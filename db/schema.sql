@@ -5,7 +5,7 @@ CREATE TABLE UserRole (
 
 CREATE TABLE UserGender (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    genderName VARCHAR(10) NOT NULL
+    genderName VARCHAR(20) NOT NULL
 );
 
 
