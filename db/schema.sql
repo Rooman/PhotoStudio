@@ -3,13 +3,19 @@ CREATE TABLE UserRole (
     roleName VARCHAR(20) NOT NULL
 );
 
+CREATE TABLE UserGender (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    genderName VARCHAR(20) NOT NULL
+);
+
+
 CREATE TABLE Users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(400) UNIQUE NOT NULL,
     phoneNumber BIGINT UNSIGNED,
     firstName VARCHAR(100),
     lastName VARCHAR(100),
-    gender VARCHAR(10) CHECK(gender IN ('M', 'F')),
+    genderId INT,
     userRoleId INT NOT NULL,
     passwordHash VARCHAR(200) NOT NULL,
     salt VARCHAR(500) NOT NULL,
@@ -18,9 +24,11 @@ CREATE TABLE Users (
     zip INT UNSIGNED,
     street VARCHAR(100),
     buildingNumber INT UNSIGNED,
-    INDEX(email, phoneNumber),
-    FOREIGN KEY (userRoleId) REFERENCES UserRole(id)
+    INDEX(phoneNumber),
+    FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
+    FOREIGN KEY (genderId) REFERENCES UserGender(id)
 );
+
 
 CREATE TABLE OrderStatus (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,10 +37,11 @@ CREATE TABLE OrderStatus (
 
 CREATE TABLE Orders (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    oderDate TIMESTAMP NOT NULL,
+    orderDate DATETIME NOT NULL,
     statusId INT NOT NULL,
     userId INT NOT NULL,
-    orderComment VARCHAR(500),
+    comment VARCHAR(500),
+    INDEX(orderDate),
     FOREIGN KEY (statusId) REFERENCES OrderStatus(id),
     FOREIGN KEY (userId) REFERENCES Users(id)
 );
@@ -44,7 +53,7 @@ CREATE TABLE PhotoStatus (
 
 CREATE TABLE OrderPhotos (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    photoSource VARCHAR(200) NOT NULL,
+    source VARCHAR(200) NOT NULL,
     orderId INT NOT NULL,
     photoStatusId INT NOT NULL,
     FOREIGN KEY (orderId) REFERENCES Orders(id),
