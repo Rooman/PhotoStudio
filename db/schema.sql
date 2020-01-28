@@ -24,7 +24,6 @@ CREATE TABLE Users (
     zip INT UNSIGNED,
     street VARCHAR(100),
     buildingNumber INT UNSIGNED,
-    INDEX(email),
     INDEX(phoneNumber),
     FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
     FOREIGN KEY (genderId) REFERENCES UserGender(id)
@@ -38,10 +37,10 @@ CREATE TABLE OrderStatus (
 
 CREATE TABLE Orders (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    orderDate TIMESTAMP NOT NULL,
+    orderDate DATETIME NOT NULL,
     statusId INT NOT NULL,
     userId INT NOT NULL,
-    orderComment VARCHAR(500),
+    comment VARCHAR(500),
     INDEX(orderDate),
     FOREIGN KEY (statusId) REFERENCES OrderStatus(id),
     FOREIGN KEY (userId) REFERENCES Users(id)
@@ -54,7 +53,7 @@ CREATE TABLE PhotoStatus (
 
 CREATE TABLE OrderPhotos (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    photoSource VARCHAR(200) NOT NULL,
+    source VARCHAR(200) NOT NULL,
     orderId INT NOT NULL,
     photoStatusId INT NOT NULL,
     FOREIGN KEY (orderId) REFERENCES Orders(id),
