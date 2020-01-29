@@ -12,7 +12,7 @@ import java.util.List;
 public class JdbcUserDao implements UserDao {
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
-    private static final String GET_ALL_USERS = "select email, phoneNumber, firstName, lastName, genderName, roleName, passwordHash, salt, country, city, zip, street, buildingNumber from photostudio.Users  inner join UserRole on Users.userRoleId=UserRole.id inner join UserGender on Users.genderId=UserGender.id;";
+    private static final String GET_ALL_USERS = "select email, phoneNumber, firstName, lastName, genderName, roleName, passwordHash, salt, country, city, zip, street, buildingNumber from photostudio.Users  inner join UserRole on Users.userRoleId=UserRole.id left join UserGender on Users.genderId=UserGender.id;";
 
     private DataSource dataSource;
 
