@@ -3,14 +3,26 @@
     <listener>
         <listener-class>com.photostudio.listener.ThymeleafInitializerListener</listener-class>
     </listener>
+
+    <!--  Servlets  -->
     <servlet>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.user.GetAllUsersServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AllOrdersServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.AllOrdersServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/</url-pattern>
         <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AllOrdersServlet</servlet-name>
+        <url-pattern>/v1/orders</url-pattern>
     </servlet-mapping>
 </web-app>
