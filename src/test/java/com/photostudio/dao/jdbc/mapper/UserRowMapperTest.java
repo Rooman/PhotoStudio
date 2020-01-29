@@ -1,6 +1,9 @@
 package com.photostudio.dao.jdbc.mapper;
 
+import com.photostudio.entity.Gender;
 import com.photostudio.entity.User;
+import com.photostudio.entity.UserRole;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +14,7 @@ import static org.mockito.Mockito.when;
 
 class UserRowMapperTest {
 
-    @org.junit.jupiter.api.Test
-
+    @Test
     public void testMapRow() throws SQLException {
         //prepare
         UserRowMapper userRowMapper = new UserRowMapper();
@@ -20,12 +22,12 @@ class UserRowMapperTest {
         ResultSet mockResultSet = mock(ResultSet.class);
 
         when(mockResultSet.getLong("id")).thenReturn((long) 555);
-        when(mockResultSet.getString("emile")).thenReturn("emile@gmail.com");
-        when(mockResultSet.getInt("userRoleId")).thenReturn(1);
+        when(mockResultSet.getString("email")).thenReturn("emile@gmail.com");
+        when(mockResultSet.getString("roleName")).thenReturn("admin");
         when(mockResultSet.getString("passwordHash")).thenReturn("passwordHashUser");
         when(mockResultSet.getString("salt")).thenReturn("saltUser");
         when(mockResultSet.getInt("phoneNumber")).thenReturn(493040054);//+49 30 40054033
-        when(mockResultSet.getString("gender")).thenReturn("M");
+        when(mockResultSet.getString("genderName")).thenReturn("FEMALE");
         when(mockResultSet.getString("firstName")).thenReturn("firstNameUser");
         when(mockResultSet.getString("lastName")).thenReturn("lastNameUser");
         when(mockResultSet.getString("country")).thenReturn("Germany");
@@ -42,11 +44,11 @@ class UserRowMapperTest {
 
         assertEquals(555, actual.getId());
         assertEquals("emile@gmail.com", actual.getEmail());
-        assertEquals(1, actual.getUserRoleId());
+        assertEquals(UserRole.ADMIN, actual.getUserRoleId());
         assertEquals("passwordHashUser", actual.getPasswordHash());
         assertEquals("saltUser", actual.getSalt());
         assertEquals(493040054, actual.getPhoneNumber());
-        assertEquals("M", actual.getGender());
+        assertEquals(Gender.FEMALE, actual.getGender());
         assertEquals("firstNameUser", actual.getFirstName());
         assertEquals("lastNameUser", actual.getLastName());
         assertEquals("Germany", actual.getCountry());

@@ -23,7 +23,7 @@ public class TemplateEngineFactory {
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setTemplateMode("HTML");
         TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
     }
 

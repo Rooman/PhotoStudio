@@ -14,11 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GetAllUsersServlet extends HttpServlet {
-    private UserService userService;
-
-    public GetAllUsersServlet() {
-        userService = ServiceLocator.getService(UserService.class);
-    }
+    private UserService userService = ServiceLocator.getService(UserService.class);
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

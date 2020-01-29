@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyReader {
-    private String path = "application.properties";
+    private String path;
 
     public PropertyReader(String path) {
         this.path = path;
@@ -25,11 +25,11 @@ public class PropertyReader {
         return null;
     }
 
-    public Properties getDevProperties() {
+    private Properties getDevProperties() {
         Properties properties = new Properties();
-        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path);) {
+        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path)) {
             if (inputStream == null) {
-                throw new IllegalArgumentException("No properties on path " + path);
+                throw new RuntimeException("No properties on path " + path);
             }
             properties.load(inputStream);
             return properties;

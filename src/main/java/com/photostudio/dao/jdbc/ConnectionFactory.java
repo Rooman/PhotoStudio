@@ -7,7 +7,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public class ConnectionFactory implements DataSource {
 
@@ -18,49 +17,55 @@ public class ConnectionFactory implements DataSource {
     }
 
     public Connection getConnection() {
-        Connection connection;
         try {
             String url = properties.getProperty("jdbc.url");
             String user = properties.getProperty("jdbc.user");
             String pass = properties.getProperty("jdbc.password");
+            Class.forName(properties.getProperty("jdbc.className"));
 
-            connection = DriverManager.getConnection(url, user, pass);
-            return connection;
-        } catch (SQLException e) {
-            throw new RuntimeException("Can't connection to the database. Check your url, pass and user name", e);
+            return DriverManager.getConnection(url, user, pass);
+        } catch (Exception e) {
+            throw new RuntimeException("Can't connect to the database. Check your url, password and user name", e);
         }
     }
 
-    public Connection getConnection(String username, String password) throws SQLException {
-        return null;
+    @Override
+    public Connection getConnection(String username, String password) {
+        throw new UnsupportedOperationException();
     }
 
-    public PrintWriter getLogWriter() throws SQLException {
-        return null;
+    @Override
+    public PrintWriter getLogWriter() {
+        throw new UnsupportedOperationException();
     }
 
-    public void setLogWriter(PrintWriter printWriter) throws SQLException {
-
+    @Override
+    public void setLogWriter(PrintWriter out) {
+        throw new UnsupportedOperationException();
     }
 
-    public void setLoginTimeout(int i) throws SQLException {
-
+    @Override
+    public void setLoginTimeout(int seconds) {
+        throw new UnsupportedOperationException();
     }
 
-    public int getLoginTimeout() throws SQLException {
-        return 0;
+    @Override
+    public int getLoginTimeout() {
+        throw new UnsupportedOperationException();
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return null;
+    @Override
+    public java.util.logging.Logger getParentLogger() {
+        throw new UnsupportedOperationException();
     }
 
-
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
+    @Override
+    public <T> T unwrap(Class<T> iface) {
+        throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
+        throw new UnsupportedOperationException();
     }
 }
