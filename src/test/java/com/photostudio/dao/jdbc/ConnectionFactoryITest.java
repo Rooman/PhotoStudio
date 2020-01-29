@@ -1,6 +1,7 @@
 package com.photostudio.dao.jdbc;
 
 import com.photostudio.util.PropertyReader;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.Properties;
@@ -8,7 +9,8 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectionFactoryITest {
-    @org.junit.jupiter.api.Test
+
+    @Test
     public void testGetConnection() throws SQLException {
 
         PropertyReader propertyReader = new PropertyReader("application.properties");

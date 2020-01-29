@@ -1,6 +1,8 @@
 package com.photostudio.dao.jdbc.mapper;
 
+import com.photostudio.entity.Gender;
 import com.photostudio.entity.User;
+import com.photostudio.entity.UserRole;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,11 +14,11 @@ public class UserRowMapper {
 
         user.setId(resultSet.getLong("id"));
         user.setEmail(resultSet.getString("email"));
-        user.setUserRoleId(resultSet.getInt("userRoleId"));
+        user.setUserRoleId(UserRole.getByUserRole(resultSet.getString("roleName")));
         user.setPasswordHash(resultSet.getString("passwordHash"));
         user.setSalt(resultSet.getString("salt"));
         user.setPhoneNumber(resultSet.getInt("phoneNumber"));
-        //user.setGender(resultSet.getString("genderId"));
+        user.setGender(Gender.getByGender(resultSet.getString("genderName")));
         user.setFirstName(resultSet.getString("firstName"));
         user.setLastName(resultSet.getString("lastName"));
         user.setCountry(resultSet.getString("country"));

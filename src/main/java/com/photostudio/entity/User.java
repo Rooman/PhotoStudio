@@ -3,11 +3,11 @@ package com.photostudio.entity;
 public class User {
     private long id;
     private String email;
-    private int userRoleId;
+    private UserRole userRoleId;
     private String passwordHash;
     private String salt;
     private int phoneNumber;
-    private String gender;
+    private Gender genderId;
     private String firstName;
     private String lastName;
     private String country;
@@ -15,6 +15,23 @@ public class User {
     private int zip;
     private String street;
     private int buildingNumber;
+
+    public Gender getGender() {
+        return genderId;
+    }
+
+    public void setGender(Gender genderId) {
+        this.genderId = genderId;
+    }
+
+    public UserRole getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(UserRole userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
 
     public String getPasswordHash() {
         return passwordHash;
@@ -106,22 +123,6 @@ public class User {
 
     public void setZip(int zip) {
         this.zip = zip;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public int getUserRoleId() {
-        return userRoleId;
-    }
-
-    public void setUserRoleId(int userRoleId) {
-        this.userRoleId = userRoleId;
     }
 
     public void setBuildingNumber(int buildingNumber) {
