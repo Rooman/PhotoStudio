@@ -11,19 +11,19 @@ public class UserRowMapper {
         User user = new User();
 
         user.setId(resultSet.getLong("id"));
-        user.setEmail(resultSet.getString("emile"));
+        user.setEmail(resultSet.getString("email"));
         user.setUserRoleId(resultSet.getInt("userRoleId"));
         user.setPasswordHash(resultSet.getString("passwordHash"));
         user.setSalt(resultSet.getString("salt"));
         user.setPhoneNumber(resultSet.getInt("phoneNumber"));
-        user.setGender(resultSet.getString("gender"));
+        //user.setGender(resultSet.getString("genderId"));
         user.setFirstName(resultSet.getString("firstName"));
         user.setLastName(resultSet.getString("lastName"));
         user.setCountry(resultSet.getString("country"));
         user.setCity(resultSet.getString("city"));
         user.setStreet(resultSet.getString("street"));
         user.setBuildingNumber(resultSet.getInt("buildingNumber"));
-        user.setZipCode(resultSet.getInt("zipCode"));
+        user.setZip(resultSet.getInt("zip"));
 
         return user;
     }

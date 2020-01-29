@@ -1,6 +1,7 @@
 package com.photostudio.dao.jdbc.mapper;
 
 import com.photostudio.entity.User;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +12,7 @@ import static org.mockito.Mockito.when;
 
 class UserRowMapperTest {
 
-    @org.junit.jupiter.api.Test
-
+    @Test
     public void testMapRow() throws SQLException {
         //prepare
         UserRowMapper userRowMapper = new UserRowMapper();

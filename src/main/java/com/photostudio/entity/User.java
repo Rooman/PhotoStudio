@@ -12,7 +12,7 @@ public class User {
     private String lastName;
     private String country;
     private String city;
-    private int zipCode;
+    private int zip;
     private String street;
     private int buildingNumber;
 
@@ -100,12 +100,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getZipCode() {
-        return zipCode;
+    public int getZip() {
+        return zip;
     }
 
-    public void setZipCode(int zipCode) {
-        this.zipCode = zipCode;
+    public void setZip(int zip) {
+        this.zip = zip;
     }
 
     public String getGender() {
