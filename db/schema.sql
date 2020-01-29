@@ -37,7 +37,7 @@ CREATE TABLE OrderStatus (
 
 CREATE TABLE Orders (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    orderDate DATETIME NOT NULL,
+    orderDate TIMESTAMP NOT NULL,
     statusId INT NOT NULL,
     userId INT NOT NULL,
     comment VARCHAR(500),
