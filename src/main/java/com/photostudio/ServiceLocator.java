@@ -1,9 +1,13 @@
 package com.photostudio;
 
+import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.ConnectionFactory;
+import com.photostudio.dao.jdbc.JdbcOrderDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.dao.UserDao;
+import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
+import com.photostudio.service.impl.DefaultOrderService;
 import com.photostudio.service.impl.DefaultUserService;
 import com.photostudio.util.PropertyReader;
 
@@ -26,8 +30,14 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
+        OrderDao orderDao = new JdbcOrderDao(dataSource);
+        register(OrderDao.class, orderDao);
+
         UserService productService = new DefaultUserService(userDao);
         register(UserService.class, productService);
+
+        OrderService orderService = new DefaultOrderService();
+        register(OrderService.class, orderService);
 
     }
 
