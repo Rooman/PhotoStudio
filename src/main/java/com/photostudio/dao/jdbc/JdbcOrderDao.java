@@ -43,7 +43,7 @@ public class JdbcOrderDao implements OrderDao {
             }
             return orders;
         } catch (SQLException e) {
-            throw new RuntimeException("Error during get all products", e);
+            throw new RuntimeException("Error during get all orders", e);
         }
     }
 }
