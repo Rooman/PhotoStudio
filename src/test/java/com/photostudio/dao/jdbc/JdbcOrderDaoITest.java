@@ -15,7 +15,7 @@ public class JdbcOrderDaoITest {
     @Test
     public void testGetAll() {
         Properties properties = new PropertyReader("application.properties").getProperties();
-        DataSource dataSource = new ConnectionFactory(properties);
+        DataSource dataSource = new DataSourceFactory(properties).createDataSource();
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(dataSource);
         List<Order> orders = jdbcOrderDao.getAll();
 

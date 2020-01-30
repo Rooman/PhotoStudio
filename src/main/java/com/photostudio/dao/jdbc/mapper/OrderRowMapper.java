@@ -8,13 +8,15 @@ import java.sql.SQLException;
 public class OrderRowMapper {
     public Order mapRow(ResultSet resultSet) throws SQLException {
 
-        return new Order.Builder()
-                .withId(resultSet.getInt("id"))
-                .withStatus(resultSet.getString("statusName"))
-                .withOrderDate(resultSet.getTimestamp("orderDate").toLocalDateTime())
-                .withEmail(resultSet.getString("email"))
-                .withPhoneNumber(resultSet.getLong("phoneNumber"))
-                .withComment(resultSet.getString("comment"))
+        Order order = Order.builder()
+                .id(resultSet.getInt("id"))
+                .status(resultSet.getString("statusName"))
+                .orderDate(resultSet.getTimestamp("orderDate").toLocalDateTime())
+                .email(resultSet.getString("email"))
+                .phoneNumber(resultSet.getLong("phoneNumber"))
+                .comment(resultSet.getString("comment"))
                 .build();
+
+        return order;
     }
 }

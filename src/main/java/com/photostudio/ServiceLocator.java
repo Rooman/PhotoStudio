@@ -1,10 +1,10 @@
 package com.photostudio;
 
 import com.photostudio.dao.OrderDao;
-import com.photostudio.dao.jdbc.ConnectionFactory;
+import com.photostudio.dao.UserDao;
+import com.photostudio.dao.jdbc.DataSourceFactory;
 import com.photostudio.dao.jdbc.JdbcOrderDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
-import com.photostudio.dao.UserDao;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.impl.DefaultOrderService;
@@ -18,14 +18,13 @@ import java.util.Properties;
 
 public class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();
-    private static Properties properties;
 
     static {
         //config properties
-        properties = new PropertyReader("application.properties").getProperties();
+        Properties properties = new PropertyReader("application.properties").getProperties();
 
         //config db connection
-        DataSource dataSource = new ConnectionFactory(properties);
+        DataSource dataSource = new DataSourceFactory(properties).createDataSource();
 
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
