@@ -25,7 +25,7 @@ public class PropertyReader {
         return null;
     }
 
-    private Properties getDevProperties() {
+    public Properties getDevProperties() {
         Properties properties = new Properties();
         try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path)) {
             if (inputStream == null) {

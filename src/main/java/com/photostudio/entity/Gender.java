@@ -1,5 +1,7 @@
 package com.photostudio.entity;
 
+import java.util.Objects;
+
 public enum Gender {
     FEMALE("FEMALE"),
     MALE("MALE");
@@ -12,7 +14,7 @@ public enum Gender {
 
     public static Gender getByGender(String name) {
         for (Gender gender : values()) {
-            if (gender.name.equalsIgnoreCase(name)) {
+            if (!Objects.equals(gender.name.equalsIgnoreCase(name), null)) {
                 return gender;
             }
         }

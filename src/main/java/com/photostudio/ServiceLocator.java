@@ -26,8 +26,8 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
-        UserService productService = new DefaultUserService(userDao);
-        register(UserService.class, productService);
+        UserService userService = new DefaultUserService(userDao);
+        register(UserService.class, userService);
 
     }
 

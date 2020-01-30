@@ -22,6 +22,11 @@ public class GetAllUsersServlet extends HttpServlet {
 
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
-        TemplateEngineFactory.process("allusers", variablesMap, response.getWriter());
+
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        TemplateEngineFactory.process("all-users", variablesMap, response.getWriter());
     }
+
 }
