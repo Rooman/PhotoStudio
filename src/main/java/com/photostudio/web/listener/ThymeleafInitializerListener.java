@@ -1,4 +1,4 @@
-package com.photostudio.listener;
+package com.photostudio.web.listener;
 
 import com.photostudio.web.templater.TemplateEngineFactory;
 

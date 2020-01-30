@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app>
     <listener>
-        <listener-class>com.photostudio.listener.ThymeleafInitializerListener</listener-class>
+        <listener-class>com.photostudio.web.listener.ThymeleafInitializerListener</listener-class>
     </listener>
+
+    <!--  Servlets  -->
     <servlet>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.user.GetAllUsersServlet</servlet-class>
@@ -10,6 +12,11 @@
     <servlet>
         <servlet-name>AddNewUserServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.user.AddNewUserServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AllOrdersServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.AllOrdersServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -20,5 +27,10 @@
     <servlet-mapping>
         <servlet-name>AddNewUserServlet</servlet-name>
         <url-pattern>/v1/admin/add</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AllOrdersServlet</servlet-name>
+        <url-pattern>/v1/orders</url-pattern>
     </servlet-mapping>
 </web-app>
