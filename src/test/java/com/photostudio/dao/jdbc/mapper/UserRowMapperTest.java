@@ -26,7 +26,7 @@ class UserRowMapperTest {
         when(mockResultSet.getString("roleName")).thenReturn("admin");
         when(mockResultSet.getString("passwordHash")).thenReturn("passwordHashUser");
         when(mockResultSet.getString("salt")).thenReturn("saltUser");
-        when(mockResultSet.getInt("phoneNumber")).thenReturn(493040054);//+49 30 40054033
+        when(mockResultSet.getLong("phoneNumber")).thenReturn((long)493040054);//+49 30 40054033
         when(mockResultSet.getString("genderName")).thenReturn("FEMALE");
         when(mockResultSet.getString("firstName")).thenReturn("firstNameUser");
         when(mockResultSet.getString("lastName")).thenReturn("lastNameUser");

@@ -17,7 +17,7 @@ public class UserRowMapper {
         user.setUserRoleId(UserRole.getByUserRole(resultSet.getString("roleName")));
         user.setPasswordHash(resultSet.getString("passwordHash"));
         user.setSalt(resultSet.getString("salt"));
-        user.setPhoneNumber(resultSet.getInt("phoneNumber"));
+        user.setPhoneNumber(resultSet.getLong("phoneNumber"));
         user.setGender(Gender.getByGender(resultSet.getString("genderName")));
         user.setFirstName(resultSet.getString("firstName"));
         user.setLastName(resultSet.getString("lastName"));

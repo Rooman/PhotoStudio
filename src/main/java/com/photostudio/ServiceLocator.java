@@ -35,8 +35,6 @@ public class ServiceLocator {
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
 
-       
-
         OrderService orderService = new DefaultOrderService();
         register(OrderService.class, orderService);
 

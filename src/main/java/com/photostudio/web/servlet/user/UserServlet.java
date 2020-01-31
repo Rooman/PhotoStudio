@@ -24,7 +24,6 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String email = request.getParameter("email");
-
         String phoneNumber = request.getParameter("phoneNumber");
         String gender = request.getParameter("genderName");
         String firstName = request.getParameter("firstName");
@@ -37,7 +36,7 @@ public class UserServlet extends HttpServlet {
         User newUser = new User();
 
         newUser.setEmail(email);
-        newUser.setPhoneNumber(Integer.parseInt(phoneNumber));
+        newUser.setPhoneNumber(Long.parseLong(phoneNumber));
         newUser.setGender(Gender.getByGender(gender));
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);

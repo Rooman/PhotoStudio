@@ -23,6 +23,8 @@ public class JdbcUserDao implements UserDao {
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
+    private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
+
     private DataSource dataSource;
 
     public JdbcUserDao(DataSource dataSource) {
@@ -52,7 +54,7 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setInt(2, user.getPhoneNumber());
+            preparedStatement.setLong(2, user.getPhoneNumber());
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
 
@@ -82,8 +84,12 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void delete(long id) {
-
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("error.Can't remove user", e);
+        }
     }
-
-
 }
