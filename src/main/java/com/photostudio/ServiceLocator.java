@@ -29,11 +29,13 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
+        UserService userService = new DefaultUserService(userDao);
+        register(UserService.class, userService);
+
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
 
-        UserService productService = new DefaultUserService(userDao);
-        register(UserService.class, productService);
+       
 
         OrderService orderService = new DefaultOrderService();
         register(OrderService.class, orderService);

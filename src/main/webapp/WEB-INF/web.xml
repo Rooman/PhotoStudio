@@ -9,6 +9,10 @@
         <servlet-name>GetAllUsersServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.user.GetAllUsersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.user.UserServlet</servlet-class>
+    </servlet>
 
     <servlet>
         <servlet-name>AllOrdersServlet</servlet-name>
@@ -17,7 +21,12 @@
 
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
-        <url-pattern>/users</url-pattern>
+        <url-pattern>/v1/admin/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/v1/user</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

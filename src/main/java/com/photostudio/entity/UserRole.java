@@ -1,7 +1,7 @@
 package com.photostudio.entity;
 
 public enum UserRole {
-    USER ("USER"),
+    USER("USER"),
     ADMIN("ADMIN");
 
     private String name;
