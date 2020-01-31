@@ -23,6 +23,14 @@ public class JdbcUserDao implements UserDao {
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
+    private static final String GET_BY_ID = "SELECT u.id id, u.email email,u.phoneNumber phoneNumber," +
+            " u.firstName firstName, u.lastName lastName, ur.roleName roleName, ug.genderName genderName, " +
+            "u.passwordHash passwordHash, u.salt salt, u.country country," +
+            " u.city city, u.zip zip, u.address address  FROM  Users u \n" +
+            "INNER JOIN UserRole ur ON u.userRoleId=ur.id \n" +
+            "LEFT JOIN UserGender ug ON u.genderId=ug.id\n" +
+            "WHERE u.id=?;";
+
     private DataSource dataSource;
 
     public JdbcUserDao(DataSource dataSource) {
@@ -72,18 +80,32 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUserById(long id) {
-        return null;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    throw new RuntimeException("error.User with id= " + id + "is missing");
+                }
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                if (resultSet.next()) {
+                    throw new RuntimeException("More than one users found");
+                }
+                return user;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("error.Can't found user where id=" + id, e);
+        }
     }
+
 
     @Override
     public void edit(User user) {
-
     }
 
     @Override
     public void delete(long id) {
 
     }
-
 
 }

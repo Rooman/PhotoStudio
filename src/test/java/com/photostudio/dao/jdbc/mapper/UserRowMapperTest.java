@@ -22,7 +22,7 @@ class UserRowMapperTest {
         ResultSet mockResultSet = mock(ResultSet.class);
 
         when(mockResultSet.getLong("id")).thenReturn((long) 555);
-        when(mockResultSet.getString("email")).thenReturn("emile@gmail.com");
+        when(mockResultSet.getString("email")).thenReturn("email@gmail.com");
         when(mockResultSet.getString("roleName")).thenReturn("admin");
         when(mockResultSet.getString("passwordHash")).thenReturn("passwordHashUser");
         when(mockResultSet.getString("salt")).thenReturn("saltUser");
@@ -42,7 +42,7 @@ class UserRowMapperTest {
         assertNotNull(actual);
 
         assertEquals(555, actual.getId());
-        assertEquals("emile@gmail.com", actual.getEmail());
+        assertEquals("email@gmail.com", actual.getEmail());
         assertEquals(UserRole.ADMIN, actual.getUserRoleId());
         assertEquals("passwordHashUser", actual.getPasswordHash());
         assertEquals("saltUser", actual.getSalt());
