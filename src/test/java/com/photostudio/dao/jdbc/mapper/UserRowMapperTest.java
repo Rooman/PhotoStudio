@@ -1,8 +1,8 @@
 package com.photostudio.dao.jdbc.mapper;
 
-import com.photostudio.entity.Gender;
-import com.photostudio.entity.User;
-import com.photostudio.entity.UserRole;
+import com.photostudio.entity.user.Gender;
+import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
@@ -32,8 +32,7 @@ class UserRowMapperTest {
         when(mockResultSet.getString("lastName")).thenReturn("lastNameUser");
         when(mockResultSet.getString("country")).thenReturn("Germany");
         when(mockResultSet.getString("city")).thenReturn("Berlin");
-        when(mockResultSet.getString("street")).thenReturn("Krausnickstraße");
-        when(mockResultSet.getInt("buildingNumber")).thenReturn(25);//"25A 3/4"
+        when(mockResultSet.getString("address")).thenReturn("Krausnickstraße 15A");
         when(mockResultSet.getInt("zipCode")).thenReturn(10178);
 
         //when
@@ -53,8 +52,7 @@ class UserRowMapperTest {
         assertEquals("lastNameUser", actual.getLastName());
         assertEquals("Germany", actual.getCountry());
         assertEquals("Berlin", actual.getCity());
-        assertEquals("Krausnickstraße", actual.getStreet());
-        assertEquals(25, actual.getBuildingNumber());
+        assertEquals("Krausnickstraße 15A", actual.getAddress());
 
     }
 }

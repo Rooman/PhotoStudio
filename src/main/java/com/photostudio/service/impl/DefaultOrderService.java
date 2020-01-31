@@ -2,7 +2,7 @@ package com.photostudio.service.impl;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.dao.OrderDao;
-import com.photostudio.entity.Order;
+import com.photostudio.entity.order.Order;
 import com.photostudio.service.OrderService;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.entity.Order;
+import com.photostudio.entity.order.Order;
 import com.photostudio.util.PropertyReader;
 import org.junit.jupiter.api.Test;
 

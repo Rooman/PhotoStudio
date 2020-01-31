@@ -1,7 +1,7 @@
 package com.photostudio.web.servlet.user;
 
 import com.photostudio.ServiceLocator;
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 

@@ -1,6 +1,6 @@
 package com.photostudio.service;
 
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.User;
 
 import java.util.List;
 

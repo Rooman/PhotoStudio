@@ -1,6 +1,6 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.User;
 import com.photostudio.util.PropertyReader;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package com.photostudio.dao.jdbc.mapper;
 
-import com.photostudio.entity.Gender;
-import com.photostudio.entity.User;
-import com.photostudio.entity.UserRole;
+import com.photostudio.entity.user.Gender;
+import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,8 +23,7 @@ public class UserRowMapper {
         user.setLastName(resultSet.getString("lastName"));
         user.setCountry(resultSet.getString("country"));
         user.setCity(resultSet.getString("city"));
-        user.setStreet(resultSet.getString("street"));
-        user.setBuildingNumber(resultSet.getInt("buildingNumber"));
+        user.setAddress(resultSet.getString("address"));
         user.setZip(resultSet.getInt("zip"));
 
         return user;

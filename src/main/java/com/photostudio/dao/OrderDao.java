@@ -1,6 +1,6 @@
 package com.photostudio.dao;
 
-import com.photostudio.entity.Order;
+import com.photostudio.entity.order.Order;
 
 import java.util.List;
 
