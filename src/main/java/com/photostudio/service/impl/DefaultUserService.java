@@ -1,7 +1,7 @@
 package com.photostudio.service.impl;
 
 import com.photostudio.dao.UserDao;
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 
 import java.util.List;

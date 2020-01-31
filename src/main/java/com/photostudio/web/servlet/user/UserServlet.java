@@ -1,12 +1,11 @@
 package com.photostudio.web.servlet.user;
 
 import com.photostudio.ServiceLocator;
-import com.photostudio.entity.Gender;
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.Gender;
+import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,8 +32,7 @@ public class UserServlet extends HttpServlet {
         String country = request.getParameter("country");
         String city = request.getParameter("city");
         String zip = request.getParameter("zipCode");
-        String street = request.getParameter("street");
-        String buildingNumber = request.getParameter("buildingNumber");
+        String address = request.getParameter("address");
 
         User newUser = new User();
 
@@ -46,8 +44,7 @@ public class UserServlet extends HttpServlet {
         newUser.setCountry(country);
         newUser.setCity(city);
         newUser.setZip(Integer.parseInt(zip));
-        newUser.setStreet(street);
-        newUser.setBuildingNumber(Integer.parseInt(buildingNumber));
+        newUser.setAddress(address);
 
         userService.add(newUser);
     }

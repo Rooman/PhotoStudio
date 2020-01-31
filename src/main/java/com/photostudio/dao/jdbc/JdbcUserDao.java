@@ -2,7 +2,7 @@ package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.User;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -14,12 +14,12 @@ public class JdbcUserDao implements UserDao {
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
             " lastName, genderName, roleName, passwordHash, salt, country, city, zip," +
-            " street, buildingNumber FROM photostudio.Users " +
+            " address FROM photostudio.Users " +
             " INNER JOIN UserRole ON Users.userRoleId=UserRole.id" +
             " LEFT JOIN UserGender ON Users.genderId=UserGender.id;";
 
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
-            "firstName,lastName,genderId,userRoleId,passwordHash,salt, country,city,zip,street,buildingNumber) " +
+            "firstName,lastName,genderId,userRoleId,passwordHash,salt, country,city,zip,address) " +
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
@@ -62,8 +62,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(8, user.getCountry());
             preparedStatement.setString(9, user.getCity());
             preparedStatement.setInt(10, user.getZip());
-            preparedStatement.setString(11, user.getStreet());
-            preparedStatement.setInt(12, user.getBuildingNumber());
+            preparedStatement.setString(11, user.getAddress());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

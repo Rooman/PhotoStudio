@@ -2,7 +2,7 @@ package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
-import com.photostudio.entity.Order;
+import com.photostudio.entity.order.Order;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

@@ -1,6 +1,4 @@
-package com.photostudio.entity;
-
-import java.util.Objects;
+package com.photostudio.entity.user;
 
 public enum Gender {
     FEMALE("FEMALE"),
@@ -14,11 +12,11 @@ public enum Gender {
 
     public static Gender getByGender(String name) {
         for (Gender gender : values()) {
-            if (!Objects.equals(gender.name.equalsIgnoreCase(name), null)) {
+            if (gender.name.equalsIgnoreCase(name)) {
                 return gender;
             }
         }
-        throw new IllegalArgumentException("No such gender : " + name);
+        return null;
     }
 }
 
