@@ -22,8 +22,7 @@ CREATE TABLE Users (
     country VARCHAR(50),
     city VARCHAR(50),
     zip INT UNSIGNED,
-    street VARCHAR(100),
-    buildingNumber INT UNSIGNED,
+    address VARCHAR(500),
     INDEX(phoneNumber),
     FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
     FOREIGN KEY (genderId) REFERENCES UserGender(id)
