@@ -10,9 +10,9 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JdbcUserDaoTest {
-    Properties properties = new PropertyReader("application.properties").getDevProperties();
-    DataSource dataSource = new ConnectionFactory(properties);
+class JdbcUserDaoITest {
+    Properties properties = new PropertyReader("application.properties").getProperties();
+    DataSource dataSource = new DataSourceFactory(properties).createDataSource();
     JdbcUserDao jdbcUserDao = new JdbcUserDao(dataSource);
 
     @Test
@@ -20,18 +20,10 @@ class JdbcUserDaoTest {
         List<User> users = jdbcUserDao.getAllUsers();
 
         for (User user : users) {
-            assertNotNull(user.getId());
+            assertTrue(user.getId() > 0);
             assertNotNull(user.getEmail());
-            assertNotNull(user.getPhoneNumber());
-            assertNotNull(user.getFirstName());
             assertNotNull(user.getPasswordHash());
             assertNotNull(user.getSalt());
-            assertNotNull(user.getCountry());
-            assertNotNull(user.getCity());
-            assertNotNull(user.getZip());
-            assertNotNull(user.getStreet());
-            assertNotNull(user.getBuildingNumber());
-            assertNotNull(user.getGender());
             assertNotNull(user.getUserRoleId());
         }
     }

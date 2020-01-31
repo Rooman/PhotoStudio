@@ -12,12 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AddNewUserServlet extends HttpServlet {
-    private UserService userService;
-
-    public AddNewUserServlet() {
-        userService = ServiceLocator.getService(UserService.class);
-    }
+public class UserServlet extends HttpServlet {
+    private UserService userService = ServiceLocator.getService(UserService.class);
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -27,7 +23,7 @@ public class AddNewUserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String email = request.getParameter("email");
 
         String phoneNumber = request.getParameter("phoneNumber");
@@ -52,6 +48,7 @@ public class AddNewUserServlet extends HttpServlet {
         newUser.setZip(Integer.parseInt(zip));
         newUser.setStreet(street);
         newUser.setBuildingNumber(Integer.parseInt(buildingNumber));
+
         userService.add(newUser);
     }
 }
