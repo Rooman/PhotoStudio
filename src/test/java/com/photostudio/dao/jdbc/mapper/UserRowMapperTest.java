@@ -26,7 +26,7 @@ class UserRowMapperTest {
         when(mockResultSet.getString("roleName")).thenReturn("admin");
         when(mockResultSet.getString("passwordHash")).thenReturn("passwordHashUser");
         when(mockResultSet.getString("salt")).thenReturn("saltUser");
-        when(mockResultSet.getInt("phoneNumber")).thenReturn(493040054);//+49 30 40054033
+        when(mockResultSet.getString("phoneNumber")).thenReturn("493040054");//+49 30 40054033
         when(mockResultSet.getString("genderName")).thenReturn("FEMALE");
         when(mockResultSet.getString("firstName")).thenReturn("firstNameUser");
         when(mockResultSet.getString("lastName")).thenReturn("lastNameUser");
@@ -43,10 +43,10 @@ class UserRowMapperTest {
 
         assertEquals(555, actual.getId());
         assertEquals("emile@gmail.com", actual.getEmail());
-        assertEquals(UserRole.ADMIN, actual.getUserRoleId());
+        assertEquals(UserRole.ADMIN, actual.getUserRole());
         assertEquals("passwordHashUser", actual.getPasswordHash());
         assertEquals("saltUser", actual.getSalt());
-        assertEquals(493040054, actual.getPhoneNumber());
+        assertEquals(493040054L, actual.getPhoneNumber());
         assertEquals(Gender.FEMALE, actual.getGender());
         assertEquals("firstNameUser", actual.getFirstName());
         assertEquals("lastNameUser", actual.getLastName());

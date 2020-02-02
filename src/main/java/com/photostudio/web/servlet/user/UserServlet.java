@@ -37,7 +37,7 @@ public class UserServlet extends HttpServlet {
         User newUser = new User();
 
         newUser.setEmail(email);
-        newUser.setPhoneNumber(Integer.parseInt(phoneNumber));
+        newUser.setPhoneNumber(Long.parseLong(phoneNumber));
         newUser.setGender(Gender.getByGender(gender));
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
