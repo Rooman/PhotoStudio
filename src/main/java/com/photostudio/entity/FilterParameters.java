@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @Builder
-public final class Order {
-    private int id;
-    private OrderStatus status;
-    private LocalDateTime orderDate;
+public final class FilterParameters {
+    private LocalDateTime fromDate;
+    private LocalDateTime toDate;
     private String email;
     private Long phoneNumber;
-    private String comment;
+    private OrderStatus orderStatus;
 }
