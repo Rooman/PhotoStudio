@@ -1,4 +1,4 @@
-package com.photostudio.entity;
+package com.photostudio.entity.order;
 
 import java.util.Arrays;
 

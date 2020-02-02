@@ -1,4 +1,4 @@
-package com.photostudio.entity;
+package com.photostudio.entity.user;
 
 public enum Gender {
     FEMALE("FEMALE"),
@@ -16,7 +16,7 @@ public enum Gender {
                 return gender;
             }
         }
-        throw new IllegalArgumentException("No such gender : " + name);
+        return null;
     }
 }
 

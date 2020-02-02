@@ -1,6 +1,6 @@
 package com.photostudio.dao.jdbc.mapper;
 
-import com.photostudio.entity.Order;
+import com.photostudio.entity.order.Order;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;

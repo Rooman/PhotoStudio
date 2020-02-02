@@ -1,4 +1,4 @@
-package com.photostudio.entity;
+package com.photostudio.entity.user;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,5 @@ public class User {
     private String country;
     private String city;
     private int zip;
-    private String street;
-    private int buildingNumber;
-
+    private String address;
 }

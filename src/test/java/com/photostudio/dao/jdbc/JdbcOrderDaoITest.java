@@ -1,13 +1,12 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.entity.FilterParameters;
-import com.photostudio.entity.Order;
-import com.photostudio.entity.OrderStatus;
+import com.photostudio.entity.order.FilterParameters;
+import com.photostudio.entity.order.OrderStatus;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import com.photostudio.entity.order.Order;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;

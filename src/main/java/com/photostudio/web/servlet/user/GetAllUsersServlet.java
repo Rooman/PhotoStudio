@@ -1,7 +1,7 @@
 package com.photostudio.web.servlet.user;
 
 import com.photostudio.ServiceLocator;
-import com.photostudio.entity.User;
+import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 
@@ -22,6 +22,11 @@ public class GetAllUsersServlet extends HttpServlet {
 
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
-        TemplateEngineFactory.process("allusers", variablesMap, response.getWriter());
+
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        TemplateEngineFactory.process("all-users", variablesMap, response.getWriter());
     }
+
 }

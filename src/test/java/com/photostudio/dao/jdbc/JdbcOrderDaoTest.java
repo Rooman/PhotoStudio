@@ -1,7 +1,7 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.entity.FilterParameters;
-import com.photostudio.entity.OrderStatus;
+import com.photostudio.entity.order.FilterParameters;
+import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.util.PropertyReader;
 import org.junit.jupiter.api.Test;
 

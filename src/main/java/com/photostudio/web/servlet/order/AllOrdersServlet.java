@@ -1,8 +1,8 @@
 package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
-import com.photostudio.entity.FilterParameters;
-import com.photostudio.entity.OrderStatus;
+import com.photostudio.entity.order.FilterParameters;
+import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 
