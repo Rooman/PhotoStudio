@@ -46,6 +46,18 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>6.2.1</version>
+                <configuration>
+                    <user>root</user>
+                    <password>toor</password>
+                    <url>jdbc:mysql://localhost:3306/photostudio</url>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
