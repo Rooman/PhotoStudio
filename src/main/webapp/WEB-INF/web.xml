@@ -19,6 +19,11 @@
         <servlet-class>com.photostudio.web.servlet.order.AllOrdersServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>AssetServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.asset.AssetServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
@@ -33,4 +38,10 @@
         <servlet-name>AllOrdersServlet</servlet-name>
         <url-pattern>/orders</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AssetServlet</servlet-name>
+        <url-pattern>/assets/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
