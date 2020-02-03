@@ -25,12 +25,12 @@
 
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
-        <url-pattern>/v1/admin/users</url-pattern>
+        <url-pattern>/admin/users</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/v1/user</url-pattern>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -40,6 +40,6 @@
 
     <servlet-mapping>
         <servlet-name>AllOrdersServlet</servlet-name>
-        <url-pattern>/v1/orders</url-pattern>
+        <url-pattern>/orders</url-pattern>
     </servlet-mapping>
 </web-app>
