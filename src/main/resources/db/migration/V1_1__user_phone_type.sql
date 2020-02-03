@@ -1,0 +1,2 @@
+ALTER TABLE Users
+CHANGE COLUMN phoneNumber phoneNumber VARCHAR(20) NULL DEFAULT NULL ;
