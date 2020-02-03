@@ -12,13 +12,12 @@ public class UserRowMapper {
     public User mapRow(ResultSet resultSet) throws SQLException {
         User user = new User();
 
-        String phoneNumber = resultSet.getString("phoneNumber");
         user.setId(resultSet.getLong("id"));
         user.setEmail(resultSet.getString("email"));
         user.setUserRole(UserRole.getByUserRole(resultSet.getString("roleName")));
         user.setPasswordHash(resultSet.getString("passwordHash"));
         user.setSalt(resultSet.getString("salt"));
-        user.setPhoneNumber(phoneNumber == null ? null : Long.parseLong(phoneNumber));
+        user.setPhoneNumber(resultSet.getString("phoneNumber"));
         user.setGender(Gender.getByGender(resultSet.getString("genderName")));
         user.setFirstName(resultSet.getString("firstName"));
         user.setLastName(resultSet.getString("lastName"));

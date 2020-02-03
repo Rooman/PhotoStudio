@@ -68,7 +68,7 @@ class JdbcUserDaoITest {
         expectedUser.setFirstName("Piter");
         expectedUser.setGender(Gender.MALE);
         expectedUser.setLastName("Lol");
-        expectedUser.setPhoneNumber(380731234567L);
+        expectedUser.setPhoneNumber("380731234567");
         expectedUser.setZip(12345);
         expectedUser.setId(1);
         expectedUser.setPasswordHash("8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257");
