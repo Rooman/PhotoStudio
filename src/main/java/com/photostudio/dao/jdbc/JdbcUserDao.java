@@ -50,7 +50,7 @@ public class JdbcUserDao implements UserDao {
             }
             return users;
         } catch (SQLException e) {
-            throw new RuntimeException("error. Can't show all users", e);
+            throw new RuntimeException("Can't show all users", e);
         }
     }
 
@@ -74,7 +74,7 @@ public class JdbcUserDao implements UserDao {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("error. Can't add new user to DB ", e);
+            throw new RuntimeException("Can't add new user to DB ", e);
         }
     }
 
@@ -85,7 +85,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
-                    throw new RuntimeException("error.User with id= " + id + "is missing");
+                    throw new RuntimeException("User with id= " + id + "is missing");
                 }
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
@@ -94,7 +94,7 @@ public class JdbcUserDao implements UserDao {
                 return user;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("error.Can't found user where id=" + id, e);
+            throw new RuntimeException("Can't found user where id=" + id, e);
         }
     }
 
