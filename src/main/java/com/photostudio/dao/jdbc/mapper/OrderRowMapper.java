@@ -1,5 +1,7 @@
 package com.photostudio.dao.jdbc.mapper;
 
+
+import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.order.Order;
 
 import java.sql.ResultSet;
@@ -10,10 +12,10 @@ public class OrderRowMapper {
 
         Order order = Order.builder()
                 .id(resultSet.getInt("id"))
-                .status(resultSet.getString("statusName"))
+                .status(OrderStatus.getOrderStatus(resultSet.getString("statusName")))
                 .orderDate(resultSet.getTimestamp("orderDate").toLocalDateTime())
                 .email(resultSet.getString("email"))
-                .phoneNumber(resultSet.getLong("phoneNumber"))
+                .phoneNumber(resultSet.getString("phoneNumber"))
                 .comment(resultSet.getString("comment"))
                 .build();
 

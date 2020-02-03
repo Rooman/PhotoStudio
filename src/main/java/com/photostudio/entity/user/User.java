@@ -13,7 +13,7 @@ public class User {
     private UserRole userRoleId;
     private String passwordHash;
     private String salt;
-    private int phoneNumber;
+    private String phoneNumber;
     private Gender gender;
     private String firstName;
     private String lastName;

@@ -20,8 +20,8 @@ public class OrderRowMapperTest {
         OrderRowMapper orderRowMapper = new OrderRowMapper();
         ResultSet mockResultSet = mock(ResultSet.class);
         when(mockResultSet.getInt("id")).thenReturn(1);
-        when(mockResultSet.getString("statusName")).thenReturn("NEW");
-        when(mockResultSet.getLong("phoneNumber")).thenReturn(3806767676L);
+        when(mockResultSet.getString("statusName")).thenReturn("New");
+        when(mockResultSet.getString("phoneNumber")).thenReturn("3806767676");
         when(mockResultSet.getString("email")).thenReturn("email@gmail.com");
         when(mockResultSet.getString("comment")).thenReturn("new Comment");
 
@@ -39,8 +39,8 @@ public class OrderRowMapperTest {
         LocalDateTime expectedDateTime = LocalDateTime.of(2020, 1, 20, 1, 20, 0);
 
         assertEquals(1, actualOrder.getId());
-        assertEquals("NEW", actualOrder.getStatus());
-        assertEquals(3806767676L, actualOrder.getPhoneNumber());
+        assertEquals("New", actualOrder.getStatus().getOrderStatusName());
+        assertEquals("3806767676", actualOrder.getPhoneNumber());
         assertEquals("email@gmail.com", actualOrder.getEmail());
         assertEquals("new Comment", actualOrder.getComment());
         assertEquals(expectedDateTime, actualOrder.getOrderDate());
