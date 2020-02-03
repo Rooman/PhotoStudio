@@ -44,7 +44,7 @@ public class AllOrdersServlet extends HttpServlet {
                 .email(request.getParameter("filterEmail"));
 
         if (filterPhoneNumber != null) {
-            filterParametersBuilder.phoneNumber(Long.parseLong(filterPhoneNumber));
+            filterParametersBuilder.phoneNumber(filterPhoneNumber);
         }
 
         if (filterOrderStatus != null) {

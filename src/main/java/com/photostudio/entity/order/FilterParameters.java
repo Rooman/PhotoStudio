@@ -13,6 +13,6 @@ public final class FilterParameters {
     private LocalDateTime fromDate;
     private LocalDateTime toDate;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private OrderStatus orderStatus;
 }

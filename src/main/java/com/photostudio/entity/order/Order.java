@@ -14,6 +14,6 @@ public final class Order {
     private OrderStatus status;
     private LocalDateTime orderDate;
     private String email;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String comment;
 }

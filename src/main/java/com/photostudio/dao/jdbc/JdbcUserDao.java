@@ -52,7 +52,7 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setInt(2, user.getPhoneNumber());
+            preparedStatement.setString(2, user.getPhoneNumber());
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
 

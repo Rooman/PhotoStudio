@@ -73,7 +73,7 @@ public class JdbcOrderDao implements OrderDao {
                     preparedStatement.setString(count++, filterParameters.getOrderStatus().getOrderStatusName());
                 }
                 if (filterParameters.getPhoneNumber() != null) {
-                    preparedStatement.setString(count, filterParameters.getPhoneNumber().toString());
+                    preparedStatement.setString(count, filterParameters.getPhoneNumber());
                 }
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     List<Order> orders = new ArrayList<>();

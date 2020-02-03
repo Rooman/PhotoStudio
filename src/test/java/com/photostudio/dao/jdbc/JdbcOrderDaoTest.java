@@ -18,7 +18,7 @@ public class JdbcOrderDaoTest {
         //prepare
         String expected = " WHERE u.email=? AND o.orderDate>=? AND o.orderDate<=? AND os.statusName=? AND u.phoneNumber=?";
         FilterParameters filterParameters = FilterParameters.builder().email("mail@mail.ua").fromDate(LocalDateTime.MIN)
-                .toDate(LocalDateTime.MAX).orderStatus(OrderStatus.NEW).phoneNumber(1234567890L).build();
+                .toDate(LocalDateTime.MAX).orderStatus(OrderStatus.NEW).phoneNumber("1234567890").build();
 
         //when
         Properties properties = new PropertyReader("application.properties").getProperties();

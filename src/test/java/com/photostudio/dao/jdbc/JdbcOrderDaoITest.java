@@ -47,7 +47,7 @@ public class JdbcOrderDaoITest {
         List<Order> expected = new ArrayList<>();
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.NEW).build();
+                .comment("NEW").email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.NEW).build();
         expected.add(order1);
         Order order2 = Order.builder().id(2)
                 .orderDate(LocalDateTime.of(2020, 1, 21, 18, 38, 33))
@@ -55,7 +55,7 @@ public class JdbcOrderDaoITest {
         expected.add(order2);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
-                .email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.SELECTED).build();
+                .email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.SELECTED).build();
         expected.add(order3);
         Order order4 = Order.builder().id(4)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
@@ -86,7 +86,7 @@ public class JdbcOrderDaoITest {
         List<Order> expected = new ArrayList<>();
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.NEW).build();
+                .comment("NEW").email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.NEW).build();
         expected.add(order1);
         Order order2 = Order.builder().id(2)
                 .orderDate(LocalDateTime.of(2020, 1, 21, 18, 38, 33))
@@ -94,7 +94,7 @@ public class JdbcOrderDaoITest {
         expected.add(order2);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
-                .email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.SELECTED).build();
+                .email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.SELECTED).build();
         expected.add(order3);
         Order order4 = Order.builder().id(4)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
@@ -127,7 +127,7 @@ public class JdbcOrderDaoITest {
         List<Order> expected = new ArrayList<>();
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.NEW).build();
+                .comment("NEW").email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.NEW).build();
         expected.add(order1);
         Order order2 = Order.builder().id(2)
                 .orderDate(LocalDateTime.of(2020, 1, 21, 18, 38, 33))
@@ -159,11 +159,11 @@ public class JdbcOrderDaoITest {
         List<Order> expected = new ArrayList<>();
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.NEW).build();
+                .comment("NEW").email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.NEW).build();
         expected.add(order1);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
-                .email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.SELECTED).build();
+                .email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.SELECTED).build();
         expected.add(order3);
 
         //when
@@ -186,16 +186,16 @@ public class JdbcOrderDaoITest {
     public void testGetOrdersByParamsWithPhoneParams(){
         //prepare
         FilterParameters filterParameters = FilterParameters.builder()
-                .phoneNumber(380731234567L)
+                .phoneNumber("380731234567")
                 .build();
         List<Order> expected = new ArrayList<>();
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.NEW).build();
+                .comment("NEW").email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.NEW).build();
         expected.add(order1);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
-                .email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.SELECTED).build();
+                .email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.SELECTED).build();
         expected.add(order3);
 
         //when
@@ -249,13 +249,13 @@ public class JdbcOrderDaoITest {
                 .orderStatus(OrderStatus.NEW)
                 .fromDate(LocalDateTime.of(2018, 1, 15, 18, 38, 33))
                 .toDate(LocalDateTime.of(2021, 1, 15, 18, 38, 33))
-                .phoneNumber(380731234567L)
+                .phoneNumber("380731234567")
                 .email("mymail@d.com")
                 .build();
         List<Order> expected = new ArrayList<>();
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").email("mymail@d.com").phoneNumber(380731234567L).status(OrderStatus.NEW).build();
+                .comment("NEW").email("mymail@d.com").phoneNumber("380731234567").status(OrderStatus.NEW).build();
         expected.add(order1);
 
         //when

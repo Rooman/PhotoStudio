@@ -40,7 +40,7 @@ public class OrderRowMapperTest {
 
         assertEquals(1, actualOrder.getId());
         assertEquals("New", actualOrder.getStatus().getOrderStatusName());
-        assertEquals(3806767676L, actualOrder.getPhoneNumber());
+        assertEquals("3806767676", actualOrder.getPhoneNumber());
         assertEquals("email@gmail.com", actualOrder.getEmail());
         assertEquals("new Comment", actualOrder.getComment());
         assertEquals(expectedDateTime, actualOrder.getOrderDate());
