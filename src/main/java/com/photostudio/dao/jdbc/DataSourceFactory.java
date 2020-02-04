@@ -14,14 +14,18 @@ public class DataSourceFactory {
     }
 
     public DataSource createDataSource() {
+        MysqlConnectionPoolDataSource mysqlConnectionPoolDataSource = new MysqlConnectionPoolDataSource();
+
         String url = properties.getProperty("jdbc.url");
         String user = properties.getProperty("jdbc.user");
-        String password = properties.getProperty("jdbc.password");
+        if (user != null) {
+            String password = properties.getProperty("jdbc.password");
 
-        MysqlConnectionPoolDataSource mysqlConnectionPoolDataSource = new MysqlConnectionPoolDataSource();
+            mysqlConnectionPoolDataSource.setUser(user);
+            mysqlConnectionPoolDataSource.setPassword(password);
+        }
         mysqlConnectionPoolDataSource.setUrl(url);
-        mysqlConnectionPoolDataSource.setUser(user);
-        mysqlConnectionPoolDataSource.setPassword(password);
+
         return mysqlConnectionPoolDataSource;
     }
 }
