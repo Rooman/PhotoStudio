@@ -1,5 +1,6 @@
 package com.photostudio.entity.order;
 
+import com.photostudio.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,9 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 public final class Order {
     private int id;
-    private String status;
+    private OrderStatus status;
     private LocalDateTime orderDate;
-    private String email;
-    private long phoneNumber;
+    private User user;
     private String comment;
 }

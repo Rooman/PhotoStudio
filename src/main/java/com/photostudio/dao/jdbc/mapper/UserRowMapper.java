@@ -14,10 +14,10 @@ public class UserRowMapper {
 
         user.setId(resultSet.getLong("id"));
         user.setEmail(resultSet.getString("email"));
-        user.setUserRoleId(UserRole.getByUserRole(resultSet.getString("roleName")));
+        user.setUserRole(UserRole.getByUserRole(resultSet.getString("roleName")));
         user.setPasswordHash(resultSet.getString("passwordHash"));
         user.setSalt(resultSet.getString("salt"));
-        user.setPhoneNumber(resultSet.getLong("phoneNumber"));
+        user.setPhoneNumber(resultSet.getString("phoneNumber"));
         user.setGender(Gender.getByGender(resultSet.getString("genderName")));
         user.setFirstName(resultSet.getString("firstName"));
         user.setLastName(resultSet.getString("lastName"));

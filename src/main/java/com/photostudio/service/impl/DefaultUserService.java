@@ -37,4 +37,9 @@ public class DefaultUserService implements UserService {
     public void delete(long id) {
         userDao.delete(id);
     }
+
+    @Override
+    public User getUserByLogin(String login) {
+        return userDao.getByLogin(login);
+    }
 }

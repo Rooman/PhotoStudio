@@ -3,6 +3,7 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
+import com.photostudio.exception.LoginPasswordInvalidException;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -14,7 +15,7 @@ public class JdbcUserDao implements UserDao {
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
             " lastName, genderName, roleName, passwordHash, salt, country, city, zip," +
-            " address FROM photostudio.Users " +
+            " address FROM Users " +
             " INNER JOIN UserRole ON Users.userRoleId=UserRole.id" +
             " LEFT JOIN UserGender ON Users.genderId=UserGender.id;";
 
@@ -24,6 +25,24 @@ public class JdbcUserDao implements UserDao {
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
+
+    private static final String GET_USER_BY_LOGIN = "SELECT u.id id, " +
+            "u.email email, " +
+            "u.phoneNumber, " +
+            "u.firstName firstName, " +
+            "u.lastName lastName, " +
+            "ug.genderName genderName, " +
+            "ur.roleName roleName, " +
+            "u.passwordHash passwordHash, " +
+            "u.salt salt, " +
+            "u.country country, " +
+            "u.city city, " +
+            "u.zip zip, " +
+            "u.address address " +
+            "FROM Users u " +
+            "JOIN UserRole ur ON u.userRoleId = ur.id " +
+            "LEFT JOIN UserGender ug ON u.genderId = ug.id " +
+            "WHERE ";
 
     private static final String GET_BY_ID = "SELECT u.id id, u.email email,u.phoneNumber phoneNumber," +
             " u.firstName firstName, u.lastName lastName, ur.roleName roleName, ug.genderName genderName, " +
@@ -62,7 +81,9 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setInt(2, user.getPhoneNumber());
+
+            preparedStatement.setString(2, user.getPhoneNumber());
+
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
 
@@ -100,9 +121,9 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
+
     @Override
     public void edit(User user) {
-
     }
 
     @Override
@@ -112,9 +133,34 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("error.Can't remove user", e);
+            throw new RuntimeException("Can't remove user", e);
         }
     }
 
+    @Override
+    public User getByLogin(String login) {
+        String resultQuery;
+        if (login.contains("@")) {
+            resultQuery = GET_USER_BY_LOGIN + "u.email=?";
+        } else {
+            resultQuery = GET_USER_BY_LOGIN + "u.phoneNumber=?";
+        }
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
+            preparedStatement.setString(1, login);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    throw new LoginPasswordInvalidException("No user with login = " + login + " found");
+                }
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                if (resultSet.next()) {
+                    throw new RuntimeException("More then one user found");
+                }
+                return user;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Get user by login error", e);
+        }
+    }
 
 }
