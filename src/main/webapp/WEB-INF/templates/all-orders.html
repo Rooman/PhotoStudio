@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Orders Journal</title>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
 </head>
 <body class="container">
 <div id="parameters">
@@ -51,7 +47,7 @@
         </div>
     </div>
     <div class="form-group">
-        <a href="#" onclick="parammeterize()" id="add_parameters"
+        <a href="#" onclick="parameterize()" id="add_parameters"
            class="btn btn-submit btn-outline-dark button">Apply</a>
     </div>
 </div>
@@ -72,34 +68,14 @@
             <td th:text="${order.orderDate}"></td>
             <td th:text="${order.status}"></td>
             <td>
-                <div th:if="${order.phoneNumber == null}" th:text="${order.email}"></div>
-                <div th:if="${order.phoneNumber != null}" th:text="${order.email} + '/' +${order.phoneNumber}"></div>
+                <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
+                <div th:if="${order.user.phoneNumber != null}" th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
             </td>
         </tr>
     </div>
     </tbody>
 </table>
+
+<script src="assets/js/order/orders.js"></script>
 </body>
-<script>
-    function parammeterize() {
-        let url = document.location.origin + '/orders';
-        let params = {};
-        document.querySelectorAll('#parameters .select-selected').forEach((element) => {
-            if (element.value.length > 0)
-                params[element.name] = element.value;
-        });
-
-        let e = document.getElementById("inputState");
-        let optionState = e.options[e.selectedIndex];
-        if (optionState.text.length > 0) {
-            params[e.name] = optionState.text;
-        }
-
-        let query = Object.keys(params)
-            .map(k => k + '=' + params[k])
-            .join('&');
-        url += '?' + query;
-        document.getElementById("add_parameters").href = url;
-    }
-</script>
 </html>

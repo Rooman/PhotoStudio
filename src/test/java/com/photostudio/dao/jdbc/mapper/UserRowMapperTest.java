@@ -43,7 +43,7 @@ class UserRowMapperTest {
 
         assertEquals(555, actual.getId());
         assertEquals("email@gmail.com", actual.getEmail());
-        assertEquals(UserRole.ADMIN, actual.getUserRoleId());
+        assertEquals(UserRole.ADMIN, actual.getUserRole());
         assertEquals("passwordHashUser", actual.getPasswordHash());
         assertEquals("saltUser", actual.getSalt());
         assertEquals("493040054", actual.getPhoneNumber());

@@ -4,10 +4,10 @@ INSERT INTO UserRole (roleName) VALUES ('USER');
 INSERT INTO UserGender (genderName) VALUES ('Male');
 INSERT INTO UserGender (genderName) VALUES ('Female');
 
-INSERT INTO Users (email, phoneNumber, firstName, lastName, genderId, userRoleId, passwordHash, salt, country, city, zip, address) VALUES ('mymail@d.com', 380731234567, 'Piter', 'Lol', 1, 1, 'jfhbgfbbgds', 'shjgfkbsbv', 'Ukraine',
+INSERT INTO Users (email, phoneNumber, firstName, lastName, genderId, userRoleId, passwordHash, salt, country, city, zip, address) VALUES ('mymail@d.com', '380731234567', 'Piter', 'Lol', 1, 1, '8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257', '3d47ccde-5b58-4c7b-a84c-28c27d566f8e', 'Ukraine',
 					'Kyiv', 12345, 'Qwerty 1234C');
 
-INSERT INTO Users (email, userRoleId, passwordHash, salt) VALUES ('mymail2@d.com', 2, 'jfhbgfbbgds', 'shjgfkbsbv');
+INSERT INTO Users (email, userRoleId, passwordHash, salt) VALUES ('mymail2@d.com', 2, '93ba5ffe3e90c219572a823caf3d639c527f10a36d240f4a021ad4a367b7ebce', 'fd75bf19-948d-4b3e-b7c6-42dbace77271');
 
 INSERT INTO OrderStatus (statusName) VALUES ('New');
 INSERT INTO OrderStatus (statusName) VALUES ('View and Select');

@@ -23,7 +23,6 @@ public class AllOrdersServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-
             FilterParameters filterParameters = getFilterParameters(request);
             paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
 
