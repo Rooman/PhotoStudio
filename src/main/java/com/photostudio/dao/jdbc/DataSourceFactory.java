@@ -18,7 +18,7 @@ public class DataSourceFactory {
 
         String url = properties.getProperty("jdbc.url");
         String user = properties.getProperty("jdbc.user");
-        if(user != null) {
+        if (user != null) {
             String password = properties.getProperty("jdbc.password");
 
             mysqlConnectionPoolDataSource.setUser(user);

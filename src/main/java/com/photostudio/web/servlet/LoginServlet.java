@@ -6,6 +6,8 @@ import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import com.photostudio.web.templater.TemplateEngineFactory;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,14 +40,11 @@ public class LoginServlet extends HttpServlet {
                 Cookie cookie = new Cookie("user-token", session.getToken());
 
                 response.addCookie(cookie);
-                response.sendRedirect("/orders");
+                response.sendRedirect(request.getContextPath() + "/orders");
             } catch (LoginPasswordInvalidException e) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("invalid", "yes");
                 TemplateEngineFactory.process("login", paramsMap, response.getWriter());
-
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.sendRedirect("/login");
             }
         } catch (IOException e) {
             throw new RuntimeException("LoginServlet doPost error", e);

@@ -9,16 +9,16 @@ import com.photostudio.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DefaultSecurityService implements SecurityService {
     private UserService userService = ServiceLocator.getService(UserService.class);
-    private List<Session> sessionList = new ArrayList<>();
+    private List<Session> sessionList = new CopyOnWriteArrayList<>();
 
     @Override
-    public synchronized Session login(String login, String password) {
+    public Session login(String login, String password) {
         User user = userService.getUserByLogin(login);
         if (user != null) {
             String hashedPassword = getHashedPassword(user.getSalt(), password);

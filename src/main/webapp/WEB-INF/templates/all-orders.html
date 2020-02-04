@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="form-group">
-        <a href="#" onclick="parammeterize()" id="add_parameters"
+        <a href="#" onclick="parameterize()" id="add_parameters"
            class="btn btn-submit btn-outline-dark button">Apply</a>
     </div>
 </div>
@@ -68,34 +68,14 @@
             <td th:text="${order.orderDate}"></td>
             <td th:text="${order.status}"></td>
             <td>
-                <div th:if="${order.phoneNumber == null}" th:text="${order.email}"></div>
-                <div th:if="${order.phoneNumber != null}" th:text="${order.email} + '/' +${order.phoneNumber}"></div>
+                <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
+                <div th:if="${order.user.phoneNumber != null}" th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
             </td>
         </tr>
     </div>
     </tbody>
 </table>
+
+<script src="assets/js/order/orders.js"></script>
 </body>
-<script>
-    function parammeterize() {
-        let url = document.location.origin + '/orders';
-        let params = {};
-        document.querySelectorAll('#parameters .select-selected').forEach((element) => {
-            if (element.value.length > 0)
-                params[element.name] = element.value;
-        });
-
-        let e = document.getElementById("inputState");
-        let optionState = e.options[e.selectedIndex];
-        if (optionState.text.length > 0) {
-            params[e.name] = optionState.text;
-        }
-
-        let query = Object.keys(params)
-            .map(k => k + '=' + params[k])
-            .join('&');
-        url += '?' + query;
-        document.getElementById("add_parameters").href = url;
-    }
-</script>
 </html>

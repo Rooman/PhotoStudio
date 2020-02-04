@@ -14,6 +14,6 @@ public final class Order {
     private int id;
     private OrderStatus status;
     private LocalDateTime orderDate;
-    private User user;;
+    private User user;
     private String comment;
 }

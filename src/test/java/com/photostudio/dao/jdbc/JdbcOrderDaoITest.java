@@ -88,7 +88,7 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
-    public void testGetOrdersByParamsWithoutParams(){
+    public void testGetOrdersByParamsWithoutParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder().build();
         List<Order> expected = new ArrayList<>();
@@ -133,11 +133,12 @@ public class JdbcOrderDaoITest {
             assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
         }
     }
+
     @Test
-    public void testGetOrdersByParamsWithDateParams(){
+    public void testGetOrdersByParamsWithDateParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder()
-                .fromDate(LocalDateTime.of(2020, 1, 14,0, 0, 0))
+                .fromDate(LocalDateTime.of(2020, 1, 14, 0, 0, 0))
                 .toDate(LocalDateTime.of(2020, 1, 22, 0, 0, 0))
                 .build();
         List<Order> expected = new ArrayList<>();
@@ -175,7 +176,7 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
-    public void testGetOrdersByParamsWithEmailParams(){
+    public void testGetOrdersByParamsWithEmailParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder()
                 .email("mymail@d.com")
@@ -212,7 +213,7 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
-    public void testGetOrdersByParamsWithPhoneParams(){
+    public void testGetOrdersByParamsWithPhoneParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder()
                 .phoneNumber("380731234567")
@@ -249,7 +250,7 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
-    public void testGetOrdersByParamsWithOrderStatusParams(){
+    public void testGetOrdersByParamsWithOrderStatusParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder()
                 .orderStatus(OrderStatus.READY)
@@ -281,7 +282,7 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
-    public void testGetOrdersByParamsWithAllParams(){
+    public void testGetOrdersByParamsWithAllParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder()
                 .orderStatus(OrderStatus.NEW)
