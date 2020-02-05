@@ -1,6 +1,7 @@
 package com.photostudio.web.servlet.user;
 
 import com.photostudio.ServiceLocator;
+import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
@@ -16,6 +17,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
         TemplateEngineFactory.process("add-user", response.getWriter());
