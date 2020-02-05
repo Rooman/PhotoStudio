@@ -10,10 +10,14 @@ import lombok.ToString;
 public class User {
     private long id;
     private String email;
-    private UserRole userRoleId;
+    private UserRole userRole;
     private String passwordHash;
     private String salt;
+<<<<<<< HEAD
     private long phoneNumber;
+=======
+    private String phoneNumber;
+>>>>>>> 2d2559873e918a19768c9b153cc3403051ab4308
     private Gender gender;
     private String firstName;
     private String lastName;

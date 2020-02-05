@@ -22,14 +22,22 @@ public class PropertyReader {
     }
 
     private Properties getProdProperties() {
-        return null;
+        try {
+            Properties properties = new Properties();
+
+            properties.setProperty("jdbc.url", System.getenv("JDBC_DATABASE_URL"));
+
+            return properties;
+        } catch (Exception e) {
+            throw new RuntimeException("Exception while were trying to get connection properties on production environment ", e);
+        }
     }
 
     private Properties getDevProperties() {
         Properties properties = new Properties();
         try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path)) {
             if (inputStream == null) {
-                throw new RuntimeException("No properties on path " + path);
+                throw new IllegalArgumentException("No properties on path " + path);
             }
             properties.load(inputStream);
             return properties;

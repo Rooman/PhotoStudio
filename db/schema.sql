@@ -12,7 +12,7 @@ CREATE TABLE UserGender (
 CREATE TABLE Users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(400) UNIQUE NOT NULL,
-    phoneNumber BIGINT UNSIGNED,
+    phoneNumber VARCHAR(20),
     firstName VARCHAR(100),
     lastName VARCHAR(100),
     genderId INT,
