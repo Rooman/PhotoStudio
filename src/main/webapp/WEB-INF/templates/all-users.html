@@ -17,9 +17,9 @@
 
     <link rel="stylesheet" type="text/css" href="assets/css/common.css">
     <link rel="stylesheet" type="text/css" href="assets/css/login.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/all-users.css">
     <title>Photo Studio</title>
 </head>
-
 <body>
 
 <!--NavBar-->
@@ -65,36 +65,39 @@
 <hr class="header__underscore">
 <!--NavBarEnd-->
 
-<div class="login">
-
-    <h1 class="login-title">Miari Fotografie</h1>
-
-    <div class="login-form-wrapper">
-        <div class="login-header">
-            <h3>Sing in</h3>
-        </div>
-        <hr class="login-underscore">
-
-        <form class="login-form" action="login" method="post">
-
-            <div  class="incorrect-login" th:if="${invalid == 'yes'}">Incorrect login(email or phone) or password please try again</div>
-
-            <div class="form-group">
-                <input type="text" class="form-control " id="inputName" aria-describedby="nameHelp"
-                       placeholder="Email or phone" name="login" required>
-                <small id="nameHelp" class="form-text text-muted">We'll never share your login with anyone else.</small>
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" id="inputPassword"  placeholder="Password" name="password" required>
-            </div>
-            <button type="submit" class="btn sign-in-button">Sing in</button>
-        </form>
-
-        <hr class="login-underscore login-underscore--green">
-        <hr class="login-underscore login-underscore--rounded">
-    </div>
+<div class="navigation-page-buttons">
+    <button class="btn navigation-page-button">Admin page</button>
+    <button class="btn navigation-page-button">All users</button>
 </div>
 
+<button class="btn new-user-button">New user</button>
+
+<h1 class="all-users-title">Users</h1>
+<main class="show-all-users">
+
+    <table class="table table-bordered users-table">
+        <thead>
+        <tr class="colum-name">
+            <th scope="col">Id</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+        </tr>
+        </thead>
+        <tbody class="users-table-body">
+        <div th:each="user : ${users}">
+            <tr>
+                <th scope="row" th:text="${user.id}"></th>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.firstName} +' '+ ${user.lastName} "></td>
+                <td th:text="${user.zip}+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
+        </div>
+        </tbody>
+    </table>
+
+</main>
 <!--    Footer-->
 <footer class="footer">
 </footer>
