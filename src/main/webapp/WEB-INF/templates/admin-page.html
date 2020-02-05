@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Admin Page</title>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="/assets/css/admin-page.css">
+</head>
+<body>
+<!--TODO: Ждем ответа по необходимости использования header и footer компонентов страницы для администратора -->
+<nav th:replace="fragment/navigation.html :: nav"></nav>
+<hr class="header__underscore">
+<main>
+    <div class="container admin">
+        <div class="admin__header">
+            <h1 class="admin__title">Admin page</h1>
+        </div>
+        <div class="admin__buttons">
+            <ul class="admin__nav-links">
+                <li class="admin__nav-link">
+                    <a href="#" class="btn btn-submit btn-outline-dark button">New order</a>
+                </li>
+                <li class="admin__nav-link">
+                    <a href="orders" class="btn btn-submit btn-outline-dark button">Order journal</a>
+                </li>
+                <li class="admin__nav-link">
+                    <a href="admin/users" class="btn btn-submit btn-outline-dark button">All users</a>
+                </li>
+                <li class="admin__nav-link">
+                    <a href="admin/user/add" class="btn btn-submit btn-outline-dark button">New user</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

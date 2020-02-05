@@ -5,8 +5,14 @@
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
 </head>
-<body class="container">
-<div id="parameters">
+<body>
+<nav th:replace="fragment/navigation.html :: nav"></nav>
+<hr class="header__underscore">
+<div id="parameters" class="container">
+    <div class="admin__header">
+        <h1 class="admin__title">Admin page</h1>
+    </div>
+
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="inputDateFrom">From</label>
@@ -21,6 +27,7 @@
                    name="filterToDate">
         </div>
     </div>
+
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="inputEmail">Email</label>
@@ -34,6 +41,7 @@
                    class="form-control select-selected" id="inputPhoneNumber" name="filterPhoneNumber">
         </div>
     </div>
+
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="inputState">State</label>
@@ -46,13 +54,14 @@
             </select>
         </div>
     </div>
+
     <div class="form-group">
         <a href="#" onclick="parameterize()" id="add_parameters"
            class="btn btn-submit btn-outline-dark button">Apply</a>
     </div>
 </div>
 
-<table class="table table-hover">
+<table class="table table-hover container">
     <thead>
     <tr>
         <th scope="col">Number</th>
@@ -69,7 +78,8 @@
             <td th:text="${order.status}"></td>
             <td>
                 <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
-                <div th:if="${order.user.phoneNumber != null}" th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
+                <div th:if="${order.user.phoneNumber != null}"
+                     th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
             </td>
         </tr>
     </div>
