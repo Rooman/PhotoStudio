@@ -34,6 +34,11 @@
         <servlet-class>com.photostudio.web.servlet.AdminPageServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.HomeServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
@@ -63,4 +68,11 @@
         <servlet-name>AdminPageServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
+  
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
+
 </web-app>

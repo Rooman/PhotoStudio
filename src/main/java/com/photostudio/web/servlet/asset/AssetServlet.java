@@ -11,8 +11,8 @@ public class AssetServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        String requestURI = request.getRequestURI().substring(1);
-        System.out.println(requestURI);
+      
+        String requestURI = request.getRequestURI().replace(request.getContextPath(),"").substring(1);
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(requestURI)) {
             byte[] buffer = new byte[BUFFER_SIZE];
             int numBytesRead;

@@ -16,9 +16,10 @@ public class UserServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process("add-user", response.getWriter());
+        TemplateEngineFactory.process("user-info", response.getWriter());
     }
 
     @Override
