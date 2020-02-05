@@ -6,13 +6,13 @@
     padding-bottom: 200px;
 }
 
-
 .login-title {
     margin-left: 75px;
     font-weight: 300;
     font-size: 144px;
     line-height: 150px;
 }
+
 
 .login-form-wrapper {
     border: 1px solid #FAE1DE;
@@ -32,6 +32,10 @@
     font-weight: 500;
     font-size: 48px;
     line-height: 48px;
+}
+.incorrect-login{
+   color:red;
+   margin-bottom:5px;
 }
 
 .login-underscore {
