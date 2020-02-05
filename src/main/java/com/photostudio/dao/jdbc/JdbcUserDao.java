@@ -24,9 +24,8 @@ public class JdbcUserDao implements UserDao {
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
-<<<<<<< HEAD
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
-=======
+
     private static final String GET_USER_BY_LOGIN = "SELECT u.id id, " +
             "u.email email, " +
             "u.phoneNumber, " +
@@ -52,7 +51,6 @@ public class JdbcUserDao implements UserDao {
             "INNER JOIN UserRole ur ON u.userRoleId=ur.id \n" +
             "LEFT JOIN UserGender ug ON u.genderId=ug.id\n" +
             "WHERE u.id=?;";
->>>>>>> 2d2559873e918a19768c9b153cc3403051ab4308
 
     private DataSource dataSource;
 
@@ -83,14 +81,9 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
-<<<<<<< HEAD
-            preparedStatement.setLong(2, user.getPhoneNumber());
-=======
             preparedStatement.setString(2, user.getPhoneNumber());
->>>>>>> 2d2559873e918a19768c9b153cc3403051ab4308
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
-
             preparedStatement.setObject(5, user.getGender());
             preparedStatement.setString(6, user.getPasswordHash());
             preparedStatement.setString(7, user.getSalt());
@@ -125,7 +118,6 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-
     @Override
     public void edit(User user) {
     }
@@ -140,8 +132,6 @@ public class JdbcUserDao implements UserDao {
             throw new RuntimeException("error.Can't remove user", e);
         }
     }
-<<<<<<< HEAD
-=======
 
     @Override
     public User getByLogin(String login) {
@@ -168,5 +158,4 @@ public class JdbcUserDao implements UserDao {
             throw new RuntimeException("Get user by login error", e);
         }
     }
->>>>>>> 2d2559873e918a19768c9b153cc3403051ab4308
 }

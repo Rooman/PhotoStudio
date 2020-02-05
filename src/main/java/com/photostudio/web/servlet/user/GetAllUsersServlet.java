@@ -18,7 +18,6 @@ public class GetAllUsersServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         List<User> users = userService.getAllUsers();
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
@@ -26,5 +25,4 @@ public class GetAllUsersServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         TemplateEngineFactory.process("all-users", variablesMap, response.getWriter());
     }
-
 }

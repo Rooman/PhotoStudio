@@ -12,18 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UserServlet extends HttpServlet {
+    private static final String ALL_USERS_PAGE = "/admin/users";
     private UserService userService = ServiceLocator.getService(UserService.class);
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
         TemplateEngineFactory.process("user-info", response.getWriter());
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String gender = request.getParameter("genderName");
@@ -47,5 +47,14 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
 
         userService.add(newUser);
+        response.sendRedirect(ALL_USERS_PAGE);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        long id = Long.parseLong(request.getParameter("id"));
+
+        userService.delete(id);
+        response.sendRedirect(ALL_USERS_PAGE);
     }
 }
