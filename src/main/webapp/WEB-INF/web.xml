@@ -64,5 +64,4 @@
         <url-pattern>/assets/*</url-pattern>
     </servlet-mapping>
 
-
 </web-app>
