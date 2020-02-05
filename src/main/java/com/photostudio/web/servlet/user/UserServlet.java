@@ -19,7 +19,7 @@ public class UserServlet extends HttpServlet {
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process("add-user", response.getWriter());
+        TemplateEngineFactory.process("user-info", response.getWriter());
     }
 
     @Override
