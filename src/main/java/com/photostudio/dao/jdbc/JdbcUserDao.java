@@ -77,7 +77,6 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void add(User user) {
-
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
@@ -129,7 +128,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("error.Can't remove user", e);
+            throw new RuntimeException("Can't remove user", e);
         }
     }
 
