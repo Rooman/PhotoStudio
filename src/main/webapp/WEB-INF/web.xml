@@ -74,4 +74,9 @@
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>AssetServlet</servlet-name>
+        <url-pattern>/assets/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
