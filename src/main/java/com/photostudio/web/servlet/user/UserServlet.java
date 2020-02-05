@@ -1,7 +1,6 @@
 package com.photostudio.web.servlet.user;
 
 import com.photostudio.ServiceLocator;
-import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
