@@ -1,5 +1,5 @@
 function parameterize() {
-    let url = 'orders';
+    let url = document.location.origin + '/orders';
     let params = {};
     document.querySelectorAll('#parameters .select-selected').forEach((element) => {
         if (element.value.length > 0
