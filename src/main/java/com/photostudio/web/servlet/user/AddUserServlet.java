@@ -52,6 +52,7 @@ public class AddUserServlet extends HttpServlet {
         if (isNotEmpty(gender)) {
             newUser.setGender(Gender.getByGender(gender));
         }
+        //TODO: check 0
         if (isNotEmpty(zip)) {
             newUser.setZip(Integer.parseInt(zip));
         }
