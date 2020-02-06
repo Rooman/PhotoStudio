@@ -31,9 +31,6 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
-        UserService userService = new DefaultUserService(userDao);
-        register(UserService.class, userService);
-
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
 
@@ -43,6 +40,8 @@ public class ServiceLocator {
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
 
+        UserService userService = new DefaultUserService(userDao, securityService);
+        register(UserService.class, userService);
     }
 
     public static <T> T getService(Class<T> serviceClass) {

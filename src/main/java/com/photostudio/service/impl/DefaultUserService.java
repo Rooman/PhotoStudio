@@ -2,16 +2,17 @@ package com.photostudio.service.impl;
 
 import com.photostudio.dao.UserDao;
 import com.photostudio.entity.user.User;
+import com.photostudio.security.SecurityService;
 import com.photostudio.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class DefaultUserService implements UserService {
     private UserDao userDao;
-
-    public DefaultUserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private SecurityService securityService;
 
     @Override
     public List<User> getAllUsers() {
@@ -19,7 +20,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public void add(User user) {
+    public void register(User user) {
+        securityService.createAndInjectSaltAndHashedPassword(user);
         userDao.add(user);
     }
 

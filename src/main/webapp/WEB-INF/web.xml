@@ -49,15 +49,13 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user/*</url-pattern>
-        <url-pattern>/user</url-pattern>
+        <servlet-name>AddUserServlet</servlet-name>
+        <url-pattern>/user/add</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>AddUserServlet</servlet-name>
-        <url-pattern>/user/add</url-pattern>
-
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

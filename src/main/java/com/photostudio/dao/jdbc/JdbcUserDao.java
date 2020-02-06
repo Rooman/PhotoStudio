@@ -23,7 +23,8 @@ public class JdbcUserDao implements UserDao {
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
             "firstName,lastName,genderId,userRoleId,passwordHash,salt, country,city,zip,address) " +
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
-            "?,?,?,?,?,?)";
+            "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?)";
+
 
     private static final String GET_USER_BY_LOGIN = "SELECT u.id id, " +
             "u.email email, " +
