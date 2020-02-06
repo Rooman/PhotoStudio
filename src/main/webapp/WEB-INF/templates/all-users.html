@@ -64,13 +64,7 @@
 </nav>
 <hr class="header__underscore">
 <!--NavBarEnd-->
-
-<div class="navigation-page-buttons">
-    <button class="btn navigation-page-button">Admin page</button>
-    <button class="btn navigation-page-button">All users</button>
-</div>
-
-<button class="btn new-user-button">New user</button>
+<button class="btn new-user-button"><a href="/user/add">New user</a></button>
 
 <h1 class="all-users-title">Users</h1>
 <main class="show-all-users">
@@ -86,13 +80,21 @@
         </tr>
         </thead>
         <tbody class="users-table-body">
-        <div th:each="user : ${users}">
+        <div th:each="user : ${users}"
+             th:with="userInfoPage=@{user(id=${user.getId()})}">
             <tr>
-                <th scope="row" th:text="${user.id}"></th>
-                <td th:text="${user.email}"></td>
+
+                <td scope="row" th:text="${user.id}"></td>
+                <a th:href="${userInfoPage}">
+                    <td th:text="${user.email}"></td>
+                </a>
                 <td th:text="${user.phoneNumber}"></td>
                 <td th:text="${user.firstName} +' '+ ${user.lastName} "></td>
+
                 <td th:text="${user.zip}+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
+
+
+            </tr>
         </div>
         </tbody>
     </table>

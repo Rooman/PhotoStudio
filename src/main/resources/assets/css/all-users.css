@@ -1,20 +1,3 @@
-navigation-page-buttons {
-    display: inline-block;
-}
-
-.navigation-page-button {
-    margin-top: 50px;
-    margin-left: 100px;
-    width: 211px;
-    height: 61px;
-    border: 1px solid #000000;
-    border-radius: 10px;
-    font-weight: 300;
-    font-size: 36px;
-    line-height: 36px;
-    text-align: center;
-}
-
 .new-user-button {
     margin-top: 50px;
     margin-left: 100px;

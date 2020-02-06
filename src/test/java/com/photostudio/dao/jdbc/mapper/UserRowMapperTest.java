@@ -33,7 +33,7 @@ class UserRowMapperTest {
         when(mockResultSet.getString("country")).thenReturn("Germany");
         when(mockResultSet.getString("city")).thenReturn("Berlin");
         when(mockResultSet.getString("address")).thenReturn("Krausnickstraße 15A");
-        when(mockResultSet.getInt("zipCode")).thenReturn(10178);
+        when(mockResultSet.getInt("zip")).thenReturn(10178);
 
         //when
         User actual = userRowMapper.mapRow(mockResultSet);
@@ -53,6 +53,7 @@ class UserRowMapperTest {
         assertEquals("Germany", actual.getCountry());
         assertEquals("Berlin", actual.getCity());
         assertEquals("Krausnickstraße 15A", actual.getAddress());
+        assertEquals(10178,actual.getZip());
 
     }
 }

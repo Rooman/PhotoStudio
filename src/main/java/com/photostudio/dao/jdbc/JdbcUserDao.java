@@ -3,6 +3,7 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.LoginPasswordInvalidException;
 
 import javax.sql.DataSource;
@@ -22,7 +23,7 @@ public class JdbcUserDao implements UserDao {
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
             "firstName,lastName,genderId,userRoleId,passwordHash,salt, country,city,zip,address) " +
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
-            "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
+            "?,?,?,?,?,?)";
 
     private static final String GET_USER_BY_LOGIN = "SELECT u.id id, " +
             "u.email email, " +
@@ -82,8 +83,8 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(2, user.getPhoneNumber());
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
-
             preparedStatement.setObject(5, user.getGender());
+//            preparedStatement.setObject(6, UserRole.USER.getId());
             preparedStatement.setString(6, user.getPasswordHash());
             preparedStatement.setString(7, user.getSalt());
             preparedStatement.setString(8, user.getCountry());
