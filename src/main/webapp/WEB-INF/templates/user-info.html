@@ -22,45 +22,7 @@
 <body>
 
 <!--NavBar-->
-<nav class="navbar navbar-expand-lg navbar-light top-nav">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav top-navbar">
-            <li class="nav-item active ">
-                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Portfolio</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">Price</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="login.html">Login</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
-            </li>
-
-            <li class="nav-item dropdown top-dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    ENG
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Eng</a>
-                    <a class="dropdown-item" href="#">Ger</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+<nav th:replace="fragment/navigation.html :: nav"></nav>
 <hr class="header__underscore">
 <!--NavBarEnd-->
 <div class="user-info">
@@ -69,7 +31,7 @@
 
     <div class="user-info-form-wrapper">
 
-       <form>
+
             <table class="table table-bordered users-table">
                 <tbody>
                 <tr>
@@ -108,10 +70,12 @@
                 </tbody>
             </table>
 
-            <button type="submit" style="  margin-left: 250px" th:action="@{user(id=${user.getId()})}" method="delete"
-                    class="btn btn-secondary active">
-                Delete User
-            </button>
+<!--            <button type="submit" style="  margin-left: 250px" th:action="@{user/delete(id=${user.getId()})}" method="POST"-->
+<!--                    class="btn btn-secondary active">-->
+<!--                Delete User-->
+<!--            </button>-->
+        <form class="user-info-form" th:action="@{user/delete(id=${user.getId()})}" method="POST">
+           <button type="submit" class="btn sign-in-button">Delete User</button>
         </form>
 
     </div>
@@ -131,6 +95,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+
+
 </body>
 
 </html>

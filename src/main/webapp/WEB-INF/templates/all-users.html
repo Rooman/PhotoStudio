@@ -2,34 +2,26 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
 
-    <!--Fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:300,400,500,700&display=swap"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--Style-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link rel="stylesheet" type="text/css" href="assets/css/common.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/login.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/all-users.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/login.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/all-users.css">
     <title>Photo Studio</title>
 </head>
 <body>
 
 <nav th:replace="fragment/navigation.html :: nav"></nav>
+<hr class="header__underscore">
 
 <div class="navigation-page-buttons">
-    <button class="btn navigation-page-button">Admin page</button>
-    <button class="btn navigation-page-button">All users</button>
+<!--    <button class="btn navigation-page-button">Admin page</button>-->
+    <a class="nav-link" href="../admin">Admin page</a>
+<!--    <button class="btn navigation-page-button">All users</button>-->
 </div>
 
-<button class="btn new-user-button">New user</button>
+<!--<button class="btn new-user-button">New user</button>-->
 
 <h1 class="all-users-title">Users</h1>
 <main class="show-all-users">
@@ -46,17 +38,15 @@
         </tr>
         </thead>
         <tbody class="users-table-body">
-        <div th:each="user : ${users}"
-             th:with="userInfoPage=@{user(id=${user.getId()})}">
+        <div th:each="user : ${users}">
             <tr>
-                <td scope="row" th:text="${user.id}"><a th:href="${userInfoPage}"> </a></td>
+                <td scope="row" th:text="${user.id}"></td>
 
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.phoneNumber}"></td>
                 <td th:text="${user.firstName} +' '+ ${user.lastName} "></td>
                 <td th:text="${user.zip}+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
-                <td><a type="hidden" name="id" th:href="${userInfoPage}">Get user</a></td>
-
+                <td><a th:href="@{'../user'(id=${user.id})}">Get user</a></td>
             </tr>
         </div>
         </tbody>

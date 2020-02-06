@@ -37,11 +37,15 @@ public class ServiceLocator {
         OrderService orderService = new DefaultOrderService();
         register(OrderService.class, orderService);
 
+        DefaultUserService userService = new DefaultUserService();
+        register(UserService.class, userService);
+
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
 
-        UserService userService = new DefaultUserService(userDao, securityService);
-        register(UserService.class, userService);
+        userService.setUserDao(userDao);
+        userService.setSecurityService(securityService);
+
     }
 
     public static <T> T getService(Class<T> serviceClass) {

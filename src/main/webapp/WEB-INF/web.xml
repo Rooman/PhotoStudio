@@ -14,8 +14,8 @@
         <servlet-class>com.photostudio.web.servlet.user.UserServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddUserServlet</servlet-name>
-        <servlet-class>com.photostudio.web.servlet.user.AddUserServlet</servlet-class>
+        <servlet-name>DeleteUserServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.user.DeleteUserServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -49,13 +49,13 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>AddUserServlet</servlet-name>
-        <url-pattern>/user/add</url-pattern>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/admin/user</url-pattern>
+        <servlet-name>DeleteUserServlet</servlet-name>
+        <url-pattern>/user/delete</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
