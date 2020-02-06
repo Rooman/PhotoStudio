@@ -47,22 +47,6 @@ body {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.button {
-    width: 18rem;
-    height: 5rem;
-    border: 3px solid rgba(250, 225, 222, 0.8);
-    border-radius: 0.6rem;
-    font-weight: 300;
-    font-size: 48px;
-    line-height: 48px;
-}
-
-.button:hover {
-    color: #000000;
-    background-color: rgba(250, 225, 222, 0.8);
-    border-color: rgba(250, 225, 222, 0.8);
-}
-
 .footer {
     background: rgba(228, 159, 182, 0.6);
     height: 187px;

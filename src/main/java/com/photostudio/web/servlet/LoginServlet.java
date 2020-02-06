@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
                 Cookie cookie = new Cookie("user-token", session.getToken());
 
                 response.addCookie(cookie);
-                response.sendRedirect(request.getContextPath() + "/admin");
+                response.sendRedirect(request.getContextPath() + "/orders");
             } catch (LoginPasswordInvalidException e) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("invalid", "yes");
