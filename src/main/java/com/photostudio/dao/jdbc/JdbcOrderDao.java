@@ -33,7 +33,7 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public List<Order> getAll() {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(addSort(GET_ALL_ORDERS));
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ORDERS);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             List<Order> orders = new ArrayList<>();
             while (resultSet.next()) {
@@ -46,15 +46,16 @@ public class JdbcOrderDao implements OrderDao {
         }
     }
 
-    //DO NOT change the order of parameters
+    //ПОРЯДОК ПАРАМЕТРОВ НЕ МЕНЯТЬ!!!!
     @Override
     public List<Order> getOrdersByParameters(FilterParameters filterParameters) {
 
         String resultWhere = getPartWhere(filterParameters);
+        ;
 
         if (resultWhere.contains("?")) {
 
-            String selectOrdersByParameters = addSort(GET_ALL_ORDERS + resultWhere);
+            String selectOrdersByParameters = GET_ALL_ORDERS + resultWhere;
 
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(selectOrdersByParameters)) {
@@ -89,7 +90,7 @@ public class JdbcOrderDao implements OrderDao {
         return getAll();
     }
 
-    String getPartWhere(FilterParameters filterParameters) {
+    protected String getPartWhere(FilterParameters filterParameters) {
         StringJoiner stringJoiner = new StringJoiner(" AND ", " WHERE ", "");
         if (filterParameters.getEmail() != null) {
             stringJoiner.add("u.email=?");
@@ -107,9 +108,5 @@ public class JdbcOrderDao implements OrderDao {
             stringJoiner.add("u.phoneNumber=?");
         }
         return stringJoiner.toString();
-    }
-
-    private String addSort(String query){
-        return query + " ORDER BY o.id DESC";
     }
 }
