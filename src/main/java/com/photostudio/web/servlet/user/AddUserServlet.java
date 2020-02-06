@@ -13,7 +13,7 @@ import java.io.IOException;
 
 
 public class AddUserServlet extends HttpServlet {
-    private static final String ALL_USERS_PAGE = "/admin/users";
+    private static final String ALL_USERS_PAGE = "../admin/users";
 
     private UserService userService = ServiceLocator.getService(UserService.class);
 

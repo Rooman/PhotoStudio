@@ -77,22 +77,22 @@
             <th scope="col">Phone</th>
             <th scope="col">Name</th>
             <th scope="col">Address</th>
+            <th scope="col">Get User</th>
         </tr>
         </thead>
         <tbody class="users-table-body">
         <div th:each="user : ${users}"
              th:with="userInfoPage=@{user(id=${user.getId()})}">
             <tr>
+                <td scope="row" th:text="${user.id}"><a th:href="${userInfoPage}"> </a></td>
 
-                <td scope="row" th:text="${user.id}"></td>
-                <a th:href="${userInfoPage}">
-                    <td th:text="${user.email}"></td>
-                </a>
+                <td th:text="${user.email}"></td>
+
                 <td th:text="${user.phoneNumber}"></td>
                 <td th:text="${user.firstName} +' '+ ${user.lastName} "></td>
 
                 <td th:text="${user.zip}+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
-
+                <td><a type="hidden" name="id" th:href="${userInfoPage}">Get user</a></td>
 
             </tr>
         </div>

@@ -55,7 +55,7 @@
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
+        <url-pattern>/admin/user</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
