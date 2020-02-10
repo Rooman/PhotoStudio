@@ -47,6 +47,7 @@
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/user</url-pattern>
+        <url-pattern>/user/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -72,11 +73,7 @@
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AssetServlet</servlet-name>
-        <url-pattern>/assets/*</url-pattern>
+        <url-pattern></url-pattern>
     </servlet-mapping>
 
 </web-app>

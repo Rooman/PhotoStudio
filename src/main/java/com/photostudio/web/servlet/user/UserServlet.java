@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UserServlet extends HttpServlet {
-    private static final String ALL_USERS_PAGE = "/admin/users";
     private UserService userService = ServiceLocator.getService(UserService.class);
 
     @Override
@@ -47,14 +46,23 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
 
         userService.add(newUser);
-        response.sendRedirect(ALL_USERS_PAGE);
+        response.sendRedirect("/admin/users");
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        long id = Long.parseLong(request.getParameter("id"));
+    public void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        if (id == null){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
-        userService.delete(id);
-        response.sendRedirect(ALL_USERS_PAGE);
+        try {
+            long userId = Long.parseLong(id);
+            userService.delete(userId);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+        }catch (Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
