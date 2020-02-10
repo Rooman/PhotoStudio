@@ -13,10 +13,6 @@
         <servlet-name>UserServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.user.UserServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>DeleteUserServlet</servlet-name>
-        <servlet-class>com.photostudio.web.servlet.user.DeleteUserServlet</servlet-class>
-    </servlet>
 
     <servlet>
         <servlet-name>AllOrdersServlet</servlet-name>
@@ -24,8 +20,23 @@
     </servlet>
 
     <servlet>
+        <servlet-name>AssetServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.asset.AssetServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AdminPageServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.AdminPageServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.HomeServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -39,17 +50,33 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>DeleteUserServlet</servlet-name>
-        <url-pattern>/v1/user</url-pattern>
+        <servlet-name>AllOrdersServlet</servlet-name>
+        <url-pattern>/orders</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>AllOrdersServlet</servlet-name>
-        <url-pattern>/orders</url-pattern>
+        <servlet-name>AssetServlet</servlet-name>
+        <url-pattern>/assets/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AdminPageServlet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+  
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AssetServlet</servlet-name>
+        <url-pattern>/assets/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>

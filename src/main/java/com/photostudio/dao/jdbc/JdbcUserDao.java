@@ -77,16 +77,12 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void add(User user) {
-
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
-
             preparedStatement.setString(2, user.getPhoneNumber());
-
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
-
             preparedStatement.setObject(5, user.getGender());
             preparedStatement.setString(6, user.getPasswordHash());
             preparedStatement.setString(7, user.getSalt());
@@ -120,7 +116,6 @@ public class JdbcUserDao implements UserDao {
             throw new RuntimeException("Can't found user where id=" + id, e);
         }
     }
-
 
     @Override
     public void edit(User user) {
@@ -162,5 +157,4 @@ public class JdbcUserDao implements UserDao {
             throw new RuntimeException("Get user by login error", e);
         }
     }
-
 }
