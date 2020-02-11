@@ -1,89 +1,90 @@
 body {
-font-family: Cormorant Upright, sans-serif;
+
+    font-family: Cormorant Upright, sans-serif;
 }
 
 .header__underscore {
-margin: 0;
+    margin: 0;
 }
 
 .container {
-max-width: 1440px;
-margin: 0 auto;
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
 .top-nav {
-height: 137px;
+    height: 137px;
 }
 
 .top-navbar {
-margin: 0 auto;
+    margin: 0 auto;
 }
 
 .top-navbar > li {
-margin-left: 75px;
-margin-right: 75px;
+    margin-left: 75px;
+    margin-right: 75px;
 }
 
 .top-navbar a {
-color: #000;
-font-size: 18px;
-text-transform: uppercase;
-line-height: 26px;
-padding: 5px;
+    color: #000;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 26px;
+    padding: 5px;
 }
 
 .top-dropdown {
-border: 2px solid rgba(0, 0, 0, 0.4);
-padding: 5px 11px;
-border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    padding: 5px 11px;
+    border-radius: 10px;
 }
 
 .top-dropdown a {
-font-size: 13px;
-line-height: 13px;
+    font-size: 13px;
+    line-height: 13px;
 }
 
 .top-dropdown a:after {
-border: 0;
-font-family: "FontAwesome";
-font-size: 14px;
-content: "\f078";
-margin-left: 5px;
-vertical-align: 0;
-color: rgba(0, 0, 0, 0.8);
+    border: 0;
+    font-family: "FontAwesome";
+    font-size: 14px;
+    content: "\f078";
+    margin-left: 5px;
+    vertical-align: 0;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .dropdown-menu show {
-max-width: 50px;
+    max-width: 50px;
 }
 
 .top-dropdown a:after {
-border: 0;
-font-family: "FontAwesome";
-font-size: 14px;
-content: "\f078";
-margin-left: 5px;
-vertical-align: 0;
-color: rgba(0, 0, 0, 0.8);
+    border: 0;
+    font-family: "FontAwesome";
+    font-size: 14px;
+    content: "\f078";
+    margin-left: 5px;
+    vertical-align: 0;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .button {
-width: 18rem;
-height: 5rem;
-border: 3px solid rgba(250, 225, 222, 0.8);
-border-radius: 0.6rem;
-font-weight: 300;
-font-size: 48px;
-line-height: 48px;
+    width: 18rem;
+    height: 5rem;
+    border: 3px solid rgba(250, 225, 222, 0.8);
+    border-radius: 0.6rem;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 48px;
 }
 
 .button:hover {
-color: #000000;
-background-color: rgba(250, 225, 222, 0.8);
-border-color: rgba(250, 225, 222, 0.8);
+    color: #000000;
+    background-color: rgba(250, 225, 222, 0.8);
+    border-color: rgba(250, 225, 222, 0.8);
 }
 
 .footer {
-background: rgba(228, 159, 182, 0.6);
-height: 187px;
+    background: rgba(228, 159, 182, 0.6);
+    height: 187px;
 }
