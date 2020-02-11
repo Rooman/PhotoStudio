@@ -20,11 +20,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>AssetServlet</servlet-name>
-        <servlet-class>com.photostudio.web.servlet.asset.AssetServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.LoginServlet</servlet-class>
     </servlet>
@@ -55,11 +50,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>AssetServlet</servlet-name>
-        <url-pattern>/assets/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
@@ -68,7 +58,7 @@
         <servlet-name>AdminPageServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
-  
+
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
