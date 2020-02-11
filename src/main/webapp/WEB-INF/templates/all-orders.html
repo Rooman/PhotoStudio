@@ -4,78 +4,108 @@
     <title>Orders Journal</title>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/all-orders.css">
 </head>
-<body class="container">
-<div id="parameters">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputDateFrom">From</label>
-            <input type="date" class="data-field form-control select-selected" id="inputDateFrom"
-                   placeholder="Search by from Date"
-                   name="filterFromDate">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputDateTo">To</label>
-            <input type="date" class="data-field form-control select-selected" id="inputDateTo"
-                   placeholder="Search by to Date"
-                   name="filterToDate">
+<body>
+<div class="conteiner">
+    <div class="bread__crumb-navigation">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="admin-page">Admin page</a></li>
+                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
+                <li class="breadcrumb-item active" aria-current="page">Order journal</li>
+            </ol>
+        </nav>
+    </div>
+
+    <h1 class="orders__title">Orders</h1>
+
+    <div class="order__header">
+        <div class="order-btn">
+            <a href="#"
+               class="btn btn-submit btn-outline-dark button order-btn_right">Filter</a>
+            <a href="#"
+               class="btn btn-submit btn-outline-dark button order-btn_left">New order</a>
         </div>
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputEmail">Email</label>
-            <input type="email" class="form-control select-selected" id="inputEmail" placeholder="email"
-                   name="filterEmail">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputPhoneNumber">Phone</label>
-            <input type="tel" pattern="[1-9][0-9]{0,3} [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"
-                   placeholder="38 XXX XXX XX XX"
-                   class="form-control select-selected" id="inputPhoneNumber" name="filterPhoneNumber">
+
+    <div class="order-board">
+        <div class="order-board_content ">
+            <div class="form-row ">
+                <div class="form-group col-md-6 form-inline">
+                    <label for="inputDateFrom">From</label>
+                    <input type="date" class="data-field form-control select-selected" id="inputDateFrom"
+                           placeholder="Search by from Date" name="filterFromDate">
+                </div>
+                <div class="form-group col-md-6 form-inline">
+                    <label for="inputDateTo">To</label>
+                    <input type="date" class="data-field form-control select-selected" id="inputDateTo"
+                           placeholder="Search by to Date" name="filterToDate">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6 form-inline">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" class="form-control select-selected" id="inputEmail" placeholder="email"
+                           name="filterEmail">
+                </div>
+                <div class="form-group col-md-6 form-inline">
+                    <label for="inputPhoneNumber">Phone</label>
+                    <input type="tel" pattern="[1-9][0-9]{0,3} [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"
+                           placeholder="38 XXX XXX XX XX" class="form-control select-selected" id="inputPhoneNumber"
+                           name="filterPhoneNumber">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6 form-inline">
+                    <label for="inputState">State</label>
+                    <select id="inputState" name="filterOrderStatus" class="form-control">
+                        <option selected></option>
+                        <option>New</option>
+                        <option>View and Select</option>
+                        <option>Selected</option>
+                        <option>Ready</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group orders-board-btn_apply ">
+                <a href="#" onclick="parameterize()" id="add_parameters"
+                   class="btn btn-submit btn-outline-dark button">Apply</a>
+            </div>
         </div>
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputState">State</label>
-            <select id="inputState" name="filterOrderStatus" class="form-control">
-                <option selected></option>
-                <option>New</option>
-                <option>View and Select</option>
-                <option>Selected</option>
-                <option>Ready</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <a href="#" onclick="parameterize()" id="add_parameters"
-           class="btn btn-submit btn-outline-dark button">Apply</a>
+    <div class="conteiner ">
+        <table class="table">
+            <thead class="table-column-name">
+            <tr>
+                <th scope="col">Number</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">User(Email/Phone)</th>
+            </tr>
+            </thead>
+            <tbody class="table-column-content">
+            <div th:each="order : ${orders}">
+                <tr>
+                    <th scope="row" th:text="${order.id}"></th>
+                    <td th:text="${order.orderDate}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td>
+                        <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
+                        <div th:if="${order.user.phoneNumber != null}"
+                             th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
+                    </td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
     </div>
 </div>
-
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">Number</th>
-        <th scope="col">Date</th>
-        <th scope="col">Status</th>
-        <th scope="col">User(Email/Phone)</th>
-    </tr>
-    </thead>
-    <tbody>
-    <div th:each="order : ${orders}">
-        <tr>
-            <th scope="row" th:text="${order.id}"></th>
-            <td th:text="${order.orderDate}"></td>
-            <td th:text="${order.status}"></td>
-            <td>
-                <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
-                <div th:if="${order.user.phoneNumber != null}" th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
-            </td>
-        </tr>
-    </div>
-    </tbody>
-</table>
-
 <script src="assets/js/order/orders.js"></script>
 </body>
 </html>
+
+
