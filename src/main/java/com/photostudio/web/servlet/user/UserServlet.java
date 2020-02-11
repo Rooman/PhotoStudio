@@ -22,9 +22,8 @@ public class UserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
-
         String phoneNumber = request.getParameter("phoneNumber");
         String gender = request.getParameter("genderName");
         String firstName = request.getParameter("firstName");
@@ -47,5 +46,23 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
 
         userService.add(newUser);
+        response.sendRedirect("/admin/users");
+    }
+
+    public void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        if (id == null){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        try {
+            long userId = Long.parseLong(id);
+            userService.delete(userId);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+        }catch (Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -28,5 +28,4 @@ public class GetAllUsersServlet extends HttpServlet {
 
         TemplateEngineFactory.process("all-users", variablesMap, response.getWriter());
     }
-
 }

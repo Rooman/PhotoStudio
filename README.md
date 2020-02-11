@@ -1,6 +1,6 @@
 Photo Studio Site
 
-[![Build Status](http://ec2-3-15-182-5.us-east-2.compute.amazonaws.com:8080/buildStatus/icon?job=deploy-war-to-tomcat-develop&subject=Develop%20branch%20build%20status)](http://ec2-3-15-182-5.us-east-2.compute.amazonaws.com:8080/job/deploy-war-to-tomcat-develop/)
+[![Build Status](http://ec2-18-220-45-192.us-east-2.compute.amazonaws.com:8080/buildStatus/icon?job=deploy-war-to-tomcat-develop&subject=Develop%20branch%20build%20status)](http://ec2-18-220-45-192.us-east-2.compute.amazonaws.com:8080/job/deploy-war-to-tomcat-develop/)
 
 trello:
 https://trello.com/b/89Y5nbw2/photo-studio-dev
