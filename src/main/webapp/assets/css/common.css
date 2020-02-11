@@ -1,9 +1,15 @@
 body {
+
     font-family: Cormorant Upright, sans-serif;
 }
 
 .header__underscore {
     margin: 0;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
 .top-nav {
@@ -30,11 +36,26 @@ body {
 .top-dropdown {
     border: 2px solid rgba(0, 0, 0, 0.4);
     padding: 5px 11px;
+    border-radius: 10px;
 }
 
 .top-dropdown a {
     font-size: 13px;
     line-height: 13px;
+}
+
+.top-dropdown a:after {
+    border: 0;
+    font-family: "FontAwesome";
+    font-size: 14px;
+    content: "\f078";
+    margin-left: 5px;
+    vertical-align: 0;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-menu show {
+    max-width: 50px;
 }
 
 .top-dropdown a:after {

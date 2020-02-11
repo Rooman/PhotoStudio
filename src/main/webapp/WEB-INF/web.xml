@@ -42,6 +42,7 @@
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/user</url-pattern>
+        <url-pattern>/user/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -55,11 +56,13 @@
     </servlet-mapping>
 
     <servlet-mapping>
+
         <servlet-name>AdminPageServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
+
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
         <url-pattern></url-pattern>

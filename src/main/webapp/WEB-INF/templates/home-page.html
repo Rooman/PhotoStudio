@@ -2,125 +2,58 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!--Fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:300,400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--Style-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link rel="stylesheet" type="text/css" href="assets/css/common.css">
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
     <link rel="stylesheet" type="text/css" href="assets/css/home.css">
-
     <title>Photo Studio</title>
 </head>
-
 <body>
-
 <header class="header">
-
     <!--NavBar-->
-    <nav class="navbar navbar-expand-lg navbar-light top-nav">
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav top-navbar">
-                <li class="nav-item active ">
-                    <a class="nav-link" href="home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Portfolio</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Price</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="login">Login</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-
-                <li class="nav-item dropdown top-dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <ENG>Eng</ENG>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Eng</a>
-                        <a class="dropdown-item" href="#">Ger</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <nav th:replace="fragment/navigation.html :: nav"></nav>
     <hr class="header__underscore">
     <!--NavBarEnd-->
-
-    <h1 class="main-title">Miari<br> Fotografie</h1>
 </header>
 
-<main class="content">
-    <h2 class="content-title">About the photo shoot of newborns
-        <br>and children up to a year</h2>
+<main class="home">
+    <div class="container">
+        <div class="baby-image baby-image_intro"><img src="assets/images/baby-intro.jpg" alt="baby">
+            <h1 class="home__main-title">Miari<br> Fotografie</h1>
+        </div>
+        <div class="home__content">
+            <h2 class="home__content-title">About the photo shoot of newborns
+                <br>and children up to a year</h2>
+            <div class="description__card shooting-age">
+                <h3 class="description__card-header">Age for shooting a newborn</h3>
+                <p class="description__card-text"> The specifics of shooting newborns are available in a certain period
+                    - up to one month, and ideally from 5 to 14 days from birth. If you missed the deadlines, don’t
+                    worry, the main thing is to decide for yourself that you want to take professional photos of your
+                    child
+                    in infancy!</p>
+                <p class="description__card-text"> You can organize a photo shoot for any age. 1 month, 2,3,5, etc.,
+                    because the
+                    charm of the baby every day only increases, and a child’s photographer will help you
+                    maintain these
+                    moments for many years!</p>
+            </div>
 
-
-    <div class="description-card shooting-age">
-        <h3 class="description-card-header">Age for shooting a newborn</h3>
-        <p class="description-card-text"> The specifics of shooting newborns are available in a certain period -
-            up to
-            one month, and ideally from 5 to 14 days from birth. If you missed the deadlines, don’t
-            worry, the
-            main thing is to decide for yourself that you want to take professional photos of your child
-            in
-            infancy!</p>
-
-        <p class="description-card-text"> You can organize a photo shoot for any age. 1 month, 2,3,5, etc.,
-            because the
-            charm of the baby every day only increases, and a child’s photographer will help you
-            maintain these
-            moments for many years!</p>
-    </div>
-
-    <div class="baby-images">
-        <div class="baby-image baby-image-left"><img src="assets/images/baby-1.png" alt=""></div>
-        <div class="baby-image baby-image-right"><img src="assets/images/baby-2.png" alt=""></div>
-    </div>
-
-    <div class="description-card shooting-location">
-        <h3 class="description-card-header">Location of the photo shoot</h3>
-        <p class="description-card-text"> A photo session can be held at home or in a specialized studio for
-            newborns. We
-            discuss all the nuances in a personal conversation. </p>
-
+            <div class="baby-images">
+                <div class="baby-image baby-image_left"><img src="assets/images/baby-1.png" alt="baby"></div>
+                <div class="baby-image baby-image_right"><img src="assets/images/baby-2.png" alt="baby"></div>
+            </div>
+            <div class="description__card shooting-location">
+                <h3 class="description__card-header">Location of the photo shoot</h3>
+                <p class="description__card-text"> A photo session can be held at home or in a specialized studio for
+                    newborns. We discuss all the nuances in a personal conversation. </p>
+            </div>
+        </div>
     </div>
 </main>
 
 <!--    Footer-->
 <footer class="footer">
 </footer>
-
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+<meta th:replace="fragment/script.html :: script">
 </body>
 
 </html>
-
