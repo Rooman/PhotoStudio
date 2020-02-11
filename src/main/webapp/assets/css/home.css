@@ -1,20 +1,17 @@
-.header {
-    background: url(../images/intro.png) no-repeat;
-    background-size: cover;
-    height: 1613px;
-    width: 100%;
+.baby-image_intro {
+    margin-top: -140px;
 }
 
-.main-title {
+.home__main-title {
     font-weight: 300;
     font-size: 144px;
     line-height: 150px;
-    margin-top: 50px;
-    /*TODO: check this*/
+    position: absolute;
+    top: 200px;
     margin-left: 5%;
 }
 
-.content {
+.home__content {
     margin-top: 30px;
     padding-top: 100px;
     padding-bottom: 200px;
@@ -22,7 +19,7 @@
     background-size: cover;
 }
 
-.content-title {
+.home__content-title {
     font-weight: 300;
     font-size: 96px;
     line-height: 105px;
@@ -37,33 +34,30 @@
     background: #FBE7E5;
 }
 
-.description-card {
+.description__card {
     width: 817px;
     padding: 50px 75px;
     border-radius: 10px;
 }
 
-.description-card-header {
+.description__card-header {
     font-weight: 300;
     font-size: 64px;
     line-height: 70px;
-    /* identical to box height, or 109% */
-
     text-align: center;
     margin: 0 0 30px;
 }
 
-.description-card-text {
+.description__card-text {
     font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 24px;
     line-height: 36px;
-
     text-align: center;
     margin: 0;
 }
 
-.description-card-text:last-child {
+.description__card-text:last-child {
     margin-top: 50px;
 }
 
@@ -81,11 +75,11 @@
     height: auto;
 }
 
-.baby-image-left {
+.baby-image_left {
     width: 40%;
 }
 
-.baby-image-right {
+.baby-image_right {
     width: 60%;
 }
 
@@ -95,4 +89,3 @@
     margin-right: 100px;
     background: rgba(137, 203, 201, 0.5);
 }
-
