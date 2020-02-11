@@ -3,6 +3,10 @@ body {
     font-family: Cormorant Upright, sans-serif;
 }
 
+.header{
+    position: relative;
+}
+
 .header__underscore {
     margin: 0;
 }
