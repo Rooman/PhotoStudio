@@ -1,48 +1,6 @@
-/*Bread Crumb */
-
-.bread__crumb-navigation {
-	margin-top: 50px;
-	margin-left: 100px;
-}
-
-.breadcrumb {
-	margin: 0;
-	padding: 0;
-	background-color: white;
-}
-
-.bread__crumb-arrow {
-	margin-top: 25px;
-	height: 5px;
-	width: 100px;
-}
-
-.breadcrumb-item {
-	width: 211px;
-	height: 61px;
-	border: 1px solid #000000;
-	border-radius: 10px;
-
-	font-weight: 300;
-	font-size: 36px;
-	line-height: 36px;
-	text-align: center;
-	text-decoration: none;
-	padding-top: 10px;
-}
-
-.breadcrumb-item a {
-	color: #000000;
-	text-decoration: none;
-}
-/*Bread Crumb End*/
-
-
-
-
-.new-user-button {
+.new-user_button {
     margin-top: 50px;
-    margin-left: 100px;
+    margin-left: 1130px;
     background: #FAE1DE;
     border: 3px solid rgba(228, 159, 182, 0.6);
     border-radius: 10px;
@@ -54,79 +12,10 @@
     text-align: center;
 }
 
-.all-users-title {
+.all-users_title {
     text-align: center;
-    margin-top: 100px;
     font-weight: 300;
     font-size: 96px;
     line-height: 96px;
 }
 
-
-.users-table {
-    margin-top: 100px;
-    margin-bottom: 100px;
-}
-
-.colum-name {
-    background: rgba(250, 225, 222, 0.8);
-    font-weight: 300;
-    font-size: 48px;
-    line-height: 48px;
-    text-align: center;
-}
-
-.users-table-body {
-    font-weight: 300;
-    font-size: 26px;
-    line-height: 26px;
-    text-align: center;
-
-}
-/*table*/
-.table {
-	border: 1px solid rgba(228, 159, 182, 0.6);
-	border-radius: 10px;
-	border-collapse: separate;
-	max-width: 1240px;
-	border-spacing: 0px;
-	margin: 100px;
-}
-
-td,
-th {
-	border-left: solid rgba(228, 159, 182, 0.6) 1px;
-	border-top: solid rgba(228, 159, 182, 0.6) 1px;
-}
-
- th {
-	background: rgba(250, 225, 222, 0.8);
-}
-
- th:first-child {
-	border-radius: 10px 0 0 0;
-}
-
- th:last-child {
-	border-radius: 0 10px 0 0;
-}
-
-th {
-	border-top: none;
-	font-weight: 300;
-	font-size: 48px;
-	line-height: 48px;
-	text-align: center;
-}
-
-td {
-	font-weight: 300;
-	font-size: 36px;
-	line-height: 36px;
-	text-align: center;
-}
-
-td:first-child,
-th:first-child {
-	border-left: none;
-}
