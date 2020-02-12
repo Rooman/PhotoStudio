@@ -1,4 +1,4 @@
-.conteiner {
+.orders{
 	max-width: 1440px;
 	margin: 0, auto;
 }
@@ -96,18 +96,18 @@
 	border: 1px solid rgba(228, 159, 182, 0.6);
 	max-width: 1240px;
 	border-spacing: 0px;
-	margin-left: 100px;
-	margin-bottom: 100px;
+	margin: 100px;
 }
 
 .table-column-name {
-	border-radius: 10px 10px 0 0;
+	border-radius: 10px ;
 	background: rgba(250, 225, 222, 0.8);
 	font-weight: 300;
 	font-size: 48px;
 	line-height: 48px;
 	text-align: center;
 }
+.table-column-name {
 
 .table-column-content {
 	font-weight: 300;
