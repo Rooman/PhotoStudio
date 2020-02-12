@@ -9,10 +9,12 @@
 </head>
 <body>
 <header class="header">
-    <!--NavBar-->
-    <nav th:replace="fragment/navigation.html :: nav"></nav>
-    <hr class="header__underscore">
-    <!--NavBarEnd-->
+    <div class="container">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
 </header>
 
 <main class="home">
@@ -38,8 +40,8 @@
             </div>
 
             <div class="baby-images">
-                <div class="baby-image baby-image_left"><img src="assets/images/baby-1.png" alt="baby"></div>
-                <div class="baby-image baby-image_right"><img src="assets/images/baby-2.png" alt="baby"></div>
+                <div class="baby-image baby-image_left"><img src="assets/images/baby-1.jpg" alt="baby"></div>
+                <div class="baby-image baby-image_right"><img src="assets/images/baby-2.jpg" alt="baby"></div>
             </div>
             <div class="description__card shooting-location">
                 <h3 class="description__card-header">Location of the photo shoot</h3>
