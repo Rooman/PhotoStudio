@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Admin Page</title>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/admin-page.css">
+</head>
+<body>
+<!--TODO: Ждем ответа по необходимости использования header и footer компонентов страницы для администратора -->
+<nav th:replace="fragment/navigation.html :: nav"></nav>
+<hr class="header__underscore">
+<main>
+    <div class="container admin">
+        <div class="admin__header">
+            <h1 class="admin__title">Admin page</h1>
+        </div>
+        <div class="admin__buttons">
+            <ul class="admin__nav-links">
+                <li class="admin__nav-link">
+                    <a href="#" class="btn btn-submit btn-outline-dark button">New order</a>
+                </li>
+                <li class="admin__nav-link">
+                    <a href="orders" class="btn btn-submit btn-outline-dark button">Order journal</a>
+                </li>
+                <li class="admin__nav-link">
+                    <a href="admin/users" class="btn btn-submit btn-outline-dark button">All users</a>
+                </li>
+                <li class="admin__nav-link">
+                    <a href="admin/user/add" class="btn btn-submit btn-outline-dark button">New user</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<meta th:replace="fragment/script.html :: script">
+</body>
+</html>
