@@ -4,7 +4,7 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
-import com.photostudio.web.cookie.CookieManager;
+import com.photostudio.web.util.CookieManager;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 
@@ -17,13 +17,14 @@ import java.util.Map;
 
 public class LoginServlet extends HttpServlet {
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-            new CommonVariableAppendService().appendUser(paramsMap, request);
+            commonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("login", paramsMap, response.getWriter());

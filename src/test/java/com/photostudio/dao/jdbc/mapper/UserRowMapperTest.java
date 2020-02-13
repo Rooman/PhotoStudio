@@ -1,6 +1,5 @@
 package com.photostudio.dao.jdbc.mapper;
 
-import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import org.junit.jupiter.api.Test;
@@ -27,13 +26,14 @@ class UserRowMapperTest {
         when(mockResultSet.getString("passwordHash")).thenReturn("passwordHashUser");
         when(mockResultSet.getString("salt")).thenReturn("saltUser");
         when(mockResultSet.getString("phoneNumber")).thenReturn("493040054");//+49 30 40054033
-        when(mockResultSet.getString("genderName")).thenReturn("FEMALE");
         when(mockResultSet.getString("firstName")).thenReturn("firstNameUser");
         when(mockResultSet.getString("lastName")).thenReturn("lastNameUser");
         when(mockResultSet.getString("country")).thenReturn("Germany");
         when(mockResultSet.getString("city")).thenReturn("Berlin");
         when(mockResultSet.getString("address")).thenReturn("Krausnickstraße 15A");
         when(mockResultSet.getInt("zipCode")).thenReturn(10178);
+        when(mockResultSet.getString("title")).thenReturn("Mr.");
+        when(mockResultSet.getString("additionalInfo")).thenReturn("Friendly");
 
         //when
         User actual = userRowMapper.mapRow(mockResultSet);
@@ -47,12 +47,13 @@ class UserRowMapperTest {
         assertEquals("passwordHashUser", actual.getPasswordHash());
         assertEquals("saltUser", actual.getSalt());
         assertEquals("493040054", actual.getPhoneNumber());
-        assertEquals(Gender.FEMALE, actual.getGender());
         assertEquals("firstNameUser", actual.getFirstName());
         assertEquals("lastNameUser", actual.getLastName());
         assertEquals("Germany", actual.getCountry());
         assertEquals("Berlin", actual.getCity());
         assertEquals("Krausnickstraße 15A", actual.getAddress());
+        assertEquals("Mr.", actual.getTitle());
+        assertEquals("Friendly", actual.getAdditionalInfo());
 
     }
 }

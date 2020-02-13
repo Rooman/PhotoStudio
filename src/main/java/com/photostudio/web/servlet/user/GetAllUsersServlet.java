@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class GetAllUsersServlet extends HttpServlet {
     private UserService userService = ServiceLocator.getService(UserService.class);
+    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -24,7 +25,7 @@ public class GetAllUsersServlet extends HttpServlet {
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
 
-        new CommonVariableAppendService().appendUser(variablesMap, request);
+        commonVariableAppendService.appendUser(variablesMap, request);
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
