@@ -2,16 +2,16 @@ package com.photostudio.service.impl;
 
 import com.photostudio.dao.UserDao;
 import com.photostudio.entity.user.User;
-import com.photostudio.security.SecurityService;
 import com.photostudio.service.UserService;
-import lombok.Setter;
 
 import java.util.List;
 
-@Setter
 public class DefaultUserService implements UserService {
     private UserDao userDao;
-    private SecurityService securityService;
+
+    public DefaultUserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -19,8 +19,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public void register(User user, String password) {
-        securityService.createAndInjectSaltAndHashedPassword(user, password);
+    public void add(User user) {
         userDao.add(user);
     }
 
@@ -42,21 +41,5 @@ public class DefaultUserService implements UserService {
     @Override
     public User getUserByLogin(String login) {
         return userDao.getByLogin(login);
-    }
-
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    public UserDao getUserDao() {
-        return userDao;
-    }
-
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
-    public SecurityService getSecurityService() {
-        return securityService;
     }
 }

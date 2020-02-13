@@ -1,0 +1,5 @@
+ALTER TABLE Users
+DROP FOREIGN KEY `Users_ibfk_2`;
+
+ALTER TABLE Users
+DROP COLUMN `genderId`;

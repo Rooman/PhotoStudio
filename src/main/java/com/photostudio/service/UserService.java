@@ -1,3 +1,4 @@
+
 package com.photostudio.service;
 
 import com.photostudio.entity.user.User;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface UserService {
     List<User> getAllUsers();
 
-    void register(User user, String password);
+    void add(User user);
 
     User getUserById(long id);
 

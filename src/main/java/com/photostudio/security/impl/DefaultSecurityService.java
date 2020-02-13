@@ -37,13 +37,17 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
-    public void createAndInjectSaltAndHashedPassword(User user, String password) {
-        String salt = UUID.randomUUID().toString();
-        // TODO: Think how to send origin password to user's email
-        //String password = salt.substring(0, salt.indexOf("-"));
+    public Session getSession(String userToken) {
+        Session sessionResult = null;
 
-        user.setSalt(salt);
-        user.setPasswordHash(getHashedPassword(salt, password));
+        for (Session session : sessionList) {
+            if (session.getToken().equals(userToken)) {
+                sessionResult = session;
+                break;
+            }
+        }
+
+        return sessionResult;
     }
 
     String getHashedPassword(String salt, String password) {
