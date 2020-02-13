@@ -36,6 +36,20 @@ public class DefaultSecurityService implements SecurityService {
         }
     }
 
+    @Override
+    public Session getSession(String userToken) {
+        Session sessionResult = null;
+
+        for (Session session : sessionList) {
+            if (session.getToken().equals(userToken)) {
+                sessionResult = session;
+                break;
+            }
+        }
+
+        return sessionResult;
+    }
+
     String getHashedPassword(String salt, String password) {
         String saltPassword = password + salt;
         byte[] originalString = saltPassword.getBytes();

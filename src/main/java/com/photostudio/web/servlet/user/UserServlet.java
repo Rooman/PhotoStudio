@@ -1,24 +1,29 @@
 package com.photostudio.web.servlet.user;
 
 import com.photostudio.ServiceLocator;
-import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
+import com.photostudio.web.util.CommonVariableAppendService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserServlet extends HttpServlet {
     private UserService userService = ServiceLocator.getService(UserService.class);
+    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> paramsMap = new HashMap<>();
+        commonVariableAppendService.appendUser(paramsMap, request);
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process("add-user", response.getWriter());
+        TemplateEngineFactory.process("add-user", paramsMap, response.getWriter());
     }
 
     @Override
@@ -32,18 +37,21 @@ public class UserServlet extends HttpServlet {
         String city = request.getParameter("city");
         String zip = request.getParameter("zipCode");
         String address = request.getParameter("address");
+        String title = request.getParameter("title");
+        String additionalInfo = request.getParameter("additionalInfo");
 
         User newUser = new User();
 
         newUser.setEmail(email);
         newUser.setPhoneNumber(phoneNumber);
-        newUser.setGender(Gender.getByGender(gender));
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setCountry(country);
         newUser.setCity(city);
         newUser.setZip(Integer.parseInt(zip));
         newUser.setAddress(address);
+        newUser.setTitle(title);
+        newUser.setAdditionalInfo(additionalInfo);
 
         userService.add(newUser);
         response.sendRedirect("/admin/users");

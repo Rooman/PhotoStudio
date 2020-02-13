@@ -14,11 +14,12 @@ public class User {
     private String passwordHash;
     private String salt;
     private String phoneNumber;
-    private Gender gender;
     private String firstName;
     private String lastName;
     private String country;
     private String city;
     private int zip;
     private String address;
+    private String title;
+    private String additionalInfo;
 }
