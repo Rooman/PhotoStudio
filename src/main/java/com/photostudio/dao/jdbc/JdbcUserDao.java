@@ -3,7 +3,6 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
-import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.LoginPasswordInvalidException;
 
 import javax.sql.DataSource;
@@ -21,8 +20,8 @@ public class JdbcUserDao implements UserDao {
 
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
             "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo) " +
-            "VALUES (?,?,?,?,?,?," +
-            "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
+            "VALUES (?,?,?,?,?," +
+            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?,?)";
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
 
