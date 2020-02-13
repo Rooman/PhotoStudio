@@ -1,0 +1,21 @@
+.new-user_button {
+    margin-top: 50px;
+    margin-left: 1130px;
+    background: #FAE1DE;
+    border: 3px solid rgba(228, 159, 182, 0.6);
+    border-radius: 10px;
+    width: 211px;
+    height: 61px;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 36px;
+    text-align: center;
+}
+
+.all-users_title {
+    text-align: center;
+    font-weight: 300;
+    font-size: 96px;
+    line-height: 96px;
+}
+
