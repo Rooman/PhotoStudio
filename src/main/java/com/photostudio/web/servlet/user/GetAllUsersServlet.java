@@ -4,6 +4,7 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
+import com.photostudio.web.util.CommonVariableAppendService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class GetAllUsersServlet extends HttpServlet {
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
 
+        new CommonVariableAppendService().appendUser(variablesMap, request);
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 

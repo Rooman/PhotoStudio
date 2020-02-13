@@ -1,6 +1,7 @@
 package com.photostudio.web.servlet;
 
 import com.photostudio.web.templater.TemplateEngineFactory;
+import com.photostudio.web.util.CommonVariableAppendService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,9 @@ public class AdminPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
+
+            new CommonVariableAppendService().appendUser(paramsMap, request);
+            response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("admin-page", paramsMap, response.getWriter());
         } catch (IOException e) {
