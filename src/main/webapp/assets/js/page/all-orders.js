@@ -5,7 +5,6 @@ function showHideFilterTable(element) {
 			srcElement.style.display = 'none';
 		} else {
 			srcElement.style.display = 'block';
-		}
-	return false;
+	}
   }
 }
