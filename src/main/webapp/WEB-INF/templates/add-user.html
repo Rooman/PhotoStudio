@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/add-user.css">
+    <title>Photo Studio</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!--	Bread Crumb-->
+    <div class="bread__crumb-navigation">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="admin-page">Admin page</a></li>
+                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
+                <li class="breadcrumb-item"><a href="all-users">All users</a></li>
+                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
+                <li class="breadcrumb-item active" aria-current="page">Manage user</li>
+            </ol>
+        </nav>
+    </div>
+    <!--Bread Crumb End-->
+
+    <h1 class="page__title">Add new user</h1>
+
+    <form class="login-form" action="user" method="post">
+        <div class="new__user__form">
+            <div class="user-login">
+                <h3 class="user__title-login">Login</h3>
+
+                <div class="login-form_between">
+
+                    <div class="form-group ">
+                        <input type="email" class="form-control  " id="inputAddress" placeholder="Email "
+                               name="email">
+                    </div>
+                    <div class="form-group ">
+                        <input type="text" class="form-control  " id="inputAddress2" placeholder="Phone"
+                               name="phoneNumber">
+                    </div>
+
+                </div>
+            </div>
+            <div class="new__user-info">
+                <div class="form-group">
+                    <input type="text" class="form-control " placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="First name"
+                           name="firstName">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " placeholder="Last name"
+                           name="lastName">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " placeholder="Country" name="country">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " placeholder="City" name="city">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " placeholder="Address" name="address">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " placeholder="ZIP code" name="zip">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control "  name="password"   placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control_info" placeholder="Additional Information">
+                </div>
+            </div>
+
+            <button type="submit" class="btn save_button">Save</button>
+            <!--                <button type="submit" class="btn password_button">Change password</button>-->
+            <!--                <form th:action="@{user/delete(id=${user.getId()})}"-->
+            <!--                      method="DELETE">-->
+            <!--                    <button type="submit" class="btn delete_button">Delete User</button>-->
+            <!--                </form>-->
+
+
+        </div>
+    </form>
+</div>
+
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>

@@ -20,8 +20,8 @@ public class JdbcUserDao implements UserDao {
 
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
             "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo) " +
-            "VALUES (?,?,?,?,?,?," +
-            "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
+            "VALUES (?,?,?,?,?," +
+            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?,?)";
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
 
