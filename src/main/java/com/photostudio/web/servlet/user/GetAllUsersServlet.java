@@ -27,8 +27,6 @@ public class GetAllUsersServlet extends HttpServlet {
 
         commonVariableAppendService.appendUser(variablesMap, request);
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
         TemplateEngineFactory.process("all-users", variablesMap, response.getWriter());
     }
 }
