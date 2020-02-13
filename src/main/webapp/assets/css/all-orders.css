@@ -1,6 +1,6 @@
 .orders{
 	max-width: 1440px;
-	margin: 0, auto;
+	margin: 0 auto;
 }
 
 .bread__crumb-navigation {
@@ -107,7 +107,6 @@
 	line-height: 48px;
 	text-align: center;
 }
-.table-column-name {
 
 .table-column-content {
 	font-weight: 300;
