@@ -1,5 +1,7 @@
 // Delete a user
 function deleteUser(id) {
+    event.preventDefault();
+
     let xhr = new XMLHttpRequest();
 
     xhr.open("DELETE", 'user?id=' + id, true);
@@ -21,5 +23,5 @@ function deleteUser(id) {
     };
 
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    xhr.send(null);
+    xhr.send();
 }

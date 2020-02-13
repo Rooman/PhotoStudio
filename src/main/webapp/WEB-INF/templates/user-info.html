@@ -16,9 +16,9 @@
     <div class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin-page">Admin page</a></li>
+                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
                 <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item"><a href="all-users">All users</a></li>
+                <li class="breadcrumb-item"><a href="admin/users">All users</a></li>
                 <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
                 <li class="breadcrumb-item active" aria-current="page">Manage user</li>
             </ol>
@@ -74,23 +74,20 @@
                     <input type="text" class="form-control form-control_info" readonly
                            placeholder="Additional Information" th:value="${user.additionalInfo}">
                 </div>
-                <!--                <button type="submit" class="btn save_button">Save</button>-->
             </div>
             <div class="">
                 <button type="submit" class="btn password_button">Change password</button>
-                <form th:action="@{user/delete(id=${user.getId()})}"
-                      method="DELETE">
-                    <button type="submit" class="btn delete_button">Delete User</button>
-                </form>
-                <!--                <button type="submit" class="btn delete_button" th:action="@{user/delete(id=${user.getId()})}"-->
-                <!--                        method="DELETE">Delete user-->
-                <!--                </button>-->
+
+                <button class="btn delete_button" th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Delete User
+                </button>
+
             </div>
         </div>
     </form>
 </div>
 
 <meta th:replace="fragment/script.html :: script">
+<script src="assets/js/user/user.js"></script>
 </body>
 
 </html>
