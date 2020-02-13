@@ -9,7 +9,7 @@
 
 .new__user__form {
 	width: 784px;
-	height: 1310px;
+	height: 1650px;
 	border: 3px solid #E49FB6;
 	border-radius: 10px;
 	margin: 100px auto;
@@ -25,7 +25,7 @@
 	border-bottom: 3px solid #E49FB6;
 	margin-top: 50px;
 	width: 781px;
-	height: 748px;
+	height: 1048px;
 	padding: 50px 30px;
 }
 
@@ -49,7 +49,11 @@
 	font-size: 24px;
 	line-height: 24px;
 }
+.form-control_info{
+	height: 170px;
+}
 .form-group{
+height: 74px;
 	margin-bottom: 20px;
 }
 
@@ -62,7 +66,8 @@
 	font-size: 36px;
 	line-height: 36px;
 	text-align: center;
-	margin-top: 20px;
+	margin-top: 120px;
+	margin-left:30px;
 }
 
 .password_button {
@@ -77,4 +82,18 @@
 	height: 74px;
 	margin-top: 40px;
 	margin-left: 30px;
+}
+.delete_button{
+ background: rgba(250, 225, 222, 0.8);
+ 	border: 3px solid rgba(228, 159, 182, 0.6);
+ 	border-radius: 10px;
+ 	font-weight: 500;
+ 	font-size: 36px;
+ 	line-height: 36px;
+ 	text-align: center;
+ 	width: 724px;
+ 	height: 74px;
+ 	margin-top: 40px;
+ 	margin-left: 30px;
+ 	margin-bottom:30px;
 }

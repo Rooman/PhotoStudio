@@ -76,7 +76,7 @@ public class UserServlet extends HttpServlet {
 
         userService.register(newUser, password);
 
-//        response.sendRedirect(request.getContextPath() + "/admin/users");
+        response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 
 
