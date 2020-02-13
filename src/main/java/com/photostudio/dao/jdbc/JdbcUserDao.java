@@ -14,14 +14,13 @@ public class JdbcUserDao implements UserDao {
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
-            " lastName, genderName, roleName, passwordHash, salt, country, city, zip," +
-            " address FROM Users " +
-            " INNER JOIN UserRole ON Users.userRoleId=UserRole.id" +
-            " LEFT JOIN UserGender ON Users.genderId=UserGender.id;";
+            " lastName, title, roleName, passwordHash, salt, country, city, zip," +
+            " address, additionalInfo FROM Users " +
+            " INNER JOIN UserRole ON Users.userRoleId=UserRole.id;";
 
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
-            "firstName,lastName,genderId,userRoleId,passwordHash,salt, country,city,zip,address) " +
-            "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
+            "firstName,lastName, title, additionalInfo, userRoleId,passwordHash,salt, country,city,zip,address) " +
+            "VALUES (?,?,?,?,?,?," +
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
@@ -31,25 +30,25 @@ public class JdbcUserDao implements UserDao {
             "u.phoneNumber, " +
             "u.firstName firstName, " +
             "u.lastName lastName, " +
-            "ug.genderName genderName, " +
             "ur.roleName roleName, " +
             "u.passwordHash passwordHash, " +
             "u.salt salt, " +
             "u.country country, " +
             "u.city city, " +
             "u.zip zip, " +
+            "u.title title, " +
+            "u.additionalInfo additionalInfo, " +
             "u.address address " +
             "FROM Users u " +
             "JOIN UserRole ur ON u.userRoleId = ur.id " +
-            "LEFT JOIN UserGender ug ON u.genderId = ug.id " +
             "WHERE ";
 
     private static final String GET_BY_ID = "SELECT u.id id, u.email email,u.phoneNumber phoneNumber," +
-            " u.firstName firstName, u.lastName lastName, ur.roleName roleName, ug.genderName genderName, " +
-            "u.passwordHash passwordHash, u.salt salt, u.country country," +
+            " u.firstName firstName, u.lastName lastName, ur.roleName roleName, " +
+            " u.title title, u.additionalInfo additionalInfo, " +
+            " u.passwordHash passwordHash, u.salt salt, u.country country," +
             " u.city city, u.zip zip, u.address address  FROM  Users u \n" +
             "INNER JOIN UserRole ur ON u.userRoleId=ur.id \n" +
-            "LEFT JOIN UserGender ug ON u.genderId=ug.id\n" +
             "WHERE u.id=?;";
 
     private DataSource dataSource;
@@ -83,13 +82,14 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(2, user.getPhoneNumber());
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
-            preparedStatement.setObject(5, user.getGender());
+            preparedStatement.setString(5, user.getTitle());
             preparedStatement.setString(6, user.getPasswordHash());
             preparedStatement.setString(7, user.getSalt());
             preparedStatement.setString(8, user.getCountry());
             preparedStatement.setString(9, user.getCity());
             preparedStatement.setInt(10, user.getZip());
             preparedStatement.setString(11, user.getAddress());
+            preparedStatement.setString(12, user.getAdditionalInfo());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

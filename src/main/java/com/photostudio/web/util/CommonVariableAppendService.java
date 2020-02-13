@@ -3,7 +3,6 @@ package com.photostudio.web.util;
 import com.photostudio.ServiceLocator;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
-import com.photostudio.web.cookie.CookieManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

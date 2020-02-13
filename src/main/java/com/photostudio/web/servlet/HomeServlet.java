@@ -11,11 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HomeServlet extends HttpServlet {
+    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> paramsMap = new HashMap<>();
-        new CommonVariableAppendService().appendUser(paramsMap, request);
+        commonVariableAppendService.appendUser(paramsMap, request);
         response.setContentType("text/html;charset=utf-8");
 
         response.setStatus(HttpServletResponse.SC_OK);

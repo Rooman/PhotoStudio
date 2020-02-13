@@ -1,6 +1,5 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.LoginPasswordInvalidException;
@@ -66,7 +65,6 @@ class JdbcUserDaoITest {
         expectedUser.setCountry("Ukraine");
         expectedUser.setEmail("mymail@d.com");
         expectedUser.setFirstName("Piter");
-        expectedUser.setGender(Gender.MALE);
         expectedUser.setLastName("Lol");
         expectedUser.setPhoneNumber("380731234567");
         expectedUser.setZip(12345);
@@ -74,6 +72,8 @@ class JdbcUserDaoITest {
         expectedUser.setPasswordHash("8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257");
         expectedUser.setSalt("3d47ccde-5b58-4c7b-a84c-28c27d566f8e");
         expectedUser.setUserRole(UserRole.ADMIN);
+        expectedUser.setTitle("Mr.");
+        expectedUser.setAdditionalInfo("Friendly");
 
         //when
         JdbcUserDao jdbcUserDao = new JdbcUserDao(jdbcDataSource);
@@ -88,12 +88,13 @@ class JdbcUserDaoITest {
         assertEquals(expectedUser.getCity(), actualUser.getCity());
         assertEquals(expectedUser.getCountry(), actualUser.getCountry());
         assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getGender(), actualUser.getGender());
         assertEquals(expectedUser.getId(), actualUser.getId());
         assertEquals(expectedUser.getLastName(), actualUser.getLastName());
         assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
         assertEquals(expectedUser.getUserRole(), actualUser.getUserRole());
         assertEquals(expectedUser.getZip(), actualUser.getZip());
+        assertEquals(expectedUser.getTitle(), actualUser.getTitle());
+        assertEquals(expectedUser.getAdditionalInfo(), actualUser.getAdditionalInfo());
     }
 
     @Test
@@ -119,12 +120,13 @@ class JdbcUserDaoITest {
         assertEquals(expectedUser.getCity(), actualUser.getCity());
         assertEquals(expectedUser.getCountry(), actualUser.getCountry());
         assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getGender(), actualUser.getGender());
         assertEquals(expectedUser.getId(), actualUser.getId());
         assertEquals(expectedUser.getLastName(), actualUser.getLastName());
         assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
         assertEquals(expectedUser.getUserRole(), actualUser.getUserRole());
         assertEquals(expectedUser.getZip(), actualUser.getZip());
+        assertEquals(expectedUser.getTitle(), actualUser.getTitle());
+        assertEquals(expectedUser.getAdditionalInfo(), actualUser.getAdditionalInfo());
     }
 
     @Test
