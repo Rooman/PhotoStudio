@@ -3,11 +3,6 @@ CREATE TABLE UserRole (
     roleName VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE UserGender (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    genderName VARCHAR(20) NOT NULL
-);
-
 
 CREATE TABLE Users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,7 +10,6 @@ CREATE TABLE Users (
     phoneNumber VARCHAR(20),
     firstName VARCHAR(100),
     lastName VARCHAR(100),
-    genderId INT,
     userRoleId INT NOT NULL,
     passwordHash VARCHAR(200) NOT NULL,
     salt VARCHAR(500) NOT NULL,
@@ -23,9 +17,10 @@ CREATE TABLE Users (
     city VARCHAR(50),
     zip INT UNSIGNED,
     address VARCHAR(500),
+    title VARCHAR(45),
+    additionalInfo VARCHAR(200),
     INDEX(phoneNumber),
-    FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
-    FOREIGN KEY (genderId) REFERENCES UserGender(id)
+    FOREIGN KEY (userRoleId) REFERENCES UserRole(id)
 );
 
 

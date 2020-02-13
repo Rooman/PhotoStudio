@@ -1,8 +1,5 @@
 package com.photostudio.security.impl;
 
-import com.photostudio.dao.UserDao;
-import com.photostudio.dao.jdbc.JdbcUserDao;
-import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.entity.Session;
@@ -39,7 +36,6 @@ public class DefaultSecurityServiceTest {
         user.setSalt("3d47ccde-5b58-4c7b-a84c-28c27d566f8e");
         user.setPasswordHash("8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257");
         user.setId(1);
-        user.setGender(Gender.MALE);
         user.setEmail("mymail@d.com");
 
         UserService userService = mock(UserService.class);
@@ -67,7 +63,6 @@ public class DefaultSecurityServiceTest {
         user.setSalt("3d47ccde-5b58-4c7b-a84c-28c27d566f8e");
         user.setPasswordHash("8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257");
         user.setId(1);
-        user.setGender(Gender.MALE);
         user.setEmail("mymail@d.com");
 
         UserService userService = mock(UserService.class);
