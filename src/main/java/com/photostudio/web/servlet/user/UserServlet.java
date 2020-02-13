@@ -53,7 +53,6 @@ public class UserServlet extends HttpServlet {
         String address = request.getParameter("address");
         String title = request.getParameter("title");
         String additionalInfo = request.getParameter("additionalInfo");
-        String password = request.getParameter("password");
 
         User newUser = new User();
 
@@ -67,13 +66,13 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
-        newUser.setPasswordHash(password);
-        newUser.setSalt("");
 
-
+        //refactor!
+        newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
+        newUser.setSalt("123");
 
         userService.add(newUser);
-        response.sendRedirect("/admin/users");
+        response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
