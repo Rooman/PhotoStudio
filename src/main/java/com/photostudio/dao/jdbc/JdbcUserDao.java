@@ -23,7 +23,7 @@ public class JdbcUserDao implements UserDao {
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
             "firstName,lastName,genderId,userRoleId,passwordHash,salt, country,city,zip,address) " +
             "VALUES (?,?,?,?,(SELECT id FROM UserGender WHERE genderName=?)," +
-            "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?)";
+            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?)";
 
 
     private static final String GET_USER_BY_LOGIN = "SELECT u.id id, " +
@@ -51,6 +51,8 @@ public class JdbcUserDao implements UserDao {
             "INNER JOIN UserRole ur ON u.userRoleId=ur.id \n" +
             "LEFT JOIN UserGender ug ON u.genderId=ug.id\n" +
             "WHERE u.id=?;";
+
+    private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
 
     private DataSource dataSource;
 
@@ -126,7 +128,13 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void delete(long id) {
-
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Can't remove user", e);
+        }
     }
 
     @Override

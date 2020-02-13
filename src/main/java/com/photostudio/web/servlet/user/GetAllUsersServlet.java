@@ -18,10 +18,11 @@ public class GetAllUsersServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         List<User> users = userService.getAllUsers();
+
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
+
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process("all-users", variablesMap, response.getWriter());
     }

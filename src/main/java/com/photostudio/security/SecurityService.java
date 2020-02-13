@@ -6,5 +6,5 @@ import com.photostudio.security.entity.Session;
 public interface SecurityService {
     Session login(String login, String password);
 
-    void createAndInjectSaltAndHashedPassword(User user);
+    void createAndInjectSaltAndHashedPassword(User user, String password);
 }
