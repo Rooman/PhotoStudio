@@ -26,14 +26,6 @@ body {
     justify-content: space-between;
 }
 
-/*.top-navbar > li {*/
-/*    margin-right: 120px;*/
-/*}*/
-
-/*.top-navbar > li:last-child {*/
-/*    margin-right: 0;*/
-/*}*/
-
 .top-navbar a {
     color: #000;
     font-size: 18px;

@@ -4,6 +4,7 @@ public enum UserRole {
     USER("USER"),
     ADMIN("ADMIN");
 
+    private int id;
     private String name;
 
     UserRole(String name) {
