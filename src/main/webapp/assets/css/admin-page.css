@@ -1,0 +1,44 @@
+.admin {
+    margin-top: 45px;
+    background: url("../images/admin-page-background.png") no-repeat;
+    height: 70rem;
+    max-width: 1440px;
+}
+
+.admin__header {
+    display: flex;
+    justify-content: center;
+    padding-top: 13rem;
+    padding-bottom: 2.6rem;
+}
+
+.admin__title {
+    font-weight: 300;
+    font-size: 96px;
+    line-height: 150px;
+}
+
+.admin__buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.admin__nav-links {
+    list-style-type: none;
+    padding-inline-start: 0;
+    width: 79rem;
+}
+
+.admin__nav-link {
+    display: inline;
+    text-decoration: none;
+    padding-right: 0.5rem;
+    padding-left: 1rem;
+}
+
+.admin-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

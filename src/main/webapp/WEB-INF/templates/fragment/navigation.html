@@ -19,16 +19,36 @@
             </li>
             <li class="nav-item dropdown top-dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <ENG>Eng</ENG>
+                    Eng
                 </a>
                 <div class="dropdown-menu " aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Eng</a>
                     <a class="dropdown-item" href="#">Ger</a>
                 </div>
             </li>
-            <li class="nav-item">
+
+            <li th:if="${user==null}" class="nav-item">
                 <a class="nav-link" href="login">Login</a>
             </li>
+
+            <li th:if="${user!=null}" class="nav-item">
+                <div class="user-dropdown">
+                    <a class="nav-link user-dropdown__link" href="#" >
+                        WELCOME,
+                        <span class="user-dropdown__email" th:text="${user.email}">
+                        </span>
+                    </a>
+
+                    <div class="user-dropdown__user-menu " >
+                        <a class="user-menu__item" href="#">New order</a>
+                        <a class="user-menu__item" href="orders">Order journal</a>
+                        <a class="user-menu__item" href="admin/users">All users</a>
+                        <a class="user-menu__item" href="admin/user/add">New user</a>
+                        <a class="user-menu__item" href="#">Logout</a>
+                    </div>
+                </div>
+            </li>
+
         </ul>
     </div>
 </nav>

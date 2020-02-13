@@ -1,12 +1,12 @@
 CREATE TABLE UserRole (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     roleName VARCHAR(20) NOT NULL
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE UserGender (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     genderName VARCHAR(20) NOT NULL
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE Users (
@@ -26,13 +26,13 @@ CREATE TABLE Users (
     INDEX(phoneNumber),
     FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
     FOREIGN KEY (genderId) REFERENCES UserGender(id)
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE OrderStatus (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     statusName VARCHAR(50) NOT NULL
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE Orders (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,12 +43,12 @@ CREATE TABLE Orders (
     INDEX(orderDate),
     FOREIGN KEY (statusId) REFERENCES OrderStatus(id),
     FOREIGN KEY (userId) REFERENCES Users(id)
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE PhotoStatus (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     statusName VARCHAR(50) NOT NULL
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE OrderPhotos (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,4 +57,4 @@ CREATE TABLE OrderPhotos (
     photoStatusId INT NOT NULL,
     FOREIGN KEY (orderId) REFERENCES Orders(id),
     FOREIGN KEY (photoStatusId) REFERENCES PhotoStatus(id)
-);
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
