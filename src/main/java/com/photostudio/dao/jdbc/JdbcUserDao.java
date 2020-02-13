@@ -19,7 +19,7 @@ public class JdbcUserDao implements UserDao {
             " INNER JOIN UserRole ON Users.userRoleId=UserRole.id;";
 
     private static final String ADD_NEW_USER = "INSERT INTO photostudio.Users (email,phoneNumber," +
-            "firstName,lastName, title, additionalInfo, userRoleId,passwordHash,salt, country,city,zip,address) " +
+            "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo) " +
             "VALUES (?,?,?,?,?,?," +
             "( SELECT id FROM UserRole WHERE roleName ='user'),?,?,?,?,?,?,?)";
 
