@@ -7,7 +7,6 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 import java.io.Writer;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,10 +30,6 @@ public class TemplateEngineFactory {
     public static void process(String template, Map<String, Object> productsMap, Writer writer) {
         IContext context = new Context(Locale.getDefault(), productsMap);
         TEMPLATE_ENGINE.process(template, context, writer);
-    }
-
-    public static void process(String template, Writer writer) {
-        process(template, Collections.emptyMap(), writer);
     }
 
 }

@@ -5,20 +5,25 @@ import com.photostudio.entity.user.Gender;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
+import com.photostudio.web.util.CommonVariableAppendService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserServlet extends HttpServlet {
     private UserService userService = ServiceLocator.getService(UserService.class);
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> paramsMap = new HashMap<>();
+        new CommonVariableAppendService().appendUser(paramsMap, request);
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process("add-user", response.getWriter());
+        TemplateEngineFactory.process("add-user", paramsMap, response.getWriter());
     }
 
     @Override
