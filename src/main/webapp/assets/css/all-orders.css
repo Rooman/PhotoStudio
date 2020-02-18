@@ -1,0 +1,152 @@
+.orders{
+	max-width: 1440px;
+	margin: 0 auto;
+}
+
+.bread__crumb-navigation {
+	margin-top: 50px;
+	margin-left: 100px;
+}
+
+.breadcrumb {
+	margin: 0;
+	padding: 0;
+	background-color: white;
+}
+
+.bread__crumb-arrow {
+	margin-top: 25px;
+	height: 5px;
+	width: 100px;
+}
+
+.breadcrumb-item {
+	width: 211px;
+	height: 61px;
+	border: 1px solid #000000;
+	border-radius: 10px;
+	font-weight: 300;
+	font-size: 36px;
+	line-height: 36px;
+	text-align: center;
+	text-decoration: none;
+	padding-top: 10px;
+}
+
+.breadcrumb-item a {
+	color: #000000;
+	text-decoration: none;
+}
+
+.orders__title {
+	font-weight: 300;
+	font-size: 96px;
+	line-height: 96px;
+	text-align: center;
+	margin-top: 100px;
+	margin-bottom: 50px;
+}
+
+.order-btn {
+	display: flex;
+	justify-content: center;
+
+}
+
+.order-board {
+	width: 925px;
+	border: 1px solid #E49FB6;
+	border-radius: 10px;
+	margin: 100px auto;
+
+}
+
+.order-btn_left {
+	margin-left: 75px;
+}
+
+.order-btn_right {
+	margin-right: 75px;
+}
+
+.order-board_content {
+	padding: 100px 50px 100px 50px;
+	font-weight: 300;
+	font-size: 48px;
+	line-height: 48px;
+}
+
+.form-control {
+	border: 3px solid #FAE1DE;
+	margin-left: 20px;
+	width: 290px;
+	height: 80px;
+	border-radius: 10px;
+}
+
+.orders-board-btn_apply {
+	display: flex;
+	justify-content: center;
+	margin: 65px;
+}
+
+.table {
+	border-collapse: separate;
+	border-radius: 10px;
+	border: 1px solid rgba(228, 159, 182, 0.6);
+	max-width: 1240px;
+	border-spacing: 0;
+	margin: 100px;
+}
+
+.table-column-name {
+	border-radius: 10px ;
+	background: rgba(250, 225, 222, 0.8);
+	font-weight: 300;
+	font-size: 48px;
+	line-height: 48px;
+	text-align: center;
+}
+
+.table-column-content {
+	font-weight: 300;
+	font-size: 36px;
+	line-height: 36px;
+	text-align: center;
+}
+
+td,
+th {
+	border-left: solid rgba(228, 159, 182, 0.6) 1px;
+	border-top: solid rgba(228, 159, 182, 0.6) 1px;
+}
+
+th {
+	border-top: none;
+	font-weight: 300;
+	font-size: 48px;
+	line-height: 48px;
+}
+
+td {
+	font-weight: 300;
+	font-size: 36px;
+	line-height: 36px;
+	text-align: center;
+}
+
+td:first-child,
+th:first-child {
+	border-left: none;
+}
+
+.order-filter-group{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.order-filter-group > input, .order-filter-group > select{
+	width: 275px;
+	font-size: 28px;
+}

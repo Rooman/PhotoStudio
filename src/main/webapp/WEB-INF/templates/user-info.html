@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/add-user.css">
+    <title>Photo Studio</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!--	Bread Crumb-->
+    <div class="bread__crumb-navigation">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
+                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
+                <li class="breadcrumb-item"><a href="admin/users">All users</a></li>
+                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
+                <li class="breadcrumb-item active" aria-current="page">Manage user</li>
+            </ol>
+        </nav>
+    </div>
+    <!--Bread Crumb End-->
+
+    <h1 class="page__title">Manage user</h1>
+
+    <form class="login-form">
+        <div class="new__user__form">
+            <div class="user-login">
+                <h3 class="user__title-login">Login</h3>
+
+                <div class="login-form_between">
+
+                    <div class="form-group ">
+                        <input type="email" class="form-control  " readonly id="inputAddress" placeholder="Email "
+                               th:value="${user.email}">
+                    </div>
+                    <div class="form-group ">
+                        <input type="text" class="form-control  " readonly id="inputAddress2" placeholder="Phone"
+                               th:value="${user.phoneNumber}">
+                    </div>
+
+                </div>
+            </div>
+            <div class="new__user-info">
+                <div class="form-group">
+                    <input type="text" class="form-control " readonly placeholder="Title" th:value="${user.title}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" readonly placeholder="First name"
+                           th:value="${user.firstName}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " readonly placeholder="Last name"
+                           th:value="${user.lastName}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " readonly placeholder="Country" th:value="${user.country}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " readonly placeholder="City" th:value="${user.city}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " readonly placeholder="Address" th:value="${user.address}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control " readonly placeholder="ZIP code" th:value="${user.zip}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control_info" readonly
+                           placeholder="Additional Information" th:value="${user.additionalInfo}">
+                </div>
+            </div>
+            <div class="">
+                <button type="submit" class="btn password_button">Change password</button>
+
+                <button class="btn delete_button" th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Delete User
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<meta th:replace="fragment/script.html :: script">
+<script src="assets/js/user/user.js"></script>
+</body>
+
+</html>

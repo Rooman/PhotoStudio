@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant+Upright:300,400,500,700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/all-users.css">
+    <title>Photo Studio</title>
+</head>
+<body>
+
+
+
+<div class="container">
+    <!--Bread Crumb-->
+    <div class="bread__crumb-navigation">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../admin">Admin page</a></li>
+                <img class="bread__crumb-arrow" src="../assets/images/Arrow.jpg" alt="arrow">
+                <li class="breadcrumb-item active" aria-current="page">All users</li>
+            </ol>
+        </nav>
+    </div>
+    <!--Bread Crumb End-->
+
+    <a href="../user" class="btn new-user_button">New user</a>
+
+    <h1 class="all-users_title">Users</h1>
+
+    <table class="table table__rounded">
+        <tbody>
+        <tr class="table_header">
+            <!--<td class="table_header">Id</td>-->
+            <td class="table_header">Email</td>
+            <td class="table_header">Phone</td>
+            <td class="table_header">Name</td>
+            <td class="table_header">Address</td>
+            <td class="table_header">User</td>
+        </tr>
+        <div th:each="user : ${users}">
+            <tr class="table_info">
+                <!--<td class="table_info" th:text="${user.id}"></td>-->
+                <td class="table_info" th:text="${user.email}"></td>
+                <td class="table_info" th:text="${user.phoneNumber}"></td>
+                <td class="table_info" th:text="${user.firstName} +' '+ ${user.lastName} "></td>
+                <td class="table_info"
+                    th:text="${user.zip}+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
+                <td class="table_info"><a th:href="@{'../user'(id=${user.id})}">Get user</a></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="../assets/js/app.js"></script>
+</body>
+
+</html>
+
