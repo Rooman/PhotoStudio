@@ -62,7 +62,7 @@ public class UserServlet extends HttpServlet {
         newUser.setLastName(lastName);
         newUser.setCountry(country);
         newUser.setCity(city);
-        newUser.setZip(zip==null?0:Integer.parseInt(zip));
+        newUser.setZip(zip == null ? 0 : Integer.parseInt(zip));
         newUser.setAddress(address);
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
@@ -90,5 +90,42 @@ public class UserServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String id = request.getParameter("id");
+            String email = request.getParameter("email");
+            String phoneNumber = request.getParameter("phoneNumber");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String country = request.getParameter("country");
+            String city = request.getParameter("city");
+            String zip = request.getParameter("zipCode");
+            String address = request.getParameter("address");
+            String title = request.getParameter("title");
+            String additionalInfo = request.getParameter("additionalInfo");
+
+            User newUser = new User();
+
+            newUser.setId(Long.parseLong(id));
+            newUser.setEmail(email);
+            newUser.setPhoneNumber(phoneNumber);
+            newUser.setFirstName(firstName);
+            newUser.setLastName(lastName);
+            newUser.setCountry(country);
+            newUser.setCity(city);
+            newUser.setZip(zip == null ? 0 : Integer.parseInt(zip));
+            newUser.setAddress(address);
+            newUser.setTitle(title);
+            newUser.setAdditionalInfo(additionalInfo);
+
+            userService.edit(newUser);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 }

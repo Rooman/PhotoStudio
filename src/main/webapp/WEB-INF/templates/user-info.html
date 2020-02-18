@@ -36,11 +36,11 @@
                 <div class="login-form_between">
 
                     <div class="form-group ">
-                        <input type="email" class="form-control  " readonly id="inputAddress" placeholder="Email "
+                        <input type="email" class="form-control  "  id="inputAddress" placeholder="Email "
                                th:value="${user.email}">
                     </div>
                     <div class="form-group ">
-                        <input type="text" class="form-control  " readonly id="inputAddress2" placeholder="Phone"
+                        <input type="text" class="form-control  "  id="inputAddress2" placeholder="Phone"
                                th:value="${user.phoneNumber}">
                     </div>
 
@@ -48,32 +48,34 @@
             </div>
             <div class="new__user-info">
                 <div class="form-group">
-                    <input type="text" class="form-control " readonly placeholder="Title" th:value="${user.title}">
+                    <input type="text" class="form-control "  placeholder="Title" th:value="${user.title}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" readonly placeholder="First name"
+                    <input type="text" class="form-control"  placeholder="First name"
                            th:value="${user.firstName}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control " readonly placeholder="Last name"
+                    <input type="text" class="form-control "  placeholder="Last name"
                            th:value="${user.lastName}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control " readonly placeholder="Country" th:value="${user.country}">
+                    <input type="text" class="form-control "  placeholder="Country" th:value="${user.country}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control " readonly placeholder="City" th:value="${user.city}">
+                    <input type="text" class="form-control "  placeholder="City" th:value="${user.city}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control " readonly placeholder="Address" th:value="${user.address}">
+                    <input type="text" class="form-control "  placeholder="Address" th:value="${user.address}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control " readonly placeholder="ZIP code" th:value="${user.zip}">
+                    <input type="text" class="form-control "  placeholder="ZIP code" th:value="${user.zip}">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control form-control_info" readonly
+                    <input type="text" class="form-control form-control_info"
                            placeholder="Additional Information" th:value="${user.additionalInfo}">
                 </div>
+                <button class="btn save_button" th:value="'updateUser(\'' + ${user.getId()} + '\');'">Save
+                </button>
             </div>
             <div class="">
                 <button type="submit" class="btn password_button">Change password</button>
