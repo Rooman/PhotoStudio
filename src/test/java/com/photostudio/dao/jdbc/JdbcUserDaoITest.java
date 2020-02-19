@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,19 +24,19 @@ class JdbcUserDaoITest {
     private JdbcDataSource jdbcDataSource;
 
     @BeforeEach
-    public void before() throws SQLException, FileNotFoundException {
+    public void before() throws SQLException, IOException {
         jdbcDataSource = new JdbcDataSource();
-        jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=mysql");
+        jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=MySQL");
         jdbcDataSource.setUser("h2");
         jdbcDataSource.setPassword("h2");
 
         connection = jdbcDataSource.getConnection();
 
-        FileReader fileSchema = new FileReader("db/schema.sql");
+        FileReader fileSchema = new FileReader(getClass().getClassLoader().getResource("db/schema.sql").getFile());
 
         RunScript.execute(connection, fileSchema);
 
-        FileReader fileData = new FileReader("db/data.sql");
+        FileReader fileData = new FileReader(getClass().getClassLoader().getResource("db/data.sql").getFile());
 
         RunScript.execute(connection, fileData);
     }
