@@ -6,6 +6,7 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+import com.photostudio.web.util.UIutil;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AllOrdersServlet extends HttpServlet {
-
+    private static final UIutil UI_UTIL = new UIutil();
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
 
     @Override
@@ -26,11 +27,12 @@ public class AllOrdersServlet extends HttpServlet {
 
             FilterParameters filterParameters = getFilterParameters(request);
             paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
-
+            paramsMap.put("UIutil", UI_UTIL);
             new CommonVariableAppendService().appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+
         } catch (IOException e) {
             throw new RuntimeException("AllOrdersServlet error", e);
         }
