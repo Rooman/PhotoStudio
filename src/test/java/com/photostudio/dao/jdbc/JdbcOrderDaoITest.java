@@ -78,11 +78,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                                && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                                && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                                && x.getStatus().equals(expectedOrder.getStatus())
-                                ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
@@ -125,11 +121,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                    && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                    && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                    && x.getStatus().equals(expectedOrder.getStatus())
-            ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
@@ -166,11 +158,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                    && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                    && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                    && x.getStatus().equals(expectedOrder.getStatus())
-            ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
@@ -203,11 +191,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                    && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                    && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                    && x.getStatus().equals(expectedOrder.getStatus())
-            ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
@@ -240,11 +224,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                    && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                    && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                    && x.getStatus().equals(expectedOrder.getStatus())
-            ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
@@ -272,11 +252,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                    && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                    && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                    && x.getStatus().equals(expectedOrder.getStatus())
-            ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
@@ -309,11 +285,7 @@ public class JdbcOrderDaoITest {
         //then
         assertEquals(expected.size(), actual.size());
         for (Order expectedOrder : expected) {
-            actual.removeIf(x -> (x.getId() == expectedOrder.getId()
-                    && x.getUser().getEmail().equals(expectedOrder.getUser().getEmail())
-                    && x.getOrderDate().equals(expectedOrder.getOrderDate())
-                    && x.getStatus().equals(expectedOrder.getStatus())
-            ));
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
     }
