@@ -27,17 +27,17 @@ public class JdbcOrderDaoITest {
     @BeforeEach
     public void before() throws SQLException, FileNotFoundException {
         jdbcDataSource = new JdbcDataSource();
-        jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=mysql");
+        jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=MySQL");
         jdbcDataSource.setUser("h2");
         jdbcDataSource.setPassword("h2");
 
         connection = jdbcDataSource.getConnection();
 
-        FileReader fileSchema = new FileReader("db/schema.sql");
+        FileReader fileSchema = new FileReader(getClass().getClassLoader().getResource("db/schema.sql").getFile());
 
         RunScript.execute(connection, fileSchema);
 
-        FileReader fileData = new FileReader("db/data.sql");
+        FileReader fileData = new FileReader(getClass().getClassLoader().getResource("db/data.sql").getFile());
 
         RunScript.execute(connection, fileData);
     }
@@ -77,14 +77,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -124,14 +120,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -165,14 +157,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -202,14 +190,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -239,14 +223,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -271,14 +251,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
     @Test
@@ -308,14 +284,10 @@ public class JdbcOrderDaoITest {
 
         //then
         assertEquals(expected.size(), actual.size());
-        for (int index = 0; index < expected.size(); index++) {
-            assertEquals(expected.get(index).getId(), actual.get(index).getId());
-            assertEquals(expected.get(index).getComment(), actual.get(index).getComment());
-            assertEquals(expected.get(index).getUser().getEmail(), actual.get(index).getUser().getEmail());
-            assertEquals(expected.get(index).getOrderDate(), actual.get(index).getOrderDate());
-            assertEquals(expected.get(index).getStatus(), actual.get(index).getStatus());
-            assertEquals(expected.get(index).getUser().getPhoneNumber(), actual.get(index).getUser().getPhoneNumber());
+        for (Order expectedOrder : expected) {
+            actual.removeIf(x -> x.equals(expectedOrder));
         }
+        assertEquals(0, actual.size());
     }
 
 

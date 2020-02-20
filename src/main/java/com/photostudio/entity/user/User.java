@@ -1,12 +1,8 @@
 package com.photostudio.entity.user;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Setter
-@Getter
-@ToString
+@Data
 public class User {
     private long id;
     private String email;
