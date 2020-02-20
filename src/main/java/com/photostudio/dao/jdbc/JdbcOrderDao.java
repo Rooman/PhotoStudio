@@ -23,6 +23,9 @@ public class JdbcOrderDao implements OrderDao {
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
 
+    private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private DataSource dataSource;
 
@@ -87,6 +90,21 @@ public class JdbcOrderDao implements OrderDao {
             }
         }
         return getAll();
+    }
+
+    @Override
+    public void delete(long id) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID);)
+        {
+            statementPhotos.setLong(1, id);
+            statementPhotos.executeUpdate();
+            statementOrders.setLong(1, id);
+            statementOrders.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error during delete order", e);
+        }
     }
 
     String getPartWhere(FilterParameters filterParameters) {

@@ -20,4 +20,11 @@ public class DefaultOrderService implements OrderService {
     public List<Order> getOrdersByParameters(FilterParameters filterParameters) {
         return orderDao.getOrdersByParameters(filterParameters);
     }
+
+    @Override
+    public void delete(long id) {
+        orderDao.delete(id);
+    }
+
+
 }

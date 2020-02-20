@@ -24,6 +24,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.OrderServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.LoginServlet</servlet-class>
     </servlet>
@@ -52,6 +57,11 @@
     <servlet-mapping>
         <servlet-name>AllOrdersServlet</servlet-name>
         <url-pattern>/orders</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/order/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
