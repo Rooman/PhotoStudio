@@ -17,6 +17,7 @@ import java.util.Map;
 public class UserServlet extends HttpServlet {
     private UserService userService = ServiceLocator.getService(UserService.class);
     private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
+    private ObjectMapper mapper = new ObjectMapper();
 
     private static boolean isNotEmpty(String value) {
         return value != null && !value.isEmpty();
@@ -100,7 +101,6 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-        ObjectMapper mapper = new ObjectMapper();
         User user = mapper.readValue(request.getReader(), User.class);
 
         try {
