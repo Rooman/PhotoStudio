@@ -28,7 +28,7 @@
 
     <h1 class="page__title">Manage user</h1>
 
-    <form class="login-form">
+    <form class="login-form" >
         <div class="new__user__form">
             <div class="user-login">
                 <h3 class="user__title-login">Login</h3>
@@ -36,7 +36,7 @@
                 <div class="login-form_between">
 
                     <div class="form-group ">
-                        <input type="email" class="form-control  "  id="inputAddress" placeholder="Email "
+                        <input type="email" class="form-control  "  name="email" id="inputAddress" placeholder="Email "
                                th:value="${user.email}">
                     </div>
                     <div class="form-group ">
@@ -74,7 +74,7 @@
                     <input type="text" class="form-control form-control_info"
                            placeholder="Additional Information" th:value="${user.additionalInfo}">
                 </div>
-                <button class="btn save_button" th:value="'updateUser(\'' + ${user.getId()} + '\');'">Save
+                <button class="btn save_button" th:onclick="'updateUser(\'' + ${user.getId()} + '\');'" >Save
                 </button>
             </div>
             <div class="">

@@ -93,8 +93,12 @@ public class UserServlet extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
+
             String id = request.getParameter("id");
+        if (id == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
             String email = request.getParameter("email");
             String phoneNumber = request.getParameter("phoneNumber");
             String firstName = request.getParameter("firstName");
@@ -107,7 +111,7 @@ public class UserServlet extends HttpServlet {
             String additionalInfo = request.getParameter("additionalInfo");
 
             User newUser = new User();
-
+        try {
             newUser.setId(Long.parseLong(id));
             newUser.setEmail(email);
             newUser.setPhoneNumber(phoneNumber);
@@ -126,6 +130,6 @@ public class UserServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        response.sendRedirect(request.getContextPath() + "/admin/users");
+        //response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 }
