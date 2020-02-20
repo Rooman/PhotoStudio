@@ -5,6 +5,8 @@ import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserServlet extends HttpServlet {
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
+
     private UserService userService = ServiceLocator.getService(UserService.class);
     private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
@@ -24,6 +28,7 @@ public class UserServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (isNotEmpty(request.getParameter("id"))) {
+            LOG.info("Request of registration form received");
             long userId = Long.parseLong(request.getParameter("id"));
 
             User user = userService.getUserById(userId);
@@ -43,6 +48,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        LOG.info("Request with user data for registration user received");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String firstName = request.getParameter("firstName");
@@ -88,6 +94,7 @@ public class UserServlet extends HttpServlet {
 
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
+            LOG.error("UserServlet doDelete() error", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

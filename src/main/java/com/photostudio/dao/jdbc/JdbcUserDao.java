@@ -4,6 +4,8 @@ import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserDao implements UserDao {
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
+
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
@@ -59,6 +63,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
+        LOG.info("Get all users from DB");
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(GET_ALL_USERS)) {
@@ -68,14 +73,17 @@ public class JdbcUserDao implements UserDao {
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 users.add(user);
             }
+            LOG.debug("Get all users: {}", users);
             return users;
         } catch (SQLException e) {
-            throw new RuntimeException("Can't show all users", e);
+            LOG.error("An exception occurred while trying to get all users", e);
+            throw new RuntimeException("Can't show all users");
         }
     }
 
     @Override
     public void add(User user) {
+        LOG.info("Add user to DB");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
@@ -90,15 +98,17 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(10, user.getZip());
             preparedStatement.setString(11, user.getAddress());
             preparedStatement.setString(12, user.getAdditionalInfo());
-
             preparedStatement.executeUpdate();
+            LOG.debug("Add user: {} to DB", user);
         } catch (SQLException e) {
+            LOG.error("An exception occurred while trying to add user: {} DB", user, e);
             throw new RuntimeException("Can't add new user to DB ", e);
         }
     }
 
     @Override
     public User getUserById(long id) {
+        LOG.info("Get user by id");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)) {
             preparedStatement.setLong(1, id);
@@ -110,10 +120,12 @@ public class JdbcUserDao implements UserDao {
                 if (resultSet.next()) {
                     throw new RuntimeException("More than one users found");
                 }
+                LOG.debug("Get user: {} by id: {}", user, id);
                 return user;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Can't found user where id=" + id, e);
+            LOG.error("An exception occurred while trying to get user by id: {}", id, e);
+            throw new RuntimeException("Can't found user where id=" + id);
         }
     }
 
@@ -123,17 +135,21 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void delete(long id) {
+        LOG.info("Delete user by id");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            LOG.debug("Delete user by id: {}", id);
         } catch (SQLException e) {
-            throw new RuntimeException("Can't remove user", e);
+            LOG.error("An exception occurred while trying to delete user by id: {}", id, e);
+            throw new RuntimeException("Can't remove user");
         }
     }
 
     @Override
     public User getByLogin(String login) {
+        LOG.info("Get user by login");
         String resultQuery;
         if (login.contains("@")) {
             resultQuery = GET_USER_BY_LOGIN + "u.email=?";
@@ -145,16 +161,20 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
+                    LOG.error("No user with login: {}", login);
                     throw new LoginPasswordInvalidException("No user with login = " + login + " found");
                 }
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
+                    resultSet.last();
+                    LOG.error("Users with login: {} is {}", login, resultSet.getRow());
                     throw new RuntimeException("More then one user found");
                 }
                 return user;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Get user by login error", e);
+            LOG.error("An exception occurred while trying to get user with login: {}", login, e);
+            throw new RuntimeException("Get user by login error");
         }
     }
 }

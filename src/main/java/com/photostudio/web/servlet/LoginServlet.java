@@ -7,6 +7,8 @@ import com.photostudio.security.entity.Session;
 import com.photostudio.web.util.CookieManager;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginServlet extends HttpServlet {
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
     private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("Request to login page received");
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
@@ -35,6 +39,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("Request with login data received");
         try {
             String login = request.getParameter("login");
             String password = request.getParameter("password");
@@ -50,7 +55,8 @@ public class LoginServlet extends HttpServlet {
                 TemplateEngineFactory.process("login", paramsMap, response.getWriter());
             }
         } catch (IOException e) {
-            throw new RuntimeException("LoginServlet doPost error", e);
+            LOG.error("LoginServlet doPost error", e);
+            throw new RuntimeException("LoginServlet doPost error");
         }
     }
 }

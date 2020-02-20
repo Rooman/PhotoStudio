@@ -4,6 +4,9 @@ import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class JdbcOrderDao implements OrderDao {
-
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private static final String GET_ALL_ORDERS = "SELECT o.id id," +
             "os.statusName statusName, " +
             "o.orderDate orderDate, " +
@@ -32,6 +35,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public List<Order> getAll() {
+        LOG.info("Get all orders from DB");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(addSort(GET_ALL_ORDERS));
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -40,9 +44,11 @@ public class JdbcOrderDao implements OrderDao {
                 Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
                 orders.add(order);
             }
+            LOG.debug("Get all orders: {}", orders);
             return orders;
         } catch (SQLException e) {
-            throw new RuntimeException("Error during get all orders", e);
+            LOG.error("An exception occurred while trying to get all orders", e);
+            throw new RuntimeException("Error during get all orders");
         }
     }
 
@@ -55,7 +61,7 @@ public class JdbcOrderDao implements OrderDao {
         if (resultWhere.contains("?")) {
 
             String selectOrdersByParameters = addSort(GET_ALL_ORDERS + resultWhere);
-
+            LOG.info("Get orders by parameters from DB");
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(selectOrdersByParameters)) {
                 int count = 1;
@@ -80,10 +86,12 @@ public class JdbcOrderDao implements OrderDao {
                         Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
                         orders.add(order);
                     }
+                    LOG.debug("Get orders by parameters: {}", orders);
                     return orders;
                 }
             } catch (SQLException e) {
-                throw new RuntimeException("Error during get orders by params", e);
+                LOG.error("An exception occurred while trying to get orders by parameters", e);
+                throw new RuntimeException("Error during get orders by params");
             }
         }
         return getAll();
@@ -109,7 +117,7 @@ public class JdbcOrderDao implements OrderDao {
         return stringJoiner.toString();
     }
 
-    private String addSort(String query){
+    private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
     }
 }

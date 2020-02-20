@@ -1,5 +1,7 @@
 package com.photostudio.web.templater;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
@@ -11,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class TemplateEngineFactory {
+
     private static TemplateEngine TEMPLATE_ENGINE = new TemplateEngine();
     private static boolean isConfigured;
 
