@@ -19,4 +19,18 @@
     line-height: 96px;
 }
 
+.img-edit{
+    width: 30px;
+    height: 30px;
+    opacity: 0.7;
+}
+
+.img-edit__header{
+    opacity: 1;
+}
+
+.img-edit:hover{
+    opacity: 1;
+}
+
 

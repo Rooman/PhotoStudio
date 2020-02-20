@@ -27,7 +27,8 @@ function deleteUser(id) {
 }
 
 // Update a user
-function updateUser(id){
+function updateUser(id) {
+    event.preventDefault();
 
     let xhr = new XMLHttpRequest();
 
@@ -38,10 +39,10 @@ function updateUser(id){
     };
 
     xhr.onreadystatechange = function () {
-           if (xhr.readyState === 4 && xhr.status === 200) {
-               window.location = "admin/users";
-           }
-       };
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            window.location = "admin/users";
+        }
+    };
 
     xhr.onerror = function () {
         console.log("error");
@@ -49,10 +50,22 @@ function updateUser(id){
         console.log(xhr.responseText);
     };
 
-    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    xhr.setRequestHeader('content-type', 'application/json;charset=UTF-8');
 
-    //let email = document.getElementById("email").value;
-    let id = document.getElementById('id').value
-   	let email = document.getElementById('email').value
-   	xhr.send("id=" + id + "&email=" + email);
-   }
+    const user = {};
+    user.id = id;
+    user.email = document.getElementById("email").value;
+    user.phoneNumber = document.getElementById("phoneNumber").value;
+    user.title = document.getElementById("title").value;
+    user.firstName = document.getElementById("firstName").value;
+    user.lastName = document.getElementById("lastName").value;
+    user.country = document.getElementById("country").value;
+    user.city = document.getElementById("city").value;
+    user.address = document.getElementById("address").value;
+    user.zip = document.getElementById("zip").value;
+    user.additionalInfo = document.getElementById("additionalInfo").value;
+
+    const json = JSON.stringify(user);
+
+    xhr.send(json);
+}

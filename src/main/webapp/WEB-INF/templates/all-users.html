@@ -19,7 +19,6 @@
 <body>
 
 
-
 <div class="container">
     <!--Bread Crumb-->
     <div class="bread__crumb-navigation">
@@ -40,23 +39,26 @@
     <table class="table table__rounded">
         <tbody>
         <tr class="table_header">
-            <!--<td class="table_header">Id</td>-->
             <td class="table_header">Email</td>
             <td class="table_header">Phone</td>
             <td class="table_header">Name</td>
             <td class="table_header">Address</td>
-            <td class="table_header"><i class="fa fa-pencil fa-fw"></i></td>
+            <td class="table_header">Additional Info</td>
+            <td class="table_header"><img class="img-edit img-edit__header" src="../assets/images/user/Edit.svg"></td>
         </tr>
         <div th:each="user : ${users}">
             <tr class="table_info">
-                <!--<td class="table_info" th:text="${user.id}"></td>-->
                 <td class="table_info" th:text="${user.email}"></td>
                 <td class="table_info" th:text="${user.phoneNumber}"></td>
                 <td class="table_info" th:text="${user.firstName} +' '+ ${user.lastName} "></td>
                 <td class="table_info"
-                    th:text="${user.zip}+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
-<!--                <td class="table_info"><a th:href="@{'../user'(id=${user.id})}">Get user</a></td>-->
-                <td class="table_info"><a th:href="@{'../user'(id=${user.id})}"><i class="fa fa-pencil fa-fw"></i></a></td>
+                    th:text="*{user.zip != 0}? *{user.zip} : ''+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
+                <td class="table_info" th:text="${user.additionalInfo}"></td>
+                <td class="table_info">
+                    <a th:href="@{'../user'(id=${user.id})}">
+                        <img class="img-edit" src="../assets/images/user/Edit.svg">
+                    </a>
+                </td>
             </tr>
         </div>
         </tbody>

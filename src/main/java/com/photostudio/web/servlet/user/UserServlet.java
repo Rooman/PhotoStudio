@@ -1,5 +1,6 @@
 package com.photostudio.web.servlet.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
@@ -62,12 +63,12 @@ public class UserServlet extends HttpServlet {
         newUser.setLastName(lastName);
         newUser.setCountry(country);
         newUser.setCity(city);
-        newUser.setZip(zip == null ? 0 : Integer.parseInt(zip));
+        newUser.setZip(isNotEmpty(zip) ? Integer.parseInt(zip) : 0);
         newUser.setAddress(address);
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
 
-        //refactor!
+        //refactor! waiting for email notification
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");
 
@@ -93,43 +94,21 @@ public class UserServlet extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-            String id = request.getParameter("id");
+        String id = request.getParameter("id");
         if (id == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-            String email = request.getParameter("email");
-            String phoneNumber = request.getParameter("phoneNumber");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String country = request.getParameter("country");
-            String city = request.getParameter("city");
-            String zip = request.getParameter("zipCode");
-            String address = request.getParameter("address");
-            String title = request.getParameter("title");
-            String additionalInfo = request.getParameter("additionalInfo");
 
-            User newUser = new User();
+        ObjectMapper mapper = new ObjectMapper();
+        User user = mapper.readValue(request.getReader(), User.class);
+
         try {
-            newUser.setId(Long.parseLong(id));
-            newUser.setEmail(email);
-            newUser.setPhoneNumber(phoneNumber);
-            newUser.setFirstName(firstName);
-            newUser.setLastName(lastName);
-            newUser.setCountry(country);
-            newUser.setCity(city);
-            newUser.setZip(zip == null ? 0 : Integer.parseInt(zip));
-            newUser.setAddress(address);
-            newUser.setTitle(title);
-            newUser.setAdditionalInfo(additionalInfo);
-
-            userService.edit(newUser);
+            userService.edit(user);
 
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        //response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 }

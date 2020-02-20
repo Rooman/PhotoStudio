@@ -28,63 +28,46 @@
 
     <h1 class="page__title">Manage user</h1>
 
-    <form class="login-form" >
+    <form class="login-form">
         <div class="new__user__form">
             <div class="user-login">
                 <h3 class="user__title-login">Login</h3>
 
                 <div class="login-form_between">
-
-                    <div class="form-group ">
-                        <input type="email" class="form-control  "  name="email" id="inputAddress" placeholder="Email "
-                               th:value="${user.email}">
-                    </div>
-                    <div class="form-group ">
-                        <input type="text" class="form-control  "  id="inputAddress2" placeholder="Phone"
-                               th:value="${user.phoneNumber}">
-                    </div>
-
+                    <input type="email" class="form-control  " name="email" id="email" placeholder="Email "
+                           th:value="${user.email}">
+                    <input type="text" class="form-control  " id="phoneNumber" placeholder="Phone"
+                           th:value="${user.phoneNumber}">
                 </div>
-            </div>
-            <div class="new__user-info">
-                <div class="form-group">
-                    <input type="text" class="form-control "  placeholder="Title" th:value="${user.title}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control"  placeholder="First name"
+                <div class="new__user-info">
+                    <input type="text" class="form-control " id="title" placeholder="Title"
+                           th:value="${user.title}">
+                    <input type="text" class="form-control" id="firstName" placeholder="First name"
                            th:value="${user.firstName}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control "  placeholder="Last name"
+                    <input type="text" class="form-control " id="lastName" placeholder="Last name"
                            th:value="${user.lastName}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control "  placeholder="Country" th:value="${user.country}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control "  placeholder="City" th:value="${user.city}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control "  placeholder="Address" th:value="${user.address}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control "  placeholder="ZIP code" th:value="${user.zip}">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control form-control_info"
+                    <input type="text" class="form-control " id="country" placeholder="Country"
+                           th:value="${user.country}">
+                    <input type="text" class="form-control " id="city" placeholder="City" th:value="${user.city}">
+                    <input type="text" class="form-control " id="address" placeholder="Address"
+                           th:value="${user.address}">
+                    <input type="text" class="form-control " id="zip" placeholder="ZIP code"
+                           th:value="*{user.zip != 0}? *{user.zip} : ''">
+                    <input type="text" class="form-control form-control_info" id="additionalInfo"
                            placeholder="Additional Information" th:value="${user.additionalInfo}">
+                    <button class="btn btn__manage" th:onclick="'updateUser(\'' + ${user.getId()} + '\');'">Save
+                    </button>
                 </div>
-                <button class="btn save_button" th:onclick="'updateUser(\'' + ${user.getId()} + '\');'" >Save
-                </button>
-            </div>
-            <div class="">
-                <button type="submit" class="btn password_button">Change password</button>
 
-                <button class="btn delete_button" th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Delete User
-                </button>
+                <div class="manage-buttons">
+                    <button type="submit" class="btn btn__manage btn__manage--pink btn__manage--mb">Change password</button>
+
+                    <button class="btn btn__manage btn__manage--pink"
+                            th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Delete User
+                    </button>
+                </div>
 
             </div>
-        </div>
     </form>
 </div>
 
