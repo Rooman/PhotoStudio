@@ -44,6 +44,7 @@ public class JdbcOrderDao implements OrderDao {
                 Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
                 orders.add(order);
             }
+            LOG.info("Get: {} orders from DB", orders.size());
             LOG.debug("Get all orders: {}", orders);
             return orders;
         } catch (SQLException e) {
@@ -55,13 +56,13 @@ public class JdbcOrderDao implements OrderDao {
     //DO NOT change the order of parameters
     @Override
     public List<Order> getOrdersByParameters(FilterParameters filterParameters) {
-
+        LOG.info("Get orders by parameters from DB");
         String resultWhere = getPartWhere(filterParameters);
 
         if (resultWhere.contains("?")) {
 
             String selectOrdersByParameters = addSort(GET_ALL_ORDERS + resultWhere);
-            LOG.info("Get orders by parameters from DB");
+            LOG.debug("Get orders by parameters: {} from DB", selectOrdersByParameters);
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(selectOrdersByParameters)) {
                 int count = 1;
@@ -86,6 +87,7 @@ public class JdbcOrderDao implements OrderDao {
                         Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
                         orders.add(order);
                     }
+                    LOG.info("Get: {} orders by parameters", orders.size());
                     LOG.debug("Get orders by parameters: {}", orders);
                     return orders;
                 }

@@ -19,37 +19,37 @@ public class DefaultUserService implements UserService {
     @Override
     public List<User> getAllUsers() {
         List<User> allUsers = userDao.getAllUsers();
-        LOG.info("Started service get all users from DB: {}", allUsers);
+        LOG.debug("Started service get all users from DB: {}", allUsers);
         return allUsers;
     }
 
     @Override
     public void add(User user) {
-        LOG.info("Started service add user: {} to DB", user);
+        LOG.debug("Started service add user: {} to DB", user);
         userDao.add(user);
     }
 
     @Override
     public User getUserById(long id) {
-        LOG.info("Started service get user by id : {} from DB", id);
+        LOG.debug("Started service get user by id : {} from DB", id);
         return userDao.getUserById(id);
     }
 
     @Override
     public void edit(User user) {
-        LOG.info("Started service edit user: {}", user);
+        LOG.debug("Started service edit user: {}", user);
         userDao.edit(user);
     }
 
     @Override
     public void delete(long id) {
-        LOG.info("Started service delete user with id: {} from DB", id);
+        LOG.debug("Started service delete user with id: {} from DB", id);
         userDao.delete(id);
     }
 
     @Override
     public User getUserByLogin(String login) {
-        LOG.info("Started service get user by login: {} from DB", login);
+        LOG.debug("Started service get user by login: {} from DB", login);
         return userDao.getByLogin(login);
     }
 }

@@ -48,7 +48,6 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        LOG.info("Request with user data for registration user received");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String firstName = request.getParameter("firstName");
@@ -72,7 +71,7 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
-
+        LOG.debug("Request for registration user: {} received", newUser);
         //refactor!
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");

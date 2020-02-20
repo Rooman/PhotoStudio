@@ -23,7 +23,6 @@ public class DefaultSecurityService implements SecurityService {
     @Override
     public Session login(String login, String password) {
         LOG.info("Connect user by login: {}", login);
-        LOG.debug("Connect user by login: {} {}", login, password);
         User user = userService.getUserByLogin(login);
         if (user != null) {
             String hashedPassword = getHashedPassword(user.getSalt(), password);
@@ -36,7 +35,7 @@ public class DefaultSecurityService implements SecurityService {
             Session session = Session.builder().user(user)
                     .token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
             sessionList.add(session);
-            LOG.info("User with login: {} is logged in ", login);
+            LOG.info("User with login: {} is logged in", login);
             return session;
         } else {
             LOG.error("User with login: {} not found", login);

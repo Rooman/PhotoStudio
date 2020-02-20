@@ -12,7 +12,6 @@ public class ThymeleafInitializerListener implements ServletContextListener {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("Initializing thymeleaf processor");
         LOG.info("Initializing thymeleaf processor");
         ServletContext servletContext = sce.getServletContext();
         TemplateEngineFactory.configTemplate(servletContext);

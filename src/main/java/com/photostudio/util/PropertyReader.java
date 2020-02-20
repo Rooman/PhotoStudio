@@ -17,8 +17,8 @@ public class PropertyReader {
     }
 
     public Properties getProperties() {
+        LOG.info("Try get properties");
         String prodEnvironment = System.getenv("environment");
-        LOG.info("System environment: {}", prodEnvironment);
         if (prodEnvironment != null && prodEnvironment.equalsIgnoreCase("PROD")) {
             LOG.info("Type of properties is production");
             return getProdProperties();
@@ -32,7 +32,7 @@ public class PropertyReader {
             Properties properties = new Properties();
             String dbUrl = System.getenv("JDBC_DATABASE_URL");
             properties.setProperty("jdbc.url", dbUrl);
-            LOG.info("Set jdbc.url: {}", dbUrl);
+            LOG.debug("Set jdbc.url: {}", dbUrl);
             return properties;
         } catch (Exception e) {
             LOG.error("Error while were trying to get connection properties on production environment", e);
@@ -47,7 +47,7 @@ public class PropertyReader {
                 throw new IllegalArgumentException("No properties on path " + path);
             }
             properties.load(inputStream);
-            LOG.info("Read properties from path: {}", path);
+            LOG.debug("Read properties from path: {}", path);
             return properties;
         } catch (IOException e) {
             LOG.error("Can't read properties file: {} ", path, e);

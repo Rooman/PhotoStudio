@@ -7,8 +7,6 @@ public class LoginPasswordInvalidException extends RuntimeException {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     public LoginPasswordInvalidException(String message) {
-
         super(message);
-        LOG.info("Run LoginPasswordInvalidException with message: {}", message);
     }
 }

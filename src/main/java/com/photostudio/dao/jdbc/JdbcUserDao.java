@@ -73,7 +73,8 @@ public class JdbcUserDao implements UserDao {
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 users.add(user);
             }
-            LOG.debug("Get all users: {}", users);
+            LOG.info("Get: {} users from DB", users.size());
+            LOG.debug("Get users: {}", users);
             return users;
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get all users", e);
@@ -99,6 +100,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(11, user.getAddress());
             preparedStatement.setString(12, user.getAdditionalInfo());
             preparedStatement.executeUpdate();
+            LOG.info("Adding user to DB is completed");
             LOG.debug("Add user: {} to DB", user);
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to add user: {} DB", user, e);
@@ -108,7 +110,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUserById(long id) {
-        LOG.info("Get user by id");
+        LOG.info("Get user by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)) {
             preparedStatement.setLong(1, id);
@@ -120,6 +122,7 @@ public class JdbcUserDao implements UserDao {
                 if (resultSet.next()) {
                     throw new RuntimeException("More than one users found");
                 }
+                LOG.info("Getting user by id: {} is completed", id);
                 LOG.debug("Get user: {} by id: {}", user, id);
                 return user;
             }
@@ -135,12 +138,12 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void delete(long id) {
-        LOG.info("Delete user by id");
+        LOG.info("Delete user by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-            LOG.debug("Delete user by id: {}", id);
+            LOG.info("Deleting user by id: {} is completed", id);
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to delete user by id: {}", id, e);
             throw new RuntimeException("Can't remove user");
@@ -149,7 +152,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getByLogin(String login) {
-        LOG.info("Get user by login");
+        LOG.info("Get user by login: {}", login);
         String resultQuery;
         if (login.contains("@")) {
             resultQuery = GET_USER_BY_LOGIN + "u.email=?";
@@ -166,10 +169,11 @@ public class JdbcUserDao implements UserDao {
                 }
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
-                    resultSet.last();
-                    LOG.error("Users with login: {} is {}", login, resultSet.getRow());
+                    LOG.error("Users with login: {} is several", login);
                     throw new RuntimeException("More then one user found");
                 }
+                LOG.info("Getting user by login: {} is completed", login);
+                LOG.debug("Get user: {} by login: {}",user, login);
                 return user;
             }
         } catch (SQLException e) {
