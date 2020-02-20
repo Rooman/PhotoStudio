@@ -87,12 +87,11 @@
         <url-pattern>/orders</url-pattern>
         <url-pattern>/user</url-pattern>
         <url-pattern>/user/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <filter-mapping>
         <filter-name>UserRoleFilter</filter-name>
         <url-pattern>/home</url-pattern>
         <url-pattern></url-pattern>
-        <dispatcher>REQUEST</dispatcher>
+        <url-pattern>/orders</url-pattern>
     </filter-mapping>
 </web-app>

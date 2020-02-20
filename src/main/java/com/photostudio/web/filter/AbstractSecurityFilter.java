@@ -5,6 +5,7 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
+import com.photostudio.web.util.CookieManager;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -23,30 +24,22 @@ public abstract class AbstractSecurityFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
-
-        Cookie[] cookies = req.getCookies();
-        //This variable will be needed to add redirection. See comment in the end of method
+        //This variables would be needed to add redirection. See comment in the end of method
+        //HttpServletResponse resp = (HttpServletResponse) response;
         //boolean isAuth = false;
-        UserRole userRole;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equalsIgnoreCase("user-token")) {
-                    String token = cookie.getValue();
-                    Session session = securityService.getSession(token);
-                    if (session != null) {
-                        userRole = session.getUser().getUserRole();
-                        if (getAcceptedRoles().contains(userRole)) {
-                            //isAuth = true;
-                            req.setAttribute("session", session);
-                        }
-                    }
-                    break;
-                }
+        //UserRole userRole;
+
+        String token = new CookieManager().getCookie(req,"token");
+        Session session = securityService.getSession(token);
+        if (session != null) {
+            UserRole userRole = session.getUser().getUserRole();
+            if (getAcceptedRoles().contains(userRole)) {
+                //isAuth = true;
+                req.setAttribute("session", session);
             }
         }
 
-        //I can add I redirection here. For example if user tries to visit admin page,
+        //I can add a redirection here. For example if user tries to visit admin page,
         //he can be redirected to some "access denied" warning page
         chain.doFilter(request, response);
     }

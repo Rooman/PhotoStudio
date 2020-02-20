@@ -6,10 +6,10 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class AdminSecurityFilter extends AbstractSecurityFilter {
-    private static final Set<UserRole> acceptedRoles = EnumSet.of(UserRole.ADMIN);
+    private static final Set<UserRole> ACCEPTED_ROLES = EnumSet.of(UserRole.ADMIN);
 
     @Override
     Set<UserRole> getAcceptedRoles() {
-        return acceptedRoles;
+        return ACCEPTED_ROLES;
     }
 }
