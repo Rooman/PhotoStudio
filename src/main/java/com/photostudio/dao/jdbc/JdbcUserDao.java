@@ -51,9 +51,23 @@ public class JdbcUserDao implements UserDao {
             " u.firstName firstName, u.lastName lastName, ur.roleName roleName, " +
             " u.title title, u.additionalInfo additionalInfo, " +
             " u.passwordHash passwordHash, u.salt salt, u.country country," +
-            " u.city city, u.zip zip, u.address address  FROM  Users u \n" +
-            "INNER JOIN UserRole ur ON u.userRoleId=ur.id \n" +
+            " u.city city, u.zip zip, u.address address  FROM  Users u " +
+            "INNER JOIN UserRole ur ON u.userRoleId=ur.id " +
             "WHERE u.id=?;";
+    private static final String EDIT_USER = "UPDATE Users u " +
+            "SET " +
+            "    u.email = ?," +
+            "    u.phoneNumber = ?," +
+            "    u.firstName = ?," +
+            "    u.lastName = ?," +
+            "    u.country = ?," +
+            "    u.city = ?," +
+            "    u.zip = ?," +
+            "    u.title = ?," +
+            "    u.additionalInfo = ?," +
+            "    u.address = ?" +
+            "WHERE" +
+            "    u.id = ?;";
 
     private DataSource dataSource;
 
@@ -134,6 +148,27 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void edit(User user) {
+        LOG.info("Edit user in DB");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getPhoneNumber());
+            preparedStatement.setString(3, user.getFirstName());
+            preparedStatement.setString(4, user.getLastName());
+            preparedStatement.setString(5, user.getCountry());
+            preparedStatement.setString(6, user.getCity());
+            preparedStatement.setInt(7, user.getZip());
+            preparedStatement.setString(8, user.getTitle());
+            preparedStatement.setString(9, user.getAdditionalInfo());
+            preparedStatement.setString(10, user.getAddress());
+            preparedStatement.setLong(11, user.getId());
+            preparedStatement.executeUpdate();
+
+            LOG.debug("User {} was edited", user);
+        } catch (SQLException e) {
+            LOG.error("Can't edit user", e);
+            throw new RuntimeException("Can't edit user", e);
+        }
     }
 
     @Override
