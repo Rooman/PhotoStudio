@@ -109,7 +109,7 @@ public class JdbcOrderDao implements OrderDao {
         return stringJoiner.toString();
     }
 
-    private String addSort(String query){
+    private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
     }
 }
