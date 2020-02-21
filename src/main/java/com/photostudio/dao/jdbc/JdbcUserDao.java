@@ -4,6 +4,8 @@ import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserDao implements UserDao {
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
+
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
@@ -47,22 +51,22 @@ public class JdbcUserDao implements UserDao {
             " u.firstName firstName, u.lastName lastName, ur.roleName roleName, " +
             " u.title title, u.additionalInfo additionalInfo, " +
             " u.passwordHash passwordHash, u.salt salt, u.country country," +
-            " u.city city, u.zip zip, u.address address  FROM  Users u \n" +
-            "INNER JOIN UserRole ur ON u.userRoleId=ur.id \n" +
+            " u.city city, u.zip zip, u.address address  FROM  Users u " +
+            "INNER JOIN UserRole ur ON u.userRoleId=ur.id " +
             "WHERE u.id=?;";
-    private static final String EDIT_USER = "UPDATE Users u \n" +
-            "SET \n" +
-            "    u.email = ?,\n" +
-            "    u.phoneNumber = ?,\n" +
-            "    u.firstName = ?,\n" +
-            "    u.lastName = ?,\n" +
-            "    u.country = ?,\n" +
-            "    u.city = ?,\n" +
-            "    u.zip = ?,\n" +
-            "    u.title = ?,\n" +
-            "    u.additionalInfo = ?,\n" +
-            "    u.address = ?\n" +
-            "WHERE\n" +
+    private static final String EDIT_USER = "UPDATE Users u " +
+            "SET " +
+            "    u.email = ?," +
+            "    u.phoneNumber = ?," +
+            "    u.firstName = ?," +
+            "    u.lastName = ?," +
+            "    u.country = ?," +
+            "    u.city = ?," +
+            "    u.zip = ?," +
+            "    u.title = ?," +
+            "    u.additionalInfo = ?," +
+            "    u.address = ?" +
+            "WHERE" +
             "    u.id = ?;";
 
     private DataSource dataSource;
@@ -133,6 +137,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void edit(User user) {
+        LOG.info("Edit user in DB");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
             preparedStatement.setString(1, user.getEmail());
@@ -147,7 +152,10 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(10, user.getAddress());
             preparedStatement.setLong(11, user.getId());
             preparedStatement.executeUpdate();
+
+            LOG.debug("User {} was edited", user);
         } catch (SQLException e) {
+            LOG.error("Can't edit user", e);
             throw new RuntimeException("Can't edit user", e);
         }
     }
