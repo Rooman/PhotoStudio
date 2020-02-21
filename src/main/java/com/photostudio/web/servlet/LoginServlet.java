@@ -18,6 +18,7 @@ import java.util.Map;
 public class LoginServlet extends HttpServlet {
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
     private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
+    private CookieManager cookieManager = new CookieManager();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -41,7 +42,7 @@ public class LoginServlet extends HttpServlet {
             try {
                 Session session = securityService.login(login, password);
 
-                new CookieManager().addCookie(response, "user-token", session.getToken());
+                cookieManager.addCookie(response, "user-token", session.getToken());
 
                 response.sendRedirect(request.getContextPath() + "/admin");
             } catch (LoginPasswordInvalidException e) {

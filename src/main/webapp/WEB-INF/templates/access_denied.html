@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/access_denied.css">
+    <title>Photo Studio</title>
+</head>
+
+<body>
+<!--NavBar-->
+<nav th:replace="fragment/navigation.html :: nav"></nav>
+<hr class="header__underscore">
+<!--NavBarEnd-->
+
+    <div class="denied-block">
+        <h1>403 Forbidden</h1>
+        <p class="denied-title">Access denied. You don't have the permission to visit requested page.</p>
+    </div>
+
+<!--    Footer-->
+<footer class="footer">
+</footer>
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
