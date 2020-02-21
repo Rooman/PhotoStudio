@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class TemplateEngineFactory {
-
     private static TemplateEngine TEMPLATE_ENGINE = new TemplateEngine();
     private static boolean isConfigured;
 

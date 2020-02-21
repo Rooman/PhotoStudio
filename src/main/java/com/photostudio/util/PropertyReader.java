@@ -36,7 +36,7 @@ public class PropertyReader {
             return properties;
         } catch (Exception e) {
             LOG.error("Error while were trying to get connection properties on production environment", e);
-            throw new RuntimeException("Exception while were trying to get connection properties on production environment ");
+            throw new RuntimeException("Exception while were trying to get connection properties on production environment", e);
         }
     }
 
@@ -51,7 +51,7 @@ public class PropertyReader {
             return properties;
         } catch (IOException e) {
             LOG.error("Can't read properties file: {} ", path, e);
-            throw new RuntimeException("Can't read properties file " + path);
+            throw new RuntimeException("Can't read properties file " + path, e);
         }
 
     }

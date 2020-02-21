@@ -48,6 +48,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        LOG.info("Request for registration user received");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String firstName = request.getParameter("firstName");
@@ -81,6 +82,7 @@ public class UserServlet extends HttpServlet {
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("Request for delete user received");
         String id = request.getParameter("id");
         if (id == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

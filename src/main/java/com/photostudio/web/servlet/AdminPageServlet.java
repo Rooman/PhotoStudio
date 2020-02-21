@@ -26,7 +26,7 @@ public class AdminPageServlet extends HttpServlet {
             TemplateEngineFactory.process("admin-page", paramsMap, response.getWriter());
         } catch (IOException e) {
             LOG.error("AdminPageServlet error", e);
-            throw new RuntimeException("AdminPageServlet error");
+            throw new RuntimeException("AdminPageServlet error", e);
         }
     }
 }

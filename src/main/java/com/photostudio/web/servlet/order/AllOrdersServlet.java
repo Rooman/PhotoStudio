@@ -36,7 +36,7 @@ public class AllOrdersServlet extends HttpServlet {
             TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);
-            throw new RuntimeException("AllOrdersServlet error");
+            throw new RuntimeException("AllOrdersServlet error", e);
         }
 
     }

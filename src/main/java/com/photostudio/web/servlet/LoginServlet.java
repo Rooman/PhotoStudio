@@ -33,6 +33,7 @@ public class LoginServlet extends HttpServlet {
 
             TemplateEngineFactory.process("login", paramsMap, response.getWriter());
         } catch (IOException e) {
+            LOG.error("LoginServlet doGet error", e);
             throw new RuntimeException("LoginServlet error", e);
         }
     }
@@ -56,7 +57,7 @@ public class LoginServlet extends HttpServlet {
             }
         } catch (IOException e) {
             LOG.error("LoginServlet doPost error", e);
-            throw new RuntimeException("LoginServlet doPost error");
+            throw new RuntimeException("LoginServlet doPost error", e);
         }
     }
 }

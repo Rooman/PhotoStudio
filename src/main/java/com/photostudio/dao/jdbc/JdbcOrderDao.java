@@ -49,7 +49,7 @@ public class JdbcOrderDao implements OrderDao {
             return orders;
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get all orders", e);
-            throw new RuntimeException("Error during get all orders");
+            throw new RuntimeException("Error during get all orders", e);
         }
     }
 
@@ -93,7 +93,7 @@ public class JdbcOrderDao implements OrderDao {
                 }
             } catch (SQLException e) {
                 LOG.error("An exception occurred while trying to get orders by parameters", e);
-                throw new RuntimeException("Error during get orders by params");
+                throw new RuntimeException("Error during get orders by params", e);
             }
         }
         return getAll();

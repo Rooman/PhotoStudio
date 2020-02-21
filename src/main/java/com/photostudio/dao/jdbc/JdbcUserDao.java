@@ -78,7 +78,7 @@ public class JdbcUserDao implements UserDao {
             return users;
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get all users", e);
-            throw new RuntimeException("Can't show all users");
+            throw new RuntimeException("Can't show all users", e);
         }
     }
 
@@ -128,7 +128,7 @@ public class JdbcUserDao implements UserDao {
             }
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get user by id: {}", id, e);
-            throw new RuntimeException("Can't found user where id=" + id);
+            throw new RuntimeException("Can't found user where id=" + id, e);
         }
     }
 
@@ -146,7 +146,7 @@ public class JdbcUserDao implements UserDao {
             LOG.info("Deleting user by id: {} is completed", id);
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to delete user by id: {}", id, e);
-            throw new RuntimeException("Can't remove user");
+            throw new RuntimeException("Can't remove user", e);
         }
     }
 
@@ -173,12 +173,12 @@ public class JdbcUserDao implements UserDao {
                     throw new RuntimeException("More then one user found");
                 }
                 LOG.info("Getting user by login: {} is completed", login);
-                LOG.debug("Get user: {} by login: {}",user, login);
+                LOG.debug("Get user: {} by login: {}", user, login);
                 return user;
             }
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get user with login: {}", login, e);
-            throw new RuntimeException("Get user by login error");
+            throw new RuntimeException("Get user by login error", e);
         }
     }
 }

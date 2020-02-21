@@ -28,8 +28,8 @@ public class DefaultSecurityService implements SecurityService {
             String hashedPassword = getHashedPassword(user.getSalt(), password);
             String actualPassword = user.getPasswordHash();
             if (!hashedPassword.equals(actualPassword)) {
-                LOG.error("Password invalid for user: {}", login);
-                throw new LoginPasswordInvalidException("Login/password invalid for user: " + login);
+                LOG.error("Login/password invalid for user with login: {}", login);
+                throw new LoginPasswordInvalidException("Login/password invalid for user with login: " + login);
             }
             String userToken = UUID.randomUUID().toString();
             Session session = Session.builder().user(user)

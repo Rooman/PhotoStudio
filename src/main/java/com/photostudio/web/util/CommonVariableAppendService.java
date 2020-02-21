@@ -24,7 +24,7 @@ public class CommonVariableAppendService {
         if (session == null) {
             return;
         }
-        LOG.debug("Session is : {}", session);
+        LOG.info("Session is : {}", session);
         paramsMap.put("user", session.getUser());
     }
 }
