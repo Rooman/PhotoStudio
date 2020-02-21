@@ -29,6 +29,7 @@ public class UserServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (isNotEmpty(request.getParameter("id"))) {
+            LOG.info("Request of registration form received");
             long userId = Long.parseLong(request.getParameter("id"));
 
             User user = userService.getUserById(userId);
@@ -48,6 +49,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        LOG.info("Request for registration user received");
         String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
         String firstName = request.getParameter("firstName");
@@ -71,7 +73,8 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
-
+        LOG.debug("Request for registration user: {} received", newUser);
+      
         //refactor! waiting for email notification
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");
@@ -81,6 +84,7 @@ public class UserServlet extends HttpServlet {
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("Request for delete user received");
         String id = request.getParameter("id");
         if (id == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -93,6 +97,7 @@ public class UserServlet extends HttpServlet {
 
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
+            LOG.error("UserServlet doDelete() error", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             throw new RuntimeException("Error trying to delete user", e);
