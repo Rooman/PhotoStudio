@@ -1,9 +1,11 @@
 package com.photostudio.dao.jdbc;
 
+
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -94,6 +96,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public void delete(long id) {
+        
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
              PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID);)
@@ -130,4 +133,6 @@ public class JdbcOrderDao implements OrderDao {
     private String addSort(String query){
         return query + " ORDER BY o.id DESC";
     }
+
+
 }

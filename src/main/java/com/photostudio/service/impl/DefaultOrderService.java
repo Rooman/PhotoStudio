@@ -1,6 +1,7 @@
 package com.photostudio.service.impl;
 
 import com.photostudio.ServiceLocator;
+import com.photostudio.dao.LocalDiskPhotoDao;
 import com.photostudio.dao.OrderDao;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
@@ -23,6 +24,8 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public void delete(long id) {
+        LocalDiskPhotoDao photoDao = ServiceLocator.getService(LocalDiskPhotoDao.class);
+        photoDao.deleteByOrder(id);
         orderDao.delete(id);
     }
 

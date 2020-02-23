@@ -24,8 +24,8 @@
     </servlet>
 
     <servlet>
-        <servlet-name>OrderServlet</servlet-name>
-        <servlet-class>com.photostudio.web.servlet.order.OrderServlet</servlet-class>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.DeleteOrderServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -60,8 +60,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>OrderServlet</servlet-name>
-        <url-pattern>/order/*</url-pattern>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <url-pattern>/order/delete/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
