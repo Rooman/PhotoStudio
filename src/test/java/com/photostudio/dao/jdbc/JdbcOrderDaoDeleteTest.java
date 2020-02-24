@@ -150,7 +150,23 @@ public class JdbcOrderDaoDeleteTest {
 
     }
 
-    @AfterEach
+    @Test
+    public void testDeletePhotoFromEmptyFolder() throws IOException {
+        //create dirs, but no files
+        String path = TEST_PATH_PHOTO + File.separator + "3";
+        File dir=new File(path);
+        dir.mkdirs();
+
+        LocalDiskPhotoDao photoDao=new LocalDiskPhotoDao(TEST_PATH_PHOTO);
+        photoDao.deleteByOrder(3);
+
+        File dirAfter = new File(path);
+        assertEquals(false,dirAfter.exists());
+
+
+    }
+
+        @AfterEach
     public void after() throws SQLException {
         connection.close();
     }

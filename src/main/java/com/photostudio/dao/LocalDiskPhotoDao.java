@@ -16,7 +16,7 @@ public class LocalDiskPhotoDao {
 
       String dirToDelete = path + File.separator + String.valueOf(orderId);
 
-      LOG.info("delete photos from local disk by path:{path}", dirToDelete);
+      LOG.info("delete photos from local disk by path:{}", dirToDelete);
       try {
           File dir = new File(dirToDelete);
           if (dir.exists()) {
@@ -25,6 +25,7 @@ public class LocalDiskPhotoDao {
           LOG.info("photos for order were deleted");
       }
       catch (Exception e) {
+          LOG.error("can't delete photos from disk", e);
           throw new RuntimeException("can't delete photos from disk:", e);
       }
   }

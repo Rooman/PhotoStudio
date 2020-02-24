@@ -117,6 +117,7 @@ public class JdbcOrderDao implements OrderDao {
             statementOrders.executeUpdate();
             LOG.info("Order by id: {} and photos deleted from DB", id);
         } catch (SQLException e) {
+            LOG.error("Error during delete order {}", id, e);
             throw new RuntimeException("Error during delete order", e);
         }
     }
