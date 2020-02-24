@@ -27,13 +27,36 @@ public class AllOrdersServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-            FilterParameters filterParameters = getFilterParameters(request);
-            paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
+            long userId;
+
+            try {
+                String user = request.getParameter("user");
+                LOG.debug("user=" + user);
+                userId = Long.parseLong(user);
+            }
+            catch (Exception e) {
+                userId = 0;
+                LOG.error("get parameter user error:" + e.getStackTrace());
+            }
+
 
             new CommonVariableAppendService().appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+            if (userId==0) {
+                LOG.info("Show all orders, Admin page");
+                FilterParameters filterParameters = getFilterParameters(request);
+                paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
+
+                TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+            }
+            else {
+                LOG.info("Show all orders for user {}", userId);
+                paramsMap.put("orders", defaultOrderService.getOrdersByUserId(userId));
+
+                TemplateEngineFactory.process("user-all-orders", paramsMap, response.getWriter());
+
+            }
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);

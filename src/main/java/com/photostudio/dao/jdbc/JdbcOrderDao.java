@@ -53,6 +53,34 @@ public class JdbcOrderDao implements OrderDao {
         }
     }
 
+    public List<Order> getOrdersByUserId(long userId){
+        LOG.info("Start get all orders by userId:{} from DB", userId);
+        String sql = GET_ALL_ORDERS + " WHERE o.userId = ?";
+        sql = addSort(sql);
+        LOG.debug("execute sql query:" + sql);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ) {
+            preparedStatement.setLong(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                List<Order> orders = new ArrayList<>();
+                while (resultSet.next()) {
+                    Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
+                    orders.add(order);
+                }
+
+                LOG.info("Get: {} orders from DB", orders.size());
+                LOG.debug("Get all orders: {}", orders);
+
+                return orders;
+            }
+        } catch (SQLException e) {
+            LOG.error("An exception occurred while trying to get all orders by userId", e);
+            throw new RuntimeException("Error during get all orders by userId", e);
+        }
+    }
+
     //DO NOT change the order of parameters
     @Override
     public List<Order> getOrdersByParameters(FilterParameters filterParameters) {

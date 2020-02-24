@@ -25,4 +25,10 @@ public class DefaultOrderService implements OrderService {
         LOG.info("Started service get orders by parameters from DB");
         return orderDao.getOrdersByParameters(filterParameters);
     }
+
+    @Override
+    public List<Order> getOrdersByUserId(long userId) {
+        LOG.info("Started service get orders by userId from DB");
+        return orderDao.getOrdersByUserId(userId);
+    }
 }

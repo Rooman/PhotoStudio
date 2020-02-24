@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Orders Journal</title>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/all-orders.css">
+</head>
+
+<body>
+<div class="container orders">
+
+    <h1 class="orders__title">Your orders</h1>
+
+    <table class="table table-hover table__rounded">
+        <tbody>
+        <tr class="table_header">
+            <td class="table_header">Number</td>
+            <td class="table_header">Date</td>
+            <td class="table_header">Status</td>
+        </tr>
+        <div th:each="order : ${orders}">
+            <tr class="table_info">
+                <td class="table_info" th:text="${order.id}"></td>
+                <td class="table_info" th:text="${order.orderDate}"></td>
+                <td class="table_info" th:text="${order.status}"></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
+
+
