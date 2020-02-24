@@ -18,7 +18,7 @@ public class DeleteOrderServlet extends HttpServlet {
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
 
     @Override
-    public void doPut(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         LOG.info("Request delete order is received");
         String id = request.getParameter("id");

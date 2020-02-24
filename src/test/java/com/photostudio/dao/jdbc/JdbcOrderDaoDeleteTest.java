@@ -50,22 +50,30 @@ public class JdbcOrderDaoDeleteTest {
 
         FileReader fileData1 = new FileReader(getClass().getClassLoader().getResource("db/migration/V1_5__insert_UserRole.sql").getFile());
         RunScript.execute(connection, fileData1);
+        fileData1.close();
+
         FileReader fileData2 = new FileReader(getClass().getClassLoader().getResource("db/migration/V1_6__insert_OrderStatus.sql").getFile());
         RunScript.execute(connection, fileData2);
+        fileData2.close();
+
         FileReader fileData3 = new FileReader(getClass().getClassLoader().getResource("db/migration/V1_7__insert_PhotoStatus.sql").getFile());
         RunScript.execute(connection, fileData3);
+        fileData3.close();
+
         FileReader fileData4 = new FileReader(getClass().getClassLoader().getResource("db/migration/V1_8__insert_admin.sql").getFile());
         RunScript.execute(connection, fileData4);
+        fileData4.close();
+
         FileReader fileData5 = new FileReader(getClass().getClassLoader().getResource("db/data_delete_order.sql").getFile());
         RunScript.execute(connection, fileData5);
-
+        fileData5.close();
     }
 
     @Test
     public void testDeleteOrderWithoutPhotos() {
         //before
         int cntOrdersBefore = getResult("SELECT COUNT(*) CNT FROM Orders");
-        int cntOrder1Before = getResult("SELECT COUNT(*) CNT FROM Orders WHERE id = 1");
+
        //when
           JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
           jdbcOrderDao.delete(1);
@@ -114,6 +122,7 @@ public class JdbcOrderDaoDeleteTest {
         int cntPhotosBefore = getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
         int cntPhotosByOrder = getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
 
+        //create dirs and files
         String path = TEST_PATH_PHOTO + File.separator + "3";
         File dir=new File(path);
         dir.mkdirs();
@@ -128,12 +137,14 @@ public class JdbcOrderDaoDeleteTest {
 
         LocalDiskPhotoDao photoDao=new LocalDiskPhotoDao(TEST_PATH_PHOTO);
         photoDao.deleteByOrder(3);
+
         //after
         int cntPhotosAfter = getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
         int cntPhotosByOrderAfter = getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
 
         assertEquals(0, cntPhotosByOrderAfter);
         assertEquals(cntPhotosBefore-cntPhotosByOrder, cntPhotosAfter);
+
         File dirAfter = new File(path);
         assertEquals(false,dirAfter.exists());
 
