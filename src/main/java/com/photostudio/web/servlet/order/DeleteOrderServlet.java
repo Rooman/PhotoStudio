@@ -30,15 +30,18 @@ public class DeleteOrderServlet extends HttpServlet {
         String token = new CookieManager().getCookie(request, cookieUserToken);
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
         Session session = securityService.getSession(token);
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
         if (!session.getUser().getUserRole().equals(UserRole.ADMIN)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
         try {
