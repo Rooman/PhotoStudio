@@ -1,6 +1,8 @@
 package com.photostudio;
 
+
 import com.photostudio.dao.LocalDiskPhotoDao;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.DataSourceFactory;
@@ -46,6 +48,10 @@ public class ServiceLocator {
 
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
+
+        //mapper for JSON
+        ObjectMapper mapper = new ObjectMapper();
+        register(ObjectMapper.class, mapper);
 
     }
 
