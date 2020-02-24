@@ -14,6 +14,7 @@ import java.util.List;
 public class DefaultOrderService implements OrderService {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderDao orderDao = ServiceLocator.getService(OrderDao.class);
+    private LocalDiskPhotoDao photoDao = ServiceLocator.getService(LocalDiskPhotoDao.class);
 
     @Override
     public List<Order> getAll() {
@@ -30,7 +31,6 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void delete(long id) {
         LOG.info("Started service delete order by id ");
-        LocalDiskPhotoDao photoDao = ServiceLocator.getService(LocalDiskPhotoDao.class);
         photoDao.deleteByOrder(id);
         orderDao.delete(id);
     }
