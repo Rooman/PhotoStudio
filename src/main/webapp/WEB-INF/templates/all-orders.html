@@ -95,7 +95,7 @@
         <div th:each="order : ${orders}">
             <tr class="table_info">
                 <td class="table_info" th:text="${order.id}"></td>
-                <td class="table_info" th:text="${UIutil.formatDate(order.orderDate)}"></td>
+                <td class="table_info" th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></td>
                 <td class="table_info" th:text="${order.status}"></td>
                 <td class="table_info">
                     <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>

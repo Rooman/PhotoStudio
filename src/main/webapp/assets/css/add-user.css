@@ -1,99 +1,93 @@
 .page__title {
-	font-weight: 300;
-	font-size: 96px;
-	line-height: 96px;
-	text-align: center;
-	margin-top: 100px;
-	margin-bottom: 50px;
+    font-weight: 300;
+    font-size: 96px;
+    line-height: 96px;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 50px;
 }
 
 .new__user__form {
-	width: 784px;
-	height: 1650px;
-	border: 3px solid #E49FB6;
-	border-radius: 10px;
-	margin: 100px auto;
-}
-
-.user-login {
-	margin-left: 30px;
-	margin-right: 30px;
+    width: 784px;
+    border: 3px solid #E49FB6;
+    border-radius: 10px;
+    margin: 100px auto;
 }
 
 .new__user-info {
-	border-top: 3px solid #E49FB6;
-	border-bottom: 3px solid #E49FB6;
-	margin-top: 50px;
-	width: 781px;
-	height: 1048px;
-	padding: 50px 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+
+    border-top: 3px solid #E49FB6;
+    margin-top: 50px;
+    width: 781px;
+    height: 1048px;
+    padding: 50px 30px;
 }
 
 .login-form_between {
-	display: flex;
-	justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.login-form_between > input{
+    margin: 10px;
 }
 
 .user__title-login {
-	font-size: 48px;
-	line-height: 64px;
-	text-align: center;
-	margin: 50px auto 50px auto;
+    font-size: 48px;
+    line-height: 64px;
+    text-align: center;
+    margin: 50px auto 50px auto;
 }
 
 .form-control {
-	border: 1px solid #E49FB6;
-	border-radius: 10px;
-	height: 74px;
-	font-weight: 300;
-	font-size: 24px;
-	line-height: 24px;
-}
-.form-control_info{
-	height: 170px;
-}
-.form-group{
-height: 74px;
-	margin-bottom: 20px;
+    border: 1px solid #E49FB6;
+    border-radius: 10px;
+    height: 74px;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 24px;
 }
 
-.save_button {
-	background: #E49FB6;
-	border-radius: 10px;
-	width: 724px;
-	height: 74px;
-	font-weight: 500;
-	font-size: 36px;
-	line-height: 36px;
-	text-align: center;
-	margin-top: 120px;
-	margin-left:30px;
+.form-control_info {
+    height: 170px;
 }
 
-.password_button {
-	background: rgba(250, 225, 222, 0.8);
+.manage-buttons{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    border-top: 3px solid #E49FB6;
+    padding: 20px;
+}
+
+.btn{
+	background: #FAE1DE;
 	border: 3px solid rgba(228, 159, 182, 0.6);
-	border-radius: 10px;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 	font-weight: 500;
 	font-size: 36px;
 	line-height: 36px;
 	text-align: center;
-	width: 724px;
 	height: 74px;
-	margin-top: 40px;
-	margin-left: 30px;
+	border-radius: 10px;
 }
-.delete_button{
- background: rgba(250, 225, 222, 0.8);
- 	border: 3px solid rgba(228, 159, 182, 0.6);
- 	border-radius: 10px;
- 	font-weight: 500;
- 	font-size: 36px;
- 	line-height: 36px;
- 	text-align: center;
- 	width: 724px;
- 	height: 74px;
- 	margin-top: 40px;
- 	margin-left: 30px;
- 	margin-bottom:30px;
+
+.btn__manage {
+	width: 273px;
+	height: 64px;
 }
+
+.btn__manage--pink{
+	background: #FCC5D9;
+}
+
+.btn__manage--mb{
+    margin-bottom: 15px;
+}
+
