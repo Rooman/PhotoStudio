@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteOrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
-    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -29,36 +28,14 @@ public class DeleteOrderServlet extends HttpServlet {
             return;
         }
 
-        String cookieUserToken = "user-token";
-
-        String token = new CookieManager().getCookie(request, cookieUserToken);
-        if (token == null) {
-            LOG.error("token is not found");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        Session session = securityService.getSession(token);
-        if (session == null) {
-            LOG.error("session for token is not found");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        if (!session.getUser().getUserRole().equals(UserRole.ADMIN)) {
-            LOG.error("user is not Admin");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
         try {
             long orderId = Long.parseLong(id);
-
             orderService.delete(orderId);
-
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
+            LOG.error("Error in the request for delete order");
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error trying to delete user", e);
         }
     }
 }

@@ -15,10 +15,10 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JdbcOrderDaoDeleteTest {
+public class JdbcOrderDaoDeleteITest {
     private Connection connection;
     private JdbcDataSource jdbcDataSource;
-    private final String TEST_PATH_PHOTO = "C:/test_delete_orders";
+    private final String TEST_PATH_PHOTO = "test_delete_orders";
 
     private int getResult(String sqlQuery) {
         int result = 0;
