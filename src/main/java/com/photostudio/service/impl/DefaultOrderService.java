@@ -29,6 +29,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public void delete(long id) {
+        LOG.info("Started service delete order by id ");
         LocalDiskPhotoDao photoDao = ServiceLocator.getService(LocalDiskPhotoDao.class);
         photoDao.deleteByOrder(id);
         orderDao.delete(id);

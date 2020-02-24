@@ -106,7 +106,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public void delete(long id) {
-        
+        LOG.info("Delete order by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
              PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID);)
@@ -115,6 +115,7 @@ public class JdbcOrderDao implements OrderDao {
             statementPhotos.executeUpdate();
             statementOrders.setLong(1, id);
             statementOrders.executeUpdate();
+            LOG.info("Order by id: {} and photos deleted from DB", id);
         } catch (SQLException e) {
             throw new RuntimeException("Error during delete order", e);
         }
