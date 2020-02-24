@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteOrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
+    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -27,8 +28,6 @@ public class DeleteOrderServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-
-        SecurityService securityService = ServiceLocator.getService(SecurityService.class);
 
         String cookieUserToken = "user-token";
 
