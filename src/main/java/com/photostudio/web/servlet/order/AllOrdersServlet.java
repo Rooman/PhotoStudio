@@ -6,8 +6,10 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,11 +31,11 @@ public class AllOrdersServlet extends HttpServlet {
 
             FilterParameters filterParameters = getFilterParameters(request);
             paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
-
             new CommonVariableAppendService().appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);
