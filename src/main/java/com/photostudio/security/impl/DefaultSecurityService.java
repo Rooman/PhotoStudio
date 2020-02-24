@@ -44,6 +44,13 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
+    public void logout(Session session) {
+        if (session != null) {
+            sessionList.remove(session);
+        }
+    }
+
+    @Override
     public Session getSession(String userToken) {
         Session sessionResult = null;
 

@@ -1,4 +1,4 @@
-package com.photostudio.web.servlet;
+package com.photostudio.web.servlet.security;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.exception.LoginPasswordInvalidException;
