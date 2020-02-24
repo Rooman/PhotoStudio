@@ -55,7 +55,7 @@ public class JdbcOrderDao implements OrderDao {
 
     public List<Order> getOrdersByUserId(long userId){
         LOG.info("Start get all orders by userId:{} from DB", userId);
-        String sql = GET_ALL_ORDERS + " WHERE o.userId = ?";
+        String sql = GET_ALL_ORDERS + " WHERE o.statusId!=1 AND o.userId = ?";
         sql = addSort(sql);
         LOG.debug("execute sql query:" + sql);
         try (Connection connection = dataSource.getConnection();
