@@ -30,5 +30,4 @@ public class CookieManager {
         LOG.info("Cookies not found");
         return null;
     }
-
 }

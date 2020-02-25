@@ -29,6 +29,7 @@ public class LoginServlet extends HttpServlet {
             Map<String, Object> paramsMap = new HashMap<>();
 
             commonVariableAppendService.appendUser(paramsMap, request);
+
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("login", paramsMap, response.getWriter());
