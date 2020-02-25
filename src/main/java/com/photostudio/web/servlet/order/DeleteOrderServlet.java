@@ -20,9 +20,8 @@ public class DeleteOrderServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-        LOG.info("Request delete order is received");
         String id = request.getParameter("id");
-        LOG.debug("order {id}", id);
+        LOG.info("Request delete order is received: order {}", id);
         if (id == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -33,7 +32,7 @@ public class DeleteOrderServlet extends HttpServlet {
             orderService.delete(orderId);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
-            LOG.error("Error in the request for delete order");
+            LOG.error("Error in the request for delete order", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             throw new RuntimeException("Error trying to delete user", e);
         }
