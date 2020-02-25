@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@WebServlet(urlPatterns = "/orders")
 public class AllOrdersServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
