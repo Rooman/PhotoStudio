@@ -1,0 +1,15 @@
+package com.photostudio.web.filter;
+
+import com.photostudio.entity.user.UserRole;
+
+import javax.servlet.annotation.WebFilter;
+import java.util.EnumSet;
+import java.util.Set;
+public class UserSecurityFilter extends AbstractSecurityFilter {
+    private static final Set<UserRole> ACCEPTED_ROLES = EnumSet.of(UserRole.USER);
+
+    @Override
+    Set<UserRole> getAcceptedRoles() {
+        return ACCEPTED_ROLES;
+    }
+}
