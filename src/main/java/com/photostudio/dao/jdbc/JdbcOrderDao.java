@@ -2,6 +2,7 @@ package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
+import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import org.slf4j.Logger;
@@ -25,8 +26,15 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
+    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, comment, source " +
+            "FROM Orders o " +
+            "JOIN OrderStatus os ON o.statusId = os.id " +
+            "JOIN Users u ON o.userId = u.id " +
+            "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
+    private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
+
     private DataSource dataSource;
 
     public JdbcOrderDao(DataSource dataSource) {
@@ -97,6 +105,29 @@ public class JdbcOrderDao implements OrderDao {
             }
         }
         return getAll();
+    }
+
+    @Override
+    public Order getOrderByIdInStatusNew(int id) {
+        LOG.info("Started service get order by id in status NEW from DB");
+        System.out.println(id);
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
+            preparedStatement.setInt(1, id);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+//                System.out.println(resultSet.next());
+//                if (!resultSet.next()) {
+//                    LOG.info("No order with id " + id + " found");
+//                    throw new RuntimeException("No order with id " + id + " found");
+//                }
+                return ORDER_WITH_PHOTO_ROW_MAPPER.mapRow(resultSet);
+            }
+
+        } catch (SQLException e) {
+            LOG.info("Get order by id in status NEW error", e);
+            throw new RuntimeException("Get order by id in status NEW error", e);
+        }
     }
 
     String getPartWhere(FilterParameters filterParameters) {

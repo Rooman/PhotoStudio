@@ -9,4 +9,6 @@ public interface OrderService {
     List<Order> getAll();
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
+
+    Order getOrderByIdInStatusNew(int id);
 }

@@ -25,4 +25,12 @@ public class DefaultOrderService implements OrderService {
         LOG.info("Started service get orders by parameters from DB");
         return orderDao.getOrdersByParameters(filterParameters);
     }
+
+    @Override
+    public Order getOrderByIdInStatusNew(int id) {
+        LOG.info("Started service get order by id in status NEW from DB");
+        return orderDao.getOrderByIdInStatusNew(id);
+    }
+
+
 }
