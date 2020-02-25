@@ -7,6 +7,10 @@ import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,22 +20,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AllOrdersServlet extends HttpServlet {
-
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("Request show all orders received");
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
             FilterParameters filterParameters = getFilterParameters(request);
             paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
-
             new CommonVariableAppendService().appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+
         } catch (IOException e) {
+            LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);
         }
 

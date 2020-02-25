@@ -1,6 +1,5 @@
 package com.photostudio.dao.jdbc.mapper;
 
-
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.user.User;
@@ -9,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OrderRowMapper {
+
     public Order mapRow(ResultSet resultSet) throws SQLException {
         String phoneNumber = resultSet.getString("phoneNumber");
         String email = resultSet.getString("email");
