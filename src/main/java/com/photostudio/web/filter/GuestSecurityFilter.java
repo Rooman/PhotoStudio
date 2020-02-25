@@ -5,8 +5,8 @@ import com.photostudio.entity.user.UserRole;
 import java.util.EnumSet;
 import java.util.Set;
 
-public class UserSecurityFilter extends AbstractSecurityFilter {
-    private static final Set<UserRole> ACCEPTED_ROLES = EnumSet.of(UserRole.USER);
+public class GuestSecurityFilter extends AbstractSecurityFilter {
+    private static final Set<UserRole> ACCEPTED_ROLES = EnumSet.of(UserRole.GUEST);
 
     @Override
     Set<UserRole> getAcceptedRoles() {
