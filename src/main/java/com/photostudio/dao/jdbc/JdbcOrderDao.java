@@ -109,16 +109,23 @@ public class JdbcOrderDao implements OrderDao {
         LOG.info("Delete order by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
-             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID);)
-        {
-            statementPhotos.setLong(1, id);
-            statementPhotos.executeUpdate();
-            statementOrders.setLong(1, id);
-            statementOrders.executeUpdate();
-            LOG.info("Order by id: {} and photos deleted from DB", id);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
+            connection.setAutoCommit(false);
+            try {
+                statementPhotos.setLong(1, id);
+                statementPhotos.executeUpdate();
+                statementOrders.setLong(1, id);
+                statementOrders.executeUpdate();
+                connection.commit();
+                LOG.info("Order by id: {} and photos deleted from DB", id);
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new RuntimeException("Error during delete order", e);
+            }
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             LOG.error("Error during delete order {}", id, e);
-            throw new RuntimeException("Error during delete order", e);
+            throw new RuntimeException("Error - Order is not deleted from db", e);
         }
     }
 
