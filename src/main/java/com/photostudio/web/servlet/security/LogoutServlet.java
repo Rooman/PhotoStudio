@@ -22,6 +22,7 @@ public class LogoutServlet extends HttpServlet {
         LOG.info("Request with logout data received");
         try {
             Cookie[] cookies = request.getCookies();
+
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals("user-token")) {
@@ -29,11 +30,15 @@ public class LogoutServlet extends HttpServlet {
                         Session session = securityService.getSession(token);
 
                         securityService.logout(session);
+
+                        new CookieManager().addCookie(response, "user-token", "");
+                        LOG.info("User was logged out");
                     }
                 }
             }
             response.sendRedirect("/login");
         } catch (IOException e) {
+            LOG.error("LogoutServlet doPost error", e);
             throw new RuntimeException("Logout error", e);
         }
     }

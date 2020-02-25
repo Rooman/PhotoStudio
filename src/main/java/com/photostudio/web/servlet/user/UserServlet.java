@@ -74,7 +74,7 @@ public class UserServlet extends HttpServlet {
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
         LOG.debug("Request for registration user: {} received", newUser);
-      
+
         //refactor! waiting for email notification
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");

@@ -88,8 +88,4 @@ public class DefaultSecurityServiceTest {
             securityService.login("mymail@d.com", "correctPassword");
         });
     }
-
-    @Test
-    void testLogout() {
-    }
 }
