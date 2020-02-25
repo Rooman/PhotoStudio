@@ -1,7 +1,7 @@
 package com.photostudio.dao.jdbc;
 
 
-import com.photostudio.dao.LocalDiskPhotoDao;
+import com.photostudio.dao.file.LocalDiskPhotoDao;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.AfterEach;
@@ -67,6 +67,8 @@ public class JdbcOrderDaoDeleteITest {
         FileReader fileData5 = new FileReader(getClass().getClassLoader().getResource("db/data_delete_order.sql").getFile());
         RunScript.execute(connection, fileData5);
         fileData5.close();
+
+
     }
 
     @Test
