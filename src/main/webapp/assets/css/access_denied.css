@@ -1,0 +1,10 @@
+.denied-block {
+    background: rgba(137, 203, 201, 0.25);
+    border: 10px;
+    border-radius: 10px 0;
+}
+
+.denied-title {
+    font-size: 36px;
+    line-height: 44px;
+}
