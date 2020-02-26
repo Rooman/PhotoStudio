@@ -14,14 +14,13 @@ import java.util.Map;
 
 public class AdminPageServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.info("Request admin page received");
         try {
             Map<String, Object> paramsMap = new HashMap<>();
-            commonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
             TemplateEngineFactory.process("admin-page", paramsMap, response.getWriter());
         } catch (IOException e) {

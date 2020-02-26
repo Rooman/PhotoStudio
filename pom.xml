@@ -52,7 +52,7 @@
                 <version>6.2.1</version>
                 <configuration>
                     <user>root</user>
-                    <password>P@ssw0rd</password>
+                    <password>root</password>
                     <url>jdbc:mysql://localhost:3306/photostudio</url>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
