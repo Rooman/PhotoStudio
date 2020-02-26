@@ -59,7 +59,7 @@
                 <div class="row order__block">
                     <div class="col-md-3" th:each="photo : ${order.photoSources}">
                         <div class="order__photo-block">
-                            <img class="order__photo" th:src="${photo}" alt="photo">
+                            <img class="order__photo" th:src="@{'/photo' + ${photo}}" alt="photo">
                         </div>
                         <div class="photo__buttons">
                             <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>

@@ -125,7 +125,8 @@
 }
 
 .order__photo {
-    height: 200px;
+    max-height: 200px;
+    max-width: 256px;
 }
 
 .photo__buttons {
@@ -146,6 +147,11 @@
     font-style: normal;
     font-size: 20px;
     line-height: 33px;
+}
+
+.photo-option:hover {
+    color: #000000;
+    opacity: 0.4;
 }
 
 .photo-add-delete-buttons {

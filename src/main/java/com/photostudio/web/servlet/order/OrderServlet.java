@@ -2,6 +2,7 @@ package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.order.Order;
+import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
@@ -31,7 +32,7 @@ public class OrderServlet extends HttpServlet {
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
 
-            if (order.getUser() != null) {
+            if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);
                 response.setContentType("text/html;charset=utf-8");
                 TemplateEngineFactory.process(request, response, "new-order", paramsMap, response.getWriter());

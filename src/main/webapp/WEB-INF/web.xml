@@ -58,6 +58,11 @@
         <servlet-class>com.photostudio.web.servlet.AccessDeniedServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>GetPhotoServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.GetPhotoServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
@@ -111,6 +116,12 @@
         <url-pattern>/access-denied</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>GetPhotoServlet</servlet-name>
+        <url-pattern>/photo/*</url-pattern>
+    </servlet-mapping>
+
+    <!--  Filters  -->
     <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>com.photostudio.web.filter.SecurityFilter</filter-class>
