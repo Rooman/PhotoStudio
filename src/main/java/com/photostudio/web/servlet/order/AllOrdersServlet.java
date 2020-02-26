@@ -31,7 +31,8 @@ public class AllOrdersServlet extends HttpServlet {
 
             FilterParameters filterParameters = getFilterParameters(request);
             paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
-            new CommonVariableAppendService().appendUser(paramsMap, request);
+
+            CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process(request, response, "all-orders", paramsMap, response.getWriter());

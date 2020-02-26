@@ -14,13 +14,12 @@ import java.util.Map;
 
 public class HomeServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LOG.info("Request home page received");
         Map<String, Object> paramsMap = new HashMap<>();
-        commonVariableAppendService.appendUser(paramsMap, request);
+        CommonVariableAppendService.appendUser(paramsMap, request);
         response.setContentType("text/html;charset=utf-8");
 
         response.setStatus(HttpServletResponse.SC_OK);

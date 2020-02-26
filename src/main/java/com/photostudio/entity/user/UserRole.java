@@ -2,9 +2,9 @@ package com.photostudio.entity.user;
 
 public enum UserRole {
     USER("USER"),
-    ADMIN("ADMIN");
+    ADMIN("ADMIN"),
+    GUEST("GUEST");
 
-    private int id;
     private String name;
 
     UserRole(String name) {
@@ -20,5 +20,8 @@ public enum UserRole {
         throw new IllegalArgumentException("No UserRole with name: " + name);
     }
 
+    public String getName() {
+        return name;
+    }
 }
 
