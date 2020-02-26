@@ -27,12 +27,11 @@ public class TemplateEngineFactory {
 
         TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
         TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
+        TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
     }
-
 
     public static void process(String template, Map<String, Object> productsMap, Writer writer) {
         IContext context = new Context(Locale.getDefault(), productsMap);
         TEMPLATE_ENGINE.process(template, context, writer);
     }
-
 }

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -44,17 +45,23 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
-    public Session getSession(String userToken) {
-        Session sessionResult = null;
+    public void logout(Session session) {
+        sessionList.remove(session);
+    }
 
-        for (Session session : sessionList) {
-            if (session.getToken().equals(userToken)) {
-                sessionResult = session;
-                break;
+    @Override
+    public Session getSession(String userToken) {
+        Iterator<Session> sessionIterator = sessionList.iterator();
+        while (sessionIterator.hasNext()) {
+            Session session = sessionIterator.next();
+            if (userToken.equals(session.getToken())) {
+                if (session.getExpireDate().isAfter(LocalDateTime.now())) {
+                    return session;
+                }
+                sessionIterator.remove();
             }
         }
-
-        return sessionResult;
+        return null;
     }
 
     String getHashedPassword(String salt, String password) {
