@@ -9,4 +9,6 @@ public interface OrderDao {
     List<Order> getAll();
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
+
+    void updateOrderStatusById(long id, long status);
 }
