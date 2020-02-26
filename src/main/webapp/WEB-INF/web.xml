@@ -24,6 +24,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.DeleteOrderServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.security.LoginServlet</servlet-class>
     </servlet>
@@ -62,6 +67,11 @@
     <servlet-mapping>
         <servlet-name>AllOrdersServlet</servlet-name>
         <url-pattern>/orders</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <url-pattern>/order/delete/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

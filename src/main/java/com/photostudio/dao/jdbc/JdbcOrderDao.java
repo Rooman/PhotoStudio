@@ -1,11 +1,13 @@
 package com.photostudio.dao.jdbc;
 
+
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 
 import javax.sql.DataSource;
@@ -25,6 +27,9 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
+
+    private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private DataSource dataSource;
@@ -99,6 +104,31 @@ public class JdbcOrderDao implements OrderDao {
         return getAll();
     }
 
+    @Override
+    public void delete(long id) {
+        LOG.info("Delete order by id: {}", id);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
+            connection.setAutoCommit(false);
+            try {
+                statementPhotos.setLong(1, id);
+                statementPhotos.executeUpdate();
+                statementOrders.setLong(1, id);
+                statementOrders.executeUpdate();
+                connection.commit();
+                LOG.info("Order by id: {} and photos deleted from DB", id);
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new RuntimeException("Error during delete order", e);
+            }
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            LOG.error("Error during delete order {}", id, e);
+            throw new RuntimeException("Error - Order is not deleted from db", e);
+        }
+    }
+
     String getPartWhere(FilterParameters filterParameters) {
         StringJoiner stringJoiner = new StringJoiner(" AND ", " WHERE ", "");
         if (filterParameters.getEmail() != null) {
@@ -122,4 +152,6 @@ public class JdbcOrderDao implements OrderDao {
     private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
     }
+
+
 }
