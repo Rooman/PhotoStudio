@@ -9,4 +9,11 @@ public interface OrderService {
     List<Order> getAll();
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
+
+    Order getOrderByIdInStatusNew(int id);
+
+    List<Order> getOrdersByUserId(long userId);
+
+    void delete(long id);
+
 }

@@ -12,7 +12,7 @@
 <div class="container orders">
 
     <!--Bread Crumb-->
-    <div class="bread__crumb-navigation">
+    <div th:if="${user.userRole.getName()=='ADMIN'}" class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
@@ -24,8 +24,7 @@
     <!--Bread Crumb End-->
 
     <h1 class="orders__title">Orders</h1>
-
-    <div class="order__header">
+     <div th:if="${user.userRole.getName()=='ADMIN'}" class="order__header">
         <div class="order-btn">
             <a value="Show/Hide" onClick="showHideFilterTable('filterTable')"
                class="btn btn-submit btn-outline-dark button order-btn_right">Filter</a>
@@ -34,7 +33,7 @@
         </div>
     </div>
 
-    <div class="order-board" id="filterTable" style="display:none">
+    <div th:if="${user.userRole.getName()=='ADMIN'}" class="order-board" id="filterTable" style="display:none">
         <div id="parameters">
             <div class="order-board_content ">
                 <div class="form-row ">
@@ -86,18 +85,18 @@
 
     <table class="table table-hover table__rounded">
         <tbody>
-        <tr class="table_header">
+        <tr id="new-page" class="table_header">
             <td class="table_header">Number</td>
             <td class="table_header">Date</td>
             <td class="table_header">Status</td>
-            <td class="table_header">User(Email/Phone)</td>
+            <td th:if="${user.userRole.getName()=='ADMIN'}" class="table_header">User(Email/Phone)</td>
         </tr>
         <div th:each="order : ${orders}">
-            <tr class="table_info">
+            <tr class="table_info double-click" th:id="'order/' + ${order.id}">
                 <td class="table_info" th:text="${order.id}"></td>
                 <td class="table_info" th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></td>
                 <td class="table_info" th:text="${order.status}"></td>
-                <td class="table_info">
+                <td th:if="${user.userRole.getName()=='ADMIN'}" class="table_info">
                     <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
                     <div th:if="${order.user.phoneNumber != null}"
                          th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
@@ -108,8 +107,12 @@
     </table>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
 <script src="assets/js/order/orders.js"></script>
 <script src="assets/js/page/all-orders.js"></script>
+<script src="assets/js/order/get-order-by-id.js"></script>
 </body>
 </html>
 

@@ -13,19 +13,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/home",value = "")
+@WebServlet(urlPatterns = {"/home", ""})
 public class HomeServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LOG.info("Request home page received");
         Map<String, Object> paramsMap = new HashMap<>();
-        commonVariableAppendService.appendUser(paramsMap, request);
+        CommonVariableAppendService.appendUser(paramsMap, request);
         response.setContentType("text/html;charset=utf-8");
 
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process("home-page", paramsMap, response.getWriter());
+        TemplateEngineFactory.process(request, response, "home-page", paramsMap);
     }
 }

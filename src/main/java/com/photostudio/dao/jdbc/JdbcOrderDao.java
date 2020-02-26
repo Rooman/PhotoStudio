@@ -2,6 +2,7 @@ package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
+import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import org.slf4j.Logger;
@@ -25,8 +26,18 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
+    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, comment, source " +
+            "FROM Orders o " +
+            "JOIN OrderStatus os ON o.statusId = os.id " +
+            "JOIN Users u ON o.userId = u.id " +
+            "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
+
+    private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
+    private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
+
     private DataSource dataSource;
 
     public JdbcOrderDao(DataSource dataSource) {
@@ -50,6 +61,34 @@ public class JdbcOrderDao implements OrderDao {
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get all orders", e);
             throw new RuntimeException("Error during get all orders", e);
+        }
+    }
+
+    public List<Order> getOrdersByUserId(long userId) {
+        LOG.info("Start get all orders by userId:{} from DB", userId);
+        String sql = GET_ALL_ORDERS + " WHERE o.statusId!=1 AND o.userId = ?";
+        sql = addSort(sql);
+        LOG.debug("execute sql query:" + sql);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setLong(1, userId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Order> orders = new ArrayList<>();
+                while (resultSet.next()) {
+                    Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
+                    orders.add(order);
+                }
+
+                LOG.info("Get: {} orders from DB", orders.size());
+                LOG.debug("Get all orders: {}", orders);
+
+                return orders;
+            }
+        } catch (SQLException e) {
+            LOG.error("An exception occurred while trying to get all orders by userId", e);
+            throw new RuntimeException("Error during get all orders by userId", e);
         }
     }
 
@@ -97,6 +136,48 @@ public class JdbcOrderDao implements OrderDao {
             }
         }
         return getAll();
+    }
+
+    @Override
+    public Order getOrderByIdInStatusNew(int id) {
+        LOG.info("Started service get order by id:{} in status NEW from DB", id);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
+            preparedStatement.setInt(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return ORDER_WITH_PHOTO_ROW_MAPPER.mapRow(resultSet);
+            }
+
+        } catch (SQLException e) {
+            LOG.error("Get order by id:{} in status NEW error", id);
+            throw new RuntimeException("Get order by id " + id + " in status NEW error", e);
+        }
+    }
+
+    @Override
+    public void delete(long id) {
+        LOG.info("Delete order by id: {}", id);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
+            connection.setAutoCommit(false);
+            try {
+                statementPhotos.setLong(1, id);
+                statementPhotos.executeUpdate();
+                statementOrders.setLong(1, id);
+                statementOrders.executeUpdate();
+                connection.commit();
+                LOG.info("Order by id: {} and photos deleted from DB", id);
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new RuntimeException("Error during delete order", e);
+            }
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            LOG.error("Error during delete order {}", id, e);
+            throw new RuntimeException("Error - Order is not deleted from db", e);
+        }
     }
 
     String getPartWhere(FilterParameters filterParameters) {

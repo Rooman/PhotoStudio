@@ -3,13 +3,13 @@ package com.photostudio.web.servlet.order;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.photostudio.entity.user.UserRole.ADMIN;
 
 @WebServlet(urlPatterns = "/orders")
 public class AllOrdersServlet extends HttpServlet {
@@ -31,18 +33,29 @@ public class AllOrdersServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-            FilterParameters filterParameters = getFilterParameters(request);
-            paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
-            new CommonVariableAppendService().appendUser(paramsMap, request);
+            CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+            User user = (User) paramsMap.get("user");
+            String templateName = "all-orders";
+
+            FilterParameters filterParameters;
+            if (user.getUserRole() == ADMIN) {
+                LOG.info("Show all orders, Admin page");
+                filterParameters = getFilterParameters(request);
+                paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
+            } else {
+                long userId = user.getId();
+                LOG.info("Show all orders for user {}", userId);
+                paramsMap.put("orders", defaultOrderService.getOrdersByUserId(userId));
+            }
+
+            TemplateEngineFactory.process(request, response, "all-orders", paramsMap);
 
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);
         }
-
     }
 
     private FilterParameters getFilterParameters(HttpServletRequest request) {

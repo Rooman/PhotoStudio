@@ -84,6 +84,11 @@ body {
     background-color: rgba(250, 225, 222, 0.8);
     border-color: rgba(250, 225, 222, 0.8);
 }
+
+.button:active {
+    background-color: #FAE1DE;
+    border-color: #FAE1DE;
+}
 /*Bread Crumb */
 .bread__crumb-navigation {
 	margin-top: 3.125rem;

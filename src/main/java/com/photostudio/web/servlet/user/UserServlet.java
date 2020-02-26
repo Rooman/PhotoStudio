@@ -17,11 +17,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/user",value = "/user/*")
+@WebServlet(urlPatterns = {"/user", "/user/*"})
 public class UserServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private UserService userService = ServiceLocator.getService(UserService.class);
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
     private ObjectMapper mapper = ServiceLocator.getService(ObjectMapper.class);
 
     private static boolean isNotEmpty(String value) {
@@ -40,12 +39,12 @@ public class UserServlet extends HttpServlet {
 
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
-            TemplateEngineFactory.process("user-info", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "user-info", paramsMap);
         } else {
             Map<String, Object> paramsMap = new HashMap<>();
-            commonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
-            TemplateEngineFactory.process("add-user", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "add-user", paramsMap);
         }
     }
 
@@ -76,7 +75,7 @@ public class UserServlet extends HttpServlet {
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
         LOG.debug("Request for registration user: {} received", newUser);
-      
+
         //refactor! waiting for email notification
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");
