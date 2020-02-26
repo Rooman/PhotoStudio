@@ -7,8 +7,10 @@ import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,7 @@ public class AllOrdersServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-            new CommonVariableAppendService().appendUser(paramsMap, request);
+            CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             User user = (User)paramsMap.get("user");
@@ -48,6 +50,7 @@ public class AllOrdersServlet extends HttpServlet {
             }
 
             TemplateEngineFactory.process(templateName, paramsMap, response.getWriter());
+
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);

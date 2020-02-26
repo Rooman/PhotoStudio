@@ -24,8 +24,18 @@
     </servlet>
 
     <servlet>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.DeleteOrderServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.photostudio.web.servlet.LoginServlet</servlet-class>
+        <servlet-class>com.photostudio.web.servlet.security.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.security.LogoutServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -36,6 +46,11 @@
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.HomeServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AccessDeniedServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.AccessDeniedServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -55,12 +70,21 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <url-pattern>/order/delete/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 
+    <servlet-mapping>
         <servlet-name>AdminPageServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
@@ -68,7 +92,26 @@
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
+        <!--  binding for root path / -->
         <url-pattern></url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>AccessDeniedServlet</servlet-name>
+        <url-pattern>/access-denied</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>com.photostudio.web.filter.SecurityFilter</filter-class>
+        <init-param>
+            <param-name>excludedUrls</param-name>
+            <param-value>/login,/,/home,/access-denied,/assets/*</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

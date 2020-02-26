@@ -1,4 +1,4 @@
-package com.photostudio.web.servlet;
+package com.photostudio.web.servlet.security;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.exception.LoginPasswordInvalidException;
@@ -6,7 +6,6 @@ import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import com.photostudio.web.util.CookieManager;
 import com.photostudio.web.templater.TemplateEngineFactory;
-import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ import java.util.Map;
 public class LoginServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -28,7 +26,6 @@ public class LoginServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-            commonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
             TemplateEngineFactory.process("login", paramsMap, response.getWriter());
@@ -47,9 +44,9 @@ public class LoginServlet extends HttpServlet {
             try {
                 Session session = securityService.login(login, password);
 
-                new CookieManager().addCookie(response, "user-token", session.getToken());
+                CookieManager.addCookie(response, "user-token", session.getToken());
 
-                response.sendRedirect(request.getContextPath() + "/admin");
+                response.sendRedirect(request.getContextPath() + "/");
             } catch (LoginPasswordInvalidException e) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("invalid", "yes");

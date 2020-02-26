@@ -11,4 +11,7 @@ public interface OrderDao {
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
     List<Order> getOrdersByUserId(long userId);
+
+    void delete(long id);
+
 }
