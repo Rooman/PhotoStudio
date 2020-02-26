@@ -3,6 +3,7 @@ package com.photostudio.web.servlet.order;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
@@ -17,6 +18,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.photostudio.entity.user.UserRole.ADMIN;
+
 public class AllOrdersServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
@@ -27,36 +30,24 @@ public class AllOrdersServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
 
-            long userId;
-
-            try {
-                String user = request.getParameter("user");
-                LOG.debug("user=" + user);
-                userId = Long.parseLong(user);
-            }
-            catch (Exception e) {
-                userId = 0;
-                LOG.error("get parameter user error:" + e.getStackTrace());
-            }
-
-
             new CommonVariableAppendService().appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            if (userId==0) {
+            User user = (User)paramsMap.get("user");
+            String templateName = "all-orders";
+
+            FilterParameters filterParameters;
+            if (user.getUserRole() == ADMIN) {
                 LOG.info("Show all orders, Admin page");
-                FilterParameters filterParameters = getFilterParameters(request);
+                filterParameters = getFilterParameters(request);
                 paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
-
-                TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
-            }
-            else {
-                LOG.info("Show all orders for user {}", userId);
+            } else {
+                long userId = user.getId();
+                LOG.info("Show all orders for user {}", userId );
                 paramsMap.put("orders", defaultOrderService.getOrdersByUserId(userId));
-
-                TemplateEngineFactory.process("user-all-orders", paramsMap, response.getWriter());
-
             }
+
+            TemplateEngineFactory.process(templateName, paramsMap, response.getWriter());
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);
