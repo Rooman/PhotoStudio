@@ -85,14 +85,14 @@
 
     <table class="table table-hover table__rounded">
         <tbody>
-        <tr class="table_header">
+        <tr id="new-page" class="table_header">
             <td class="table_header">Number</td>
             <td class="table_header">Date</td>
             <td class="table_header">Status</td>
             <td th:if="${user.userRole.getName()=='ADMIN'}" class="table_header">User(Email/Phone)</td>
         </tr>
         <div th:each="order : ${orders}">
-            <tr class="table_info">
+            <tr class="table_info double-click" th:id="'order/' + ${order.id}">
                 <td class="table_info" th:text="${order.id}"></td>
                 <td class="table_info" th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></td>
                 <td class="table_info" th:text="${order.status}"></td>
@@ -107,8 +107,12 @@
     </table>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
 <script src="assets/js/order/orders.js"></script>
 <script src="assets/js/page/all-orders.js"></script>
+<script src="assets/js/order/get-order-by-id.js"></script>
 </body>
 </html>
 

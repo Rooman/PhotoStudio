@@ -12,6 +12,7 @@ public interface OrderDao {
 
     List<Order> getOrdersByUserId(long userId);
 
-    void delete(long id);
+    Order getOrderByIdInStatusNew(int id);
 
+    void delete(long id);
 }

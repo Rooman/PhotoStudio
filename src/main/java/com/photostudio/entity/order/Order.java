@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -19,4 +20,5 @@ public final class Order {
     private LocalDateTime orderDate;
     private User user;
     private String comment;
+    private List<String> photoSources;
 }

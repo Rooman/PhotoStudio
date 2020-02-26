@@ -30,6 +30,14 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
+    public Order getOrderByIdInStatusNew(int id) {
+        LOG.info("Started service get order by id:{} in status NEW from DB", id);
+        return orderDao.getOrderByIdInStatusNew(id);
+    }
+
+
+
+    @Override
     public List<Order> getOrdersByUserId(long userId) {
         LOG.info("Started service get orders by userId from DB");
         return orderDao.getOrdersByUserId(userId);
@@ -40,4 +48,6 @@ public class DefaultOrderService implements OrderService {
         photoDao.deleteByOrder(id);
         orderDao.delete(id);
     }
+
+
 }

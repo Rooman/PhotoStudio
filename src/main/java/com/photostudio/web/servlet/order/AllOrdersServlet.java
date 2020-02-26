@@ -49,7 +49,7 @@ public class AllOrdersServlet extends HttpServlet {
                 paramsMap.put("orders", defaultOrderService.getOrdersByUserId(userId));
             }
 
-            TemplateEngineFactory.process(templateName, paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "all-orders", paramsMap);
 
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);

@@ -49,8 +49,18 @@
     </servlet>
 
     <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.order.OrderServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>AccessDeniedServlet</servlet-name>
         <servlet-class>com.photostudio.web.servlet.AccessDeniedServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>GetPhotoServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.GetPhotoServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -97,10 +107,21 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/order/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>AccessDeniedServlet</servlet-name>
         <url-pattern>/access-denied</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>GetPhotoServlet</servlet-name>
+        <url-pattern>/photo/*</url-pattern>
+    </servlet-mapping>
+
+    <!--  Filters  -->
     <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>com.photostudio.web.filter.SecurityFilter</filter-class>
