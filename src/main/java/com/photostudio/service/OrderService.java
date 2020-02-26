@@ -12,6 +12,8 @@ public interface OrderService {
 
     Order getOrderByIdInStatusNew(int id);
 
+    List<Order> getOrdersByUserId(long userId);
+
     void delete(long id);
 
 }

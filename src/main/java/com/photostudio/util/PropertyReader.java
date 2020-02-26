@@ -33,6 +33,11 @@ public class PropertyReader {
             String dbUrl = System.getenv("JDBC_DATABASE_URL");
             properties.setProperty("jdbc.url", dbUrl);
             LOG.debug("Set jdbc.url: {}", dbUrl);
+
+            String dirPhoto = System.getenv("dir_photo");
+            properties.setProperty("dir.photo", dirPhoto);
+            LOG.debug("Set dir.photo: {}", dirPhoto);
+
             return properties;
         } catch (Exception e) {
             LOG.error("Error while were trying to get connection properties on production environment", e);

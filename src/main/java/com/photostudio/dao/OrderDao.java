@@ -10,6 +10,8 @@ public interface OrderDao {
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
+    List<Order> getOrdersByUserId(long userId);
+
     Order getOrderByIdInStatusNew(int id);
 
     void delete(long id);
