@@ -35,7 +35,7 @@ public class OrderServlet extends HttpServlet {
             if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);
                 response.setContentType("text/html;charset=utf-8");
-                TemplateEngineFactory.process(request, response, "new-order", paramsMap, response.getWriter());
+                TemplateEngineFactory.process(request, response, "new-order", paramsMap);
             } else {
                 response.sendRedirect(request.getContextPath() + "/orders");
             }

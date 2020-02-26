@@ -10,6 +10,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
@@ -32,9 +33,10 @@ public class TemplateEngineFactory {
     }
 
 
-    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> productsMap, Writer writer) {
+    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> productsMap) throws IOException {
+
         IContext context = new WebContext(request, response, request.getServletContext(), Locale.getDefault(), productsMap);
-        TEMPLATE_ENGINE.process(template, context, writer);
+        TEMPLATE_ENGINE.process(template, context, response.getWriter());
     }
 
 }

@@ -19,7 +19,7 @@ public class AccessDeniedServlet extends HttpServlet {
             CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            TemplateEngineFactory.process(request, response, "access_denied", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "access_denied", paramsMap);
         } catch (IOException e) {
             throw new RuntimeException("AccessDeniedServlet error", e);
         }
