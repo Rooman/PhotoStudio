@@ -84,6 +84,38 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
+    public void testGetOrderByIdInStatusNew() {
+        //prepare
+        User user = new User();
+        user.setEmail("mymail@d.com");
+
+        List<String> photoList = new ArrayList<>();
+        photoList.add("/home/myPhoto1");
+        photoList.add("/home/myPhoto2");
+
+        Order expected = Order.builder().id(1)
+                .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
+                .comment("NEW").user(user).status(OrderStatus.NEW).photoSources(photoList).build();
+
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        Order actual = jdbcOrderDao.getOrderByIdInStatusNew(1);
+
+        //then
+        LocalDateTime expectedDateTime = LocalDateTime.of(2020, 1, 15, 18, 38, 33);
+
+        assertEquals(1, expected.getId());
+        assertEquals("New", expected.getStatus().getOrderStatusName());
+        assertEquals("mymail@d.com", expected.getUser().getEmail());
+        assertEquals("NEW", expected.getComment());
+        assertEquals(expectedDateTime, expected.getOrderDate());
+
+        for (String expectedSource : expected.getPhotoSources()) {
+            photoList.removeIf(x -> x.equals(expectedSource));
+        }
+    }
+
+    @Test
     public void testGetOrdersByParamsWithoutParams() {
         //prepare
         FilterParameters filterParameters = FilterParameters.builder().build();

@@ -22,6 +22,8 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/admin}">Admin page</a></li>
                 <img class="bread__crumb-arrow" th:src="@{/assets/images/Arrow.jpg}" alt="arrow">
+                <li class="breadcrumb-item"><a th:href="@{/orders}">Order journal</a></li>
+                <img class="bread__crumb-arrow" th:src="@{/assets/images/Arrow.jpg}" alt="arrow">
                 <li class="breadcrumb-item active" aria-current="page">New order</li>
             </ol>
         </nav>
@@ -44,7 +46,8 @@
                    th:value="${order.user.email}">
             <button class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user
             </button>
-            <a href="user" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create new
+            <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
+                new
                 user</a>
         </div>
         <div>
@@ -67,12 +70,15 @@
             </div>
             <div class="photo-add-delete-buttons">
                 <button class="btn btn-submit btn-outline-dark button order__button photo-add-button">Add</button>
-                <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all</button>
+                <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all
+                </button>
             </div>
         </div>
         <div class="order__complete-buttons">
             <button class="btn btn-submit btn-outline-dark button order__button save-button">Save</button>
-            <button class="btn btn-submit btn-outline-dark button order__button view-select-button">Status to view and select</button>
+            <button class="btn btn-submit btn-outline-dark button order__button view-select-button">Status to view and
+                select
+            </button>
         </div>
     </div>
 </main>

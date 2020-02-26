@@ -17,7 +17,6 @@ import java.util.Map;
 
 public class OrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
 
     @Override
@@ -30,14 +29,14 @@ public class OrderServlet extends HttpServlet {
 
             Order order = defaultOrderService.getOrderByIdInStatusNew(id);
             Map<String, Object> paramsMap = new HashMap<>();
-            commonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendUser(paramsMap, request);
 
             if (order.getUser() != null) {
                 paramsMap.put("order", order);
                 response.setContentType("text/html;charset=utf-8");
                 TemplateEngineFactory.process(request, response, "new-order", paramsMap, response.getWriter());
             } else {
-                response.sendRedirect("/orders");
+                response.sendRedirect(request.getContextPath() + "/orders");
             }
 
         } catch (IOException e) {
