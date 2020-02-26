@@ -1,4 +1,4 @@
-package com.photostudio.web.servlet;
+package com.photostudio.web.servlet.security;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.exception.LoginPasswordInvalidException;
@@ -6,7 +6,6 @@ import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import com.photostudio.web.util.CookieManager;
 import com.photostudio.web.templater.TemplateEngineFactory;
-import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

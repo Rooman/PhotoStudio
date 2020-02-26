@@ -39,7 +39,7 @@ public class SecurityFilter implements Filter {
         // Optional, included by default
         urlToRoleMap.put("/admin/users", ADMIN);
         urlToRoleMap.put("/admin", ADMIN);
-
+        urlToRoleMap.put("/order/delete/*", ADMIN);
     }
 
     @Override
