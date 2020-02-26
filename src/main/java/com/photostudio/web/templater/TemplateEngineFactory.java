@@ -1,10 +1,9 @@
 package com.photostudio.web.templater;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
@@ -25,13 +24,13 @@ public class TemplateEngineFactory {
         templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
-        TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
-    }
 
+        TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
+        TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
+    }
 
     public static void process(String template, Map<String, Object> productsMap, Writer writer) {
         IContext context = new Context(Locale.getDefault(), productsMap);
         TEMPLATE_ENGINE.process(template, context, writer);
     }
-
 }

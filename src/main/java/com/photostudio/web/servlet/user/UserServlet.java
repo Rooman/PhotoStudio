@@ -19,7 +19,6 @@ import java.util.Map;
 public class UserServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private UserService userService = ServiceLocator.getService(UserService.class);
-    private CommonVariableAppendService commonVariableAppendService = new CommonVariableAppendService();
     private ObjectMapper mapper = ServiceLocator.getService(ObjectMapper.class);
 
     private static boolean isNotEmpty(String value) {
@@ -41,7 +40,7 @@ public class UserServlet extends HttpServlet {
             TemplateEngineFactory.process("user-info", paramsMap, response.getWriter());
         } else {
             Map<String, Object> paramsMap = new HashMap<>();
-            commonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
             TemplateEngineFactory.process("add-user", paramsMap, response.getWriter());
         }

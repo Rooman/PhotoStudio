@@ -43,7 +43,7 @@ public class DefaultSecurityService implements SecurityService {
             throw new LoginPasswordInvalidException("Login/password invalid for user" + login);
         }
     }
-    
+
     @Override
     public void logout(Session session) {
         if (session != null) {
