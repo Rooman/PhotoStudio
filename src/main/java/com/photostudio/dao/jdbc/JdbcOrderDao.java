@@ -140,7 +140,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public Order getOrderByIdInStatusNew(int id) {
-        LOG.info("Started service get order by id in status NEW from DB");
+        LOG.info("Started service get order by id:{} in status NEW from DB", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
             preparedStatement.setInt(1, id);
@@ -150,8 +150,8 @@ public class JdbcOrderDao implements OrderDao {
             }
 
         } catch (SQLException e) {
-            LOG.info("Get order by id in status NEW error", e);
-            throw new RuntimeException("Get order by id in status NEW error", e);
+            LOG.error("Get order by id:{} in status NEW error", id);
+            throw new RuntimeException("Get order by id " + id + " in status NEW error", e);
         }
     }
 

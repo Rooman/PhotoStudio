@@ -17,7 +17,7 @@ public class GetPhotoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        LOG.info("Request photo source received");
+        LOG.info("Request to photo source received");
 
         String prefixPath = request.getContextPath() + PATH_TO_PHOTO;
 
@@ -34,11 +34,11 @@ public class GetPhotoServlet extends HttpServlet {
                 outputStream.write(buffer, 0, count);
             }
         } catch (FileNotFoundException e) {
-            LOG.info("Photo not found");
+            LOG.error("Photo not found by path {}", photoPath, e);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } catch (IOException e) {
-            LOG.info("Loading photo error", e);
-            throw new RuntimeException("Loading photo error", e);
+            LOG.error("Loading photo by path {} error", photoPath, e);
+            throw new RuntimeException("Loading photo by path: " + photoPath + "error", e);
         }
     }
 }

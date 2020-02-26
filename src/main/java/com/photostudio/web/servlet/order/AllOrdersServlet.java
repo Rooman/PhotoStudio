@@ -35,7 +35,6 @@ public class AllOrdersServlet extends HttpServlet {
             CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            TemplateEngineFactory.process(request, response, "all-orders", paramsMap);
             User user = (User)paramsMap.get("user");
             String templateName = "all-orders";
 

@@ -23,10 +23,11 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            LOG.info("Request get order page by id in status NEW");
+
             String uri = request.getRequestURI();
             String[] partsOfUri = uri.split("/");
             int id = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
+            LOG.info("Request get order page by id:{} in status NEW", id);
 
             Order order = defaultOrderService.getOrderByIdInStatusNew(id);
             Map<String, Object> paramsMap = new HashMap<>();
@@ -37,12 +38,13 @@ public class OrderServlet extends HttpServlet {
                 response.setContentType("text/html;charset=utf-8");
                 TemplateEngineFactory.process(request, response, "new-order", paramsMap);
             } else {
+                LOG.info("Order with id:{} is not in status New", id);
                 response.sendRedirect(request.getContextPath() + "/orders");
             }
 
         } catch (IOException e) {
-            LOG.error("Add new order page error", e);
-            throw new RuntimeException("Add new order page error", e);
+            LOG.error("Get with order in status New error", e);
+            throw new RuntimeException("Get with order in status New error", e);
         }
     }
 }
