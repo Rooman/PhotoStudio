@@ -32,6 +32,9 @@ public class JdbcOrderDao implements OrderDao {
             "JOIN Users u ON o.userId = u.id " +
             "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
 
+    private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
 
@@ -121,6 +124,31 @@ public class JdbcOrderDao implements OrderDao {
         } catch (SQLException e) {
             LOG.info("Get order by id in status NEW error", e);
             throw new RuntimeException("Get order by id in status NEW error", e);
+        }
+    }
+
+    @Override
+    public void delete(long id) {
+        LOG.info("Delete order by id: {}", id);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
+            connection.setAutoCommit(false);
+            try {
+                statementPhotos.setLong(1, id);
+                statementPhotos.executeUpdate();
+                statementOrders.setLong(1, id);
+                statementOrders.executeUpdate();
+                connection.commit();
+                LOG.info("Order by id: {} and photos deleted from DB", id);
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new RuntimeException("Error during delete order", e);
+            }
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            LOG.error("Error during delete order {}", id, e);
+            throw new RuntimeException("Error - Order is not deleted from db", e);
         }
     }
 

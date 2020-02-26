@@ -11,4 +11,7 @@ public interface OrderService {
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
     Order getOrderByIdInStatusNew(int id);
+
+    void delete(long id);
+
 }
