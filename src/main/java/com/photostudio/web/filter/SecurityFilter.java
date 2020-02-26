@@ -34,11 +34,12 @@ public class SecurityFilter implements Filter {
         this.excludedUrls = Arrays.asList(excludedUrlsStr.split(","));
 
         urlToRoleMap.put("/logout", USER);
-        urlToRoleMap.put("/user/orders", USER);
+        urlToRoleMap.put("/orders", USER);
+        urlToRoleMap.put("/user", USER);
         // Optional, included by default
-        urlToRoleMap.put("/admin/orders", ADMIN);
         urlToRoleMap.put("/admin/users", ADMIN);
-        urlToRoleMap.put("/user", ADMIN);
+        urlToRoleMap.put("/admin", ADMIN);
+
     }
 
     @Override
