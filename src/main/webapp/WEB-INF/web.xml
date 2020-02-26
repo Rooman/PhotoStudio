@@ -25,7 +25,12 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.photostudio.web.servlet.LoginServlet</servlet-class>
+        <servlet-class>com.photostudio.web.servlet.security.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.security.LogoutServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -70,7 +75,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 
+    <servlet-mapping>
         <servlet-name>AdminPageServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>

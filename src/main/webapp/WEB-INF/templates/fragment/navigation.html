@@ -1,6 +1,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <nav class="navbar navbar-expand-lg navbar-light top-nav">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -18,7 +19,8 @@
                 <a class="nav-link" href="#">Contact</a>
             </li>
             <li class="nav-item dropdown top-dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
                     Eng
                 </a>
                 <div class="dropdown-menu " aria-labelledby="navbarDropdown">
@@ -27,24 +29,26 @@
                 </div>
             </li>
 
-            <li th:if="${user==null}" class="nav-item">
+            <li th:if="${ user==null}" class="nav-item">
                 <a class="nav-link" href="login">Login</a>
             </li>
 
             <li th:if="${user!=null}" class="nav-item">
                 <div class="user-dropdown">
-                    <a class="nav-link user-dropdown__link" href="#" >
+                    <a class="nav-link user-dropdown__link" href="#">
                         WELCOME,
                         <span class="user-dropdown__email" th:text="${user.email}">
                         </span>
                     </a>
 
-                    <div class="user-dropdown__user-menu " >
+                    <div class="user-dropdown__user-menu ">
                         <a class="user-menu__item" href="#">New order</a>
                         <a class="user-menu__item" href="orders">Order journal</a>
                         <a class="user-menu__item" href="admin/users">All users</a>
                         <a class="user-menu__item" href="user">New user</a>
-                        <a class="user-menu__item" href="#">Logout</a>
+                        <form class="user-menu__item" action="logout" method="post">
+                            <button class="user-menu__item" type="submit">Logout</button>
+                        </form>
                     </div>
                 </div>
             </li>
