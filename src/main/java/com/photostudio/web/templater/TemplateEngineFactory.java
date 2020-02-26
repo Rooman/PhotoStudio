@@ -25,7 +25,6 @@ public class TemplateEngineFactory {
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
 
-        TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
         TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
         TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
     }
