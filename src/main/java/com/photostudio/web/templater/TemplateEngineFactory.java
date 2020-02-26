@@ -25,13 +25,13 @@ public class TemplateEngineFactory {
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
 
+        TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
         TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
     }
 
 
     public static void process(String template, Map<String, Object> productsMap, Writer writer) {
         IContext context = new Context(Locale.getDefault(), productsMap);
-        TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
         TEMPLATE_ENGINE.process(template, context, writer);
     }
 
