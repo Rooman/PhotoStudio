@@ -34,10 +34,11 @@ public class SecurityFilter implements Filter {
         this.excludedUrls = Arrays.asList(excludedUrlsStr.split(","));
 
         urlToRoleMap.put("/logout", USER);
-        urlToRoleMap.put("/orders", USER);
+        urlToRoleMap.put("/user/orders", USER);
         // Optional, included by default
-        urlToRoleMap.put("/admin/order", ADMIN);
+        urlToRoleMap.put("/admin/orders", ADMIN);
         urlToRoleMap.put("/admin/users", ADMIN);
+        urlToRoleMap.put("/user", ADMIN);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class SecurityFilter implements Filter {
             if (hasAccess(requiredRole, currentUser.getUserRole())) {
                 chain.doFilter(request, response);
             } else {
-                response.sendRedirect(request.getContextPath() + "/fuck_you_asshole");
+                response.sendRedirect(request.getContextPath() + "/access-denied");
                 log.debug("Access denied to url {} for user {}", servletPath, currentUserLogin);
             }
         }

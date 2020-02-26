@@ -52,7 +52,7 @@
                 <version>6.2.1</version>
                 <configuration>
                     <user>root</user>
-                    <password>root</password>
+                    <password>P@ssw0rd</password>
                     <url>jdbc:mysql://localhost:3306/photostudio</url>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
@@ -75,7 +75,11 @@
             <artifactId>thymeleaf</artifactId>
             <version>3.0.11.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>3.0.4.RELEASE</version>
+        </dependency>
         <!--Security-->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -132,5 +136,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

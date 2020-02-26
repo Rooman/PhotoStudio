@@ -3,7 +3,7 @@ package com.photostudio.web.templater;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
-//import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
@@ -31,7 +31,7 @@ public class TemplateEngineFactory {
 
     public static void process(String template, Map<String, Object> productsMap, Writer writer) {
         IContext context = new Context(Locale.getDefault(), productsMap);
-       // TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
+        TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
         TEMPLATE_ENGINE.process(template, context, writer);
     }
 

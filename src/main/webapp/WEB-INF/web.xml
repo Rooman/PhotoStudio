@@ -78,7 +78,7 @@
 
     <servlet-mapping>
         <servlet-name>AccessDeniedServlet</servlet-name>
-        <url-pattern>/fuck_you_asshole</url-pattern>
+        <url-pattern>/access-denied</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -86,7 +86,7 @@
         <filter-class>com.photostudio.web.filter.SecurityFilter</filter-class>
         <init-param>
             <param-name>excludedUrls</param-name>
-            <param-value>/login,/,/home,/fuck_you_asshole,/assets/*</param-value>
+            <param-value>/login,/,/home,/access-denied,/assets/*</param-value>
         </init-param>
     </filter>
 
