@@ -24,7 +24,7 @@ public class LogoutServlet extends HttpServlet {
 
         CookieManager.addCookie(response, "user-token", "");
         LOG.info("User was logged out");
-        response.sendRedirect("/login");
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 }
 
