@@ -10,6 +10,7 @@ import javax.servlet.ServletContextListener;
 
 public class ThymeleafInitializerListener implements ServletContextListener {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         LOG.info("Initializing thymeleaf processor");

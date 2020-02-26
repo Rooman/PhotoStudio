@@ -78,7 +78,6 @@
 
     <servlet-mapping>
         <servlet-name>OrderServlet</servlet-name>
-        <url-pattern>/order</url-pattern>
         <url-pattern>/order/*</url-pattern>
     </servlet-mapping>
 

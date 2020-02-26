@@ -34,7 +34,7 @@ public class AllOrdersServlet extends HttpServlet {
             new CommonVariableAppendService().appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            TemplateEngineFactory.process("all-orders", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "all-orders", paramsMap, response.getWriter());
 
         } catch (IOException e) {
             LOG.error("AllOrdersServlet error", e);

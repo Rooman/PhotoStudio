@@ -110,17 +110,11 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public Order getOrderByIdInStatusNew(int id) {
         LOG.info("Started service get order by id in status NEW from DB");
-        System.out.println(id);
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
             preparedStatement.setInt(1, id);
 
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
-//                System.out.println(resultSet.next());
-//                if (!resultSet.next()) {
-//                    LOG.info("No order with id " + id + " found");
-//                    throw new RuntimeException("No order with id " + id + " found");
-//                }
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return ORDER_WITH_PHOTO_ROW_MAPPER.mapRow(resultSet);
             }
 

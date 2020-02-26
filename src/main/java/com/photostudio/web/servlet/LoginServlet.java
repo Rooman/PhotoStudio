@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
             commonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            TemplateEngineFactory.process("login", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "login", paramsMap, response.getWriter());
         } catch (IOException e) {
             LOG.error("LoginServlet doGet error", e);
             throw new RuntimeException("LoginServlet error", e);
@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
             } catch (LoginPasswordInvalidException e) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("invalid", "yes");
-                TemplateEngineFactory.process("login", paramsMap, response.getWriter());
+                TemplateEngineFactory.process(request, response, "login", paramsMap, response.getWriter());
             }
         } catch (IOException e) {
             LOG.error("LoginServlet doPost error", e);

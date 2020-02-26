@@ -29,13 +29,17 @@ public class OrderServlet extends HttpServlet {
             int id = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
 
             Order order = defaultOrderService.getOrderByIdInStatusNew(id);
-
             Map<String, Object> paramsMap = new HashMap<>();
             commonVariableAppendService.appendUser(paramsMap, request);
-            paramsMap.put("order", order);
 
-            response.setContentType("text/html;charset=utf-8");
-            TemplateEngineFactory.process("new-order", paramsMap, response.getWriter());
+            if (order.getUser() != null) {
+                paramsMap.put("order", order);
+                response.setContentType("text/html;charset=utf-8");
+                TemplateEngineFactory.process(request, response, "new-order", paramsMap, response.getWriter());
+            } else {
+                response.sendRedirect("/orders");
+            }
+
         } catch (IOException e) {
             LOG.error("Add new order page error", e);
             throw new RuntimeException("Add new order page error", e);
