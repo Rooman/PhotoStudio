@@ -25,4 +25,6 @@
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
     </root>
+
+   <!-- TODO: Add console appender    -->
 </configuration>

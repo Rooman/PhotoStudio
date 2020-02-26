@@ -38,6 +38,11 @@
         <servlet-class>com.photostudio.web.servlet.HomeServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>AccessDeniedServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.AccessDeniedServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
@@ -60,7 +65,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-
         <servlet-name>AdminPageServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
@@ -68,7 +72,26 @@
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
+        <!--  binding for root path / -->
         <url-pattern></url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>AccessDeniedServlet</servlet-name>
+        <url-pattern>/access-denied</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>com.photostudio.web.filter.SecurityFilter</filter-class>
+        <init-param>
+            <param-name>excludedUrls</param-name>
+            <param-value>/login,/,/home,/access-denied,/assets/*</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>
