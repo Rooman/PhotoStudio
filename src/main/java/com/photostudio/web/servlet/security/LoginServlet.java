@@ -1,6 +1,7 @@
 package com.photostudio.web.servlet.security;
 
 import com.photostudio.ServiceLocator;
+import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.photostudio.entity.user.UserRole.ADMIN;
 
 public class LoginServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -46,7 +49,18 @@ public class LoginServlet extends HttpServlet {
 
                 CookieManager.addCookie(response, "user-token", session.getToken());
 
-                response.sendRedirect(request.getContextPath() + "/");
+                User user = session.getUser();
+                if (user == null) {
+                    response.sendRedirect(request.getContextPath() + "/");
+                } else {
+                    LOG.debug(" userRole {}", user.getUserRole().getName());
+                    if (ADMIN == user.getUserRole()) {
+                        response.sendRedirect(request.getContextPath() + "/admin");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/orders");
+                    }
+                }
+
             } catch (LoginPasswordInvalidException e) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("invalid", "yes");
