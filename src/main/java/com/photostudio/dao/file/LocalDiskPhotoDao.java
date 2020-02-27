@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 
 public class LocalDiskPhotoDao implements PhotoDao {
 
@@ -28,6 +29,12 @@ public class LocalDiskPhotoDao implements PhotoDao {
         }
         LOG.info("photos for order {} were deleted", orderId);
     }
+
+//    @Override
+//    public List<String> addByOrderId(long orderId, List<String> pathPhoto){
+//        File dir = new File(path, String.valueOf(orderId));
+//
+//    }
 
     private void deleteDir(File dir) {
         if (dir.isDirectory()) {

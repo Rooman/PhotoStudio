@@ -15,4 +15,6 @@ public interface OrderDao {
 
     void delete(long id);
 
+    void addOrderPhotos(long id);
+
 }

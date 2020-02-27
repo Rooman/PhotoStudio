@@ -53,6 +53,16 @@
         <servlet-class>com.photostudio.web.servlet.AccessDeniedServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <servlet-class>com.photostudio.web.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <url-pattern>/photo</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>GetAllUsersServlet</servlet-name>
         <url-pattern>/admin/users</url-pattern>
@@ -101,17 +111,17 @@
         <url-pattern>/access-denied</url-pattern>
     </servlet-mapping>
 
-    <filter>
+   <!-- <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>com.photostudio.web.filter.SecurityFilter</filter-class>
         <init-param>
             <param-name>excludedUrls</param-name>
-            <param-value>/login,/,/home,/access-denied,/assets/*</param-value>
+            <param-value>/login,/,/home,/access-denied,/assets/*,/photo</param-value>
         </init-param>
     </filter>
 
     <filter-mapping>
         <filter-name>SecurityFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 </web-app>

@@ -144,6 +144,12 @@ public class JdbcOrderDao implements OrderDao {
         }
     }
 
+    @Override
+    public void addOrderPhotos(long id){
+
+
+    }
+
     String getPartWhere(FilterParameters filterParameters) {
         StringJoiner stringJoiner = new StringJoiner(" AND ", " WHERE ", "");
         if (filterParameters.getEmail() != null) {
