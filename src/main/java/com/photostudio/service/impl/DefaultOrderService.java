@@ -49,7 +49,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public void add(Order order) {
-        LOG.info("Started creating new order");
+        LOG.info("Started creating new order {}", order);
         orderDao.add(order);
     }
 

@@ -80,7 +80,7 @@ public class OrderServlet extends HttpServlet {
                 defaultOrderService.add(order);
 
             } else {
-                LOG.info("Order already exist");
+                LOG.info("Order by {} already exist", lastPartOfUri);
             }
             response.sendRedirect(request.getContextPath() + "/orders");
 

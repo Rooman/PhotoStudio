@@ -192,9 +192,9 @@ public class JdbcOrderDao implements OrderDao {
             preparedStatement.setString(2, order.getUser().getEmail());
             preparedStatement.setString(3, order.getComment());
             preparedStatement.executeUpdate();
-            LOG.info("Order created and added to DB");
+            LOG.info("Order {} created and added to DB", order);
         } catch (SQLException e) {
-            LOG.error("Error during create order", e);
+            LOG.error("Error during create order {}", order, e);
             throw new RuntimeException("Error during create order", e);
         }
     }
