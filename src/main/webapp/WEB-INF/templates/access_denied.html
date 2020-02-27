@@ -4,7 +4,7 @@
 <head>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/access_denied.css">
+    <link rel="stylesheet" type="text/css" th:href="@{assets/css/access_denied.css}">
     <title>Photo Studio</title>
 </head>
 
@@ -22,7 +22,7 @@
 <!--    Footer-->
 
 <!--TODO: Stick footer to end of page-->
-<footer class="footer">
+<footer class="footer footer-access">
 </footer>
 <meta th:replace="fragment/script.html :: script">
 </body>
