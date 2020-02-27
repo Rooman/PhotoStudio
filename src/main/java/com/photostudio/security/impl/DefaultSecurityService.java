@@ -51,14 +51,16 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public Session getSession(String userToken) {
-        Iterator<Session> sessionIterator = sessionList.iterator();
-        while (sessionIterator.hasNext()) {
-            Session session = sessionIterator.next();
-            if (userToken.equals(session.getToken())) {
-                if (session.getExpireDate().isAfter(LocalDateTime.now())) {
-                    return session;
+        if(userToken!=null) {
+            Iterator<Session> sessionIterator = sessionList.iterator();
+            while (sessionIterator.hasNext()) {
+                Session session = sessionIterator.next();
+                if (userToken.equals(session.getToken())) {
+                    if (session.getExpireDate().isAfter(LocalDateTime.now())) {
+                        return session;
+                    }
+                    sessionIterator.remove();
                 }
-                sessionIterator.remove();
             }
         }
         return null;
