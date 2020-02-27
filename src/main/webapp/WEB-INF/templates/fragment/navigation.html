@@ -42,10 +42,12 @@
                     </a>
 
                     <div class="user-dropdown__user-menu ">
-                        <a class="user-menu__item" href="#">New order</a>
-                        <a class="user-menu__item" href="orders">Order journal</a>
-                        <a class="user-menu__item" href="admin/users">All users</a>
-                        <a class="user-menu__item" href="user">New user</a>
+                        <a th:if="${user.userRole.getName()=='ADMIN'}" class="user-menu__item" href="#">New order</a>
+                        <a th:if="${user.userRole.getName()=='ADMIN'}" class="user-menu__item" href="orders">Order journal</a>
+                        <a th:if="${user.userRole.getName()=='ADMIN'}" class="user-menu__item" href="admin/users">All users</a>
+                        <a th:if="${user.userRole.getName()=='ADMIN'}" class="user-menu__item" href="user">New user</a>
+                        <a th:if="${user.userRole.getName()=='USER'}" class="user-menu__item" href="orders">My orders</a>
+                        <a th:if="${user.userRole.getName()=='USER'}" class="user-menu__item" href="#">My settings</a>
                         <form action="logout" method="post">
                             <button class="user-menu__item" type="submit">Logout</button>
                         </form>
