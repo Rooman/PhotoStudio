@@ -226,7 +226,17 @@ a.user-menu__item{
     text-transform: none;
 }
 
-.user-menu__item:first-child{
+user-dropdown__user-menu .user-menu__item:first-child{
     margin-top: 0;
 }
+
+button.user-menu__item {
+    height: 36px;
+    background-color:#fff;
+}
+
+button.user-menu__item:hover {
+    text-decoration:underline;
+}
+
 /* User dropdown menu on Navigation end*/
