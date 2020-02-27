@@ -1,8 +1,8 @@
 package com.photostudio.dao.jdbc;
 
+
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
-import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import org.slf4j.Logger;
@@ -26,18 +26,12 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, comment, source " +
-            "FROM Orders o " +
-            "JOIN OrderStatus os ON o.statusId = os.id " +
-            "JOIN Users u ON o.userId = u.id " +
-            "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
+    private static final String UPDATE_ORDER_STATUS_BY_ID = "UPDATE orders SET statusId = ? WHERE id = ?;";
 
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
-    private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
-
     private DataSource dataSource;
 
     public JdbcOrderDao(DataSource dataSource) {
@@ -61,34 +55,6 @@ public class JdbcOrderDao implements OrderDao {
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get all orders", e);
             throw new RuntimeException("Error during get all orders", e);
-        }
-    }
-
-    public List<Order> getOrdersByUserId(long userId){
-        LOG.info("Start get all orders by userId:{} from DB", userId);
-        String sql = GET_ALL_ORDERS + " WHERE o.statusId!=1 AND o.userId = ?";
-        sql = addSort(sql);
-        LOG.debug("execute sql query:" + sql);
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ) {
-            preparedStatement.setLong(1, userId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                List<Order> orders = new ArrayList<>();
-                while (resultSet.next()) {
-                    Order order = ORDER_ROW_MAPPER.mapRow(resultSet);
-                    orders.add(order);
-                }
-
-                LOG.info("Get: {} orders from DB", orders.size());
-                LOG.debug("Get all orders: {}", orders);
-
-                return orders;
-            }
-        } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to get all orders by userId", e);
-            throw new RuntimeException("Error during get all orders by userId", e);
         }
     }
 
@@ -139,19 +105,27 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
+    public List<Order> getOrdersByUserId(long userId) {
+        return null;
+    }
+
+    @Override
     public Order getOrderByIdInStatusNew(int id) {
-        LOG.info("Started service get order by id:{} in status NEW from DB", id);
+        return null;
+    }
+
+    @Override
+    public void updateOrderStatusById(long id, long orderStatus) {
+        LOG.info("Update status for order with id:{}", id);
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
-            preparedStatement.setInt(1, id);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return ORDER_WITH_PHOTO_ROW_MAPPER.mapRow(resultSet);
-            }
-
-        } catch (SQLException e) {
-            LOG.error("Get order by id:{} in status NEW error", id);
-            throw new RuntimeException("Get order by id " + id + " in status NEW error", e);
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS_BY_ID)) {
+            preparedStatement.setLong(1, orderStatus);
+            preparedStatement.setLong(2, id);
+            preparedStatement.executeUpdate();
+            LOG.info("Status for order with id:{} is updated", id);
+        } catch (Exception e) {
+            LOG.error("An exception occurred while trying to update status for order with id:{}", id, e);
+            throw new RuntimeException("Error during update status for order", e);
         }
     }
 
@@ -180,6 +154,12 @@ public class JdbcOrderDao implements OrderDao {
         }
     }
 
+    @Override
+    public void addOrderPhotos(long id){
+
+
+    }
+
     String getPartWhere(FilterParameters filterParameters) {
         StringJoiner stringJoiner = new StringJoiner(" AND ", " WHERE ", "");
         if (filterParameters.getEmail() != null) {
@@ -203,4 +183,6 @@ public class JdbcOrderDao implements OrderDao {
     private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
     }
+
+
 }
