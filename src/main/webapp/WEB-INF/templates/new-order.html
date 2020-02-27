@@ -34,16 +34,18 @@
 <h1 class="order__title">Order</h1>
 
 <main>
-    <div class="container order">
+    <form th:action="${order.id == 0} ? 'order' : 'order/' + ${order.id}" method="post" class="container order">
         <div class="order__main-info">
-            <div class="order__detail-info order__number" th:text="${order.id}"></div>
+            <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}" name="orderId"></div>
             <div class="order__detail-info order__date"
                  th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
             <div class="order__detail-info order__status" th:text="${order.status}"></div>
         </div>
         <div class="order__user-info">
-            <input type="email" class="form-control order__detail-info order__user-email" id="email"
-                   th:value="${order.user.email}">
+            <input th:if="${order.user} != null" type="email" class="form-control order__detail-info order__user-email" id="email-exist"
+                   th:value="${order.user.email}" name="email">
+            <input th:if="${order.user} == null" type="email" class="form-control order__detail-info order__user-email" id="email"
+                    placeholder="Email" name="email" required>
             <button class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user
             </button>
             <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
@@ -51,8 +53,10 @@
                 user</a>
         </div>
         <div>
-            <textarea class="form-control order__detail-info order__comment" id="comment" rows="5" name="comment"
-                      th:value="${order.comment}"></textarea>
+            <textarea th:if="${order.comment} != null" class="form-control order__detail-info order__comment" id="comment-exist" rows="5" name="comment"
+                      th:text="${order.comment}"></textarea>
+            <textarea th:if="${order.comment} == null" class="form-control order__detail-info order__comment" id="comment" rows="5" name="comment"
+                      placeholder="Comment"></textarea>
         </div>
         <div class="order__photos">
             <div class="photo-aria overflow-auto">
@@ -80,7 +84,7 @@
                 select
             </button>
         </div>
-    </div>
+    </form>
 </main>
 
 </body>

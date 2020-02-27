@@ -30,10 +30,13 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
-            "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
+            "LEFT JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
 
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+
+    private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
+            "(SELECT id FROM OrderStatus WHERE statusName='New'),(SELECT id FROM Users WHERE email=?), ?)";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
@@ -64,14 +67,14 @@ public class JdbcOrderDao implements OrderDao {
         }
     }
 
-    public List<Order> getOrdersByUserId(long userId){
+    public List<Order> getOrdersByUserId(long userId) {
         LOG.info("Start get all orders by userId:{} from DB", userId);
         String sql = GET_ALL_ORDERS + " WHERE o.statusId!=1 AND o.userId = ?";
         sql = addSort(sql);
         LOG.debug("execute sql query:" + sql);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ) {
+        ) {
             preparedStatement.setLong(1, userId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -177,6 +180,22 @@ public class JdbcOrderDao implements OrderDao {
         } catch (SQLException e) {
             LOG.error("Error during delete order {}", id, e);
             throw new RuntimeException("Error - Order is not deleted from db", e);
+        }
+    }
+
+    @Override
+    public void add(Order order) {
+        LOG.info("Create new order");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER)) {
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
+            preparedStatement.setString(2, order.getUser().getEmail());
+            preparedStatement.setString(3, order.getComment());
+            preparedStatement.executeUpdate();
+            LOG.info("Order created and added to DB");
+        } catch (SQLException e) {
+            LOG.error("Error during create order", e);
+            throw new RuntimeException("Error during create order", e);
         }
     }
 

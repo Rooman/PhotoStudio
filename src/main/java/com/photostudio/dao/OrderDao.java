@@ -15,4 +15,6 @@ public interface OrderDao {
     Order getOrderByIdInStatusNew(int id);
 
     void delete(long id);
+
+    void add(Order order);
 }
