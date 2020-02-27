@@ -79,6 +79,9 @@
             <button class="btn btn-submit btn-outline-dark button order__button view-select-button">Status to view and
                 select
             </button>
+            <form th:action="'delete/'+${order.id}" method="post">
+                <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
+            </form>
         </div>
     </div>
 </main>
