@@ -53,7 +53,8 @@ public class SecurityFilter implements Filter {
         Session session = securityService.getSession(token);
         request.setAttribute("session", session);
 
-        String servletPath = request.getServletPath();
+        String servletPath = request.getRequestURI();
+        servletPath = servletPath.replaceAll("/\\d+$", "/*");
         String currentUserLogin = session == null ? GUEST.getName() : session.getUser().getEmail();
         log.debug("Attempt to access url {} by user {}", servletPath, currentUserLogin);
 
