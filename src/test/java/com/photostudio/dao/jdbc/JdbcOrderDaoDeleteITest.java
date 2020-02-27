@@ -33,15 +33,15 @@ public class JdbcOrderDaoDeleteITest {
         //before
         int cntOrdersBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
 
-       //when
-          JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-          jdbcOrderDao.delete(1);
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.delete(1);
 
         //after
         int cntOrder1After = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders WHERE id = 1");
         int cntOrdersAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
 
-        assertEquals(cntOrdersBefore-1, cntOrdersAfter);
+        assertEquals(cntOrdersBefore - 1, cntOrdersAfter);
         assertEquals(0, cntOrder1After);
 
     }
@@ -71,7 +71,7 @@ public class JdbcOrderDaoDeleteITest {
         int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
 
         assertEquals(0, cntPhotosByOrderAfter);
-        assertEquals(cntPhotosBefore-cntPhotosByOrder, cntPhotosAfter);
+        assertEquals(cntPhotosBefore - cntPhotosByOrder, cntPhotosAfter);
 
     }
 
@@ -83,10 +83,10 @@ public class JdbcOrderDaoDeleteITest {
 
         //create dirs and files
         String path = TEST_PATH_PHOTO + File.separator + "3";
-        File dir=new File(path);
+        File dir = new File(path);
         dir.mkdirs();
-        for (int i=1; i <= cntPhotosByOrder; i++) {
-            File newFile=new File(path, String.valueOf(i)+".jpg");
+        for (int i = 1; i <= cntPhotosByOrder; i++) {
+            File newFile = new File(path, String.valueOf(i) + ".jpg");
             newFile.createNewFile();
         }
 
@@ -94,7 +94,7 @@ public class JdbcOrderDaoDeleteITest {
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         jdbcOrderDao.delete(3);
 
-        LocalDiskPhotoDao photoDao=new LocalDiskPhotoDao(TEST_PATH_PHOTO);
+        LocalDiskPhotoDao photoDao = new LocalDiskPhotoDao(TEST_PATH_PHOTO);
         photoDao.deleteByOrder(3);
 
         //after
@@ -102,24 +102,24 @@ public class JdbcOrderDaoDeleteITest {
         int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
 
         assertEquals(0, cntPhotosByOrderAfter);
-        assertEquals(cntPhotosBefore-cntPhotosByOrder, cntPhotosAfter);
+        assertEquals(cntPhotosBefore - cntPhotosByOrder, cntPhotosAfter);
 
         File dirAfter = new File(path);
-        assertEquals(false,dirAfter.exists());
+        assertEquals(false, dirAfter.exists());
     }
 
     @Test
     public void testDeletePhotoFromEmptyFolder() throws IOException {
         //create dirs, but no files
         String path = TEST_PATH_PHOTO + File.separator + "3";
-        File dir=new File(path);
+        File dir = new File(path);
         dir.mkdirs();
 
-        LocalDiskPhotoDao photoDao=new LocalDiskPhotoDao(TEST_PATH_PHOTO);
+        LocalDiskPhotoDao photoDao = new LocalDiskPhotoDao(TEST_PATH_PHOTO);
         photoDao.deleteByOrder(3);
 
         File dirAfter = new File(path);
-        assertEquals(false,dirAfter.exists());
+        assertEquals(false, dirAfter.exists());
     }
 
     @AfterEach

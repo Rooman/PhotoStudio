@@ -11,7 +11,7 @@ import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static com.photostudio.entity.user.UserRole.ADMIN;
 
+@WebServlet(urlPatterns = "/orders")
 public class AllOrdersServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
@@ -35,7 +36,7 @@ public class AllOrdersServlet extends HttpServlet {
             CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
 
-            User user = (User)paramsMap.get("user");
+            User user = (User) paramsMap.get("user");
             String templateName = "all-orders";
 
             FilterParameters filterParameters;
@@ -45,7 +46,7 @@ public class AllOrdersServlet extends HttpServlet {
                 paramsMap.put("orders", defaultOrderService.getOrdersByParameters(filterParameters));
             } else {
                 long userId = user.getId();
-                LOG.info("Show all orders for user {}", userId );
+                LOG.info("Show all orders for user {}", userId);
                 paramsMap.put("orders", defaultOrderService.getOrdersByUserId(userId));
             }
 
@@ -55,7 +56,6 @@ public class AllOrdersServlet extends HttpServlet {
             LOG.error("AllOrdersServlet error", e);
             throw new RuntimeException("AllOrdersServlet error", e);
         }
-
     }
 
     private FilterParameters getFilterParameters(HttpServletRequest request) {

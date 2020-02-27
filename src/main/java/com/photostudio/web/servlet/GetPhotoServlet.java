@@ -4,16 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
+@WebServlet(urlPatterns = "/photo/*")
 public class GetPhotoServlet extends HttpServlet {
     private static final int BUFFER_SIZE = 8192;
     private static final String PATH_TO_PHOTO = "/photo";
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

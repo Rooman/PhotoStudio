@@ -10,18 +10,16 @@ import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+@WebServlet(urlPatterns = "/order/*")
 public class OrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
@@ -87,7 +85,8 @@ public class OrderServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/orders");
 
         } catch (IOException e) {
-            throw new RuntimeException("Error");
+            LOG.error("Get with order in status New error", e);
+            throw new RuntimeException("Get with order in status New error", e);
         }
     }
 
