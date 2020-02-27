@@ -55,7 +55,7 @@ public class FileUploadServlet extends HttpServlet {
         for (Part part : request.getParts()) {
             System.out.println("Part");
             if (part != null && part.getSize() > 0) {
-                String fileName = part.getSubmittedFileName();
+                String fileName = getFileName(part);
                 String contentType = part.getContentType();
                 System.out.println(fileName);
                 // allows only JPEG files to be uploaded
@@ -67,5 +67,15 @@ public class FileUploadServlet extends HttpServlet {
         }
     }
 
-
+    private String getFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        System.out.println("content-disposition header= "+contentDisp);
+        String[] tokens = contentDisp.split(";");
+        for (String token : tokens) {
+            if (token.trim().startsWith("filename")) {
+                return token.substring(token.indexOf("=") + 2, token.length()-1);
+            }
+        }
+        return "";
+    }
 }
