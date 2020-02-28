@@ -14,46 +14,46 @@
 <hr class="header__underscore">
 <!--NavBarEnd-->
 
+<main>
+    <div class="container container-main login">
+        <h1 class="login-title">Miari Fotografie</h1>
 
-<div class="container login">
-    <h1 class="login-title">Miari Fotografie</h1>
+        <div class="login-form-wrapper">
+            <div class="login-header">
+                <h3>Sing in</h3>
+            </div>
+            <hr class="login-underscore">
 
-    <div class="login-form-wrapper">
-        <div class="login-header">
-            <h3>Sing in</h3>
+            <form class="login-form" action="login" method="post">
+
+                <div class="incorrect-login" th:if="${invalid == 'yes'}">Incorrect login(email or phone) or password
+                    please
+                    try again
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control " id="inputName" aria-describedby="nameHelp"
+                           placeholder="Email or phone" name="login" required>
+                    <small id="nameHelp" class="form-text text-muted">We'll never share your login with anyone
+                        else.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password"
+                           name="password"
+                           required>
+                </div>
+                <button type="submit" class="btn sign-in-button">Sing in</button>
+            </form>
+
+            <hr class="login-underscore login-underscore--green">
+            <hr class="login-underscore login-underscore--rounded">
         </div>
-        <hr class="login-underscore">
-
-        <form class="login-form" action="login" method="post">
-
-            <div class="incorrect-login" th:if="${invalid == 'yes'}">Incorrect login(email or phone) or password
-                please
-                try again
-            </div>
-
-            <div class="form-group">
-                <input type="text" class="form-control " id="inputName" aria-describedby="nameHelp"
-                       placeholder="Email or phone" name="login" required>
-                <small id="nameHelp" class="form-text text-muted">We'll never share your login with anyone
-                    else.</small>
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password"
-                       name="password"
-                       required>
-            </div>
-            <button type="submit" class="btn sign-in-button">Sing in</button>
-        </form>
-
-        <hr class="login-underscore login-underscore--green">
-        <hr class="login-underscore login-underscore--rounded">
     </div>
-</div>
-
+</main>
 
 <!--    Footer-->
-<footer class="footer">
-</footer>
+<meta th:replace="fragment/footer.html :: footer">
 <meta th:replace="fragment/script.html :: script">
 </body>
 

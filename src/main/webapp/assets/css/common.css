@@ -1,5 +1,18 @@
+html, body {
+    height:100%;
+}
+
 body {
     font-family: "Cormorant Upright", sans-serif;
+}
+
+main {
+  min-height:90%;
+}
+
+.container-main {
+  overflow:auto;
+  padding-bottom:187px;
 }
 
 .header{
@@ -178,6 +191,7 @@ td.table_header:last-child {
 .footer {
     background: rgba(228, 159, 182, 0.6);
     height: 187px;
+    margin-top:-187px;
 }
 
 /* User dropdown menu on Navigation */

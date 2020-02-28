@@ -18,7 +18,7 @@
 </header>
 
 <main class="home">
-    <div class="container">
+    <div class="container container-main">
         <div class="baby-image baby-image_intro"><img src="assets/images/baby-intro.jpg" alt="baby">
             <h1 class="home__main-title">Miari<br> Fotografie</h1>
         </div>
@@ -52,9 +52,8 @@
     </div>
 </main>
 
-<!--    Footer-->
-<footer class="footer">
-</footer>
+
+<meta th:replace="fragment/footer.html :: footer">
 <meta th:replace="fragment/script.html :: script">
 </body>
 
