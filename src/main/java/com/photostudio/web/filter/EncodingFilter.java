@@ -1,8 +1,12 @@
 package com.photostudio.web.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
+@WebFilter(urlPatterns = {"/*"},
+        initParams = @WebInitParam(name = "requestEncoding", value = "UTF-8"))
 public class EncodingFilter implements Filter {
     private String encoding;
 
