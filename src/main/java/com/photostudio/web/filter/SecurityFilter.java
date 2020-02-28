@@ -40,13 +40,13 @@ public class SecurityFilter implements Filter {
 
         urlToRoleMap.put("/logout", USER);
         urlToRoleMap.put("/orders", USER);
-        urlToRoleMap.put("/order/*", USER);
-        urlToRoleMap.put("/photo/*", USER);
+        urlToRoleMap.put("/order", USER);
+        urlToRoleMap.put("/photo", USER);
         
         urlToRoleMap.put("/admin/users", ADMIN);
         urlToRoleMap.put("/user", ADMIN);
         urlToRoleMap.put("/admin", ADMIN);
-        urlToRoleMap.put("/order/delete/*", ADMIN);
+        urlToRoleMap.put("/order/delete", ADMIN);
     }
 
     @Override
@@ -58,8 +58,7 @@ public class SecurityFilter implements Filter {
         Session session = securityService.getSession(token);
         request.setAttribute("session", session);
 
-        String servletPath = request.getRequestURI();
-        servletPath = servletPath.replaceAll("/\\d+$", "/*");
+        String servletPath = request.getServletPath();
         String currentUserLogin = session == null ? GUEST.getName() : session.getUser().getEmail();
         log.debug("Attempt to access url {} by user {}", servletPath, currentUserLogin);
 
