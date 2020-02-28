@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/order", "/order/*"})
+@WebServlet(urlPatterns = "/order/*")
 public class OrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
@@ -32,27 +32,19 @@ public class OrderServlet extends HttpServlet {
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
 
-            if (isNumeric(lastPartOfUri)) {
-                int id = Integer.parseInt(lastPartOfUri);
-                LOG.info("Request get order page by id:{} in status NEW", id);
+            int id = Integer.parseInt(lastPartOfUri);
+            LOG.info("Request get order page by id:{} in status NEW", id);
 
-                Order order = defaultOrderService.getOrderByIdInStatusNew(id);
-                request.setAttribute("orderId", id);
+            Order order = defaultOrderService.getOrderByIdInStatusNew(id);
+            request.setAttribute("orderId", id);
 
-                if (OrderStatus.NEW.equals(order.getStatus())) {
-                    paramsMap.put("order", order);
-                    response.setContentType("text/html;charset=utf-8");
-                    TemplateEngineFactory.process(request, response, "new-order", paramsMap);
-                } else {
-                    LOG.info("Order with id:{} is not in status New", id);
-                    response.sendRedirect(request.getContextPath() + "/orders");
-                }
-            } else {
-                LOG.info("Request get order page for create new order");
-                Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
+            if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);
                 response.setContentType("text/html;charset=utf-8");
-                TemplateEngineFactory.process(request, response, "new-order", paramsMap);
+                TemplateEngineFactory.process(request, response, "order", paramsMap);
+            } else {
+                LOG.info("Order with id:{} is not in status New", id);
+                response.sendRedirect(request.getContextPath() + "/orders");
             }
 
         } catch (IOException e) {
@@ -61,48 +53,9 @@ public class OrderServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String lastPartOfUri = getLastPartOfUri(request);
-
-            if (!isNumeric(lastPartOfUri)) {
-                LOG.info("Create new order");
-                User user = new User();
-                user.setEmail(request.getParameter("email"));
-
-                Order order = Order.builder().orderDate(LocalDateTime.now())
-                        .status(OrderStatus.NEW)
-                        .user(user)
-                        .comment(request.getParameter("comment"))
-                        .build();
-
-                defaultOrderService.add(order);
-
-            } else {
-                LOG.info("Order by {} already exist", lastPartOfUri);
-            }
-            response.sendRedirect(request.getContextPath() + "/orders");
-
-        } catch (IOException e) {
-            LOG.error("Get with order in status New error", e);
-            throw new RuntimeException("Get with order in status New error", e);
-        }
-    }
-
     private String getLastPartOfUri(HttpServletRequest request) {
         String uri = request.getRequestURI();
         String[] partsOfUri = uri.split("/");
         return partsOfUri[partsOfUri.length - 1];
-    }
-
-    private boolean isNumeric(String str) {
-
-        // null or empty
-        if (str == null || str.length() == 0) {
-            return false;
-        }
-
-        return str.chars().allMatch(Character::isDigit);
     }
 }

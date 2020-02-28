@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
               integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
               crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" th:href="@{/assets/css/new-order.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/assets/css/order.css}">
         <title>Photo Studio</title>
     </head>
 </head>
@@ -34,18 +34,21 @@
 <h1 class="order__title">Order</h1>
 
 <main>
-    <form th:action="${order.id == 0} ? 'order' : 'order/' + ${order.id}" method="post" class="container order">
+    <div class="container order">
         <div class="order__main-info">
-            <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}" name="orderId"></div>
+            <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"
+                 name="orderId"></div>
             <div class="order__detail-info order__date"
                  th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
             <div class="order__detail-info order__status" th:text="${order.status}"></div>
         </div>
         <div class="order__user-info">
-            <input th:if="${order.user} != null" type="email" class="form-control order__detail-info order__user-email" id="email-exist"
+            <input th:if="${order.user} != null" type="email" class="form-control order__detail-info order__user-email"
+                   id="email-exist"
                    th:value="${order.user.email}" name="email">
-            <input th:if="${order.user} == null" type="email" class="form-control order__detail-info order__user-email" id="email"
-                    placeholder="Email" name="email" required>
+            <input th:if="${order.user} == null" type="email" class="form-control order__detail-info order__user-email"
+                   id="email"
+                   placeholder="Email" name="email" required>
             <button class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user
             </button>
             <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
@@ -53,9 +56,11 @@
                 user</a>
         </div>
         <div>
-            <textarea th:if="${order.comment} != null" class="form-control order__detail-info order__comment" id="comment-exist" rows="5" name="comment"
+            <textarea th:if="${order.comment} != null" class="form-control order__detail-info order__comment"
+                      id="comment-exist" rows="5" name="comment"
                       th:text="${order.comment}"></textarea>
-            <textarea th:if="${order.comment} == null" class="form-control order__detail-info order__comment" id="comment" rows="5" name="comment"
+            <textarea th:if="${order.comment} == null" class="form-control order__detail-info order__comment"
+                      id="comment" rows="5" name="comment"
                       placeholder="Comment"></textarea>
         </div>
         <div class="order__photos">
@@ -79,14 +84,19 @@
             </div>
         </div>
         <div class="order__complete-buttons">
-            <button class="btn btn-submit btn-outline-dark button order__button save-button">Save</button>
+            <input type="hidden" id="contextPath" th:value="${contextPath}"/>
+            <button class="btn btn-submit btn-outline-dark button order__button save-button" onclick="createNewOrder()"
+                    th:id="${order.id == 0} ? 'newOrder' : 'order'">Save
+            </button>
             <button class="btn btn-submit btn-outline-dark button order__button view-select-button">Status to view and
                 select
             </button>
         </div>
-    </form>
+    </div>
 </main>
 
 </body>
 <meta th:replace="fragment/script.html :: script">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script th:src="@{/assets/js/order/new-order.js}"></script>
 </html>
