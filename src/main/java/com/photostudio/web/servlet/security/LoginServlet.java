@@ -18,12 +18,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-<<<<<<< HEAD
 import static com.photostudio.entity.user.UserRole.ADMIN;
 
-=======
+
 @WebServlet(urlPatterns = "/login")
->>>>>>> develop
 public class LoginServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
