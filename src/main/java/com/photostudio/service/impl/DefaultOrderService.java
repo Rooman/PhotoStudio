@@ -36,7 +36,6 @@ public class DefaultOrderService implements OrderService {
     }
 
 
-
     @Override
     public List<Order> getOrdersByUserId(long userId) {
         LOG.info("Started service get orders by userId from DB");

@@ -9,6 +9,8 @@ import com.photostudio.web.util.CookieManager;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,6 +21,9 @@ import java.util.Map;
 
 import static com.photostudio.entity.user.UserRole.*;
 
+@WebFilter(urlPatterns = {"/*"},
+        initParams = @WebInitParam(name = "excludedUrls", value = "/login,/,/home,/access-denied,/assets/*"),
+        description = "ADMIN has access to all URLs. USER-some admin pages and excludedURLs. GUEST-only excludedURLs.")
 
 @Slf4j
 public class SecurityFilter implements Filter {

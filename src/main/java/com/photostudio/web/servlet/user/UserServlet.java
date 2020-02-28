@@ -9,6 +9,7 @@ import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@WebServlet(urlPatterns = {"/user", "/user/*"})
 public class UserServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private UserService userService = ServiceLocator.getService(UserService.class);
