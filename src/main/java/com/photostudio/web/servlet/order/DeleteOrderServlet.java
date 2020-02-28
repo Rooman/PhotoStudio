@@ -27,8 +27,6 @@ public class DeleteOrderServlet extends HttpServlet {
         try {
             orderService.delete(orderId);
             response.setStatus(HttpServletResponse.SC_OK);
-            LOG.debug("request.getContextPath() {}", request.getContextPath());
-            LOG.debug("partsOfUri[] {}",partsOfUri[0]);
             response.sendRedirect(request.getContextPath() + "/orders");
         } catch (Exception e) {
             LOG.error("Error in the request for delete order", e);
