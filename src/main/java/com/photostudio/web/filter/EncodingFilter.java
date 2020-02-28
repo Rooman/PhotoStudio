@@ -15,11 +15,11 @@ public class EncodingFilter implements Filter {
 
     public void init(FilterConfig config) {
         encoding = config.getInitParameter("requestEncoding");
+        log.debug("Encoding filter start with encoding:{}", encoding);
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        log.debug("Encoding filter start with encoding:{}", encoding);
         request.setCharacterEncoding(encoding);
         chain.doFilter(request, response);
     }
