@@ -22,6 +22,8 @@ public class JdbcOrderDaoITest {
     @BeforeAll
     public static void addTestData() throws SQLException {
         jdbcDataSource = dataSource.init();
+        dataSource.runScript("db/clear_orders.sql");
+        dataSource.runScript("db/clear_users.sql");
         dataSource.runScript("db/data.sql");
     }
 
@@ -307,6 +309,8 @@ public class JdbcOrderDaoITest {
 
     @AfterAll
     public static void closeConnection() throws SQLException {
+        dataSource.runScript("db/clear_orders.sql");
+        dataSource.runScript("db/clear_users.sql");
         dataSource.close();
     }
 }

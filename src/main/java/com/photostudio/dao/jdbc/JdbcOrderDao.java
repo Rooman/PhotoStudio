@@ -47,7 +47,6 @@ public class JdbcOrderDao implements OrderDao {
 
     public JdbcOrderDao(DataSource dataSource) {
         this.dataSource = dataSource;
-        orderStatusCache = getOrderStatusCache();
     }
 
     @Override
@@ -192,6 +191,9 @@ public class JdbcOrderDao implements OrderDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER)) {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
+            if (orderStatusCache == null) {
+                orderStatusCache = getOrderStatusCache();
+            }
             preparedStatement.setInt(2, orderStatusCache.get(order.getStatus()));
             preparedStatement.setLong(3, order.getUser().getId());
             preparedStatement.setString(4, order.getComment());
