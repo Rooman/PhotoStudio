@@ -41,12 +41,14 @@
                         </span>
                     </a>
 
-                    <div class="user-dropdown__user-menu ">
-                        <a class="user-menu__item" th:href="@{/order}">New order</a>
-                        <a class="user-menu__item" th:href="@{/orders}">Order journal</a>
-                        <a class="user-menu__item" th:href="@{/admin/users}">All users</a>
-                        <a class="user-menu__item" th:href="@{/user}">New user</a>
-                        <form class="user-menu__item" action="logout" method="post">
+                    <div class="user-dropdown__user-menu " th:with="roleAdmin=${user.userRole.getName()=='ADMIN'}, roleUser=${user.userRole.getName()=='USER'}">
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/order}">New order</a>
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/orders}">Order journal</a>
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/admin/users}">All users</a>
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/user}">New user</a>
+                        <a th:if="${roleUser}" class="user-menu__item" th:href="@{/orders}">My orders</a>
+                        <a th:if="${roleUser}" class="user-menu__item" href="#">My settings</a>
+                        <form action="/logout" method="post">
                             <button class="user-menu__item" type="submit">Logout</button>
                         </form>
                     </div>

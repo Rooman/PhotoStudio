@@ -36,8 +36,7 @@
 <main>
     <div class="container order">
         <div class="order__main-info">
-            <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"
-                 name="orderId"></div>
+            <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"></div>
             <div class="order__detail-info order__date"
                  th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
             <div class="order__detail-info order__status" th:text="${order.status}"></div>
@@ -58,7 +57,7 @@
             </div>
             <div>
             <textarea class="form-control order__detail-info order__comment"
-                      id="comment-exist" rows="5" name="comment"
+                      id="comment" rows="5" name="comment"
                       th:attr="placeholder=${order.comment == null ? 'Comment' : null}"
                       th:text="${order.comment != null}?${order.comment}"></textarea>
 
@@ -97,10 +96,12 @@
                 </button>
             </div>
         </form>
+                <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
+                    <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
+                </form>
     </div>
 </main>
 
 </body>
 <meta th:replace="fragment/script.html :: script">
-<script th:src="@{/assets/js/order/new-order.js}"></script>
 </html>
