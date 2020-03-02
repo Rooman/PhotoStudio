@@ -32,7 +32,7 @@ public class DeleteOrderServlet extends HttpServlet {
         } catch (Exception e) {
             LOG.error("Error in the request for delete order", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            throw new RuntimeException("Error trying to delete user", e);
+            throw new RuntimeException("Error trying to delete order", e);
         }
     }
 }
