@@ -77,12 +77,14 @@ public class UserServlet extends HttpServlet {
         newUser.setAdditionalInfo(additionalInfo);
         LOG.debug("Request for registration user: {} received", newUser);
 
-        MailSender mailSender = new MailSender();
-        mailSender.send("Your account by Miari Fotografie", "Dear Customer, your account is activated. You can log in using password 123", email);// todo change hardcoded password
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");
 
         userService.add(newUser);
+
+        MailSender mailSender = new MailSender();
+        mailSender.send("Your account by Miari Fotografie", "Dear Customer, your account is activated. You can log in using password 123", email);// todo change hardcoded password
+
         response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 
