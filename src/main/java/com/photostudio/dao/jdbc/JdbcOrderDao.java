@@ -5,15 +5,14 @@ import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import com.photostudio.entity.order.OrderStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class JdbcOrderDao implements OrderDao {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -36,15 +35,19 @@ public class JdbcOrderDao implements OrderDao {
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
-            "(SELECT id FROM OrderStatus WHERE statusName='New'),(SELECT id FROM Users WHERE email=?), ?)";
+            "?, ?, ?)";
+
+    private static final String GET_ORDER_STATUSES = "SELECT id, statusName FROM OrderStatus";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
 
     private DataSource dataSource;
+    private Map<OrderStatus, Integer> orderStatusCache;
 
     public JdbcOrderDao(DataSource dataSource) {
         this.dataSource = dataSource;
+        orderStatusCache = getOrderStatusCache();
     }
 
     @Override
@@ -189,8 +192,9 @@ public class JdbcOrderDao implements OrderDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER)) {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
-            preparedStatement.setString(2, order.getUser().getEmail());
-            preparedStatement.setString(3, order.getComment());
+            preparedStatement.setInt(2, orderStatusCache.get(order.getStatus()));
+            preparedStatement.setLong(3, order.getUser().getId());
+            preparedStatement.setString(4, order.getComment());
             preparedStatement.executeUpdate();
             LOG.info("Order {} created and added to DB", order);
         } catch (SQLException e) {
@@ -221,5 +225,23 @@ public class JdbcOrderDao implements OrderDao {
 
     private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
+    }
+
+    private Map<OrderStatus, Integer> getOrderStatusCache() {
+        LOG.info("Get Order Statuses for Cache");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_STATUSES);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            Map<OrderStatus, Integer> orderStatusMap = new HashMap<>();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                OrderStatus orderStatus = OrderStatus.getOrderStatus(resultSet.getString("statusName"));
+                orderStatusMap.put(orderStatus, id);
+            }
+            return orderStatusMap;
+        } catch (SQLException e) {
+            LOG.error("Get order status cache error", e);
+            throw new RuntimeException("Get order status cache error", e);
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.photostudio.web.servlet.order;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
-import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,23 +25,22 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String lastPartOfUri = getLastPartOfUri(request);
+            int idFromUri = getIdFromUri(request.getRequestURI());
 
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
 
-            int id = Integer.parseInt(lastPartOfUri);
-            LOG.info("Request get order page by id:{} in status NEW", id);
+            LOG.info("Request get order page by id:{} in status NEW", idFromUri);
 
-            Order order = defaultOrderService.getOrderByIdInStatusNew(id);
-            request.setAttribute("orderId", id);
+            Order order = defaultOrderService.getOrderByIdInStatusNew(idFromUri);
+            request.setAttribute("orderId", idFromUri);
 
             if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);
                 response.setContentType("text/html;charset=utf-8");
                 TemplateEngineFactory.process(request, response, "order", paramsMap);
             } else {
-                LOG.info("Order with id:{} is not in status New", id);
+                LOG.info("Order with id:{} is not in status New", idFromUri);
                 response.sendRedirect(request.getContextPath() + "/orders");
             }
 
@@ -53,9 +50,8 @@ public class OrderServlet extends HttpServlet {
         }
     }
 
-    private String getLastPartOfUri(HttpServletRequest request) {
-        String uri = request.getRequestURI();
+    int getIdFromUri(String uri) {
         String[] partsOfUri = uri.split("/");
-        return partsOfUri[partsOfUri.length - 1];
+        return Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
     }
 }

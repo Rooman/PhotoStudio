@@ -5,6 +5,7 @@ import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
+import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class AddNewOrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
+    private UserService defaultUserService = ServiceLocator.getService(UserService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -32,8 +34,6 @@ public class AddNewOrderServlet extends HttpServlet {
             LOG.info("Request get order page for create new order");
             Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
             paramsMap.put("order", order);
-            //Context path needed for redirect in new-order.js
-            paramsMap.put("contextPath", request.getContextPath());
             response.setContentType("text/html;charset=utf-8");
             TemplateEngineFactory.process(request, response, "order", paramsMap);
         } catch (IOException e) {
@@ -45,21 +45,25 @@ public class AddNewOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         LOG.info("Create new order");
-        User user = new User();
-        user.setEmail(request.getParameter("email"));
+        String email = request.getParameter("email");
+        User user = defaultUserService.getUserByLogin(email);
 
         String comment = request.getParameter("comment");
 
-        Order.OrderBuilder order = Order.builder().orderDate(LocalDateTime.now())
+        Order.OrderBuilder orderBuilder = Order.builder().orderDate(LocalDateTime.now())
                 .status(OrderStatus.NEW)
                 .user(user);
 
-        if (comment.equals("")) {
-            order.comment(null);
-        } else {
-            order.comment(comment);
+        if (!comment.isEmpty()) {
+            orderBuilder.comment(comment);
         }
 
-        defaultOrderService.add(order.build());
+        defaultOrderService.add(orderBuilder.build());
+        try {
+            response.sendRedirect(request.getContextPath() + "/orders");
+        } catch (IOException e) {
+            LOG.error("Send redirect after add new order error", e);
+            throw new RuntimeException("Send redirect after add new order error", e);
+        }
     }
 }

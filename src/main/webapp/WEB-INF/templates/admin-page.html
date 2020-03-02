@@ -18,17 +18,18 @@
         <div class="admin__buttons">
             <ul class="admin__nav-links">
                 <li class="admin__nav-link">
-                    <a href="order" class="btn btn-submit btn-outline-dark button">New order</a>
+                    <a th:href="@{/order}" class="btn btn-submit btn-outline-dark button">New order</a>
                 </li>
                 <li class="admin__nav-link">
-                    <a href="orders" class="btn btn-submit btn-outline-dark button order__button order__search-button">Order
+                    <a th:href="@{/orders}"
+                       class="btn btn-submit btn-outline-dark button order__button order__search-button">Order
                         journal</a>
                 </li>
                 <li class="admin__nav-link">
-                    <a href="admin/users" class="btn btn-submit btn-outline-dark button">All users</a>
+                    <a th:href="@{/admin/users}" class="btn btn-submit btn-outline-dark button">All users</a>
                 </li>
                 <li class="admin__nav-link">
-                    <a href="user" class="btn btn-submit btn-outline-dark button">New user</a>
+                    <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button">New user</a>
                 </li>
             </ul>
         </div>

@@ -24,11 +24,11 @@
     <!--Bread Crumb End-->
 
     <h1 class="orders__title">Orders</h1>
-     <div th:if="${user.userRole.getName()=='ADMIN'}" class="order__header">
+    <div th:if="${user.userRole.getName()=='ADMIN'}" class="order__header">
         <div class="order-btn">
             <a value="Show/Hide" onClick="showHideFilterTable('filterTable')"
                class="btn btn-submit btn-outline-dark button order-btn_right">Filter</a>
-            <a href="order"
+            <a th:href="@{/order}"
                class="btn btn-submit btn-outline-dark button order-btn_left">New order</a>
         </div>
     </div>
