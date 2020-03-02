@@ -41,7 +41,7 @@
                  th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
             <div class="order__detail-info order__status" th:text="${order.status}"></div>
         </div>
-        <form th:action="@{/order}" method="post">
+        <form th:action="${order.id} == 0 ? @{/order} : @{/orders}" th:method="${order.id} == 0 ? post : get">
             <div class="order__user-info">
                 <input type="email" class="form-control order__detail-info order__user-email"
                        id="email"
@@ -96,9 +96,9 @@
                 </button>
             </div>
         </form>
-                <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
-                    <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
-                </form>
+        <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
+            <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
+        </form>
     </div>
 </main>
 
