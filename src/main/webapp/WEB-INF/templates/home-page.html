@@ -20,23 +20,15 @@
 <main class="home">
     <div class="container container-main">
         <div class="baby-image baby-image_intro"><img src="assets/images/baby-intro.jpg" alt="baby">
-            <h1 class="home__main-title">Miari<br> Fotografie</h1>
+            <p class="home__main-title" th:text="#{home.title}" >Zii<br> Fotografie</p>
         </div>
         <div class="home__content">
-            <h2 class="home__content-title">About the photo shoot of newborns
+            <h2 class="home__content-title" th:text="#{content.title}" >Rood rood
                 <br>and children up to a year</h2>
             <div class="description__card shooting-age">
-                <h3 class="description__card-header">Age for shooting a newborn</h3>
-                <p class="description__card-text"> The specifics of shooting newborns are available in a certain period
-                    - up to one month, and ideally from 5 to 14 days from birth. If you missed the deadlines, don’t
-                    worry, the main thing is to decide for yourself that you want to take professional photos of your
-                    child
-                    in infancy!</p>
-                <p class="description__card-text"> You can organize a photo shoot for any age. 1 month, 2,3,5, etc.,
-                    because the
-                    charm of the baby every day only increases, and a child’s photographer will help you
-                    maintain these
-                    moments for many years!</p>
+                <h3 class="description__card-header" th:text="#{card.title}" >Low</h3>
+                <p class="description__card-text" th:text="#{card.content1}" > fancy!</p>
+                <p class="description__card-text" th:text="#{card.content2}" > he</p>
             </div>
 
             <div class="baby-images">
