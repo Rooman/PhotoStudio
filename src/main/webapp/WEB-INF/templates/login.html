@@ -5,7 +5,7 @@
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
     <link rel="stylesheet" type="text/css" href="assets/css/login.css">
-    <title>Photo Studio</title>
+    <title th:text="#{page.title}">Login</title>
 </head>
 
 <body>
@@ -20,30 +20,30 @@
 
         <div class="login-form-wrapper">
             <div class="login-header">
-                <h3>Sing in</h3>
+                <h3 th:text="#{sign.in.label}">Sing In</h3>
             </div>
             <hr class="login-underscore">
 
             <form class="login-form" action="login" method="post">
 
-                <div class="incorrect-login" th:if="${invalid == 'yes'}">Incorrect login(email or phone) or password
+                <div class="incorrect-login" th:if="${invalid == 'yes'}" th:text="#{incorrect.login}">Incorrect login(email or phone) or password
                     please
                     try again
                 </div>
 
                 <div class="form-group">
                     <input type="text" class="form-control " id="inputName" aria-describedby="nameHelp"
-                           placeholder="Email or phone" name="login" required>
-                    <small id="nameHelp" class="form-text text-muted">We'll never share your login with anyone
+                           th:placeholder="#{email.placeholder}" name="login" required>
+                    <small id="nameHelp" class="form-text text-muted" th:text="#{no.share.label}">We'll never share your login with anyone
                         else.
                     </small>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password"
+                    <input type="password" class="form-control" id="inputPassword" th:placeholder="#{password.placeholder}"
                            name="password"
                            required>
                 </div>
-                <button type="submit" class="btn sign-in-button">Sing in</button>
+                <button type="submit" class="btn sign-in-button" th:text="#{sign.in.button}">Sing in</button>
             </form>
 
             <hr class="login-underscore login-underscore--green">
