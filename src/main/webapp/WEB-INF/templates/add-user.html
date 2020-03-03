@@ -16,22 +16,22 @@
     <div class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
+                <li class="breadcrumb-item"><a href="admin" th:text="#{admin.page.label}">Admin page</a></li>
                 <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item"><a href="admin/users">All users</a></li>
+                <li class="breadcrumb-item"><a href="admin/users" th:text="#{all.users.label}">All users</a></li>
                 <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">Manage user</li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="#{manage.user.label}">Manage user</li>
             </ol>
         </nav>
     </div>
     <!--Bread Crumb End-->
 
-    <h1 class="page__title">Add new user</h1>
+    <h1 class="page__title" th:text="#{add.user.title}">Add new user</h1>
 
     <form class="login-form" action="user" method="post">
         <div class="new__user__form">
             <div class="user-login">
-                <h3 class="user__title-login">Login</h3>
+                <h3 class="user__title-login" th:text="#{login.label}">Login</h3>
 
                 <div class="login-form_between">
 
