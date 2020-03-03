@@ -192,6 +192,11 @@ td.table_header:last-child {
     background: rgba(228, 159, 182, 0.6);
     height: 187px;
     margin-top:-187px;
+    text-transform:uppercase;
+}
+
+.footer a {
+   color:#000;
 }
 
 /* User dropdown menu on Navigation */
