@@ -40,10 +40,11 @@ public class FileUploadServlet extends HttpServlet {
         System.out.println("helle");
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
+        String comment = request.getParameter("orderComment");
         // gets absolute path of the web application
-        String applicationPath = request.getServletContext().getRealPath("");
+        //String applicationPath = request.getServletContext().getRealPath("");
         // constructs path of the directory to save uploaded file
-        String uploadFilePath = applicationPath + File.separator + 5;
+        String uploadFilePath = "/mys3bucket";
         System.out.println(uploadFilePath);
         // creates upload folder if it does not exists
         File uploadFolder = new File(uploadFilePath);
@@ -53,27 +54,30 @@ public class FileUploadServlet extends HttpServlet {
 
         // write all files in upload folder
         for (Part part : request.getParts()) {
-            System.out.println("Part");
             if (part != null && part.getSize() > 0) {
-                String fileName = getFileName(part);
-                String contentType = part.getContentType();
-                System.out.println(fileName);
-                // allows only JPEG files to be uploaded
+                if (part.getName().equalsIgnoreCase("photo")) {
+
+                    String contentType = part.getContentType();
+                    System.out.println(contentType);
+                    String fileName = getFileName(part);
+                    System.out.println(fileName);
+                    // allows only JPEG files to be uploaded
 //                if (!contentType.equalsIgnoreCase("image/jpg")) {
 //                    continue;
 //                }
-                part.write(uploadFilePath + File.separator + fileName);
+                    part.write(uploadFilePath + File.separator + fileName);
+                }
             }
         }
     }
 
     private String getFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
-        System.out.println("content-disposition header= "+contentDisp);
+        System.out.println("content-disposition header= " + contentDisp);
         String[] tokens = contentDisp.split(";");
         for (String token : tokens) {
             if (token.trim().startsWith("filename")) {
-                return token.substring(token.indexOf("=") + 2, token.length()-1);
+                return token.substring(token.indexOf("=") + 2, token.length() - 1);
             }
         }
         return "";
