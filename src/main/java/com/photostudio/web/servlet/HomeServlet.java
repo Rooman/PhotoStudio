@@ -23,6 +23,6 @@ public class HomeServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process("home-page", paramsMap, response.getWriter());
+        TemplateEngineFactory.process(request, response, "home-page", paramsMap);
     }
 }

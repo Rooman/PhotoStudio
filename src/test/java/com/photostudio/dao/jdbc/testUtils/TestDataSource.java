@@ -40,8 +40,7 @@ public class TestDataSource {
     public int getResult(String sqlQuery) {
         int result = 0;
         try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sqlQuery)
-        ) {
+             ResultSet resultSet = statement.executeQuery(sqlQuery)) {
             if (resultSet.next()) {
                 result = resultSet.getInt(1);
             }

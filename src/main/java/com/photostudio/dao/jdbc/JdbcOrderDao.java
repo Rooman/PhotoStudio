@@ -105,6 +105,16 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
+    public List<Order> getOrdersByUserId(long userId) {
+        return null;
+    }
+
+    @Override
+    public Order getOrderByIdInStatusNew(int id) {
+        return null;
+    }
+
+    @Override
     public void updateOrderStatusById(long id, long orderStatus) {
         LOG.info("Update status for order with id:{}", id);
         try (Connection connection = dataSource.getConnection();

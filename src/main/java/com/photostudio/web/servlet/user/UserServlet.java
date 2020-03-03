@@ -37,12 +37,12 @@ public class UserServlet extends HttpServlet {
 
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
-            TemplateEngineFactory.process("user-info", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "user-info", paramsMap);
         } else {
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
             response.setContentType("text/html;charset=utf-8");
-            TemplateEngineFactory.process("add-user", paramsMap, response.getWriter());
+            TemplateEngineFactory.process(request, response, "add-user", paramsMap);
         }
     }
 

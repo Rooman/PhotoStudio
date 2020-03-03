@@ -11,7 +11,13 @@ public interface OrderDao {
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
 
+    List<Order> getOrdersByUserId(long userId);
+
+    Order getOrderByIdInStatusNew(int id);
+
+
     void updateOrderStatusById(long id, long status);
+
 
     void delete(long id);
 

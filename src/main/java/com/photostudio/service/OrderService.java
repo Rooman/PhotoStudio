@@ -10,6 +10,10 @@ public interface OrderService {
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
+    Order getOrderByIdInStatusNew(int id);
+
+    List<Order> getOrdersByUserId(long userId);
+
     void updateOrderStatusById(long id, long status);
 
     void delete(long id);

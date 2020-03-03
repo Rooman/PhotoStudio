@@ -21,4 +21,5 @@ INSERT INTO PhotoStatus (statusName) VALUES ('New');
 INSERT INTO PhotoStatus (statusName) VALUES ('Done');
 
 INSERT INTO OrderPhotos (source, orderId, photoStatusId) VALUES ('/home/myPhoto1', 1, 1);
+INSERT INTO OrderPhotos (source, orderId, photoStatusId) VALUES ('/home/myPhoto2', 1, 1);
 INSERT INTO OrderPhotos (source, orderId, photoStatusId) VALUES ('/home/myPhoto2', 2, 2);
