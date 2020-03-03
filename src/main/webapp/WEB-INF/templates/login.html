@@ -29,9 +29,9 @@
                     <input type="password" class="form-control" id="inputPassword" placeholder="Password"
                            name="password"
                            required>
-                    <small th:if="${invalid == 'yes'}"  class="form-text incorrect-login">
+                    <div th:if="${invalid == 'yes'}"  class="form-text incorrect-login">
                         The mail/phone or password incorrect
-                    </small>
+                    </div>
                 </div>
                 <button type="submit" class="btn sign-in-button">Sing in</button>
             </form>
