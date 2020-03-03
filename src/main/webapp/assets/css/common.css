@@ -194,6 +194,14 @@ td.table_header:last-child {
     margin-top:-187px;
 }
 
+.footer span {
+   text-transform:uppercase;
+}
+
+.footer a {
+   color:#000;
+}
+
 /* User dropdown menu on Navigation */
 .user-dropdown {
     display: flex;
