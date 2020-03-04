@@ -18,7 +18,7 @@ public class MailSender {
     private Properties properties;
 
     public MailSender() {
-        properties = new PropertyReader("application.properties").getProperties();
+        properties = new PropertyReader("mail.properties").getProperties();
         this.adminEmail = properties.getProperty("mail.admin.email");
         this.password = properties.getProperty("mail.admin.password");
     }
@@ -40,7 +40,7 @@ public class MailSender {
             Transport.send(message);
         } catch (MessagingException e) {
             LOG.error("Mail was not send to {}", toEmail, e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Mail was not send to " + toEmail, e);
         }
     }
 }

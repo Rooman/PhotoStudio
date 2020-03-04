@@ -38,6 +38,16 @@ public class PropertyReader {
             properties.setProperty("dir.photo", dirPhoto);
             LOG.debug("Set dir.photo: {}", dirPhoto);
 
+            String adminMailPassword = System.getenv("ADMIN_MAIL_PASSWORD");
+            properties.setProperty("mail.admin.password", adminMailPassword);
+            LOG.debug("Set admin.mail.password: {}", adminMailPassword);
+
+            properties.setProperty("mail.admin.email", "miari.fotografie@gmail.com");
+            properties.setProperty("mail.smtp.auth", "true");
+            properties.setProperty("mail.smtp.starttls.enable", "true");
+            properties.setProperty("mail.smtp.host", "smtp.gmail.com");
+            properties.setProperty("mail.smtp.port", "587");
+
             return properties;
         } catch (Exception e) {
             LOG.error("Error while were trying to get connection properties on production environment", e);

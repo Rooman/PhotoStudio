@@ -82,7 +82,7 @@ public class UserServlet extends HttpServlet {
 
         userService.add(newUser);
 
-        MailSender mailSender = new MailSender();
+        MailSender mailSender = ServiceLocator.getService(MailSender.class);
         mailSender.send("Your account by Miari Fotografie", "Dear Customer, your account is activated. You can log in using password 123", email);// todo change hardcoded password
 
         response.sendRedirect(request.getContextPath() + "/admin/users");
