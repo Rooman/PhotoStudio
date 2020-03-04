@@ -5,6 +5,7 @@ import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import com.photostudio.entity.order.OrderStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ public class JdbcOrderDao implements OrderDao {
 
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+    private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ? WHERE o.id = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
@@ -172,11 +174,30 @@ public class JdbcOrderDao implements OrderDao {
             } catch (SQLException e) {
                 connection.rollback();
                 throw new RuntimeException("Error during delete order", e);
+            } finally {
+                connection.setAutoCommit(true);
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             LOG.error("Error during delete order {}", id, e);
             throw new RuntimeException("Error - Order is not deleted from db", e);
+        }
+    }
+
+    @Override
+    public void changeOrderStatus(long id, OrderStatus newStatus) {
+        LOG.info("Change order status by id: {} new status : {}", id, newStatus);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS)) {
+
+            statement.setInt(1, newStatus.ordinal() + 1);
+            statement.setLong(2, id);
+
+            statement.execute();
+
+            LOG.info("Order status changed successfully");
+        } catch (SQLException e) {
+            LOG.error("Error during changing status order id= {}", id, e);
+            throw new RuntimeException("Error - Order status is not changed", e);
         }
     }
 

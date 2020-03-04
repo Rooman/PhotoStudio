@@ -2,10 +2,10 @@ package com.photostudio.service.impl;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.dao.PhotoDao;
-import com.photostudio.dao.file.LocalDiskPhotoDao;
 import com.photostudio.dao.OrderDao;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,5 +48,10 @@ public class DefaultOrderService implements OrderService {
         orderDao.delete(id);
     }
 
+
+    public void changeStatus(long id, OrderStatus newStatus) {
+        LOG.info("Started service changeStatus for order:{} newStatus:{}", id, newStatus.getOrderStatusName());
+        orderDao.changeOrderStatus(id, newStatus);
+    }
 
 }
