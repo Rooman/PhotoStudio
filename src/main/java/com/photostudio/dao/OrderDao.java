@@ -20,5 +20,5 @@ public interface OrderDao {
 
     int add(Order order);
 
-    void savePhotos(int orderId,List<String> photosPath);
+    void savePhotos(Order order, int orderId, List<String> photosPath);
 }

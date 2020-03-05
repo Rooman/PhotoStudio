@@ -70,7 +70,7 @@ public class AddNewOrderServlet extends HttpServlet {
         defaultOrderService.add(orderBuilder.build(), photoToUpload);
 
         try {
-            response.sendRedirect(request.getContextPath() + "/orders");
+            response.sendRedirect(request.getContextPath() + "/order");
         } catch (IOException e) {
             LOG.error("Send redirect after add new order error", e);
             throw new RuntimeException("Send redirect after add new order error", e);

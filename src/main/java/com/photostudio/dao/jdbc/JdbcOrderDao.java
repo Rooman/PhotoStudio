@@ -36,12 +36,14 @@ public class JdbcOrderDao implements OrderDao {
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
             "?, ?, ?)";
+    private static final String SAVE_PHOTO_PATH ="INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
 
     private DataSource dataSource;
     private OrderStatusDao orderStatusDao = ServiceLocator.getService(OrderStatusDao.class);
+
     public JdbcOrderDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -200,7 +202,7 @@ public class JdbcOrderDao implements OrderDao {
                 if (generatedKeys.next()) {
                     orderId = generatedKeys.getInt(1);
                 }
-               log.info("Order {} created and added to DB", order);
+                log.info("Order {} created and added to DB", order);
             } catch (SQLException e) {
                 log.error("Error during create order {}", order, e);
                 throw new RuntimeException("Error during create order", e);
@@ -215,20 +217,22 @@ public class JdbcOrderDao implements OrderDao {
 
 
     @Override
-    // private static final String SAVE_PHOTO_PATH =""
-    public void savePhotos(int orderId, List<String> photosPaths) {
-//        LOG.info("");
-//        for (String pathToPhoto : photosPaths) {
-//            try (Connection connection = dataSource.getConnection();
-//                 PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
-//                preparedStatement.setString(1, pathToPhoto);
-//                preparedStatement.setInt(2, orderId);
-//                preparedStatement.executeUpdate();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
+
+    public void savePhotos(Order order, int orderId, List<String> photosPaths) {
+        log.info("Save photos to DB");
+        for (String pathToPhoto : photosPaths) {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
+                preparedStatement.setString(1, pathToPhoto);
+                preparedStatement.setInt(1, orderStatusDao.getOrderStatusIdByStatusName(order.getStatus()));
+                preparedStatement.setInt(3, orderId);
+                preparedStatement.executeUpdate();
+                log.info("Photos added to DB");
+            } catch (SQLException e) {
+                log.error("Error during save photo to DB with orderId {}", orderId, e);
+                throw new RuntimeException("Error during save photo to DB", e);
+            }
+        }
     }
 
     String getPartWhere(FilterParameters filterParameters) {
