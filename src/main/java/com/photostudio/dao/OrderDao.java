@@ -17,5 +17,7 @@ public interface OrderDao {
 
     void delete(long id);
 
-    void changeOrderStatus(long id, OrderStatus newStatus);
+    void changeOrderStatus(long id, boolean forward);
+
+    OrderStatus getOrderStatus(long id);
 }

@@ -32,10 +32,10 @@ public class JdbcOrderDao implements OrderDao {
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
             "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
-
+    private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
-    private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ? WHERE o.id = ?";
+    private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = o.statusId + ?  WHERE o.id = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
@@ -184,12 +184,13 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void changeOrderStatus(long id, OrderStatus newStatus) {
-        LOG.info("Change order status by id: {} new status : {}", id, newStatus);
+    public void changeOrderStatus(long id, boolean forward) {
+        LOG.info("Change order status by id: {} ", id);
+        int step = (forward) ? 1 : -1;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS)) {
 
-            statement.setInt(1, newStatus.ordinal() + 1);
+            statement.setInt(1, step);
             statement.setLong(2, id);
 
             statement.execute();
@@ -199,6 +200,30 @@ public class JdbcOrderDao implements OrderDao {
             LOG.error("Error during changing status order id= {}", id, e);
             throw new RuntimeException("Error - Order status is not changed", e);
         }
+    }
+
+    @Override
+    public OrderStatus getOrderStatus(long id) {
+        LOG.info("Get order status by id: {}", id);
+        OrderStatus status = null;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_ORDER_STATUS)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    status = OrderStatus.getOrderStatus(resultSet.getString(1));
+                    LOG.info("Order status:{}", status);
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error("Error during get status order id = {}", id, e);
+            throw new RuntimeException("Error during get status order id = " + id, e);
+        }
+        if (status == null) {
+            LOG.error("Order {} is not found in DB", id);
+            throw new RuntimeException("Order " + id + " is not found in DB");
+        }
+        return status;
     }
 
     String getPartWhere(FilterParameters filterParameters) {

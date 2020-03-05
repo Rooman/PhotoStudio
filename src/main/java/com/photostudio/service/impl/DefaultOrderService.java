@@ -6,7 +6,11 @@ import com.photostudio.dao.OrderDao;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
+import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.service.OrderService;
+import com.photostudio.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,16 +46,69 @@ public class DefaultOrderService implements OrderService {
         return orderDao.getOrdersByUserId(userId);
     }
 
+    @Override
     public void delete(long id) {
         LOG.info("Started service delete order by id ");
         photoDao.deleteByOrder(id);
         orderDao.delete(id);
     }
 
-
-    public void changeStatus(long id, OrderStatus newStatus) {
-        LOG.info("Started service changeStatus for order:{} newStatus:{}", id, newStatus.getOrderStatusName());
-        orderDao.changeOrderStatus(id, newStatus);
+    @Override
+    public void moveStatusForward(long id, UserRole userRole) {
+        LOG.info("Started service set next status for order:{}", id);
+        OrderStatus statusDb = orderDao.getOrderStatus(id);
+        if (checkByDBStatusForward(statusDb, userRole)) {
+            orderDao.changeOrderStatus(id, true);
+        } else{
+            LOG.error("Order status " + statusDb.getOrderStatusName() + " can't be changed forward");
+            throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed forward ");
+        }
     }
 
+    @Override
+    public void moveStatusBack(long id, UserRole userRole) {
+        LOG.info("Started service set previous status for order:{}", id);
+        OrderStatus statusDb = orderDao.getOrderStatus(id);
+        if (checkByDBStatusBack(statusDb, userRole)) {
+            orderDao.changeOrderStatus(id, false);
+        } else{
+            LOG.error("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
+            throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
+        }
+    }
+
+    private boolean checkByDBStatusForward(OrderStatus statusDB, UserRole userRole) {
+        LOG.info("Check status in DB for change status forward: {} by user {}", statusDB, userRole);
+        boolean isCorrect = true;
+        if ((statusDB == OrderStatus.NEW || statusDB == OrderStatus.SELECTED) && userRole == UserRole.USER) {
+            isCorrect = false;
+        }
+
+        if (isCorrect && statusDB == OrderStatus.VIEW_AND_SELECT && userRole == UserRole.ADMIN) {
+            isCorrect = false;
+        }
+
+        if (isCorrect && statusDB == OrderStatus.READY) {
+            isCorrect = false;
+        }
+
+        return isCorrect;
+    }
+
+    private boolean checkByDBStatusBack(OrderStatus statusDB, UserRole userRole) {
+        LOG.info("Check status in DB for change status back: {} by user ", statusDB, userRole);
+        boolean isCorrect = true;
+        if (statusDB != OrderStatus.READY) {
+            isCorrect = false;
+        }
+        if (isCorrect && userRole == UserRole.ADMIN) {
+            isCorrect = false;
+        }
+        return isCorrect;
+    }
+
+    //For tests
+    void setOrderDao(OrderDao orderDao) {
+        this.orderDao = orderDao;
+    }
 }
