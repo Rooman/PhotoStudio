@@ -33,7 +33,7 @@
 
 <h1 class="order__title">Order</h1>
 
-<main>
+<form id="fileUploadForm" method="post" action="order" enctype="multipart/form-data">
     <div class="container order">
         <div class="order__main-info">
             <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"
@@ -78,7 +78,10 @@
                 </div>
             </div>
             <div class="photo-add-delete-buttons">
-                <button class="btn btn-submit btn-outline-dark button order__button photo-add-button">Add</button>
+<!--                Input->btn+msg!!!!!!!!-->
+                <input class="btn btn-submit btn-outline-dark button order__button photo-add-button"
+                        type="file" name="photo" multiple="multiple">Add</input>
+
                 <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all
                 </button>
             </div>
@@ -86,14 +89,14 @@
         <div class="order__complete-buttons">
             <input type="hidden" id="contextPath" th:value="${contextPath}"/>
             <button class="btn btn-submit btn-outline-dark button order__button save-button" onclick="createNewOrder()"
-                    th:id="${order.id == 0} ? 'newOrder' : 'order'">Save
+                    th:id="${order.id == 0} ? 'newOrder' : 'order'" type="submit">Save
             </button>
             <button class="btn btn-submit btn-outline-dark button order__button view-select-button">Status to view and
                 select
             </button>
         </div>
     </div>
-</main>
+</form>
 
 </body>
 <meta th:replace="fragment/script.html :: script">

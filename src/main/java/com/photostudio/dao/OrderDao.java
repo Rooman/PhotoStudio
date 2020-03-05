@@ -16,5 +16,7 @@ public interface OrderDao {
 
     void delete(long id);
 
-    void add(Order order);
+    int add(Order order);
+
+    void savePhotos(int orderId,List<String> photosPath);
 }

@@ -184,19 +184,47 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void add(Order order) {
+    public int add(Order order) {
         LOG.info("Create new order");
+        int orderId = 0;
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setString(2, order.getUser().getEmail());
             preparedStatement.setString(3, order.getComment());
             preparedStatement.executeUpdate();
-            LOG.info("Order {} created and added to DB", order);
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    orderId = generatedKeys.getInt(1);
+                }
+                LOG.info("Order {} created and added to DB", order);
+            } catch (SQLException e) {
+                LOG.error("Error during create order {}", order, e);
+                throw new RuntimeException("Error during create order", e);
+            }
         } catch (SQLException e) {
-            LOG.error("Error during create order {}", order, e);
-            throw new RuntimeException("Error during create order", e);
+            e.printStackTrace();
         }
+        return orderId;
+    }
+
+
+    @Override
+    // private static final String SAVE_PHOTO_PATH =""
+    public void savePhotos(int orderId, List<String> photosPaths) {
+//        LOG.info("");
+//        for (String pathToPhoto : photosPaths) {
+//            try (Connection connection = dataSource.getConnection();
+//                 PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
+//                preparedStatement.setString(1, pathToPhoto);
+//                preparedStatement.setInt(2, orderId);
+//                preparedStatement.executeUpdate();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
     }
 
     String getPartWhere(FilterParameters filterParameters) {

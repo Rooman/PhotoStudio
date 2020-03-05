@@ -10,6 +10,7 @@ import com.photostudio.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.Part;
 import java.util.List;
 
 public class DefaultOrderService implements OrderService {
@@ -48,9 +49,11 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void add(Order order) {
+    public void add(Order order,List<Part> photoToUpload) {
         LOG.info("Started creating new order {}", order);
-        orderDao.add(order);
+        int orderId=orderDao.add(order);
+        List<String> photosPath=photoDao.savePhotoByOrder(photoToUpload);
+        orderDao.savePhotos(orderId,photosPath);
     }
 
 

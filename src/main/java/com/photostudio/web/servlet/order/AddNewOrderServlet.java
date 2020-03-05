@@ -10,16 +10,23 @@ import com.photostudio.web.util.CommonVariableAppendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/order")
+@MultipartConfig
 public class AddNewOrderServlet extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
@@ -43,7 +50,7 @@ public class AddNewOrderServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         LOG.info("Create new order");
         User user = new User();
         user.setEmail(request.getParameter("email"));
@@ -59,7 +66,10 @@ public class AddNewOrderServlet extends HttpServlet {
         } else {
             order.comment(comment);
         }
+        LOG.info("Save photo to new order");
 
-        defaultOrderService.add(order.build());
+        List<Part> photoToUpload = (List<Part>) request.getParts();//(List<Part>)??????
+        defaultOrderService.add(order.build(), photoToUpload);
+
     }
 }
