@@ -1,3 +1,7 @@
+.container-main {
+    overflow:inherit;
+}
+
 .baby-image_intro {
     margin-top: -140px;
 }

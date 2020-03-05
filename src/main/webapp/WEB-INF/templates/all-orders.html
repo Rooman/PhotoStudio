@@ -8,11 +8,14 @@
     <link rel="stylesheet" type="text/css" href="assets/css/all-orders.css">
 </head>
 
-<body>
-<div class="container orders">
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
+<nav th:replace="fragment/navigation.html :: nav"></nav>
+<hr class="header__underscore">
+<main>
+<div class="container container-main orders">
 
     <!--Bread Crumb-->
-    <div th:if="${user.userRole.getName()=='ADMIN'}" class="bread__crumb-navigation">
+    <div th:if="${roleAdmin}" class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
@@ -23,17 +26,19 @@
     </div>
     <!--Bread Crumb End-->
 
-    <h1 class="orders__title">Orders</h1>
-     <div th:if="${user.userRole.getName()=='ADMIN'}" class="order__header">
+     <h1 th:if="${roleAdmin}" class="orders__title">Orders</h1>
+     <h1 th:if="${roleUser}" class="orders__title">Your orders</h1>
+
+    <div th:if="${roleAdmin}" class="order__header">
         <div class="order-btn">
             <a value="Show/Hide" onClick="showHideFilterTable('filterTable')"
                class="btn btn-submit btn-outline-dark button order-btn_right">Filter</a>
-            <a href="order"
+            <a th:href="@{/order}"
                class="btn btn-submit btn-outline-dark button order-btn_left">New order</a>
         </div>
     </div>
 
-    <div th:if="${user.userRole.getName()=='ADMIN'}" class="order-board" id="filterTable" style="display:none">
+    <div th:if="${roleAdmin}" class="order-board" id="filterTable" style="display:none">
         <div id="parameters">
             <div class="order-board_content ">
                 <div class="form-row ">
@@ -89,14 +94,14 @@
             <td class="table_header">Number</td>
             <td class="table_header">Date</td>
             <td class="table_header">Status</td>
-            <td th:if="${user.userRole.getName()=='ADMIN'}" class="table_header">User(Email/Phone)</td>
+            <td th:if="${roleAdmin}" class="table_header">User(Email/Phone)</td>
         </tr>
         <div th:each="order : ${orders}">
             <tr class="table_info double-click" th:id="'order/' + ${order.id}">
                 <td class="table_info" th:text="${order.id}"></td>
                 <td class="table_info" th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></td>
                 <td class="table_info" th:text="${order.status}"></td>
-                <td th:if="${user.userRole.getName()=='ADMIN'}" class="table_info">
+                <td th:if="${roleAdmin}" class="table_info">
                     <div th:if="${order.user.phoneNumber == null}" th:text="${order.user.email}"></div>
                     <div th:if="${order.user.phoneNumber != null}"
                          th:text="${order.user.email} + '/' +${order.user.phoneNumber}"></div>
@@ -107,12 +112,16 @@
     </table>
 
 </div>
+</main>
+
+<meta th:if="${roleUser}" th:replace="fragment/footer.html :: footer">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
 <script src="assets/js/order/orders.js"></script>
 <script src="assets/js/page/all-orders.js"></script>
 <script src="assets/js/order/get-order-by-id.js"></script>
+<script src="assets/js/app.js"></script>
 </body>
 </html>
 

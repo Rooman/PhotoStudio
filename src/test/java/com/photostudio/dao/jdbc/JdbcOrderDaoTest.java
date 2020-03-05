@@ -1,17 +1,17 @@
 package com.photostudio.dao.jdbc;
 
+import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.OrderStatus;
-import com.photostudio.util.PropertyReader;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JdbcOrderDaoTest {
+    private DataSource dataSource = new TestDataSource().init();
 
     @Test
     public void testGetPartWhereWithAllParams() {
@@ -21,8 +21,6 @@ public class JdbcOrderDaoTest {
                 .toDate(LocalDateTime.MAX).orderStatus(OrderStatus.NEW).phoneNumber("1234567890").build();
 
         //when
-        Properties properties = new PropertyReader("application.properties").getProperties();
-        DataSource dataSource = new DataSourceFactory(properties).createDataSource();
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(dataSource);
         String actual = jdbcOrderDao.getPartWhere(filterParameters);
 
@@ -38,8 +36,6 @@ public class JdbcOrderDaoTest {
                 .orderStatus(OrderStatus.NEW).build();
 
         //when
-        Properties properties = new PropertyReader("application.properties").getProperties();
-        DataSource dataSource = new DataSourceFactory(properties).createDataSource();
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(dataSource);
         String actual = jdbcOrderDao.getPartWhere(filterParameters);
 
@@ -54,8 +50,6 @@ public class JdbcOrderDaoTest {
         FilterParameters filterParameters = FilterParameters.builder().build();
 
         //when
-        Properties properties = new PropertyReader("application.properties").getProperties();
-        DataSource dataSource = new DataSourceFactory(properties).createDataSource();
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(dataSource);
         String actual = jdbcOrderDao.getPartWhere(filterParameters);
 
