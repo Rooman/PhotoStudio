@@ -66,11 +66,12 @@ public class AddNewOrderServlet extends HttpServlet {
         }
         LOG.info("Save photo to new order");
 
-        List<Part> photoToUpload = (List<Part>) request.getParts();//(List<Part>)??????
+        List<Part> photoToUpload = (List<Part>) request.getParts();
+
         defaultOrderService.add(orderBuilder.build(), photoToUpload);
 
         try {
-            response.sendRedirect(request.getContextPath() + "/order");
+            response.sendRedirect(request.getContextPath() + "/orders");
         } catch (IOException e) {
             LOG.error("Send redirect after add new order error", e);
             throw new RuntimeException("Send redirect after add new order error", e);
