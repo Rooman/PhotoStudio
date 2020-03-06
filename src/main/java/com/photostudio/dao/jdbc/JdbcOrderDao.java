@@ -30,7 +30,7 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
-            "JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
+            "LEFT JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='New'";
 
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";

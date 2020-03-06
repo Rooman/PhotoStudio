@@ -31,12 +31,15 @@ public class OrderServlet extends HttpServlet {
             int id = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
             LOG.info("Request get order page by id:{} in status NEW", id);
 
+            String newEmail = request.getParameter("newEmail");
+
             Order order = defaultOrderService.getOrderByIdInStatusNew(id);
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
 
             if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);
+                paramsMap.put("newEmail", newEmail);
                 response.setContentType("text/html;charset=utf-8");
                 TemplateEngineFactory.process(request, response, "new-order", paramsMap);
             } else {

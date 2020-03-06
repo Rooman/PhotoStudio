@@ -43,9 +43,10 @@
         </div>
         <div class="order__user-info">
             <input type="email" class="form-control order__detail-info order__user-email" id="email"
-                   th:value="${order.user.email}">
-            <button class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user
-            </button>
+                   th:attr="value=${newEmail != null ? newEmail : order.user.email},
+                            placeholder=${order.user == null and newEmail == null ? 'Email' : null}">
+            <a th:href="${order.id} == 0 ? @{/admin/users?search=userForOrder} : @{'/admin/users?search=userForOrder&id=' + ${order.id}}"
+               class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user</a>
             <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
                 new
                 user</a>
@@ -84,6 +85,7 @@
             </form>
         </div>
     </div>
+
 </main>
 
 </body>
