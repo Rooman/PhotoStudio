@@ -39,7 +39,7 @@ public class OrderRowMapperTest {
         LocalDateTime expectedDateTime = LocalDateTime.of(2020, 1, 20, 1, 20, 0);
 
         assertEquals(1, actualOrder.getId());
-        assertEquals("New", actualOrder.getStatus().getOrderStatusName());
+        assertEquals("NEW", actualOrder.getStatus().getOrderStatusName());
         assertEquals("3806767676", actualOrder.getUser().getPhoneNumber());
         assertEquals("email@gmail.com", actualOrder.getUser().getEmail());
         assertEquals("new Comment", actualOrder.getComment());

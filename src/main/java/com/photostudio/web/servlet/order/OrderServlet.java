@@ -25,31 +25,36 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
-
-            String uri = request.getRequestURI();
-            String[] partsOfUri = uri.split("/");
-            int id = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
-            LOG.info("Request get order page by id:{} in status NEW", id);
+            int idFromUri = getIdFromUri(request.getRequestURI());
 
             String newEmail = request.getParameter("newEmail");
 
-            Order order = defaultOrderService.getOrderByIdInStatusNew(id);
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
+
+            LOG.info("Request get order page by id:{} in status NEW", idFromUri);
+
+            Order order = defaultOrderService.getOrderByIdInStatusNew(idFromUri);
+            request.setAttribute("orderId", idFromUri);
 
             if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);
                 paramsMap.put("newEmail", newEmail);
                 response.setContentType("text/html;charset=utf-8");
-                TemplateEngineFactory.process(request, response, "new-order", paramsMap);
+                TemplateEngineFactory.process(request, response, "order", paramsMap);
             } else {
-                LOG.info("Order with id:{} is not in status New", id);
+                LOG.info("Order with id:{} is not in status New", idFromUri);
                 response.sendRedirect(request.getContextPath() + "/orders");
             }
 
         } catch (IOException e) {
-            LOG.error("Get with order in status New error", e);
-            throw new RuntimeException("Get with order in status New error", e);
+            LOG.error("Get page order in status New error", e);
+            throw new RuntimeException("Get page order in status New error", e);
         }
+    }
+
+    int getIdFromUri(String uri) {
+        String[] partsOfUri = uri.split("/");
+        return Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
     }
 }

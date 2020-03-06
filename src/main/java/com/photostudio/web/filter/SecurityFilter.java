@@ -21,9 +21,9 @@ import java.util.Map;
 
 import static com.photostudio.entity.user.UserRole.*;
 
-@WebFilter(urlPatterns = {"/*"},
-        initParams = @WebInitParam(name = "excludedUrls", value = "/login,/,/home,/access-denied,/assets/*"),
-        description = "ADMIN has access to all URLs. USER-some admin pages and excludedURLs. GUEST-only excludedURLs.")
+//@WebFilter(urlPatterns = {"/*"},
+//        initParams = @WebInitParam(name = "excludedUrls", value = "/login,/,/home,/access-denied,/assets/*"),
+//        description = "ADMIN has access to all URLs. USER-some admin pages and excludedURLs. GUEST-only excludedURLs.")
 
 @Slf4j
 public class SecurityFilter implements Filter {
