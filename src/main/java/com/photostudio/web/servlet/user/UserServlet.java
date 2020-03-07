@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
+import com.photostudio.util.PasswordUtil;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 import com.photostudio.web.util.MailSender;
@@ -77,6 +78,8 @@ public class UserServlet extends HttpServlet {
         newUser.setAdditionalInfo(additionalInfo);
         LOG.debug("Request for registration user: {} received", newUser);
 
+        PasswordUtil service = ServiceLocator.getService(PasswordUtil.class);
+        String salt = service.getSalt();
         newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
         newUser.setSalt("123");
 

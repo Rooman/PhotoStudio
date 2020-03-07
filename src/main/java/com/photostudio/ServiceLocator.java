@@ -16,6 +16,7 @@ import com.photostudio.service.UserService;
 import com.photostudio.service.impl.DefaultOrderService;
 import com.photostudio.service.impl.DefaultUserService;
 import com.photostudio.util.PropertyReader;
+import com.photostudio.util.PasswordUtil;
 import com.photostudio.web.util.MailSender;
 
 import javax.sql.DataSource;
@@ -53,6 +54,9 @@ public class ServiceLocator {
 
         MailSender mailSender = new MailSender();
         register(MailSender.class, mailSender);
+
+        PasswordUtil passwordUtil = new PasswordUtil();
+        register(PasswordUtil.class, passwordUtil);
 
         //mapper for JSON
         ObjectMapper mapper = new ObjectMapper();
