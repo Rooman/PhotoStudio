@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.io.PrintStream;
 import java.util.Properties;
 
 public class PropertyReader {
@@ -29,7 +30,8 @@ public class PropertyReader {
 
     private Properties getProdProperties() {
         try {
-            Properties properties = new Properties();
+            Properties properties = getDevProperties();
+
             String dbUrl = System.getenv("JDBC_DATABASE_URL");
             properties.setProperty("jdbc.url", dbUrl);
             LOG.debug("Set jdbc.url: {}", dbUrl);
@@ -37,6 +39,10 @@ public class PropertyReader {
             String dirPhoto = System.getenv("dir_photo");
             properties.setProperty("dir.photo", dirPhoto);
             LOG.debug("Set dir.photo: {}", dirPhoto);
+
+            String adminMailPassword = System.getenv("ADMIN_MAIL_PASSWORD");
+            properties.setProperty("mail.admin.password", adminMailPassword);
+            LOG.debug("Set admin.mail.password: {}", adminMailPassword);
 
             return properties;
         } catch (Exception e) {

@@ -1,14 +1,12 @@
 package com.photostudio.dao.jdbc;
 
+import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,25 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JdbcUserDaoITest {
 
-    private Connection connection;
-    private JdbcDataSource jdbcDataSource;
+    private static TestDataSource dataSource = new TestDataSource();
+    private static JdbcDataSource jdbcDataSource;
 
-    @BeforeEach
-    public void before() throws SQLException, IOException {
-        jdbcDataSource = new JdbcDataSource();
-        jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=MySQL");
-        jdbcDataSource.setUser("h2");
-        jdbcDataSource.setPassword("h2");
-
-        connection = jdbcDataSource.getConnection();
-
-        FileReader fileSchema = new FileReader(getClass().getClassLoader().getResource("db/schema.sql").getFile());
-
-        RunScript.execute(connection, fileSchema);
-
-        FileReader fileData = new FileReader(getClass().getClassLoader().getResource("db/data.sql").getFile());
-
-        RunScript.execute(connection, fileData);
+    @BeforeAll
+    public static void addTestData() throws SQLException {
+        jdbcDataSource = dataSource.init();
+        dataSource.runScript("db/data.sql");
     }
 
 
@@ -140,9 +126,9 @@ class JdbcUserDaoITest {
         });
     }
 
-    @AfterEach
-    public void after() throws SQLException {
-        connection.close();
+    @AfterAll
+    public static void closeConnection() throws SQLException {
+        dataSource.close();
     }
 
 

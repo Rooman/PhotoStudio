@@ -1,6 +1,6 @@
 package com.photostudio;
 
-
+import com.photostudio.dao.OrderStatusDao;
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.file.LocalDiskPhotoDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.DataSourceFactory;
 import com.photostudio.dao.jdbc.JdbcOrderDao;
+import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
@@ -16,6 +17,7 @@ import com.photostudio.service.UserService;
 import com.photostudio.service.impl.DefaultOrderService;
 import com.photostudio.service.impl.DefaultUserService;
 import com.photostudio.util.PropertyReader;
+import com.photostudio.web.util.MailSender;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -35,8 +37,8 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
-        UserService userService = new DefaultUserService(userDao);
-        register(UserService.class, userService);
+        OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
+        register(OrderStatusDao.class, orderStatusDao);
 
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
@@ -44,11 +46,17 @@ public class ServiceLocator {
         PhotoDao photoDiskDao = new LocalDiskPhotoDao(properties.getProperty("dir.photo"));
         register(PhotoDao.class, photoDiskDao);
 
+        UserService userService = new DefaultUserService(userDao);
+        register(UserService.class, userService);
+
         OrderService orderService = new DefaultOrderService();
         register(OrderService.class, orderService);
 
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
+
+        MailSender mailSender = new MailSender();
+        register(MailSender.class, mailSender);
 
         //mapper for JSON
         ObjectMapper mapper = new ObjectMapper();

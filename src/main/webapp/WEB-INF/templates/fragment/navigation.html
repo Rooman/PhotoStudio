@@ -41,14 +41,17 @@
                         </span>
                     </a>
 
-                    <div class="user-dropdown__user-menu " th:with="roleAdmin=${user.userRole.getName()=='ADMIN'}, roleUser=${user.userRole.getName()=='USER'}">
-                        <a th:if="${roleAdmin}" class="user-menu__item" href="#">New order</a>
-                        <a th:if="${roleAdmin}" class="user-menu__item" href="/orders">Order journal</a>
-                        <a th:if="${roleAdmin}" class="user-menu__item" href="/admin/users">All users</a>
-                        <a th:if="${roleAdmin}" class="user-menu__item" href="/user">New user</a>
-                        <a th:if="${roleUser}" class="user-menu__item" href="/orders">My orders</a>
+                    <div class="user-dropdown__user-menu "
+                         th:with="roleAdmin=${user.userRole.getName()=='ADMIN'}, roleUser=${user.userRole.getName()=='USER'}">
+
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/order}">New order</a>
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/orders}">Order journal</a>
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/admin/users}">All users</a>
+                        <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/user}">New user</a>
+                        <a th:if="${roleUser}" class="user-menu__item" th:href="@{/orders}">My orders</a>
                         <a th:if="${roleUser}" class="user-menu__item" href="#">My settings</a>
-                        <form action="/logout" method="post">
+
+                        <form th:action="@{/logout}" method="post">
                             <button class="user-menu__item" type="submit" th:text="#{logout.label}">Logout</button>
                         </form>
                     </div>
