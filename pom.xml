@@ -123,6 +123,13 @@
             <version>2.10.2</version>
         </dependency>
 
+        <!--Mail-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
         <!--tests-->
         <dependency>
             <groupId>org.mockito</groupId>
