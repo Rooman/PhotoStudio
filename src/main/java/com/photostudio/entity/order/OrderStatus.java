@@ -3,10 +3,10 @@ package com.photostudio.entity.order;
 import java.util.Arrays;
 
 public enum OrderStatus {
-    NEW("New"),
-    VIEW_AND_SELECT("View and Select"),
-    SELECTED("Selected"),
-    READY("Ready");
+    NEW("NEW"),
+    VIEW_AND_SELECT("VIEW AND SELECT"),
+    SELECTED("SELECTED"),
+    READY("READY");
 
     private final String orderStatusName;
 

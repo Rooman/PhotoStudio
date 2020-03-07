@@ -58,7 +58,7 @@ main {
     line-height: 13px;
 }
 
-.top-dropdown a:after {
+.top-dropdown > a:after {
     border: 0;
     font-family: "FontAwesome";
     font-size: 14px;
@@ -66,20 +66,14 @@ main {
     margin-left: 5px;
     vertical-align: 0;
     color: rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-choose {
+
 }
 
 .dropdown-menu show {
     max-width: 50px;
-}
-
-.top-dropdown a:after {
-    border: 0;
-    font-family: "FontAwesome";
-    font-size: 14px;
-    content: "\f078";
-    margin-left: 5px;
-    vertical-align: 0;
-    color: rgba(0, 0, 0, 0.8);
 }
 
 .button {

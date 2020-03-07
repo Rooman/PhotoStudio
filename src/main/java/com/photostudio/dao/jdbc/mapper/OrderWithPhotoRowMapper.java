@@ -30,7 +30,10 @@ public class OrderWithPhotoRowMapper {
 
                 isFirst = true;
             }
-            photoSources.add(resultSet.getString("source"));
+            String source = resultSet.getString("source");
+            if (source != null) {
+                photoSources.add(source);
+            }
         }
 
         return orderBuilder.photoSources(photoSources).build();
