@@ -11,6 +11,7 @@
 }
 
 .home__main-title {
+    max-width: 150px;
     font-weight: 300;
     font-size: 144px;
     line-height: 150px;
