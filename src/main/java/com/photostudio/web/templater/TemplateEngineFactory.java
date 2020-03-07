@@ -1,5 +1,6 @@
 package com.photostudio.web.templater;
 
+import com.photostudio.web.util.SupportedLocale;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
@@ -33,9 +34,11 @@ public class TemplateEngineFactory {
     }
 
 
-    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> productsMap) throws IOException {
-
-        IContext context = new WebContext(request, response, request.getServletContext(), Locale.getDefault(), productsMap);
+    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> parameters) throws IOException {
+        SupportedLocale currentLocale = (SupportedLocale) request.getAttribute("currentLocale");
+        parameters.put("language", currentLocale.getName());
+        
+        IContext context = new WebContext(request, response, request.getServletContext(), currentLocale.getLocale(), parameters);
         TEMPLATE_ENGINE.process(template, context, response.getWriter());
     }
 

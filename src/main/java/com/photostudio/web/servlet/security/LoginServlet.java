@@ -5,6 +5,7 @@ import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
+import com.photostudio.web.util.CommonVariableAppendService;
 import com.photostudio.web.util.CookieManager;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.photostudio.entity.user.UserRole.ADMIN;
 
