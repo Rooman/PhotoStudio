@@ -1,14 +1,13 @@
 package com.photostudio.web.filter;
 
 import com.photostudio.web.util.CookieManager;
+import com.photostudio.web.util.SupportedLocale;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 
 @WebFilter(filterName = "CookieLocaleFilter", urlPatterns = {"/*"})
 public class CookieLocaleFilter implements Filter {
@@ -24,21 +23,25 @@ public class CookieLocaleFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        String cookieLang = CookieManager.getCookie(req, "lang");
         String paramLang = req.getParameter("lang");
 
-        if (paramLang != null) {
-            if (!paramLang.equals(cookieLang)) {
-                CookieManager.addCookie(res, "lang", paramLang);
-                res.setLocale(Locale.forLanguageTag(paramLang));
-            }
-        } else if (cookieLang != null) {
-            res.setLocale(Locale.forLanguageTag(cookieLang));
+        SupportedLocale currentLocale;
+
+        if (isPresent(paramLang)) {
+            currentLocale = SupportedLocale.findByName(paramLang);
+            CookieManager.addCookie(res, "lang", currentLocale.getName());
         } else {
-            CookieManager.addCookie(res, "lang", "eng");
-            res.setLocale(Locale.forLanguageTag("eng"));
+            String cookieLang = CookieManager.getCookie(req, "lang");
+            currentLocale = SupportedLocale.findByName(paramLang);
+            res.setLocale(SupportedLocale.findByName(cookieLang).getLocale());
         }
 
+        req.setAttribute("currentLocale", currentLocale);
         chain.doFilter(request, response);
     }
+
+    private boolean isPresent(String paramLang) {
+        return paramLang != null && !paramLang.isEmpty();
+    }
+
 }
