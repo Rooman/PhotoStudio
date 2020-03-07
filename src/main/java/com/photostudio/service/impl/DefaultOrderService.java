@@ -52,7 +52,7 @@ public class DefaultOrderService implements OrderService {
     public void add(Order order,List<Part> photoToUpload) {
         LOG.info("Started creating new order {}", order);
         int orderId=orderDao.add(order);
-        List<String> photosPath=photoDao.savePhotoByOrder(photoToUpload);
+        List<String> photosPath=photoDao.savePhotoByOrder(photoToUpload,orderId);
         orderDao.savePhotos(order,orderId,photosPath);
     }
 
