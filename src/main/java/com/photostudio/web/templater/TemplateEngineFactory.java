@@ -34,8 +34,8 @@ public class TemplateEngineFactory {
 
 
     public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> productsMap) throws IOException {
-
-        IContext context = new WebContext(request, response, request.getServletContext(), Locale.getDefault(), productsMap);
+        Locale locale = productsMap.get("lang") != null ? Locale.forLanguageTag((String) productsMap.get("language")) : Locale.getDefault();
+        IContext context = new WebContext(request, response, request.getServletContext(), locale, productsMap);
         TEMPLATE_ENGINE.process(template, context, response.getWriter());
     }
 
