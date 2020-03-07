@@ -52,11 +52,11 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public int add(Order order,List<Part> photoToUpload) {
+    public int add(Order order, List<Part> photoToUpload) {
         log.info("Started creating new order {}", order);
         int orderId = orderDao.add(order, orderCacheService.getOrderStatusIdByStatusName(order.getStatus()));
-        List<String> photosPath=photoDao.savePhotoByOrder(photoToUpload);
-        orderDao.savePhotos(order,orderId,photosPath);
+        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
+        orderDao.savePhotos(order, orderId, photosPath);
         return orderId;
     }
 

@@ -1,6 +1,7 @@
 package com.photostudio.web.templater;
 
 import com.photostudio.web.util.SupportedLocale;
+import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
@@ -16,6 +17,8 @@ import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
 
+
+@Slf4j
 public class TemplateEngineFactory {
     private static TemplateEngine TEMPLATE_ENGINE = new TemplateEngine();
     private static boolean isConfigured;
@@ -34,12 +37,16 @@ public class TemplateEngineFactory {
     }
 
 
-    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> parameters) throws IOException {
-        SupportedLocale currentLocale = (SupportedLocale) request.getAttribute("currentLocale");
-        parameters.put("language", currentLocale.getName());
+    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> parameters) {
+        try {
+            SupportedLocale currentLocale = (SupportedLocale) request.getAttribute("currentLocale");
+            parameters.put("language", currentLocale.getName());
 
-        IContext context = new WebContext(request, response, request.getServletContext(), currentLocale.getLocale(), parameters);
-        TEMPLATE_ENGINE.process(template, context, response.getWriter());
+            IContext context = new WebContext(request, response, request.getServletContext(), currentLocale.getLocale(), parameters);
+            TEMPLATE_ENGINE.process(template, context, response.getWriter());
+        } catch (IOException e) {
+            log.error("Error ", e);
+        }
     }
 
 }
