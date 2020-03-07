@@ -2,7 +2,7 @@ package com.photostudio.service;
 
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
-import com.photostudio.entity.user.UserRole;
+import com.photostudio.entity.user.User;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface OrderService {
 
     void delete(long id);
 
-    void moveStatusForward(long id, UserRole userRole);
+    void moveStatusForward(long id, User user);
 
-    void moveStatusBack(long id, UserRole userRole);
+    void moveStatusBack(long id, User user);
 }

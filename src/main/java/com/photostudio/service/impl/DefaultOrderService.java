@@ -54,24 +54,26 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void moveStatusForward(long id, UserRole userRole) {
+    public void moveStatusForward(long id, User user) {
         LOG.info("Started service set next status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
-        if (checkByDBStatusForward(statusDb, userRole)) {
+        if (checkByDBStatusForward(statusDb, user.getUserRole())) {
             orderDao.changeOrderStatus(id, true);
-        } else{
+            sendMail(user.getEmail(), statusDb.ordinal() + 2);//+1 - next, +1 because enum from 0
+        } else {
             LOG.error("Order status " + statusDb.getOrderStatusName() + " can't be changed forward");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed forward ");
         }
     }
 
     @Override
-    public void moveStatusBack(long id, UserRole userRole) {
+    public void moveStatusBack(long id, User user) {
         LOG.info("Started service set previous status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
-        if (checkByDBStatusBack(statusDb, userRole)) {
+        if (checkByDBStatusBack(statusDb, user.getUserRole())) {
             orderDao.changeOrderStatus(id, false);
-        } else{
+            sendMail(user.getEmail(), statusDb.ordinal()); //-1
+        } else {
             LOG.error("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
         }
@@ -105,6 +107,21 @@ public class DefaultOrderService implements OrderService {
             isCorrect = false;
         }
         return isCorrect;
+    }
+
+    private void sendMail(String userMail, int statusOrder) {
+        LOG.info("Send mail after changong status :{}", statusOrder);
+        switch (statusOrder) {
+            case 2:{
+                    break;
+            }
+            case 3:{
+                    break;
+            }
+            case 4:{
+                    break;
+            }
+        }
     }
 
     //For tests

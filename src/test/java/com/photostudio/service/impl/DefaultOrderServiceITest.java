@@ -3,6 +3,7 @@ package com.photostudio.service.impl;
 
 import com.photostudio.dao.jdbc.JdbcOrderDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
+import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import org.h2.jdbcx.JdbcDataSource;
@@ -32,8 +33,10 @@ public class DefaultOrderServiceITest {
     @Test
     public void testToViewAndSelectByAdmin() {
 
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
         assertDoesNotThrow(() -> {
-            orderService.moveStatusForward(1, UserRole.ADMIN);
+            orderService.moveStatusForward(1, user);
         });
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 1");
@@ -42,10 +45,13 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testToViewAndSelectByUser() {
-        //orderService.moveStatusForward(1, UserRole.USER);
+
+        User user = new User();
+        user.setUserRole(UserRole.USER);
+
         //after
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusForward(1, UserRole.USER);
+            orderService.moveStatusForward(1, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 1");
@@ -55,8 +61,11 @@ public class DefaultOrderServiceITest {
     @Test
     public void testToSelectedByAdmin() {
 
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusForward(2, UserRole.ADMIN);
+            orderService.moveStatusForward(2, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
@@ -66,8 +75,11 @@ public class DefaultOrderServiceITest {
     @Test
     public void testToSelectedByUser() {
 
+        User user = new User();
+        user.setUserRole(UserRole.USER);
+
         assertDoesNotThrow(() -> {
-            orderService.moveStatusForward(2, UserRole.USER);
+            orderService.moveStatusForward(2, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
@@ -76,8 +88,12 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testToReadyByAdmin() {
+
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
+
         assertDoesNotThrow(() -> {
-            orderService.moveStatusForward(3, UserRole.ADMIN);
+            orderService.moveStatusForward(3, user);
         });
 
 
@@ -88,8 +104,11 @@ public class DefaultOrderServiceITest {
     @Test
     public void testToReadyByUser() {
 
+        User user = new User();
+        user.setUserRole(UserRole.USER);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusForward(3, UserRole.USER);
+            orderService.moveStatusForward(3, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
@@ -98,8 +117,12 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testNextStatusFromReadyByAdmin() {
+
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusForward(4, UserRole.ADMIN);
+            orderService.moveStatusForward(4, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
@@ -109,8 +132,11 @@ public class DefaultOrderServiceITest {
     @Test
     public void testNextStatusFromReadyByUser() {
 
+        User user = new User();
+        user.setUserRole(UserRole.USER);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusForward(4, UserRole.USER);
+            orderService.moveStatusForward(4, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
@@ -119,8 +145,11 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testPreviousStatusFromReadyByAdmin() {
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusBack(4, UserRole.ADMIN);
+            orderService.moveStatusBack(4, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
@@ -129,9 +158,11 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testPreviousStatusFromReadyByUser() {
+        User user = new User();
+        user.setUserRole(UserRole.USER);
 
         assertDoesNotThrow(() -> {
-            orderService.moveStatusBack(4, UserRole.USER);
+            orderService.moveStatusBack(4, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
@@ -140,8 +171,11 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testPreviousStatusFromSelectedByAdmin() {
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusBack(3, UserRole.ADMIN);
+            orderService.moveStatusBack(3, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
@@ -151,8 +185,11 @@ public class DefaultOrderServiceITest {
     @Test
     public void testPreviousStatusFromSelectedByUser() {
 
+        User user = new User();
+        user.setUserRole(UserRole.USER);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusBack(3, UserRole.USER);
+            orderService.moveStatusBack(3, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
@@ -161,8 +198,12 @@ public class DefaultOrderServiceITest {
 
     @Test
     public void testPreviousStatusFromViewAndSelectByAdmin() {
+
+        User user = new User();
+        user.setUserRole(UserRole.ADMIN);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusBack(2, UserRole.ADMIN);
+            orderService.moveStatusBack(2, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
@@ -172,8 +213,11 @@ public class DefaultOrderServiceITest {
     @Test
     public void testPreviousStatusFromViewAndSelectByUser() {
 
+        User user = new User();
+        user.setUserRole(UserRole.USER);
+
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
-            orderService.moveStatusBack(2, UserRole.USER);
+            orderService.moveStatusBack(2, user);
         });
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
