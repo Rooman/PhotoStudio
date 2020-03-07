@@ -22,7 +22,7 @@ public class JdbcOrderStatusCachedDao implements OrderStatusDao {
 
     public JdbcOrderStatusCachedDao(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.orderStatusCache = getOrderStatuses();
+    //    this.orderStatusCache = getOrderStatuses();
     }
 
     @Override

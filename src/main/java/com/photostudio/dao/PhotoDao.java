@@ -7,5 +7,5 @@ public interface PhotoDao {
 
     void deleteByOrder(long orderId);
 
-    List<String> savePhotoByOrder(List<Part> photos);
+    List<String> savePhotoByOrder(List<Part> photos,long orderId);
 }

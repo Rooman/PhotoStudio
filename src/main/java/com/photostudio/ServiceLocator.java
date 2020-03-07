@@ -1,6 +1,5 @@
 package com.photostudio;
 
-
 import com.photostudio.dao.OrderStatusDao;
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.file.LocalDiskPhotoDao;
@@ -40,9 +39,6 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
-        PhotoDao photoDiskDao = new LocalDiskPhotoDao(properties.getProperty("dir.photo"));
-        register(PhotoDao.class, photoDiskDao);
-
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
         register(OrderStatusDao.class, orderStatusDao);
 
@@ -51,6 +47,9 @@ public class ServiceLocator {
 
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
+
+        PhotoDao photoDiskDao = new LocalDiskPhotoDao(properties.getProperty("dir.photo"));
+        register(PhotoDao.class, photoDiskDao);
 
         UserService userService = new DefaultUserService(userDao);
         register(UserService.class, userService);

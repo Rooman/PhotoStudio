@@ -1,4 +1,4 @@
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
 <nav class="navbar navbar-expand-lg navbar-light top-nav">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,35 +7,35 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav top-navbar">
             <li class="nav-item active ">
-                <a class="nav-link" href="home">Home</a>
+                <a class="nav-link" href="home" th:text="#{home.nav.title}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Portfolio</a>
+                <a class="nav-link" href="#" th:text="#{portfolio.nav.title}">Portfolio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Price</a>
+                <a class="nav-link" href="#" th:text="#{price.nav.title}">Price</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
+                <a class="nav-link" href="#" th:text="#{contact.nav.title}">Contact</a>
             </li>
             <li class="nav-item dropdown top-dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Eng
+                <a class="nav-link dropdown-toggle dropdown-choose" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false" th:text="${language == null ? 'Eng' : language}">
                 </a>
-                <div class="dropdown-menu " aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Eng</a>
-                    <a class="dropdown-item" href="#">Ger</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="?lang=en">Eng</a>
+                    <a class="dropdown-item" href="?lang=de">Ger</a>
+                    <a class="dropdown-item" href="?lang=ru">Ru</a>
                 </div>
             </li>
 
             <li th:if="${ user==null}" class="nav-item">
-                <a class="nav-link" href="login">Login</a>
+                <a class="nav-link" href="login" th:text="#{login.label}">Login</a>
             </li>
 
             <li th:if="${user!=null}" class="nav-item">
                 <div class="user-dropdown">
-                    <a class="nav-link user-dropdown__link" href="#">
+                    <a class="nav-link user-dropdown__link" href="#" th:text="#{welcome.label}" >
                         WELCOME,
                         <span class="user-dropdown__email" th:text="${user.email}">
                         </span>
@@ -47,9 +47,11 @@
                         <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/admin/users}">All users</a>
                         <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/user}">New user</a>
                         <a th:if="${roleUser}" class="user-menu__item" th:href="@{/orders}">My orders</a>
+
                         <a th:if="${roleUser}" class="user-menu__item" href="#">My settings</a>
+
                         <form th:action="@{/logout}" method="post">
-                            <button class="user-menu__item" type="submit">Logout</button>
+                            <button class="user-menu__item" type="submit" th:text="#{logout.label}">Logout</button>
                         </form>
                     </div>
                 </div>
