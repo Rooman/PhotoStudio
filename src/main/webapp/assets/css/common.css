@@ -58,7 +58,7 @@ main {
     line-height: 13px;
 }
 
-.top-dropdown a:after {
+.top-dropdown > a:after {
     border: 0;
     font-family: "FontAwesome";
     font-size: 14px;
