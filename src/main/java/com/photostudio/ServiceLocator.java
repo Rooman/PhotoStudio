@@ -12,8 +12,10 @@ import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
+import com.photostudio.service.OrderCacheService;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
+import com.photostudio.service.impl.DefaultOrderCacheService;
 import com.photostudio.service.impl.DefaultOrderService;
 import com.photostudio.service.impl.DefaultUserService;
 import com.photostudio.util.PropertyReader;
@@ -39,6 +41,9 @@ public class ServiceLocator {
 
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
         register(OrderStatusDao.class, orderStatusDao);
+
+        OrderCacheService orderCacheService = new DefaultOrderCacheService();
+        register(OrderCacheService.class, orderCacheService);
 
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);

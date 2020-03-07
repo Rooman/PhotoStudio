@@ -1,15 +1,11 @@
 package com.photostudio.dao.jdbc.testUtils;
 
-
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class TestDataSource {
     private Connection connection;

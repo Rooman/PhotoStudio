@@ -69,3 +69,8 @@ function updateUser(id) {
 
     xhr.send(json);
 }
+
+//Get user for order
+$('.double-click').dblclick(function(e) {
+    window.location.href = e.target.parentElement.id;
+});

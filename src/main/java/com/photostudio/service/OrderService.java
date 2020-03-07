@@ -17,6 +17,6 @@ public interface OrderService {
 
     void delete(long id);
 
-    void add(Order order, List<Part> photoToUpload);
+    int add(Order order, List<Part> photoToUpload);
 
 }
