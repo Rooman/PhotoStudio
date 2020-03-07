@@ -6,54 +6,58 @@ import com.photostudio.dao.file.LocalDiskPhotoDao;
 import com.photostudio.dao.OrderDao;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import com.photostudio.service.OrderCacheService;
 import com.photostudio.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Part;
 import java.util.List;
 
+@Slf4j
 public class DefaultOrderService implements OrderService {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private OrderDao orderDao = ServiceLocator.getService(OrderDao.class);
     private PhotoDao photoDao = ServiceLocator.getService(PhotoDao.class);
+    private OrderCacheService orderCacheService = ServiceLocator.getService(OrderCacheService.class);
 
     @Override
     public List<Order> getAll() {
-        LOG.info("Started service get all orders from DB");
+        log.info("Started service get all orders from DB");
         return orderDao.getAll();
     }
 
     @Override
     public List<Order> getOrdersByParameters(FilterParameters filterParameters) {
-        LOG.info("Started service get orders by parameters from DB");
+        log.info("Started service get orders by parameters from DB");
         return orderDao.getOrdersByParameters(filterParameters);
     }
 
     @Override
     public Order getOrderByIdInStatusNew(int id) {
-        LOG.info("Started service get order by id:{} in status NEW from DB", id);
+        log.info("Started service get order by id:{} in status NEW from DB", id);
         return orderDao.getOrderByIdInStatusNew(id);
     }
 
     @Override
     public List<Order> getOrdersByUserId(long userId) {
-        LOG.info("Started service get orders by userId from DB");
+        log.info("Started service get orders by userId from DB");
         return orderDao.getOrdersByUserId(userId);
     }
 
     public void delete(long id) {
-        LOG.info("Started service delete order by id ");
+        log.info("Started service delete order by id ");
         photoDao.deleteByOrder(id);
         orderDao.delete(id);
     }
 
     @Override
-    public void add(Order order,List<Part> photoToUpload) {
-        LOG.info("Started creating new order {}", order);
-        int orderId=orderDao.add(order);
+    public int add(Order order,List<Part> photoToUpload) {
+        log.info("Started creating new order {}", order);
+        int orderId = orderDao.add(order, orderCacheService.getOrderStatusIdByStatusName(order.getStatus()));
         List<String> photosPath=photoDao.savePhotoByOrder(photoToUpload);
         orderDao.savePhotos(order,orderId,photosPath);
+        return orderId;
     }
 
 

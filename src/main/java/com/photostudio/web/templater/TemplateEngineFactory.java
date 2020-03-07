@@ -33,10 +33,13 @@ public class TemplateEngineFactory {
     }
 
 
-    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> productsMap) throws IOException {
-
+    public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> productsMap) {
+        try {
         IContext context = new WebContext(request, response, request.getServletContext(), Locale.getDefault(), productsMap);
-        TEMPLATE_ENGINE.process(template, context, response.getWriter());
+            TEMPLATE_ENGINE.process(template, context, response.getWriter());
+        } catch (IOException e) {
+            throw new RuntimeException("Write template error", e);
+        }
     }
 
 }

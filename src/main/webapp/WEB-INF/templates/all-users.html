@@ -47,7 +47,7 @@
         </tr>
         <div th:each="user : ${users}">
             <tr class="table_info double-click"
-                th:id="${orderId == null} ? '/order?newEmail=' + ${user.email} : '/order/' + ${orderId} +'?newEmail=' + ${user.email}">
+                th:id="${orderId == null} ? '../order?newEmail=' + ${user.email} : '../order/' + ${orderId} +'?newEmail=' + ${user.email}">
                 <td class="table_info" th:text="${user.email}"></td>
                 <td class="table_info" th:text="${user.phoneNumber}"></td>
                 <td class="table_info" th:text="${user.firstName} +' '+ ${user.lastName} "></td>
@@ -63,7 +63,7 @@
         </div>
         </tbody>
     </table>
-    <a th:if="${search} != null" th:href="${orderId} == 0 ? '/order' : '/order/' + ${orderId}" class="btn new-user_button">Close</a>
+    <a th:if="${search} != null" th:href="${orderId} == 0 ? @{'/order'} : @{'/order/' + ${orderId}}" class="btn new-user_button">Close</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

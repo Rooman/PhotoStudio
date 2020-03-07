@@ -42,7 +42,6 @@ public class JdbcOrderDao implements OrderDao {
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
 
     private DataSource dataSource;
-    private OrderStatusDao orderStatusDao = ServiceLocator.getService(OrderStatusDao.class);
 
     public JdbcOrderDao(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -185,15 +184,14 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-
-    public int add(Order order) {
+    public int add(Order order, int orderStatusId) {
         log.info("Create new order");
         int orderId = 0;
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
-            preparedStatement.setInt(2, orderStatusDao.getOrderStatusIdByStatusName(order.getStatus()));
+            preparedStatement.setInt(2, orderStatusId);
             preparedStatement.setLong(3, order.getUser().getId());
             preparedStatement.setString(4, order.getComment());
             preparedStatement.executeUpdate();
@@ -224,7 +222,7 @@ public class JdbcOrderDao implements OrderDao {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
                 preparedStatement.setString(1, pathToPhoto);
-                preparedStatement.setInt(1, orderStatusDao.getOrderStatusIdByStatusName(order.getStatus()));
+                preparedStatement.setInt(2, 1);
                 preparedStatement.setInt(3, orderId);
                 preparedStatement.executeUpdate();
                 log.info("Photos added to DB");

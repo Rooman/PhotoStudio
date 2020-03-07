@@ -3,7 +3,9 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
+import com.photostudio.exception.GetUserByEmailException;
 import com.photostudio.exception.LoginPasswordInvalidException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class JdbcUserDao implements UserDao {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
@@ -29,7 +32,7 @@ public class JdbcUserDao implements UserDao {
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
 
-    private static final String GET_USER_BY_LOGIN = "SELECT u.id id, " +
+    private static final String GET_USER_BY_PARAMS = "SELECT u.id id, " +
             "u.email email, " +
             "u.phoneNumber, " +
             "u.firstName firstName, " +
@@ -190,9 +193,9 @@ public class JdbcUserDao implements UserDao {
         LOG.info("Get user by login: {}", login);
         String resultQuery;
         if (login.contains("@")) {
-            resultQuery = GET_USER_BY_LOGIN + "u.email=?";
+            resultQuery = GET_USER_BY_PARAMS + "u.email=?";
         } else {
-            resultQuery = GET_USER_BY_LOGIN + "u.phoneNumber=?";
+            resultQuery = GET_USER_BY_PARAMS + "u.phoneNumber=?";
         }
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
@@ -214,6 +217,33 @@ public class JdbcUserDao implements UserDao {
         } catch (SQLException e) {
             LOG.error("An exception occurred while trying to get user with login: {}", login, e);
             throw new RuntimeException("Get user by login error", e);
+        }
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        log.info("Get user by email: {}", email);
+        String resultQuery = GET_USER_BY_PARAMS + "u.email=?";
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
+            preparedStatement.setString(1, email);
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    log.error("No user with email: {}", email);
+                    throw new GetUserByEmailException("No user with email = " + email + " found");
+                }
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                if (resultSet.next()) {
+                    LOG.error("Users with email: {} is several", email);
+                    throw new RuntimeException("More then one user found");
+                }
+                LOG.info("Getting user by email: {} is completed", email);
+                LOG.debug("Get user: {} by email: {}", user, email);
+                return user;
+            }
+        } catch (SQLException e) {
+            LOG.error("An exception occurred while trying to get user with email: {}", email, e);
+            throw new RuntimeException("Get user by email error", e);
         }
     }
 }

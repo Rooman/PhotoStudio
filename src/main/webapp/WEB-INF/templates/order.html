@@ -33,76 +33,76 @@
 
 <h1 class="order__title">Order</h1>
 
-<form id="fileUploadForm" method="post" action="order" enctype="multipart/form-data">
-    <div class="container order">
-        <div class="order__main-info">
-            <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"></div>
-            <div class="order__detail-info order__date"
-                 th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
-            <div class="order__detail-info order__status" th:text="${order.status}"></div>
-        </div>
-        <form th:action="${order.id} == 0 ? @{/order} : @{/orders}" th:method="${order.id} == 0 ? post : get">
-            <div class="order__user-info">
-                <input type="email" class="form-control order__detail-info order__user-email"
-                       id="email"
-                       th:attr="value=${newEmail != null ? newEmail : order.user.email},
+<!--<form id="fileUploadForm" method="post" th:action="@{/order}" >-->
+<div class="container order">
+    <div class="order__main-info">
+        <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"></div>
+        <div class="order__detail-info order__date"
+             th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
+        <div class="order__detail-info order__status" th:text="${order.status}"></div>
+    </div>
+    <form id="new" th:action="${order.id} == 0 ? @{/order} : @{/orders}" th:method="${order.id} == 0 ? post : get"
+          th:enctype="${order.id} == 0 ? 'multipart/form-data' : null">
+        <div class="order__user-info">
+            <input type="email" class="form-control order__detail-info order__user-email"
+                   id="email"
+                   th:attr="value=${((newEmail != null) ? newEmail : (order.id != 0) ? order.user.email : null)},
                             placeholder=${order.user == null and newEmail == null ? 'Email' : null}"
-                       name="email" required>
-                <a th:href="${order.id} == 0 ? @{/admin/users?search=userForOrder} : @{'/admin/users?search=userForOrder&id=' + ${order.id}}"
-                   class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user</a>
-                <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
-                    new
-                    user</a>
-            </div>
-            <div>
+                   name="email" required>
+            <a th:href="${order.id} == 0 ? @{/admin/users?search=userForOrder} : @{'/admin/users?search=userForOrder&id=' + ${order.id}}"
+               class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user</a>
+            <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
+                new
+                user</a>
+        </div>
+        <div>
             <textarea class="form-control order__detail-info order__comment"
                       id="comment" rows="5" name="comment"
                       th:attr="placeholder=${order.comment == null ? 'Comment' : null}"
                       th:text="${order.comment != null}?${order.comment}"></textarea>
 
-            </div>
-            <div class="order__photos">
-                <div class="photo-aria overflow-auto">
-                    <div class="row order__block">
-                        <div class="col-md-3" th:each="photo : ${order.photoSources}">
-                            <div class="order__photo-block">
-                                <img class="order__photo" th:src="@{'/photo' + ${photo}}" alt="photo">
-                            </div>
-                            <div class="photo__buttons">
-                                <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
-                                <a class="photo-option" href="#"><i class="fas fa-trash-alt"></i></a>
-                            </div>
+        </div>
+        <div class="order__photos">
+            <div class="photo-aria overflow-auto">
+                <div class="row order__block">
+                    <div class="col-md-3" th:each="photo : ${order.photoSources}">
+                        <div class="order__photo-block">
+                            <img class="order__photo" th:src="@{'/photo' + ${photo}}" alt="photo">
+                        </div>
+                        <div class="photo__buttons">
+                            <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
+                            <a class="photo-option" href="#"><i class="fas fa-trash-alt"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="photo-add-delete-buttons">
+            </div>
+            <div class="photo-add-delete-buttons">
 
 
-<!--                Input->btn+msg!!!!!!!!-->
+                <!--                Input->btn+msg!!!!!!!!-->
                 <input class="btn btn-submit btn-outline-dark button order__button photo-add-button"
-                        type="file" name="photo" multiple="multiple">Add</input>
+                       type="file" name="photo" multiple="multiple">Add</input>
 
                 <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all
                 </button>
             </div>
         </div>
 
-            <div class="order__complete-buttons">
+        <div class="order__complete-buttons">
 
-                <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
-                </button>
-                <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button">
-                    Status to view
-                    and
-                    select
-                </button>
-            </div>
-        </form>
-        <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
-            <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
-        </form>
-    </div>
-</form>
+            <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
+            </button>
+            <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button">
+                Status to view
+                and
+                select
+            </button>
+            <button class="btn btn-submit btn-outline-dark button order__button delete-button" form="old">Delete order</button>
+        </div>
+    </form>
+    <form id="old" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+</div>
+<!--</form>-->
 
 </body>
 <meta th:replace="fragment/script.html :: script">
