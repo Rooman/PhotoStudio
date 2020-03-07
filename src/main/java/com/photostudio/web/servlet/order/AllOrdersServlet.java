@@ -34,6 +34,7 @@ public class AllOrdersServlet extends HttpServlet {
             Map<String, Object> paramsMap = new HashMap<>();
 
             CommonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendLang(paramsMap, request, response);
             response.setContentType("text/html;charset=utf-8");
 
             User user = (User) paramsMap.get("user");

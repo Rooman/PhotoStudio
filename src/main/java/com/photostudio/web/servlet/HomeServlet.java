@@ -23,7 +23,7 @@ public class HomeServlet extends HttpServlet {
         LOG.info("Request home page received");
         Map<String, Object> paramsMap = new HashMap<>();
         CommonVariableAppendService.appendUser(paramsMap, request);
-        CommonVariableAppendService.appendLang(paramsMap, request);
+        CommonVariableAppendService.appendLang(paramsMap, request, response);
 
         response.setContentType("text/html;charset=utf-8");
 

@@ -34,6 +34,7 @@ public class OrderServlet extends HttpServlet {
             Order order = defaultOrderService.getOrderByIdInStatusNew(id);
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendLang(paramsMap, request, response);
 
             if (OrderStatus.NEW.equals(order.getStatus())) {
                 paramsMap.put("order", order);

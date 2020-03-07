@@ -23,6 +23,7 @@ public class AdminPageServlet extends HttpServlet {
         try {
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
+            CommonVariableAppendService.appendLang(paramsMap, request,response);
             response.setContentType("text/html;charset=utf-8");
             TemplateEngineFactory.process(request, response, "admin-page", paramsMap);
         } catch (IOException e) {
