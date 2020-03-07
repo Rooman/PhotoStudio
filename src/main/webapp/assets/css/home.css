@@ -1,9 +1,12 @@
 .container-main {
     overflow:inherit;
+
 }
 
 .baby-image_intro {
-    margin-top: -140px;
+   background: url("../images/baby-intro.jpg") no-repeat;
+   background-size: cover;
+   width: 100%;
 }
 
 .home__main-title {
