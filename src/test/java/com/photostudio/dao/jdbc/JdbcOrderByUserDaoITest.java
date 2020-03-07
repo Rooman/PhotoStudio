@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JdbcOrderByUserDaoTest {
+public class JdbcOrderByUserDaoITest {
     private static TestDataSource dataSource = new TestDataSource();
     private static JdbcDataSource jdbcDataSource;
 

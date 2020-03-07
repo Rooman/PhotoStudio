@@ -38,14 +38,14 @@ public class ServiceLocator {
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
+        OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
+        register(OrderStatusDao.class, orderStatusDao);
+
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
 
         PhotoDao photoDiskDao = new LocalDiskPhotoDao(properties.getProperty("dir.photo"));
         register(PhotoDao.class, photoDiskDao);
-
-        OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
-        register(OrderStatusDao.class, orderStatusDao);
 
         UserService userService = new DefaultUserService(userDao);
         register(UserService.class, userService);

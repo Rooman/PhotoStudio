@@ -215,7 +215,6 @@ public class JdbcOrderDao implements OrderDao {
         return orderId;
     }
 
-
     @Override
 
     public void savePhotos(Order order, int orderId, List<String> photosPaths) {
