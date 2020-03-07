@@ -1,6 +1,9 @@
 package com.photostudio.dao.file;
 
+import com.photostudio.ServiceLocator;
+import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.PhotoDao;
+import com.photostudio.entity.order.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
