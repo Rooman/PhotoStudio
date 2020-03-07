@@ -34,7 +34,6 @@ public class LoginServlet extends HttpServlet {
         LOG.info("Request to login page received");
         try {
             Map<String, Object> paramsMap = new HashMap<>();
-            CommonVariableAppendService.appendLang(paramsMap, request, response);
 
             response.setContentType("text/html;charset=utf-8");
 

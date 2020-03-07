@@ -7,9 +7,9 @@ import java.util.Locale;
 @Slf4j
 public enum SupportedLocale {
 
-    GERMANY("ger", Locale.forLanguageTag("de-DE")),
+    GERMANY("de", Locale.forLanguageTag("de-DE")),
     RUSSIAN("ru", Locale.forLanguageTag("ru-RU")),
-    US("us", Locale.US);
+    US("en", Locale.US);
 
     private String name;
     private Locale locale;

@@ -32,7 +32,7 @@ public class CookieLocaleFilter implements Filter {
             CookieManager.addCookie(res, "lang", currentLocale.getName());
         } else {
             String cookieLang = CookieManager.getCookie(req, "lang");
-            currentLocale = SupportedLocale.findByName(paramLang);
+            currentLocale = SupportedLocale.findByName(cookieLang);
             res.setLocale(SupportedLocale.findByName(cookieLang).getLocale());
         }
 

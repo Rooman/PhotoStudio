@@ -16,15 +16,4 @@ public class CommonVariableAppendService {
             paramsMap.put("user", session.getUser());
         }
     }
-
-    public static void appendLang(Map<String, Object> paramsMap, HttpServletRequest request, HttpServletResponse response) {
-        String lang = CookieManager.getCookie(request, "lang");
-        if (lang != null) {
-            paramsMap.put("language", lang);
-            response.setLocale(Locale.forLanguageTag(lang));
-        } else {
-            paramsMap.put("language", "en");
-            response.setLocale(Locale.forLanguageTag("en"));
-        }
-    }
 }

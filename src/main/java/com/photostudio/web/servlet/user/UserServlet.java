@@ -36,7 +36,6 @@ public class UserServlet extends HttpServlet {
             User user = userService.getUserById(userId);
             Map<String, Object> paramsMap = new HashMap<>();
             paramsMap.put("user", user);
-            CommonVariableAppendService.appendLang(paramsMap, request, response);
 
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
@@ -44,7 +43,6 @@ public class UserServlet extends HttpServlet {
         } else {
             Map<String, Object> paramsMap = new HashMap<>();
             CommonVariableAppendService.appendUser(paramsMap, request);
-            CommonVariableAppendService.appendLang(paramsMap, request, response);
             response.setContentType("text/html;charset=utf-8");
             TemplateEngineFactory.process(request, response, "add-user", paramsMap);
         }
