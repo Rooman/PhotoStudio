@@ -60,7 +60,6 @@
                       id="comment" rows="5" name="comment"
                       th:attr="placeholder=${order.comment == null ? 'Comment' : null}"
                       th:text="${order.comment != null}?${order.comment}"></textarea>
-
             </div>
             <div class="order__photos">
                 <div class="photo-aria overflow-auto">
@@ -79,11 +78,14 @@
                 <div class="photo-add-delete-buttons">
 
                     <label class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
-                        Add <input  type="file" style="display: none;"  name="photo" multiple="multiple"/>
+                        Add <input type="file" style="display: none;" name="photo" multiple="multiple"/>
                     </label>
 
-                    <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all
-                    </button>
+                    <a class="photo-option" href="#">
+                        <button type="button" class="btn btn-submit btn-outline-dark button order__button photo-delete-button">
+                            Delete all
+                        </button>
+                    </a>
                 </div>
             </div>
 

@@ -1,6 +1,5 @@
 package com.photostudio;
 
-
 import com.photostudio.dao.OrderStatusDao;
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.file.LocalDiskPhotoDao;

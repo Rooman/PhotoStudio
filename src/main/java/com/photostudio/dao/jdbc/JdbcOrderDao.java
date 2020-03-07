@@ -9,7 +9,6 @@ import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import lombok.extern.slf4j.Slf4j;
 
-
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
@@ -36,7 +35,7 @@ public class JdbcOrderDao implements OrderDao {
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
             "?, ?, ?)";
-    private static final String SAVE_PHOTO_PATH ="INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
+    private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
@@ -185,7 +184,6 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-
     public int add(Order order) {
         log.info("Create new order");
         int orderId = 0;
@@ -216,14 +214,13 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-
     public void savePhotos(Order order, int orderId, List<String> photosPaths) {
         log.info("Save photos to DB");
         for (String pathToPhoto : photosPaths) {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
                 preparedStatement.setString(1, pathToPhoto);
-                preparedStatement.setInt(2,1);//PhotoStatus-UNSELECTED
+                preparedStatement.setInt(2, 1);//PhotoStatus-UNSELECTED
                 preparedStatement.setInt(3, orderId);
                 preparedStatement.executeUpdate();
                 log.info("Photos added to DB");

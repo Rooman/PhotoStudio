@@ -1,9 +1,7 @@
 package com.photostudio.dao.file;
 
-import com.photostudio.ServiceLocator;
-import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.PhotoDao;
-import com.photostudio.entity.order.Order;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +64,6 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     private String getFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
-        System.out.println("content-disposition header= " + contentDisp);
         String[] names = contentDisp.split(";");
         for (String name : names) {
             if (name.trim().startsWith("filename")) {
