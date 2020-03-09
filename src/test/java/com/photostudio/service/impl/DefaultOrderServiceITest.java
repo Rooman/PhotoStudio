@@ -35,6 +35,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(1, user);
         });
@@ -48,7 +49,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
-
+        user.setEmail("user@test.com");
         //after
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(1, user);
@@ -63,6 +64,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(2, user);
@@ -77,6 +79,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
+        user.setEmail("user@test.com");
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(2, user);
@@ -91,6 +94,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(3, user);
@@ -106,6 +110,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
+        user.setEmail("user@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(3, user);
@@ -120,6 +125,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(4, user);
@@ -134,6 +140,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
+        user.setEmail("user@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(4, user);
@@ -147,6 +154,7 @@ public class DefaultOrderServiceITest {
     public void testPreviousStatusFromReadyByAdmin() {
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(4, user);
@@ -160,6 +168,7 @@ public class DefaultOrderServiceITest {
     public void testPreviousStatusFromReadyByUser() {
         User user = new User();
         user.setUserRole(UserRole.USER);
+        user.setEmail("user@test.com");
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusBack(4, user);
@@ -173,6 +182,7 @@ public class DefaultOrderServiceITest {
     public void testPreviousStatusFromSelectedByAdmin() {
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(3, user);
@@ -187,6 +197,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
+        user.setEmail("user@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(3, user);
@@ -201,6 +212,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
+        user.setEmail("test@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(2, user);
@@ -215,6 +227,7 @@ public class DefaultOrderServiceITest {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
+        user.setEmail("user@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(2, user);
