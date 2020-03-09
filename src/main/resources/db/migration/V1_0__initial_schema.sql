@@ -1,12 +1,12 @@
 CREATE TABLE UserRole (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     roleName VARCHAR(20) NOT NULL
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE UserGender (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     genderName VARCHAR(20) NOT NULL
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE Users (
@@ -24,15 +24,15 @@ CREATE TABLE Users (
     zip INT UNSIGNED,
     address VARCHAR(500),
     INDEX(phoneNumber),
-    FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
-    FOREIGN KEY (genderId) REFERENCES UserGender(id)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    CONSTRAINT FK_UserRole FOREIGN KEY (userRoleId) REFERENCES UserRole(id),
+    CONSTRAINT FK_UserGender FOREIGN KEY (genderId) REFERENCES UserGender(id)
+) DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE OrderStatus (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     statusName VARCHAR(50) NOT NULL
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE Orders (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,20 +41,20 @@ CREATE TABLE Orders (
     userId INT NOT NULL,
     comment VARCHAR(500),
     INDEX(orderDate),
-    FOREIGN KEY (statusId) REFERENCES OrderStatus(id),
-    FOREIGN KEY (userId) REFERENCES Users(id)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    CONSTRAINT FK_OrderStatus FOREIGN KEY (statusId) REFERENCES OrderStatus(id),
+    CONSTRAINT FK_Users FOREIGN KEY (userId) REFERENCES Users(id)
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE PhotoStatus (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     statusName VARCHAR(50) NOT NULL
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE OrderPhotos (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     source VARCHAR(200) NOT NULL,
     orderId INT NOT NULL,
     photoStatusId INT NOT NULL,
-    FOREIGN KEY (orderId) REFERENCES Orders(id),
-    FOREIGN KEY (photoStatusId) REFERENCES PhotoStatus(id)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    CONSTRAINT FK_Orders FOREIGN KEY (orderId) REFERENCES Orders(id),
+    CONSTRAINT FK_PhotoStatus FOREIGN KEY (photoStatusId) REFERENCES PhotoStatus(id)
+) DEFAULT CHARSET=utf8mb4;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@
     </div>
     <!--Bread Crumb End-->
 
-    <a href="../user" class="btn new-user_button">New user</a>
+    <a th:if="${search} == null" th:href="@{/user}" class="btn new-user_button">New user</a>
 
     <h1 class="all-users_title">Users</h1>
 
@@ -46,7 +46,8 @@
             <td class="table_header"><img class="img-edit img-edit__header" src="../assets/images/user/Edit.svg"></td>
         </tr>
         <div th:each="user : ${users}">
-            <tr class="table_info">
+            <tr class="table_info double-click"
+                th:id="${orderId == null} ? '../order?newEmail=' + ${user.email} : '../order/' + ${orderId} +'?newEmail=' + ${user.email}">
                 <td class="table_info" th:text="${user.email}"></td>
                 <td class="table_info" th:text="${user.phoneNumber}"></td>
                 <td class="table_info" th:text="${user.firstName} +' '+ ${user.lastName} "></td>
@@ -62,6 +63,7 @@
         </div>
         </tbody>
     </table>
+    <a th:if="${search} != null" th:href="${orderId} == 0 ? @{'/order'} : @{'/order/' + ${orderId}}" class="btn new-user_button">Close</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -73,6 +75,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script src="../assets/js/user/user.js"></script>
 </body>
 
 </html>

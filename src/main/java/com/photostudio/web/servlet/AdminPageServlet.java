@@ -20,14 +20,9 @@ public class AdminPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.info("Request admin page received");
-        try {
-            Map<String, Object> paramsMap = new HashMap<>();
-            CommonVariableAppendService.appendUser(paramsMap, request);
-            response.setContentType("text/html;charset=utf-8");
-            TemplateEngineFactory.process(request, response, "admin-page", paramsMap);
-        } catch (IOException e) {
-            LOG.error("AdminPageServlet error", e);
-            throw new RuntimeException("AdminPageServlet error", e);
-        }
+        Map<String, Object> paramsMap = new HashMap<>();
+        CommonVariableAppendService.appendUser(paramsMap, request);
+        response.setContentType("text/html;charset=utf-8");
+        TemplateEngineFactory.process(request, response, "admin-page", paramsMap);
     }
 }

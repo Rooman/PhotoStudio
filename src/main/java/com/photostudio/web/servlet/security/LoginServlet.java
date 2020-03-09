@@ -5,6 +5,7 @@ import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
+import com.photostudio.web.util.CommonVariableAppendService;
 import com.photostudio.web.util.CookieManager;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import org.slf4j.Logger;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.photostudio.entity.user.UserRole.ADMIN;
 
@@ -29,16 +32,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.info("Request to login page received");
-        try {
-            Map<String, Object> paramsMap = new HashMap<>();
 
-            response.setContentType("text/html;charset=utf-8");
+        Map<String, Object> paramsMap = new HashMap<>();
 
-            TemplateEngineFactory.process(request, response, "login", paramsMap);
-        } catch (IOException e) {
-            LOG.error("LoginServlet doGet error", e);
-            throw new RuntimeException("LoginServlet error", e);
-        }
+        response.setContentType("text/html;charset=utf-8");
+
+        TemplateEngineFactory.process(request, response, "login", paramsMap);
     }
 
     @Override
