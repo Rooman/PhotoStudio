@@ -40,6 +40,8 @@ public class JdbcOrderDao implements OrderDao {
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
             "?, ?, ?)";
     private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
+    private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
+    private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
@@ -228,6 +230,47 @@ public class JdbcOrderDao implements OrderDao {
             throw new RuntimeException("Order " + id + " is not found in DB");
         }
         return status;
+    }
+
+    @Override
+    public int getPhotoCount(long id) {
+        log.info("Get photo count for order id: {}", id);
+        int result = 0;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_COUNT_PHOTO)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                    log.info("Count photos:{}", result);
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            log.error("Error during execution query GET_COUNT_PHOTO for order id = {}", id, e);
+            throw new RuntimeException("Error during execution query GET_COUNT_PHOTO for order id = " + id, e);
+        }
+    }
+
+    @Override
+    public int getPhotoCountByStatus(long id, int idPhotoStatus) {
+        log.info("Get photo count for order id: {}, photo status:{}", id, idPhotoStatus);
+        int result = 0;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_COUNT_PHOTO_BY_STATUS)) {
+            statement.setLong(1, id);
+            statement.setInt(2, idPhotoStatus);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                    log.info("Count photos:{}", result);
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            log.error("Error during execution query GET_COUNT_PHOTO_BY_STATUS for order id = {}", id, e);
+            throw new RuntimeException("Error during execution query GET_COUNT_PHOTO_BY_STATUS for order id = " + id, e);
+        }
     }
 
     @Override

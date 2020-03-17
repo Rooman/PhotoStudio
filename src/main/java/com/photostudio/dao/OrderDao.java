@@ -25,4 +25,8 @@ public interface OrderDao {
     void changeOrderStatus(long id, boolean forward);
 
     OrderStatus getOrderStatus(long id);
+
+    int getPhotoCount(long id);
+
+    int getPhotoCountByStatus(long id, int idPhotoStatus);
 }

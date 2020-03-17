@@ -77,9 +77,10 @@ public class DefaultOrderService implements OrderService {
     public void moveStatusForward(long id, User user) {
         log.info("Started service set next status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
-        if (checkByDBStatusForward(statusDb, user.getUserRole())) {
+        int newStatus = statusDb.ordinal() + 2; //+1 - next, +1 because enum from 0
+        if (checkByDBStatusForward(statusDb, user.getUserRole()) && checkPhoto(id, newStatus)) {
             orderDao.changeOrderStatus(id, true);
-            mailService.sendOnChangeStatus(user, id, statusDb.ordinal() + 2);//+1 - next, +1 because enum from 0
+            mailService.sendOnChangeStatus(user, id, newStatus);
         } else {
             log.error("Order status " + statusDb.getOrderStatusName() + " can't be changed forward");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed forward ");
@@ -90,9 +91,10 @@ public class DefaultOrderService implements OrderService {
     public void moveStatusBack(long id, User user) {
         log.info("Started service set previous status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
-        if (checkByDBStatusBack(statusDb, user.getUserRole())) {
+        int newStatus = statusDb.ordinal(); //-1
+        if (checkByDBStatusBack(statusDb, user.getUserRole()) && checkPhoto(id, newStatus)) {
             orderDao.changeOrderStatus(id, false);
-            mailService.sendOnChangeStatus(user, id, statusDb.ordinal()); //-1
+            mailService.sendOnChangeStatus(user, id, newStatus);
         } else {
             log.error("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
@@ -129,5 +131,24 @@ public class DefaultOrderService implements OrderService {
         return isCorrect;
     }
 
+    private boolean checkPhoto(long orderId, int newOrderStatus) {
+        boolean result = true;
+        if (newOrderStatus == 2) {
+            if (orderDao.getPhotoCount(orderId) == 0) {
+                throw new ChangeOrderStatusInvalidException("Photo should be loaded");
+            }
+        }
+        if (newOrderStatus == 3) {
+            if (orderDao.getPhotoCountByStatus(orderId, 2) == 0) {
+                throw new ChangeOrderStatusInvalidException("Photo should be selected");
+            }
+        }
+        if (newOrderStatus == 4) {
+            if (orderDao.getPhotoCountByStatus(orderId, 3) == 0) {
+                throw new ChangeOrderStatusInvalidException("Photo should be ready");
+            }
+        }
 
+        return result;
+    }
 }
