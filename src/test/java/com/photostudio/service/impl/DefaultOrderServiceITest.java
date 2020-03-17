@@ -2,16 +2,17 @@ package com.photostudio.service.impl;
 
 
 import com.photostudio.dao.jdbc.JdbcOrderDao;
+import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
+import com.photostudio.service.MailService;
+import com.photostudio.service.testUtils.MockMailSender;
+import com.photostudio.web.util.MailSender;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -19,15 +20,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DefaultOrderServiceITest {
-    private TestDataSource dataSource = new TestDataSource();
-    private DefaultOrderService orderService = new DefaultOrderService();
+    private static TestDataSource dataSource = new TestDataSource();
+    private static DefaultOrderService orderService;
+
+    @BeforeAll
+    public static void before() {
+        try {
+            JdbcDataSource jdbcDataSource = dataSource.init();
+            dataSource.runScript("db/data.sql");
+            JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+            JdbcUserDao jdbcUserDao = new JdbcUserDao(jdbcDataSource);
+            MockMailSender mockMailSender = new MockMailSender(dataSource);
+            MailSender mailSender = (MailSender) mockMailSender;
+            MailService mailService = new DefaultMailService(mailSender);
+            orderService = new DefaultOrderService(jdbcOrderDao, null, null, mailService);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @BeforeEach
-    public void before() throws SQLException, IOException {
-        JdbcDataSource jdbcDataSource = dataSource.init();
-        dataSource.runScript("db/data.sql");
-        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        orderService.setOrderDao(jdbcOrderDao);
+    public void beforeEach() {
+        try {
+            dataSource.execUpdate("DELETE FROM TestSentMails;");
+            dataSource.runScript("db/data_change_status.sql");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Test
@@ -42,6 +61,15 @@ public class DefaultOrderServiceITest {
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 1");
         assertEquals(2, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(1, cntMails);
+
+        String mailTo = dataSource.getString("SELECT mailto FROM TestSentMails");
+        assertEquals("test@test.com", mailTo);
+
+        String subject = dataSource.getString("SELECT subject FROM TestSentMails");
+        assertEquals("Order 1 is created", subject);
     }
 
     @Test
@@ -57,6 +85,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 1");
         assertEquals(1, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -72,6 +104,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
         assertEquals(2, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -87,6 +123,15 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
         assertEquals(3, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(1, cntMails);
+
+        String mailTo = dataSource.getString("SELECT mailto FROM TestSentMails");
+        assertEquals("admin@test.com", mailTo);
+
+        String subject = dataSource.getString("SELECT subject FROM TestSentMails");
+        assertEquals("User user@test.com selected photo for order:2", subject);
     }
 
     @Test
@@ -102,7 +147,17 @@ public class DefaultOrderServiceITest {
 
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
-        assertEquals(4, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(1, cntMails);
+
+        String mailTo = dataSource.getString("SELECT mailto FROM TestSentMails");
+        assertEquals("test@test.com", mailTo);
+
+        String subject = dataSource.getString("SELECT subject FROM TestSentMails");
+        assertEquals("Order 3 is ready", subject);
+
+
     }
 
     @Test
@@ -118,6 +173,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
         assertEquals(3, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -133,6 +192,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(4, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -148,6 +211,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(4, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -162,6 +229,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(4, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -176,6 +247,17 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(3, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(1, cntMails);
+
+        String mailTo = dataSource.getString("SELECT mailto FROM TestSentMails");
+        assertEquals("admin@test.com", mailTo);
+
+        String subject = dataSource.getString("SELECT subject FROM TestSentMails");
+        assertEquals("User user@test.com selected photo for order:4", subject);
+
+
     }
 
     @Test
@@ -190,6 +272,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
         assertEquals(3, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -205,6 +291,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
         assertEquals(3, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -220,6 +310,10 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
         assertEquals(2, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
     @Test
@@ -235,10 +329,14 @@ public class DefaultOrderServiceITest {
 
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
         assertEquals(2, statusOrder);
+
+        int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
+        assertEquals(0, cntMails);
+
     }
 
-    @AfterEach
-    public void after() throws SQLException {
+    @AfterAll
+    public static void after() throws SQLException {
         dataSource.close();
     }
 }

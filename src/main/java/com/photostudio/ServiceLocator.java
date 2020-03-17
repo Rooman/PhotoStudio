@@ -12,9 +12,11 @@ import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
+import com.photostudio.service.MailService;
 import com.photostudio.service.OrderCacheService;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
+import com.photostudio.service.impl.DefaultMailService;
 import com.photostudio.service.impl.DefaultOrderCacheService;
 import com.photostudio.service.impl.DefaultOrderService;
 import com.photostudio.service.impl.DefaultUserService;
@@ -54,14 +56,17 @@ public class ServiceLocator {
         UserService userService = new DefaultUserService(userDao);
         register(UserService.class, userService);
 
-        OrderService orderService = new DefaultOrderService();
+        MailSender mailSender = new MailSender();
+        register(MailSender.class, mailSender);
+
+        MailService mailService = new DefaultMailService(mailSender);
+        register(MailService.class, mailService);
+
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderCacheService, mailService);
         register(OrderService.class, orderService);
 
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
-
-        MailSender mailSender = new MailSender();
-        register(MailSender.class, mailSender);
 
         //mapper for JSON
         ObjectMapper mapper = new ObjectMapper();

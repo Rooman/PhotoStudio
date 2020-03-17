@@ -1,6 +1,5 @@
 package com.photostudio.service.impl;
 
-import com.photostudio.ServiceLocator;
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.OrderDao;
 import com.photostudio.entity.order.FilterParameters;
@@ -10,12 +9,11 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
-import com.photostudio.web.util.MailSender;
+import com.photostudio.service.MailService;
 
 import com.photostudio.service.OrderCacheService;
 import com.photostudio.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
-
 
 
 import javax.servlet.http.Part;
@@ -23,10 +21,17 @@ import java.util.List;
 
 @Slf4j
 public class DefaultOrderService implements OrderService {
-    private OrderDao orderDao = ServiceLocator.getService(OrderDao.class);
-    private PhotoDao photoDao = ServiceLocator.getService(PhotoDao.class);
-    private OrderCacheService orderCacheService = ServiceLocator.getService(OrderCacheService.class);
-    private MailSender mailSender = ServiceLocator.getService(MailSender.class);
+    private OrderDao orderDao;
+    private PhotoDao photoDao;
+    private OrderCacheService orderCacheService;
+    private MailService mailService;
+
+    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderCacheService orderCacheService, MailService mailService) {
+        this.orderDao = orderDao;
+        this.photoDao = photoDao;
+        this.orderCacheService = orderCacheService;
+        this.mailService = mailService;
+    }
 
     @Override
     public List<Order> getAll() {
@@ -74,7 +79,7 @@ public class DefaultOrderService implements OrderService {
         OrderStatus statusDb = orderDao.getOrderStatus(id);
         if (checkByDBStatusForward(statusDb, user.getUserRole())) {
             orderDao.changeOrderStatus(id, true);
-            sendMail(user.getEmail(), id,statusDb.ordinal() + 2);//+1 - next, +1 because enum from 0
+            mailService.sendOnChangeStatus(user, id, statusDb.ordinal() + 2);//+1 - next, +1 because enum from 0
         } else {
             log.error("Order status " + statusDb.getOrderStatusName() + " can't be changed forward");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed forward ");
@@ -87,7 +92,7 @@ public class DefaultOrderService implements OrderService {
         OrderStatus statusDb = orderDao.getOrderStatus(id);
         if (checkByDBStatusBack(statusDb, user.getUserRole())) {
             orderDao.changeOrderStatus(id, false);
-            sendMail(user.getEmail(), id, statusDb.ordinal()); //-1
+            mailService.sendOnChangeStatus(user, id, statusDb.ordinal()); //-1
         } else {
             log.error("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
@@ -124,27 +129,5 @@ public class DefaultOrderService implements OrderService {
         return isCorrect;
     }
 
-    private void sendMail(String userMail, long orderId, int statusOrder) {
-        log.info("Send mail after changong status :{}", statusOrder);
-        switch (statusOrder) {
-            case 2: {
-                mailSender.send("Order " + orderId + " is created", "You can choose photo in order " + orderId, userMail);
-                break;
-            }
-            case 3: {
-                mailSender.send("User " + userMail + " selected photo for order:", "", userMail);
-                break;
-            }
-            case 4: {
-                mailSender.send("Order "+orderId +" ready", "You can download selected photo", userMail);
-                break;
-            }
-        }
-    }
 
-
-    //For tests
-    void setOrderDao(OrderDao orderDao) {
-        this.orderDao = orderDao;
-    }
 }

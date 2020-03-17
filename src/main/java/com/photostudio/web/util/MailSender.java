@@ -43,4 +43,8 @@ public class MailSender {
             throw new RuntimeException("Mail was not send to " + toEmail, e);
         }
     }
+
+    public void sendToAdmin(String subject, String text) {
+        send(subject, text, adminEmail);
+    }
 }
