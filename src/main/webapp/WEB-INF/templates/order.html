@@ -33,6 +33,9 @@
 
 <h1 class="order__title">Order</h1>
 
+<h2 class="error" align="center"  th:if="${errorMessage!=null}" th:text="${errorMessage}"></h2>
+
+
 <!--<form id="fileUploadForm" method="post" th:action="@{/order}" >-->
 <div class="container order">
     <div class="order__main-info">
@@ -83,8 +86,9 @@
                     </label>
 
                 <!--                Input->btn+msg!!!!!!!!-->
-                <input class="btn btn-submit btn-outline-dark button order__button photo-add-button"
+               <!-- <input class="btn btn-submit btn-outline-dark button order__button photo-add-button"
                        type="file" name="photo" style="display:none" multiple="multiple">Add</input>
+               -->
 
                 <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all
                 </button>
@@ -95,7 +99,7 @@
 
             <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
             </button>
-            <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button">
+            <button class="btn btn-submit btn-outline-dark button order__button view-select-button" form="change_status">
                 Status to view
                 and
                 select
@@ -104,6 +108,7 @@
         </div>
     </form>
     <form id="old" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+    <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
 </div>
 <!--</form>-->
 

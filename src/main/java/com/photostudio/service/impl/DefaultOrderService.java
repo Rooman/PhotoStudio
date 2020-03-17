@@ -132,20 +132,21 @@ public class DefaultOrderService implements OrderService {
     }
 
     private boolean checkPhoto(long orderId, int newOrderStatus) {
+        log.info("Check photo in DB for order:{} new status:{}", orderId, newOrderStatus);
         boolean result = true;
         if (newOrderStatus == 2) {
             if (orderDao.getPhotoCount(orderId) == 0) {
-                throw new ChangeOrderStatusInvalidException("Photo should be loaded");
+                throw new ChangeOrderStatusInvalidException("Photos should be loaded");
             }
         }
         if (newOrderStatus == 3) {
             if (orderDao.getPhotoCountByStatus(orderId, 2) == 0) {
-                throw new ChangeOrderStatusInvalidException("Photo should be selected");
+                throw new ChangeOrderStatusInvalidException("Photos should be selected");
             }
         }
         if (newOrderStatus == 4) {
             if (orderDao.getPhotoCountByStatus(orderId, 3) == 0) {
-                throw new ChangeOrderStatusInvalidException("Photo should be ready");
+                throw new ChangeOrderStatusInvalidException("Photos should be ready");
             }
         }
 
