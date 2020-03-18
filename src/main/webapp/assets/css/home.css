@@ -3,10 +3,15 @@
 }
 
 .baby-image_intro {
+   background: url("../images/baby-intro.jpg") no-repeat;
+   background-size: cover;
     margin-top: -140px;
+    height: 1613px;
+    width: 100%;
 }
 
 .home__main-title {
+    max-width: 150px;
     font-weight: 300;
     font-size: 144px;
     line-height: 150px;

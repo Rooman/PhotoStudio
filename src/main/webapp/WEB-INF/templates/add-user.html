@@ -36,8 +36,10 @@
                 <div class="login-form_between">
 
                     <input type="email" class="form-control  " id="email" placeholder="Email "
-                           name="email">
-                    <input type="text" class="form-control  " id="phoneNumber" placeholder="Phone"
+                           name="email" required>
+                    <input type="tel" pattern="[1-9][0-9]{5,15}"
+                           placeholder="Phone"
+                           class="form-control  " id="phoneNumber"
                            name="phoneNumber">
 
                 </div>

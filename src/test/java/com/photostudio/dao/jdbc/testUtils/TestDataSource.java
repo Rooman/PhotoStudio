@@ -1,15 +1,11 @@
 package com.photostudio.dao.jdbc.testUtils;
 
-
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class TestDataSource {
     private Connection connection;
@@ -59,6 +55,27 @@ public class TestDataSource {
             throw new RuntimeException("Error in the getResult:", ex);
         }
         return result;
+    }
+
+    public String getString(String sqlQuery) {
+        String result = null;
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sqlQuery)) {
+            if (resultSet.next()) {
+                result = resultSet.getString(1);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error in the getString:", ex);
+        }
+        return result;
+    }
+
+    public void execUpdate(String sql) {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error in the execUpdate:", ex);
+        }
     }
 
     public void close() throws SQLException {
