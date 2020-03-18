@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class JdbcOrderChangeStatusTest {
+public class JdbcOrderChangeStatusITest {
     private TestDataSource dataSource = new TestDataSource();
     private JdbcOrderDao jdbcOrderDao;
 

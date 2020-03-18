@@ -17,12 +17,12 @@ public interface OrderService {
 
     List<Order> getOrdersByUserId(long userId);
 
-    void delete(long id);
+    void delete(int id);
 
     int add(Order order, List<Part> photoToUpload);
 
-    void moveStatusForward(long id, User user);
+    void moveStatusForward(int id, User user);
 
-    void moveStatusBack(long id, User user);
+    void moveStatusBack(int id, User user);
 
 }

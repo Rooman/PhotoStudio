@@ -27,7 +27,7 @@ public class ChangeOrderStatusServlet extends HttpServlet {
         String uri = request.getRequestURI();
         log.info("Request change order status is received: order {}", uri);
         String[] partsOfUri = uri.split("/");
-        long orderId = Long.parseLong(partsOfUri[partsOfUri.length - 1]);
+        int orderId = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
 
         log.info("Request change order status is received: order {}", orderId);
 

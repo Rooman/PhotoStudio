@@ -16,17 +16,17 @@ public interface OrderDao {
 
     Order getOrderByIdInStatusNew(int id);
 
-    void delete(long id);
+    void delete(int id);
 
     int add(Order order, int orderStatusId);
 
     void savePhotos(Order order, int orderId, List<String> photosPath);
 
-    void changeOrderStatus(long id, boolean forward);
+    void changeOrderStatus(int id, boolean forward);
 
-    OrderStatus getOrderStatus(long id);
+    OrderStatus getOrderStatus(int id);
 
-    int getPhotoCount(long id);
+    int getPhotoCount(int id);
 
-    int getPhotoCountByStatus(long id, int idPhotoStatus);
+    int getPhotoCountByStatus(int id, int idPhotoStatus);
 }

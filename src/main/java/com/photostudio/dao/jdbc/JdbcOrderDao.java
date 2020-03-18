@@ -164,7 +164,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(int id) {
         log.info("Delete order by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
@@ -179,6 +179,7 @@ public class JdbcOrderDao implements OrderDao {
                 log.info("Order by id: {} and photos deleted from DB", id);
             } catch (SQLException e) {
                 connection.rollback();
+                log.error("Rollback- Error during delete order {}", id, e);
                 throw new RuntimeException("Error during delete order", e);
             } finally {
                 connection.setAutoCommit(true);
@@ -190,7 +191,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void changeOrderStatus(long id, boolean forward) {
+    public void changeOrderStatus(int id, boolean forward) {
         log.info("Change order status by id: {} ", id);
         int step = (forward) ? 1 : -1;
         try (Connection connection = dataSource.getConnection();
@@ -209,7 +210,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public OrderStatus getOrderStatus(long id) {
+    public OrderStatus getOrderStatus(int id) {
         log.info("Get order status by id: {}", id);
         OrderStatus status = null;
         try (Connection connection = dataSource.getConnection();
@@ -218,22 +219,21 @@ public class JdbcOrderDao implements OrderDao {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     status = OrderStatus.getOrderStatus(resultSet.getString(1));
-                    log.info("Order status:{}", status);
+                    log.info("Order status: {}", status);
+                } else {
+                    log.error("Order {} is not found in DB", id);
+                    throw new RuntimeException("Order " + id + " is not found in DB");
                 }
             }
         } catch (SQLException e) {
             log.error("Error during get status order id = {}", id, e);
             throw new RuntimeException("Error during get status order id = " + id, e);
         }
-        if (status == null) {
-            log.error("Order {} is not found in DB", id);
-            throw new RuntimeException("Order " + id + " is not found in DB");
-        }
         return status;
     }
 
     @Override
-    public int getPhotoCount(long id) {
+    public int getPhotoCount(int id) {
         log.info("Get photo count for order id: {}", id);
         int result = 0;
         try (Connection connection = dataSource.getConnection();
@@ -242,7 +242,7 @@ public class JdbcOrderDao implements OrderDao {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     result = resultSet.getInt(1);
-                    log.info("Count photos:{}", result);
+                    log.info("Count photos: {}", result);
                 }
             }
             return result;
@@ -253,8 +253,8 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public int getPhotoCountByStatus(long id, int idPhotoStatus) {
-        log.info("Get photo count for order id: {}, photo status:{}", id, idPhotoStatus);
+    public int getPhotoCountByStatus(int id, int idPhotoStatus) {
+        log.info("Get photo count for order id: {}, photo status: {}", id, idPhotoStatus);
         int result = 0;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(GET_COUNT_PHOTO_BY_STATUS)) {
@@ -263,7 +263,7 @@ public class JdbcOrderDao implements OrderDao {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     result = resultSet.getInt(1);
-                    log.info("Count photos:{}", result);
+                    log.info("Count photos: {}", result);
                 }
             }
             return result;

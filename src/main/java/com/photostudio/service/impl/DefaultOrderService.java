@@ -66,7 +66,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(int id) {
         log.info("Started service delete order by id ");
         photoDao.deleteByOrder(id);
         orderDao.delete(id);
@@ -74,7 +74,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
 
-    public void moveStatusForward(long id, User user) {
+    public void moveStatusForward(int id, User user) {
         log.info("Started service set next status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
         int newStatus = statusDb.ordinal() + 2; //+1 - next, +1 because enum from 0
@@ -88,7 +88,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void moveStatusBack(long id, User user) {
+    public void moveStatusBack(int id, User user) {
         log.info("Started service set previous status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
         int newStatus = statusDb.ordinal(); //-1
@@ -120,7 +120,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     private boolean checkByDBStatusBack(OrderStatus statusDB, UserRole userRole) {
-        log.info("Check status in DB for change status back: {} by user ", statusDB, userRole);
+        log.info("Check status in DB for change status back: {} by user {}", statusDB, userRole);
         boolean isCorrect = true;
         if (statusDB != OrderStatus.READY) {
             isCorrect = false;
@@ -131,21 +131,24 @@ public class DefaultOrderService implements OrderService {
         return isCorrect;
     }
 
-    private boolean checkPhoto(long orderId, int newOrderStatus) {
-        log.info("Check photo in DB for order:{} new status:{}", orderId, newOrderStatus);
+    private boolean checkPhoto(int orderId, int newOrderStatus) {
+        log.info("Check photo in DB for order: {} new status: {}", orderId, newOrderStatus);
         boolean result = true;
         if (newOrderStatus == 2) {
             if (orderDao.getPhotoCount(orderId) == 0) {
+                log.error("Photos should be loaded");
                 throw new ChangeOrderStatusInvalidException("Photos should be loaded");
             }
         }
         if (newOrderStatus == 3) {
             if (orderDao.getPhotoCountByStatus(orderId, 2) == 0) {
+                log.error("Photos should be selected");
                 throw new ChangeOrderStatusInvalidException("Photos should be selected");
             }
         }
         if (newOrderStatus == 4) {
             if (orderDao.getPhotoCountByStatus(orderId, 3) == 0) {
+                log.error("Photos should be ready");
                 throw new ChangeOrderStatusInvalidException("Photos should be ready");
             }
         }
