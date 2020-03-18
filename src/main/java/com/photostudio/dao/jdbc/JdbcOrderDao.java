@@ -2,7 +2,8 @@ package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
-import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
+import com.photostudio.dao.jdbc.mapper.OrderWithPhotosRowMapper;
+import com.photostudio.dao.jdbc.mapper.PhotoSourceRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, phoneNumber, comment " +
+    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, comment " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
@@ -39,7 +40,8 @@ public class JdbcOrderDao implements OrderDao {
     private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
-    private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
+    private static final OrderWithPhotosRowMapper ORDER_WITH_PHOTOS_ROW_MAPPER = new OrderWithPhotosRowMapper();
+    private static final PhotoSourceRowMapper PHOTO_SOURCE_ROW_MAPPER = new PhotoSourceRowMapper();
 
     private DataSource dataSource;
 
@@ -143,40 +145,35 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public Order getOrderByIdInStatusNew(int id) {
-        log.info("Started service get order by id:{} in status NEW from DB", id);
-        String resultQuery = GET_ORDER_BY_ID_IN_STATUS_NEW + GET_PHOTOS_BY_ORDER_ID;
+        log.info("Started service get order by id: {} in status NEW from DB", id);
+        String resultQuery = GET_PHOTOS_BY_ORDER_ID + GET_ORDER_BY_ID_IN_STATUS_NEW;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
             preparedStatement.setInt(1, id);
             preparedStatement.setInt(2, id);
 
             preparedStatement.execute();
-            Order order;
+            List<String> photoSources = new ArrayList<>();
 
-            try (ResultSet orderResultSet = preparedStatement.getResultSet()) {
-                log.info("Get main information about order with id: {}", id);
-                orderResultSet.next();
-                order = ORDER_ROW_MAPPER.mapRow(orderResultSet);
-            }
-
-            if (preparedStatement.getMoreResults()) {
-                List<String> photoSources = new ArrayList<>();
-                try (ResultSet photoResultSet = preparedStatement.getResultSet()) {
-                    while (photoResultSet.next()) {
-                        photoSources.add(photoResultSet.getString("source"));
-                    }
-                    if (photoSources.size() != 0) {
-                        log.info("Add photos to order with id: {}", id);
-                        return order.getOrderWithPhotos(photoSources);
-                    }
+            try (ResultSet photoResultSet = preparedStatement.getResultSet()) {
+                log.info("Assemble photo sources for order with id: {}", id);
+                while (photoResultSet.next()) {
+                    String photoSource = PHOTO_SOURCE_ROW_MAPPER.mapRow(photoResultSet);
+                    photoSources.add(photoSource);
                 }
             }
-            return order;
+            preparedStatement.getMoreResults();
+            try (ResultSet orderResultSet = preparedStatement.getResultSet()) {
+                log.info("Assemble main information about order with id: {}", id);
+                orderResultSet.next();
+                return ORDER_WITH_PHOTOS_ROW_MAPPER.mapRow(orderResultSet, photoSources);
+            }
 
         } catch (SQLException e) {
-            log.error("Get order by id:{} in status NEW error", id, e);
+            log.error("Get order by id: {} in status NEW error", id, e);
             throw new RuntimeException("Get order by id " + id + " in status NEW error", e);
         }
+
     }
 
     @Override

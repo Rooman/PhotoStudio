@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @ToString
 @Builder
@@ -18,17 +17,4 @@ public final class Order {
     private User user;
     private String comment;
     private List<String> photoSources;
-
-    private Order(Order order, List<String> sources) {
-        this.id = order.id;
-        this.status = order.status;
-        this.orderDate = order.orderDate;
-        this.user = order.user;
-        this.comment = order.comment;
-        this.photoSources = sources;
-    }
-
-    public Order getOrderWithPhotos(List<String> sources) {
-        return new Order(this, sources);
-    }
 }
