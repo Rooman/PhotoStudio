@@ -1,30 +1,40 @@
 package com.photostudio.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.io.PrintStream;
 import java.util.Properties;
 
+@Slf4j
 public class PropertyReader {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private String path;
+    private Properties properties;
 
     public PropertyReader(String path) {
         this.path = path;
+        properties = getAllProperties();
     }
 
-    public Properties getProperties() {
-        LOG.info("Try get properties");
+    public String getString(String propertyName) {
+        return properties.getProperty(propertyName);
+    }
+
+    public Integer getInt(String propertyName) {
+        String strProperty = getString(propertyName);
+
+        return strProperty == null ? null : Integer.valueOf(strProperty);
+    }
+
+    public Properties getAllProperties() {
+        log.info("Try get properties");
         String prodEnvironment = System.getenv("environment");
         if (prodEnvironment != null && prodEnvironment.equalsIgnoreCase("PROD")) {
-            LOG.info("Type of properties is production");
+            log.info("Type of properties is production");
             return getProdProperties();
         }
-        LOG.info("Type of properties is development");
+        log.info("Type of properties is development");
         return getDevProperties();
     }
 
@@ -34,36 +44,33 @@ public class PropertyReader {
 
             String dbUrl = System.getenv("JDBC_DATABASE_URL");
             properties.setProperty("jdbc.url", dbUrl);
-            LOG.debug("Set jdbc.url: {}", dbUrl);
+            log.debug("Set jdbc.url: {}", dbUrl);
 
             String dirPhoto = System.getenv("dir_photo");
             properties.setProperty("dir.photo", dirPhoto);
-            LOG.debug("Set dir.photo: {}", dirPhoto);
+            log.debug("Set dir.photo: {}", dirPhoto);
 
             String adminMailPassword = System.getenv("ADMIN_MAIL_PASSWORD");
             properties.setProperty("mail.admin.password", adminMailPassword);
-            LOG.debug("Set admin.mail.password: {}", adminMailPassword);
+            log.debug("Set admin.mail.password: {}", adminMailPassword);
 
             return properties;
         } catch (Exception e) {
-            LOG.error("Error while were trying to get connection properties on production environment", e);
+            log.error("Error while were trying to get connection properties on production environment", e);
             throw new RuntimeException("Exception while were trying to get connection properties on production environment", e);
         }
     }
 
     private Properties getDevProperties() {
         Properties properties = new Properties();
-        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path)) {
-            if (inputStream == null) {
-                throw new IllegalArgumentException("No properties on path " + path);
-            }
-            properties.load(inputStream);
-            LOG.debug("Read properties from path: {}", path);
-            return properties;
+        try {
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(path);
+            properties.load(resourceAsStream);
         } catch (IOException e) {
-            LOG.error("Can't read properties file: {} ", path, e);
-            throw new RuntimeException("Can't read properties file " + path, e);
+            log.error("Cant read properties file on the path: {}", path);
+            throw new RuntimeException("File with properties could not be read", e);
         }
-
+        log.info("Property file was successfully loaded: {}", path);
+        return properties;
     }
 }
