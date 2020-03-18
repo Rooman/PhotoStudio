@@ -174,7 +174,7 @@ public class JdbcOrderDao implements OrderDao {
             return order;
 
         } catch (SQLException e) {
-            log.error("Get order by id:{} in status NEW error", id);
+            log.error("Get order by id:{} in status NEW error", id, e);
             throw new RuntimeException("Get order by id " + id + " in status NEW error", e);
         }
     }
