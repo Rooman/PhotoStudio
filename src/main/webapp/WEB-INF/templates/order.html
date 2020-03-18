@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" class="no-js">
 
 <head>
     <head>
@@ -77,12 +77,15 @@
                 </div>
                 <div class="photo-add-delete-buttons">
 
-                    <label class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
-                        Add <input type="file" style="display: none;" name="photo" multiple="multiple"/>
+                    <input type="file" name="file" id="file" class="inputfile"
+                           data-multiple-caption="{count} files selected" multiple/>
+                    <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
+                        <span>Add</span>
                     </label>
 
                     <a class="photo-option" href="#">
-                        <button type="button" class="btn btn-submit btn-outline-dark button order__button photo-delete-button">
+                        <button type="button"
+                                class="btn btn-submit btn-outline-dark button order__button photo-delete-button">
                             Delete all
                         </button>
                     </a>
@@ -103,7 +106,6 @@
         </form>
     </div>
 </form>
-
 </body>
 <meta th:replace="fragment/script.html :: script">
 </html>
