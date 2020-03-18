@@ -7,6 +7,7 @@ import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import com.photostudio.entity.order.OrderStatus;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -31,12 +32,16 @@ public class JdbcOrderDao implements OrderDao {
             "JOIN Users u ON o.userId = u.id " +
             "LEFT JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
 
+    private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+    private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = o.statusId + ?  WHERE o.id = ?";
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
             "?, ?, ?)";
     private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
+    private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
+    private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final OrderWithPhotoRowMapper ORDER_WITH_PHOTO_ROW_MAPPER = new OrderWithPhotoRowMapper();
@@ -159,7 +164,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(int id) {
         log.info("Delete order by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
@@ -174,12 +179,97 @@ public class JdbcOrderDao implements OrderDao {
                 log.info("Order by id: {} and photos deleted from DB", id);
             } catch (SQLException e) {
                 connection.rollback();
+                log.error("Rollback- Error during delete order {}", id, e);
                 throw new RuntimeException("Error during delete order", e);
+            } finally {
+                connection.setAutoCommit(true);
             }
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
             log.error("Error during delete order {}", id, e);
             throw new RuntimeException("Error - Order is not deleted from db", e);
+        }
+    }
+
+    @Override
+    public void changeOrderStatus(int id, boolean forward) {
+        log.info("Change order status by id: {} ", id);
+        int step = (forward) ? 1 : -1;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS)) {
+
+            statement.setInt(1, step);
+            statement.setLong(2, id);
+
+            statement.execute();
+
+            log.info("Order status changed successfully");
+        } catch (SQLException e) {
+            log.error("Error during changing status order id= {}", id, e);
+            throw new RuntimeException("Error - Order status is not changed", e);
+        }
+    }
+
+    @Override
+    public OrderStatus getOrderStatus(int id) {
+        log.info("Get order status by id: {}", id);
+        OrderStatus status = null;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_ORDER_STATUS)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    status = OrderStatus.getOrderStatus(resultSet.getString(1));
+                    log.info("Order status: {}", status);
+                } else {
+                    log.error("Order {} is not found in DB", id);
+                    throw new RuntimeException("Order " + id + " is not found in DB");
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error during get status order id = {}", id, e);
+            throw new RuntimeException("Error during get status order id = " + id, e);
+        }
+        return status;
+    }
+
+    @Override
+    public int getPhotoCount(int id) {
+        log.info("Get photo count for order id: {}", id);
+        int result = 0;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_COUNT_PHOTO)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                    log.info("Count photos: {}", result);
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            log.error("Error during execution query GET_COUNT_PHOTO for order id = {}", id, e);
+            throw new RuntimeException("Error during execution query GET_COUNT_PHOTO for order id = " + id, e);
+        }
+    }
+
+    @Override
+    public int getPhotoCountByStatus(int id, int idPhotoStatus) {
+        log.info("Get photo count for order id: {}, photo status: {}", id, idPhotoStatus);
+        int result = 0;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_COUNT_PHOTO_BY_STATUS)) {
+            statement.setLong(1, id);
+            statement.setInt(2, idPhotoStatus);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1);
+                    log.info("Count photos: {}", result);
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            log.error("Error during execution query GET_COUNT_PHOTO_BY_STATUS for order id = {}", id, e);
+            throw new RuntimeException("Error during execution query GET_COUNT_PHOTO_BY_STATUS for order id = " + id, e);
         }
     }
 
@@ -215,7 +305,6 @@ public class JdbcOrderDao implements OrderDao {
 
 
     @Override
-
     public void savePhotos(Order order, int orderId, List<String> photosPaths) {
         log.info("Save photos to DB");
         for (String pathToPhoto : photosPaths) {

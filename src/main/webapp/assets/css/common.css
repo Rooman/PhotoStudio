@@ -252,4 +252,7 @@ button.user-menu__item:hover {
     text-decoration:underline;
 }
 
+.error {
+ color: red;
+}
 /* User dropdown menu on Navigation end*/
