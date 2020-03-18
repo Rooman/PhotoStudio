@@ -2,7 +2,6 @@ package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.OrderDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
-import com.photostudio.dao.jdbc.mapper.OrderWithPhotosRowMapper;
 import com.photostudio.dao.jdbc.mapper.PhotoSourceRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
@@ -25,7 +24,7 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, comment " +
+    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, phoneNumber, comment " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
@@ -44,7 +43,6 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
-    private static final OrderWithPhotosRowMapper ORDER_WITH_PHOTOS_ROW_MAPPER = new OrderWithPhotosRowMapper();
     private static final PhotoSourceRowMapper PHOTO_SOURCE_ROW_MAPPER = new PhotoSourceRowMapper();
 
     private DataSource dataSource;
@@ -173,7 +171,10 @@ public class JdbcOrderDao implements OrderDao {
             try (ResultSet orderResultSet = preparedStatement.getResultSet()) {
                 log.info("Assemble main information about order with id: {}", id);
                 orderResultSet.next();
-                return ORDER_WITH_PHOTOS_ROW_MAPPER.mapRow(orderResultSet, photoSources);
+                Order order = ORDER_ROW_MAPPER.mapRow(orderResultSet);
+                order.getPhotoSources().addAll(photoSources);
+
+                return order;
             }
 
         } catch (SQLException e) {
