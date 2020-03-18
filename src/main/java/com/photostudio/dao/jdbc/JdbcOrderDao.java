@@ -162,7 +162,10 @@ public class JdbcOrderDao implements OrderDao {
                     photoSources.add(photoSource);
                 }
             }
-            preparedStatement.getMoreResults();
+            if (!preparedStatement.getMoreResults()) {
+                log.error("Get more resultSet for order with id: {} error", id);
+                throw new RuntimeException("Get more resultSet for order with id: " + id + " error");
+            }
             try (ResultSet orderResultSet = preparedStatement.getResultSet()) {
                 log.info("Assemble main information about order with id: {}", id);
                 orderResultSet.next();
