@@ -30,11 +30,11 @@ public class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();
 
     static {
-        //config properties
-        Properties properties = new PropertyReader("application.properties").getProperties();
+        //config property reader util class
+        PropertyReader propertyReader = new PropertyReader("application.properties");
 
         //config db connection
-        DataSource dataSource = new DataSourceFactory(properties).createDataSource();
+        DataSource dataSource = new DataSourceFactory(propertyReader).createDataSource();
 
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
@@ -48,7 +48,7 @@ public class ServiceLocator {
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
 
-        PhotoDao photoDiskDao = new LocalDiskPhotoDao(properties.getProperty("dir.photo"));
+        PhotoDao photoDiskDao = new LocalDiskPhotoDao(propertyReader.getString("dir.photo"));
         register(PhotoDao.class, photoDiskDao);
 
         UserService userService = new DefaultUserService(userDao);
