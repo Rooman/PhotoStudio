@@ -1,8 +1,6 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.ServiceLocator;
 import com.photostudio.dao.OrderDao;
-import com.photostudio.dao.OrderStatusDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.dao.jdbc.mapper.OrderWithPhotoRowMapper;
 import com.photostudio.entity.order.FilterParameters;
@@ -25,14 +23,16 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, comment, source " +
+    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, phoneNumber, comment " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
-            "LEFT JOIN OrderPhotos op ON o.id = op.orderId WHERE o.id=? and statusName='NEW'";
+            "WHERE o.id=? and statusName='NEW';";
 
-    private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
-    private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+    private static final String GET_PHOTOS_BY_ORDER_ID = "SELECT source FROM OrderPhotos WHERE orderId=?;";
+
+    private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?;";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?;";
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
             "?, ?, ?)";
@@ -144,13 +144,34 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public Order getOrderByIdInStatusNew(int id) {
         log.info("Started service get order by id:{} in status NEW from DB", id);
+        String resultQuery = GET_ORDER_BY_ID_IN_STATUS_NEW + GET_PHOTOS_BY_ORDER_ID;
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_IN_STATUS_NEW)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
             preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, id);
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return ORDER_WITH_PHOTO_ROW_MAPPER.mapRow(resultSet);
+            preparedStatement.execute();
+            Order order;
+
+            try (ResultSet orderResultSet = preparedStatement.getResultSet()) {
+                log.info("Get main information about order with id: {}", id);
+                orderResultSet.next();
+                order = ORDER_ROW_MAPPER.mapRow(orderResultSet);
             }
+
+            if (preparedStatement.getMoreResults()) {
+                List<String> photoSources = new ArrayList<>();
+                try (ResultSet photoResultSet = preparedStatement.getResultSet()) {
+                    while (photoResultSet.next()) {
+                        photoSources.add(photoResultSet.getString("source"));
+                    }
+                    if (photoSources.size() != 0) {
+                        log.info("Add photos to order with id: {}", id);
+                        return order.getOrderWithPhotos(photoSources);
+                    }
+                }
+            }
+            return order;
 
         } catch (SQLException e) {
             log.error("Get order by id:{} in status NEW error", id);
