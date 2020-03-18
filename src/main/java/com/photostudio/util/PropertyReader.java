@@ -63,14 +63,17 @@ public class PropertyReader {
 
     private Properties getDevProperties() {
         Properties properties = new Properties();
-        try {
-            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(path);
-            properties.load(resourceAsStream);
+        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("No properties on path " + path);
+            }
+            properties.load(inputStream);
+            log.debug("Read properties from path: {}", path);
+            return properties;
         } catch (IOException e) {
-            log.error("Cant read properties file on the path: {}", path);
-            throw new RuntimeException("File with properties could not be read", e);
+            log.error("Can't read properties file: {} ", path, e);
+            throw new RuntimeException("Can't read properties file " + path, e);
         }
-        log.info("Property file was successfully loaded: {}", path);
-        return properties;
+
     }
 }
