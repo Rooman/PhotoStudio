@@ -81,8 +81,8 @@
             </div>
             <div class="photo-add-delete-buttons">
 
-                <input type="file" name="file" id="file" class="inputfile"
-                       data-multiple-caption="{count} files selected" multiple/>
+                <input type="file" name="photo" id="file" class="inputfile"
+                       data-multiple-caption="{count} file(s) selected" multiple/>
                 <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
                     <span>Add</span>
                 </label>
@@ -111,4 +111,7 @@
 </div>
 </body>
 <meta th:replace="fragment/script.html :: script">
+
+<script th:src="@{/assets/js/order/custom-file-input.js}"></script>
+
 </html>

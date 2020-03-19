@@ -1,28 +1,22 @@
-;( function ( document, window, index )
-{
-	let inputs = document.querySelectorAll( '.inputfile' );
-	Array.prototype.forEach.call( inputs, function( input )
-	{
-		let label	 = input.nextElementSibling,
-			labelVal = label.innerHTML;
+let inputs = document.querySelectorAll('.inputfile');
 
-		input.addEventListener( 'change', function( e )
-		{
-			let fileName = '';
-			if( this.files && this.files.length > 1 )
-				fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-			else
-				fileName = e.target.value.split( '\\' ).pop();
+inputs.forEach(function (input) {
+    let label = input.nextElementSibling,
+        labelVal = label.innerHTML;
 
-			if( fileName )
-				label.querySelector( 'span' ).innerHTML = fileName;
-			else
-				label.innerHTML = labelVal;
-		});
-		// Firefox bug fix
-		input.addEventListener( 'focus', function(){ input.classList.add( 'has-focus' ); });
-		input.addEventListener( 'blur', function(){ input.classList.remove( 'has-focus' ); });
-	});
-}( document, window, 0 ));
+    input.addEventListener('change', function () {
+        let fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
 
- (function(e,t,n){let r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|s)no-js(s|$)/,"$1js$2")})(document,window,0);
+        if (fileName)
+            label.querySelector('span').innerHTML = fileName;
+        else
+            label.innerHTML = labelVal;
+    });
+    // Firefox bug fix
+    input.addEventListener('focus', function () {
+        input.classList.add('has-focus');
+    });
+    input.addEventListener('blur', function () {
+        input.classList.remove('has-focus');
+    });
+});
