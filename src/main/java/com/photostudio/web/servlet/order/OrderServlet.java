@@ -27,10 +27,13 @@ public class OrderServlet extends HttpServlet {
         int idFromUri = Integer.parseInt(uri.substring(uri.lastIndexOf("/") + 1));
         String newEmail = request.getParameter("newEmail");
 
+        String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+
         Map<String, Object> paramsMap = new HashMap<>();
         CommonVariableAppendService.appendUser(paramsMap, request);
 
         log.info("Request get order page by id:{}", idFromUri);
+        log.info("errorMessage:{}", errorMessage);
 
         Order order = orderService.getOrderByIdInStatusNew(idFromUri);
         request.setAttribute("orderId", idFromUri);
@@ -39,6 +42,7 @@ public class OrderServlet extends HttpServlet {
             paramsMap.put("newEmail", newEmail);
         }
         paramsMap.put("order", order);
+        paramsMap.put("errorMessage", errorMessage);
 
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);

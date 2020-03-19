@@ -57,6 +57,27 @@ public class TestDataSource {
         return result;
     }
 
+    public String getString(String sqlQuery) {
+        String result = null;
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sqlQuery)) {
+            if (resultSet.next()) {
+                result = resultSet.getString(1);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error in the getString:", ex);
+        }
+        return result;
+    }
+
+    public void execUpdate(String sql) {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error in the execUpdate:", ex);
+        }
+    }
+
     public void close() throws SQLException {
         connection.close();
     }

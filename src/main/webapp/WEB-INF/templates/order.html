@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" class="no-js">
 
 <head>
     <head>
@@ -32,6 +32,9 @@
 <!--Bread Crumb End-->
 
 <h1 class="order__title">Order</h1>
+
+<h2 class="error" align="center" th:if="${errorMessage!=null}" th:text="${errorMessage}"></h2>
+
 
 <!--<form id="fileUploadForm" method="post" th:action="@{/order}" >-->
 <div class="container order">
@@ -78,21 +81,21 @@
             </div>
             <div class="photo-add-delete-buttons">
 
-                    <label class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
-                        Add <input type="file" style="display: none;" name="photo" multiple="multiple" accept=".png, .jpeg, .jpg"/>
-                    </label>
+                <input type="file" name="photo" id="file" class="inputfile"
+                       data-multiple-caption="{count} files selected" multiple accept=".png, .jpeg, .jpg"/>
+                <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
+                    <span>Add</span>
+                </label>
 
-                <!--                Input->btn+msg!!!!!!!!-->
-                <input class="btn btn-submit btn-outline-dark button order__button photo-add-button"
-                       type="file" name="photo" style="display:none" multiple="multiple">Add</input>
-
-                <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button">Delete all
-                </button>
+                <a class="photo-option" href="#">
+                    <button type="button"
+                            class="btn btn-submit btn-outline-dark button order__button photo-delete-button">
+                        Delete all
+                    </button>
+                </a>
             </div>
         </div>
-
         <div class="order__complete-buttons">
-
             <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
             </button>
             <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button">
@@ -100,13 +103,12 @@
                 and
                 select
             </button>
-            <button class="btn btn-submit btn-outline-dark button order__button delete-button" form="old">Delete order</button>
         </div>
     </form>
-    <form id="old" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+    <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
+        <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
+    </form>
 </div>
-<!--</form>-->
-
 </body>
 <meta th:replace="fragment/script.html :: script">
 </html>

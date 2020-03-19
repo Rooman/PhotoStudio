@@ -1,31 +1,28 @@
 package com.photostudio.web.util;
 
 import com.photostudio.util.PropertyReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Slf4j
 public class MailSender {
-
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
-
     private String adminEmail;
     private String password;
-    private Properties properties;
+    private PropertyReader propertyReader;
 
     public MailSender() {
-        properties = new PropertyReader("mail.properties").getProperties();
-        this.adminEmail = properties.getProperty("mail.admin.email");
-        this.password = properties.getProperty("mail.admin.password");
+        propertyReader = new PropertyReader("mail.properties");
+        this.adminEmail = propertyReader.getString("mail.admin.email");
+        this.password = propertyReader.getString("mail.admin.password");
     }
 
     public void send(String subject, String text, String toEmail) {
-        LOG.info("Try to send mail to {}", toEmail);
-        Session session = Session.getInstance(properties, new Authenticator() {
+        log.info("Try to send mail to {}", toEmail);
+        Session session = Session.getInstance(propertyReader.getAllProperties(), new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(adminEmail, password);
             }
@@ -39,8 +36,12 @@ public class MailSender {
             message.setText(text);
             Transport.send(message);
         } catch (MessagingException e) {
-            LOG.error("Mail was not send to {}", toEmail, e);
+            log.error("Mail was not send to {}", toEmail, e);
             throw new RuntimeException("Mail was not send to " + toEmail, e);
         }
+    }
+
+    public void sendToAdmin(String subject, String text) {
+        send(subject, text, adminEmail);
     }
 }
