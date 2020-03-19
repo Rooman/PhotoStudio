@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/order")
-@MultipartConfig
+@MultipartConfig(maxFileSize = 1024 * 1024 * 50)
 @Slf4j
 public class AddNewOrderServlet extends HttpServlet {
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
@@ -46,6 +46,9 @@ public class AddNewOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.info("Create new order");
+
+        List<Part> photoToUpload = (List<Part>) request.getParts();
+
         String email = request.getParameter("email");
         User user = userService.getUserByEmail(email);
 
@@ -61,7 +64,6 @@ public class AddNewOrderServlet extends HttpServlet {
         }
         log.info("Save photo to new order");
 
-        List<Part> photoToUpload = (List<Part>) request.getParts();//(List<Part>)??????
         int orderId = orderService.add(orderBuilder.build(), photoToUpload);
 
         response.sendRedirect(request.getContextPath() + "/order/" + orderId);
