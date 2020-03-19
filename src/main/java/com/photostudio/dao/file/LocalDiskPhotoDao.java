@@ -21,7 +21,6 @@ public class LocalDiskPhotoDao implements PhotoDao {
             throw new RuntimeException("path to Photo folder is null");
         }
         this.path = path;
-
     }
 
     @Override
@@ -46,7 +45,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
-                    String photoPath = new File(dirOrder, fileName).toString();
+                    String photoPath = new File(dirOrder, fileName).getAbsolutePath();
                     try {
                         photo.write(photoPath);
                         photosPaths.add(photoPath);
