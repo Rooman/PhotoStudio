@@ -20,12 +20,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
             LOG.error("can't create object LocalDiskPhotoDao: path is null");
             throw new RuntimeException("path to Photo folder is null");
         }
-        String userDir = System.getProperty("user.dir");
-        File photosDir = new File(userDir, path);
-        if (!photosDir.exists()) {
-            photosDir.mkdirs();
-        }
-        this.path = photosDir.getAbsolutePath();
+        this.path = path;
     }
 
     @Override
@@ -42,9 +37,9 @@ public class LocalDiskPhotoDao implements PhotoDao {
     public List<String> savePhotoByOrder(List<Part> photos, long orderId) {
         LOG.info("save photos on local disk by path : {}", path);
         List<String> photosPaths = new ArrayList<>();
-        File dirOrder = new File(path + File.separator + "Order-" + orderId);
+        File dirOrder = new File(path, "Order-" + orderId);
         if (!dirOrder.exists()) {
-            dirOrder.mkdirs();
+            dirOrder.mkdir();
         }
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
