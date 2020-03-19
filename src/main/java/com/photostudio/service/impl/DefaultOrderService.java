@@ -25,12 +25,14 @@ public class DefaultOrderService implements OrderService {
     private PhotoDao photoDao;
     private OrderCacheService orderCacheService;
     private MailService mailService;
+    private String acceptedFileTypes;
 
-    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderCacheService orderCacheService, MailService mailService) {
+    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderCacheService orderCacheService, MailService mailService, String acceptedFileTypes) {
         this.orderDao = orderDao;
         this.photoDao = photoDao;
         this.orderCacheService = orderCacheService;
         this.mailService = mailService;
+        this.acceptedFileTypes = acceptedFileTypes;
     }
 
     @Override
@@ -99,6 +101,11 @@ public class DefaultOrderService implements OrderService {
             log.error("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
             throw new ChangeOrderStatusInvalidException("Order status " + statusDb.getOrderStatusName() + " can't be changed back");
         }
+    }
+
+    @Override
+    public String getAcceptedFileTypes() {
+        return acceptedFileTypes;
     }
 
     private boolean checkByDBStatusForward(OrderStatus statusDB, UserRole userRole) {

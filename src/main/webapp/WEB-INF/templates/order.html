@@ -82,7 +82,7 @@
             <div class="photo-add-delete-buttons">
 
                 <input type="file" name="photo" id="file" class="inputfile"
-                       data-multiple-caption="{count} files selected" multiple accept=".png, .jpeg, .jpg"/>
+                       data-multiple-caption="{count} files selected" multiple th:accept="${acceptedFiles}"/>
                 <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
                     <span>Add</span>
                 </label>

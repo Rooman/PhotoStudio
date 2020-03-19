@@ -33,7 +33,7 @@ public class DefaultOrderServiceITest {
             MockMailSender mockMailSender = new MockMailSender(dataSource);
             MailSender mailSender = (MailSender) mockMailSender;
             MailService mailService = new DefaultMailService(mailSender);
-            orderService = new DefaultOrderService(jdbcOrderDao, null, null, mailService);
+            orderService = new DefaultOrderService(jdbcOrderDao, null, null, mailService, null);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

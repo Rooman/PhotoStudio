@@ -25,4 +25,5 @@ public interface OrderService {
 
     void moveStatusBack(int id, User user);
 
+    String getAcceptedFileTypes();
 }

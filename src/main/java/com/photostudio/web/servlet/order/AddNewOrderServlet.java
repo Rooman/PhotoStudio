@@ -39,6 +39,7 @@ public class AddNewOrderServlet extends HttpServlet {
         Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
         paramsMap.put("order", order);
         paramsMap.put("newEmail", newEmail);
+        paramsMap.put("acceptedFiles", orderService.getAcceptedFileTypes());
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);
     }

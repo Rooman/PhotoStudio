@@ -62,7 +62,7 @@ public class ServiceLocator {
         MailService mailService = new DefaultMailService(mailSender);
         register(MailService.class, mailService);
 
-        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderCacheService, mailService);
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderCacheService, mailService, propertyReader.getString("file.type"));
         register(OrderService.class, orderService);
 
         SecurityService securityService = new DefaultSecurityService();
