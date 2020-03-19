@@ -13,16 +13,13 @@ import java.io.*;
 @WebServlet(urlPatterns = "/photo/*")
 public class GetPhotoServlet extends HttpServlet {
     private static final int BUFFER_SIZE = 8192;
-    private static final String PATH_TO_PHOTO = "/photo";
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         LOG.info("Request to photo source received");
 
-        String prefixPath = request.getContextPath() + PATH_TO_PHOTO;
-
-        String photoPath = request.getRequestURI().substring(prefixPath.length());
+        String photoPath = request.getPathInfo();
 
         try (InputStream resourceAsStream = new FileInputStream(photoPath);
              BufferedInputStream styleStream = new BufferedInputStream(resourceAsStream)) {
