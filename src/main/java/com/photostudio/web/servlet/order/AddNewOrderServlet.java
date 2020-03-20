@@ -6,6 +6,7 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
+import com.photostudio.util.PropertyReader;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import java.util.Map;
 public class AddNewOrderServlet extends HttpServlet {
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
     private UserService userService = ServiceLocator.getService(UserService.class);
+    private PropertyReader propertyReader = ServiceLocator.getService(PropertyReader.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -39,7 +41,7 @@ public class AddNewOrderServlet extends HttpServlet {
         Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
         paramsMap.put("order", order);
         paramsMap.put("newEmail", newEmail);
-        paramsMap.put("acceptedFiles", orderService.getAcceptedFileTypes());
+        paramsMap.put("acceptedFileTypes", propertyReader.getString("order.photo.fileType"));
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);
     }
