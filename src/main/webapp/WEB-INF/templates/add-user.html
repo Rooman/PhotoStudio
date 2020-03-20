@@ -4,7 +4,7 @@
 <head>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/add-user.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/add-user.css}">
     <title>Photo Studio</title>
 </head>
 
@@ -16,11 +16,11 @@
     <div class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item"><a href="admin/users">All users</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">Manage user</li>
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin page</a></li>
+                <img class="bread__crumb-arrow" th:src="@{/assets/images/Arrow.jpg}" alt="arrow">
+                <li class="breadcrumb-item"><a th:href="@{/admin/users}">All users</a></li>
+                <img class="bread__crumb-arrow" th:src="@{/assets/images/Arrow.jpg}" alt="arrow">
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Manage user</li>
             </ol>
         </nav>
     </div>

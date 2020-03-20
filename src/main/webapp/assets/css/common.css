@@ -118,6 +118,7 @@ main {
 	width: 13.1875rem;
 	height: 3.8125rem;
 	border: 1px solid #000000;
+    opacity: 0.4;
 	border-radius: 0.625rem;
 	font-weight: 300;
 	font-size: 2.25rem;
@@ -127,9 +128,17 @@ main {
 	padding-top: 0.625rem;
 }
 
+.breadcrumb-item:hover {
+    opacity: unset;
+}
+
 .breadcrumb-item a {
 	color: #000000;
 	text-decoration: none;
+}
+
+.breadcrumb-item__active {
+    opacity: unset;
 }
 /*Bread Crumb End*/
 
