@@ -106,7 +106,7 @@
             <button th:if="${order.id != 0}" class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
         </div>
     </form>
-    <form th:if="${order.id != 0}" id="delete_order" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+    <form id="delete_order"  th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
 </div>
 </body>
