@@ -3,9 +3,9 @@ package com.photostudio.service.impl;
 import com.photostudio.ServiceLocator;
 import com.photostudio.dao.OrderStatusDao;
 import com.photostudio.entity.order.OrderStatus;
-import com.photostudio.service.OrderCacheService;
+import com.photostudio.service.OrderStatusService;
 
-public class DefaultOrderCacheService implements OrderCacheService {
+public class DefaultOrderStatusService implements OrderStatusService {
     private OrderStatusDao orderStatusDao = ServiceLocator.getService(OrderStatusDao.class);
 
     @Override
