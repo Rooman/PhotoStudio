@@ -33,6 +33,11 @@ public class DefaultOrderService implements OrderService {
         this.mailService = mailService;
     }
 
+    DefaultOrderService(OrderDao orderDao, MailService mailService) {
+        this.orderDao = orderDao;
+        this.mailService = mailService;
+    }
+
     @Override
     public List<Order> getAll() {
         log.info("Started service get all orders from DB");
