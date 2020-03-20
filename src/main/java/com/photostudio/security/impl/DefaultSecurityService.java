@@ -35,10 +35,7 @@ public class DefaultSecurityService implements SecurityService {
             }
             String userToken = UUID.randomUUID().toString();
             Session session = Session.builder().user(user)
-                    //original piece of code:
-                    //.token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
-                    //test:
-                    .token(userToken).expireDate(LocalDateTime.now().plusMinutes(1)).build();
+                    .token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
             sessionList.add(session);
             log.info("User with login: {} is logged in", login);
             return session;
