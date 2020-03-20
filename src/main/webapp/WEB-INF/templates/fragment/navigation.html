@@ -46,7 +46,7 @@
                         <a th:if="${roleAdmin}" class="user-menu__item" th:href="@{/user}">New user</a>
                         <a th:if="${roleUser}" class="user-menu__item" th:href="@{/orders}">My orders</a>
 
-                        <a th:if="${roleUser}" class="user-menu__item" href="#">My settings</a>
+                        <a th:if="${roleUser}" class="user-menu__item" th:href="@{'/user'(id=${user.id})}">My settings</a>
 
                         <form th:action="@{/logout}" method="post">
                             <button class="user-menu__item" type="submit" th:text="#{logout.label}">Logout</button>
