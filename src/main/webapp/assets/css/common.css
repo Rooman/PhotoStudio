@@ -108,17 +108,10 @@ main {
 	background-color: white;
 }
 
-.bread__crumb-arrow {
-	margin-top: 1.5625rem;
-	height: 5px;
-	width: 6.25rem;
-}
-
 .breadcrumb-item {
 	width: 13.1875rem;
 	height: 3.8125rem;
-	border: 1px solid #000000;
-    opacity: 0.4;
+	border: 1px solid #989898;
 	border-radius: 0.625rem;
 	font-weight: 300;
 	font-size: 2.25rem;
@@ -128,17 +121,56 @@ main {
 	padding-top: 0.625rem;
 }
 
-.breadcrumb-item:hover {
-    opacity: unset;
+.breadcrumb-item a {
+    color: #989898;
+    text-decoration: none;
 }
 
-.breadcrumb-item a {
-	color: #000000;
-	text-decoration: none;
+.breadcrumb-item:hover a {
+    color: #000000;
+}
+
+.breadcrumb__link {
+    display: inline-block;
+    width: 190px;
+    color: #989898;
+    text-decoration: none;
+}
+
+.breadcrumb-item:before {
+    content: " " !important;
+    padding-right: 0 !important;
+}
+
+.breadcrumb-item:after {
+    content: " ";
+    width: 120px;
+    height: 8px;
+    position: absolute;
+    margin-left: 11px;
+    margin-top: 15px;
+    background: url("../images/Arrow.jpg") no-repeat;
+    background-size: 120px 5px;
+}
+
+.breadcrumb-item:not(:first-child) {
+    margin-left: 122px;
+    padding-left: 0;
+}
+
+.breadcrumb-item:last-child:after{
+    content: "";
+    width: 0;
+    height: 0;
+}
+
+.breadcrumb-item:hover {
+    border-color: #000000;
+    color: black;
 }
 
 .breadcrumb-item__active {
-    opacity: unset;
+    border-color: #000000;
 }
 /*Bread Crumb End*/
 
