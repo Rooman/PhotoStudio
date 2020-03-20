@@ -35,7 +35,10 @@ public class DefaultSecurityService implements SecurityService {
             }
             String userToken = UUID.randomUUID().toString();
             Session session = Session.builder().user(user)
-                    .token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
+                    //original piece of code:
+                    //.token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
+                    //test:
+                    .token(userToken).expireDate(LocalDateTime.now().plusMinutes(1)).build();
             sessionList.add(session);
             log.info("User with login: {} is logged in", login);
             return session;
@@ -59,8 +62,9 @@ public class DefaultSecurityService implements SecurityService {
                 if (userToken.equals(session.getToken())) {
                     if (session.getExpireDate().isAfter(LocalDateTime.now())) {
                         return session;
+                    } else {
+                        sessionList.remove(session);
                     }
-                    sessionIterator.remove();
                 }
             }
         }
