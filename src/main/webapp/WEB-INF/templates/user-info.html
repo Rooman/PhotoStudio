@@ -8,21 +8,24 @@
     <title>Photo Studio</title>
 </head>
 
-<body>
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
 
+<div th:if="${roleUser}">
+    <nav th:replace="fragment/navigation.html :: nav"></nav>
+    <hr class="header__underscore">
+</div>
 <div class="container">
-
-    <!--	Bread Crumb-->
-    <div class="bread__crumb-navigation">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
-                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin/users}">All users</a></li>
-                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Manage user</li>
-            </ol>
-        </nav>
-    </div>
-    <!--Bread Crumb End-->
+        <!--	Bread Crumb-->
+        <div th:if="${roleAdmin}" class="bread__crumb-navigation">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin/users}">All users</a></li>
+                    <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Manage user</li>
+                </ol>
+            </nav>
+        </div>
+        <!--Bread Crumb End-->
 
     <h1 class="page__title">Manage user</h1>
 
@@ -66,6 +69,7 @@
                 </div>
 
             </div>
+        </div>
     </form>
 </div>
 
