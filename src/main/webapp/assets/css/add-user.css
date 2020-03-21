@@ -91,3 +91,10 @@
     margin-bottom: 15px;
 }
 
+.delete-button {
+    width: 200px;
+    height: 64px;
+    background: #FCC5D9;
+    margin-left: 25px;
+    border-color: #FCC5D9;
+}
