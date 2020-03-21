@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LocalDiskPhotoDao implements PhotoDao {
+    private static final int BUFFER_SIZE = 8192;
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private String path;
 
@@ -41,13 +41,20 @@ public class LocalDiskPhotoDao implements PhotoDao {
         if (!dirOrder.exists()) {
             dirOrder.mkdir();
         }
+
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
                     String photoPath = new File(dirOrder, fileName).getAbsolutePath();
-                    try {
-                        photo.write(photoPath);
+                    try (InputStream fileContent = photo.getInputStream();
+                         FileOutputStream savePhoto = new FileOutputStream(photoPath)) {
+                        int count;
+                        byte[] buffer = new byte[BUFFER_SIZE];
+                        while ((count = fileContent.read(buffer)) != -1) {
+                            savePhoto.write(buffer, 0, count);
+                        }
+                        //photo.write(photoPath);
                         photosPaths.add(photoPath);
                     } catch (IOException e) {
                         LOG.error("Can't save photos on local disk by path : {}", path);

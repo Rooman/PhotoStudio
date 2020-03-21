@@ -9,10 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(urlPatterns = "/photo/*")
 public class GetPhotoServlet extends HttpServlet {
     private static final int BUFFER_SIZE = 8192;
+
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Override
