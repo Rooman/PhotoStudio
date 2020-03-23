@@ -86,8 +86,11 @@ public class DefaultOrderService implements OrderService {
     public void moveStatusForward(int id, User user) {
         log.info("Started service set next status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
-        OrderStatus newStatus = orderStatusService.getNext(statusDb);
-        if (checkByDBStatusForward(statusDb, user.getUserRole()) && checkPhoto(id, newStatus)) {
+        OrderStatus newStatus = statusDb.next();
+        if (newStatus == null) {
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FORWARD, statusDb);
+        }
+        if (checkUserRole(user.getUserRole(), newStatus) && checkPhoto(id, newStatus)) {
             orderDao.changeOrderStatus(id, orderStatusService.getOrderStatusIdByStatusName(newStatus));
             mailService.sendOnChangeStatus(user, id, newStatus);
         }
@@ -97,38 +100,26 @@ public class DefaultOrderService implements OrderService {
     public void moveStatusBack(int id, User user) {
         log.info("Started service set previous status for order:{}", id);
         OrderStatus statusDb = orderDao.getOrderStatus(id);
-        OrderStatus newStatus = orderStatusService.getPrevious(statusDb);
-        if (checkByDBStatusBack(statusDb, user.getUserRole()) && checkPhoto(id, newStatus)) {
+        OrderStatus newStatus = statusDb.previous();
+        if (newStatus == null) {
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_BACK, statusDb);
+        }
+        if (checkUserRole(user.getUserRole(), newStatus) && checkPhoto(id, newStatus)) {
             orderDao.changeOrderStatus(id, orderStatusService.getOrderStatusIdByStatusName(newStatus));
             mailService.sendOnChangeStatus(user, id, newStatus);
         }
     }
 
-    private boolean checkByDBStatusForward(OrderStatus statusDB, UserRole userRole) {
-        log.info("Check status in DB for change status forward: {} by user {}", statusDB, userRole);
-        if ((statusDB == OrderStatus.NEW || statusDB == OrderStatus.SELECTED) && userRole == UserRole.USER) {
-            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_USER, statusDB);
+    private boolean checkUserRole(UserRole userRole, OrderStatus newStatus) {
+        log.info("Check user role to change status to {} by user {}", newStatus, userRole);
+        if ((newStatus == OrderStatus.VIEW_AND_SELECT || newStatus == OrderStatus.READY) && userRole == UserRole.USER) {
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_USER, newStatus);
         }
 
-        if (statusDB == OrderStatus.VIEW_AND_SELECT && userRole == UserRole.ADMIN) {
-            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_ADMIN, statusDB);
+        if (newStatus == OrderStatus.SELECTED && userRole == UserRole.ADMIN) {
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_ADMIN, newStatus);
         }
 
-        if (statusDB == OrderStatus.READY) {
-            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FORWARD, statusDB);
-        }
-
-        return true;
-    }
-
-    private boolean checkByDBStatusBack(OrderStatus statusDB, UserRole userRole) {
-        log.info("Check status in DB for change status back: {} by user {}", statusDB, userRole);
-        if (statusDB != OrderStatus.READY) {
-            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_BACK, statusDB);
-        }
-        if (userRole == UserRole.ADMIN) {
-            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_ADMIN, statusDB);
-        }
         return true;
     }
 

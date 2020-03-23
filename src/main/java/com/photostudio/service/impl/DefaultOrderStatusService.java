@@ -17,19 +17,4 @@ public class DefaultOrderStatusService implements OrderStatusService {
         return orderStatusDao.getOrderStatusIdByStatusName(status);
     }
 
-    @Override
-    public OrderStatus getNext(OrderStatus orderStatus) {
-        int id = getOrderStatusIdByStatusName(orderStatus);
-        return getById(id + 1);
-    }
-
-    @Override
-    public OrderStatus getPrevious(OrderStatus orderStatus) {
-        int id = getOrderStatusIdByStatusName(orderStatus);
-        return getById(id - 1);
-    }
-
-    private OrderStatus getById(int i) {
-        return orderStatusDao.getOrderStatusById(i);
-    }
 }
