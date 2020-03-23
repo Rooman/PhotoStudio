@@ -81,7 +81,7 @@
             <div class="photo-add-delete-buttons">
 
                 <input type="file" name="photo" id="file" class="inputfile"
-                       data-multiple-caption="{count} file(s) selected" multiple/>
+                       data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
                 <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
                     <span>Add</span>
                 </label>
@@ -102,11 +102,11 @@
                 and
                 select
             </button>
+            <button th:if="${order.id != 0}" class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
         </div>
     </form>
-    <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
-        <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
-    </form>
+    <form id="delete_order"  th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+    <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
 </div>
 </body>
 <meta th:replace="fragment/script.html :: script">
