@@ -2,12 +2,13 @@ package com.photostudio.service.impl;
 
 
 import com.photostudio.dao.jdbc.JdbcOrderDao;
-import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.service.MailService;
+import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.testUtils.MockMailSender;
 import com.photostudio.web.util.MailSender;
 import org.h2.jdbcx.JdbcDataSource;
@@ -29,11 +30,12 @@ public class DefaultOrderServiceITest {
             JdbcDataSource jdbcDataSource = dataSource.init();
             dataSource.runScript("db/data.sql");
             JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-            JdbcUserDao jdbcUserDao = new JdbcUserDao(jdbcDataSource);
+            JdbcOrderStatusCachedDao jdbcOrderStatusCachedDao = new JdbcOrderStatusCachedDao(jdbcDataSource);
+            OrderStatusService orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
             MockMailSender mockMailSender = new MockMailSender(dataSource);
             MailSender mailSender = (MailSender) mockMailSender;
             MailService mailService = new DefaultMailService(mailSender);
-            orderService = new DefaultOrderService(jdbcOrderDao, null, null, mailService);
+            orderService = new DefaultOrderService(jdbcOrderDao, null, orderStatusService, mailService);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

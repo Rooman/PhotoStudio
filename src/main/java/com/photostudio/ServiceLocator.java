@@ -13,12 +13,12 @@ import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
 import com.photostudio.service.MailService;
-import com.photostudio.service.OrderCacheService;
 import com.photostudio.service.OrderService;
+import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.impl.DefaultMailService;
-import com.photostudio.service.impl.DefaultOrderCacheService;
 import com.photostudio.service.impl.DefaultOrderService;
+import com.photostudio.service.impl.DefaultOrderStatusService;
 import com.photostudio.service.impl.DefaultUserService;
 import com.photostudio.util.PropertyReader;
 import com.photostudio.web.util.MailSender;
@@ -26,7 +26,6 @@ import com.photostudio.web.util.MailSender;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();
@@ -44,8 +43,8 @@ public class ServiceLocator {
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
         register(OrderStatusDao.class, orderStatusDao);
 
-        OrderCacheService orderCacheService = new DefaultOrderCacheService();
-        register(OrderCacheService.class, orderCacheService);
+        OrderStatusService orderCacheService = new DefaultOrderStatusService(orderStatusDao);
+        register(OrderStatusService.class, orderCacheService);
 
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);

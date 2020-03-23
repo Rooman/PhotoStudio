@@ -13,7 +13,7 @@
     </head>
 </head>
 
-<body >
+<body>
 <div class="container">
 
     <!--Bread Crumb-->
@@ -97,16 +97,20 @@
         <div class="order__complete-buttons">
             <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
             </button>
-            <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button">
+            <button th:if="${order.id != 0}"
+                    class="btn btn-submit btn-outline-dark button order__button view-select-button"
+                    form="change_status">
                 Status to view
                 and
                 select
             </button>
+            <button th:if="${order.id != 0}" class="btn btn-submit btn-outline-dark button order__button delete-button"
+                    data-toggle="modal" data-target="#delete-order" form="delete_order">Delete order
+            </button>
         </div>
     </form>
-    <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
-        <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
-    </form>
+    <form id="delete_order" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+    <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
 </div>
 </body>
 <meta th:replace="fragment/script.html :: script">

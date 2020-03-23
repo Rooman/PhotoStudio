@@ -11,23 +11,22 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JdbcOrderChangeStatusITest {
     private TestDataSource dataSource = new TestDataSource();
-    private JdbcOrderDao jdbcOrderDao;
+    private JdbcDataSource jdbcDataSource;
 
     @BeforeEach
     public void before() throws SQLException, IOException {
-        JdbcDataSource jdbcDataSource = dataSource.init();
+        jdbcDataSource = dataSource.init();
         dataSource.runScript("db/data.sql");
-        jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
     }
 
     @Test
     public void testStatusToViewAndSelect() {
         //when change from  NEW
-        jdbcOrderDao.changeOrderStatus(1, true);
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.changeOrderStatus(1, 2);
 
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 1");
@@ -37,18 +36,30 @@ public class JdbcOrderChangeStatusITest {
     @Test
     public void testStatusToSelected() {
         //when change from ViewAndSelect
-        jdbcOrderDao.changeOrderStatus(2, true);
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.changeOrderStatus(2, 3);
 
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 2");
         assertEquals(3, statusOrder);
     }
 
+    @Test
+    public void testStatusToSelectedRepeat() {
+        //when change from ViewAndSelect
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.changeOrderStatus(3, 3);
+
+        //after
+        int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
+        assertEquals(3, statusOrder);
+    }
 
     @Test
     public void testStatusToReady() {
         //when change from Selected
-        jdbcOrderDao.changeOrderStatus(3, true);
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.changeOrderStatus(3, 4);
 
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 3");
@@ -59,24 +70,12 @@ public class JdbcOrderChangeStatusITest {
     @Test
     public void testStatusToSelectedFromReady() {
         //when change from ViewAndSelect
-        jdbcOrderDao.changeOrderStatus(4, false);
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.changeOrderStatus(4, 3);
 
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(3, statusOrder);
-    }
-
-    @Test
-    public void testGetOrderStatus() {
-        OrderStatus orderStatus = jdbcOrderDao.getOrderStatus(1);
-        assertEquals(OrderStatus.NEW.getOrderStatusName(), orderStatus.getOrderStatusName());
-    }
-
-    @Test
-    public void testGetOrderStatusNotExist() {
-        assertThrows(RuntimeException.class, () -> {
-            OrderStatus orderStatus = jdbcOrderDao.getOrderStatus(10);
-        });
     }
 
     @AfterEach

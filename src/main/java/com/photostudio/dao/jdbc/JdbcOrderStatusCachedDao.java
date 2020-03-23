@@ -30,6 +30,16 @@ public class JdbcOrderStatusCachedDao implements OrderStatusDao {
         return orderStatusCache.get(status);
     }
 
+    @Override
+    public OrderStatus getOrderStatusById(int i) {
+        for (Map.Entry<OrderStatus, Integer> orderStatusIntegerEntry : orderStatusCache.entrySet()) {
+            if (orderStatusIntegerEntry.getValue() == i) {
+                return orderStatusIntegerEntry.getKey();
+            }
+        }
+        return null;
+    }
+
     private Map<OrderStatus, Integer> getOrderStatuses() {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_STATUSES);

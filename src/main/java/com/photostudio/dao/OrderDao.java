@@ -22,7 +22,7 @@ public interface OrderDao {
 
     void savePhotos(Order order, int orderId, List<String> photosPath);
 
-    void changeOrderStatus(int id, boolean forward);
+    void changeOrderStatus(int id, int orderStatusId);
 
     OrderStatus getOrderStatus(int id);
 
