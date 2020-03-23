@@ -10,7 +10,7 @@ import com.photostudio.entity.photo.PhotoStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
-import com.photostudio.exception.entity.ChangeOrderStatusError;
+import com.photostudio.exception.entity.ErrorChangeOrderStatus;
 import com.photostudio.service.MailService;
 
 
@@ -33,6 +33,12 @@ public class DefaultOrderService implements OrderService {
     public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderStatusService, MailService mailService) {
         this.orderDao = orderDao;
         this.photoDao = photoDao;
+        this.orderStatusService = orderStatusService;
+        this.mailService = mailService;
+    }
+
+    DefaultOrderService(OrderDao orderDao, OrderStatusService orderStatusService, MailService mailService) {
+        this.orderDao = orderDao;
         this.orderStatusService = orderStatusService;
         this.mailService = mailService;
     }
@@ -101,15 +107,15 @@ public class DefaultOrderService implements OrderService {
     private boolean checkByDBStatusForward(OrderStatus statusDB, UserRole userRole) {
         log.info("Check status in DB for change status forward: {} by user {}", statusDB, userRole);
         if ((statusDB == OrderStatus.NEW || statusDB == OrderStatus.SELECTED) && userRole == UserRole.USER) {
-            throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.INCORRECT_STATUS_FOR_USER, statusDB);
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_USER, statusDB);
         }
 
         if (statusDB == OrderStatus.VIEW_AND_SELECT && userRole == UserRole.ADMIN) {
-            throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.INCORRECT_STATUS_FOR_ADMIN, statusDB);
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_ADMIN, statusDB);
         }
 
         if (statusDB == OrderStatus.READY) {
-            throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.INCORRECT_STATUS_FORWARD, statusDB);
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FORWARD, statusDB);
         }
 
         return true;
@@ -118,10 +124,10 @@ public class DefaultOrderService implements OrderService {
     private boolean checkByDBStatusBack(OrderStatus statusDB, UserRole userRole) {
         log.info("Check status in DB for change status back: {} by user {}", statusDB, userRole);
         if (statusDB != OrderStatus.READY) {
-            throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.INCORRECT_STATUS_BACK, statusDB);
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_BACK, statusDB);
         }
         if (userRole == UserRole.ADMIN) {
-            throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.INCORRECT_STATUS_FOR_ADMIN, statusDB);
+            throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_ADMIN, statusDB);
         }
         return true;
     }
@@ -131,17 +137,17 @@ public class DefaultOrderService implements OrderService {
         boolean result = true;
         if (newOrderStatus == OrderStatus.VIEW_AND_SELECT) {
             if (orderDao.getPhotoCount(orderId) == 0) {
-                throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.PHOTOS_SHOULD_BE_LOADED);
+                throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_LOADED);
             }
         }
         if (newOrderStatus == OrderStatus.SELECTED) {
             if (orderDao.getPhotoCountByStatus(orderId, PhotoStatus.SELECTED.getId()) == 0) {
-                throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.PHOTOS_SHOULD_BE_SELECTED);
+                throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_SELECTED);
             }
         }
         if (newOrderStatus == OrderStatus.READY) {
             if (orderDao.getPhotoCountByStatus(orderId, PhotoStatus.PAID.getId()) == 0) {
-                throw new ChangeOrderStatusInvalidException(ChangeOrderStatusError.PHOTOS_SHOULD_BE_PAID);
+                throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_PAID);
             }
         }
 

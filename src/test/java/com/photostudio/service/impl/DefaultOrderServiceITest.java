@@ -34,7 +34,7 @@ public class DefaultOrderServiceITest {
         MockMailSender mockMailSender = new MockMailSender(dataSource);
         MailSender mailSender = (MailSender) mockMailSender;
         MailService mailService = new DefaultMailService(mailSender);
-        orderService = new DefaultOrderService(jdbcOrderDao, null, orderStatusService, mailService);
+        orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, mailService);
     }
 
     @BeforeEach
@@ -400,6 +400,7 @@ public class DefaultOrderServiceITest {
         assertEquals(0, cntMails);
 
     }
+
 
     @AfterAll
     public static void after() throws SQLException {

@@ -1,9 +1,12 @@
 package com.photostudio.exception.entity;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public enum ChangeOrderStatusError {
+@AllArgsConstructor
+public enum ErrorChangeOrderStatus {
 
     INCORRECT_STATUS_FORWARD("Order status %s can't be changed forward"),
     INCORRECT_STATUS_BACK("Order status %s can't be changed back"),
@@ -14,8 +17,4 @@ public enum ChangeOrderStatusError {
     PHOTOS_SHOULD_BE_PAID("Photos should be paid");
 
     private String message;
-
-    ChangeOrderStatusError(String message) {
-        this.message = message;
-    }
 }
