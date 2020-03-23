@@ -6,6 +6,7 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
+import com.photostudio.util.PropertyReader;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/order")
-@MultipartConfig
+@MultipartConfig(maxFileSize = 1024 * 1024 * 50)
 @Slf4j
 public class AddNewOrderServlet extends HttpServlet {
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
     private UserService userService = ServiceLocator.getService(UserService.class);
+    private PropertyReader propertyReader = ServiceLocator.getService(PropertyReader.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -39,6 +41,7 @@ public class AddNewOrderServlet extends HttpServlet {
         Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
         paramsMap.put("order", order);
         paramsMap.put("newEmail", newEmail);
+        paramsMap.put("acceptedFileTypes", propertyReader.getString("order.photo.fileType"));
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);
     }
@@ -46,6 +49,9 @@ public class AddNewOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.info("Create new order");
+
+        List<Part> photoToUpload = (List<Part>) request.getParts();
+
         String email = request.getParameter("email");
         User user = userService.getUserByEmail(email);
 
@@ -61,7 +67,6 @@ public class AddNewOrderServlet extends HttpServlet {
         }
         log.info("Save photo to new order");
 
-        List<Part> photoToUpload = (List<Part>) request.getParts();//(List<Part>)??????
         int orderId = orderService.add(orderBuilder.build(), photoToUpload);
 
         response.sendRedirect(request.getContextPath() + "/order/" + orderId);

@@ -2,6 +2,6 @@ package com.photostudio.service;
 
 import com.photostudio.entity.order.OrderStatus;
 
-public interface OrderCacheService {
+public interface OrderStatusService {
     int getOrderStatusIdByStatusName(OrderStatus status);
 }

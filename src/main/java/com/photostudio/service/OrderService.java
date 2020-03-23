@@ -24,5 +24,4 @@ public interface OrderService {
     void moveStatusForward(int id, User user);
 
     void moveStatusBack(int id, User user);
-
 }

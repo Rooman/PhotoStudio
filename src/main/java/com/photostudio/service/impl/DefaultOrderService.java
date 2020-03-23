@@ -11,7 +11,7 @@ import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.service.MailService;
 
-import com.photostudio.service.OrderCacheService;
+import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,13 +23,18 @@ import java.util.List;
 public class DefaultOrderService implements OrderService {
     private OrderDao orderDao;
     private PhotoDao photoDao;
-    private OrderCacheService orderCacheService;
+    private OrderStatusService orderCacheService;
     private MailService mailService;
 
-    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderCacheService orderCacheService, MailService mailService) {
+    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderCacheService, MailService mailService) {
         this.orderDao = orderDao;
         this.photoDao = photoDao;
         this.orderCacheService = orderCacheService;
+        this.mailService = mailService;
+    }
+
+    DefaultOrderService(OrderDao orderDao, MailService mailService) {
+        this.orderDao = orderDao;
         this.mailService = mailService;
     }
 
