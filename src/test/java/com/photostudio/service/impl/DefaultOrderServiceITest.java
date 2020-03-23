@@ -25,30 +25,22 @@ public class DefaultOrderServiceITest {
     private static DefaultOrderService orderService;
 
     @BeforeAll
-    public static void before() {
-        try {
-            JdbcDataSource jdbcDataSource = dataSource.init();
-            dataSource.runScript("db/data.sql");
-            JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-            JdbcOrderStatusCachedDao jdbcOrderStatusCachedDao = new JdbcOrderStatusCachedDao(jdbcDataSource);
-            OrderStatusService orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
-            MockMailSender mockMailSender = new MockMailSender(dataSource);
-            MailSender mailSender = (MailSender) mockMailSender;
-            MailService mailService = new DefaultMailService(mailSender);
-            orderService = new DefaultOrderService(jdbcOrderDao, null, orderStatusService, mailService);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public static void before() throws SQLException {
+        JdbcDataSource jdbcDataSource = dataSource.init();
+        dataSource.runScript("db/data.sql");
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        JdbcOrderStatusCachedDao jdbcOrderStatusCachedDao = new JdbcOrderStatusCachedDao(jdbcDataSource);
+        OrderStatusService orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
+        MockMailSender mockMailSender = new MockMailSender(dataSource);
+        MailSender mailSender = (MailSender) mockMailSender;
+        MailService mailService = new DefaultMailService(mailSender);
+        orderService = new DefaultOrderService(jdbcOrderDao, null, orderStatusService, mailService);
     }
 
     @BeforeEach
-    public void beforeEach() {
-        try {
-            dataSource.execUpdate("DELETE FROM TestSentMails;");
-            dataSource.runScript("db/data_change_status.sql");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public void beforeEach() throws SQLException {
+        dataSource.execUpdate("DELETE FROM TestSentMails;");
+        dataSource.runScript("db/data_change_status.sql");
     }
 
     @Test

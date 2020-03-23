@@ -33,6 +33,7 @@ public class ServiceLocator {
     static {
         //config property reader util class
         PropertyReader propertyReader = new PropertyReader("application.properties");
+        register(PropertyReader.class, propertyReader);
 
         //config db connection
         DataSource dataSource = new DataSourceFactory(propertyReader).createDataSource();
@@ -43,8 +44,8 @@ public class ServiceLocator {
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
         register(OrderStatusDao.class, orderStatusDao);
 
-        OrderStatusService orderCacheService = new DefaultOrderStatusService(orderStatusDao);
-        register(OrderStatusService.class, orderCacheService);
+        OrderStatusService orderStatusService = new DefaultOrderStatusService(orderStatusDao);
+        register(OrderStatusService.class, orderStatusService);
 
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
@@ -61,7 +62,7 @@ public class ServiceLocator {
         MailService mailService = new DefaultMailService(mailSender);
         register(MailService.class, mailService);
 
-        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderCacheService, mailService);
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
         register(OrderService.class, orderService);
 
         SecurityService securityService = new DefaultSecurityService();

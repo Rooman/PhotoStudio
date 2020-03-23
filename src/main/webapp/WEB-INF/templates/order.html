@@ -81,7 +81,7 @@
             <div class="photo-add-delete-buttons">
 
                 <input type="file" name="photo" id="file" class="inputfile"
-                       data-multiple-caption="{count} file(s) selected" multiple/>
+                       data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
                 <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
                     <span>Add</span>
                 </label>
@@ -104,11 +104,34 @@
                 and
                 select
             </button>
-            <button th:if="${order.id != 0}" class="btn btn-submit btn-outline-dark button order__button delete-button"
-                    data-toggle="modal" data-target="#delete-order" form="delete_order">Delete order
+            <button th:if="${order.id != 0}" type="button"
+                    class="btn btn-submit btn-outline-dark button order__button delete-button"
+                    data-toggle="modal" data-target="#delete-order">Delete order
             </button>
         </div>
     </form>
+    <div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title dialog-title" id="delete-order-title">Confirm delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="dialog-body"
+                       th:text="'Are you sure you want to delete order with id '+${order.id}+' ?'"></p>
+                </div>
+                <div class="modal-footer dialog-buttons">
+                    <button class="btn btn-submit btn-outline-dark button dialog__button
+                            delete-button" data-dismiss="modal">No
+                    </button>
+                    <button class="btn btn-submit btn-outline-dark button dialog__button delete-button"
+                            form="delete_order">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <form id="delete_order" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
 </div>
