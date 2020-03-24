@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,22 +20,28 @@ import java.util.Map;
 
 import static com.photostudio.entity.user.UserRole.*;
 
-@WebFilter(urlPatterns = {"/*"},
-        initParams = @WebInitParam(name = "excludedUrls", value = "/login,/,/home,/access-denied,/assets/*"),
-        description = "ADMIN has access to all URLs. USER-some admin pages and excludedURLs. GUEST-only excludedURLs.")
-
+/**
+ * ADMIN has access to all URLs. USER-some admin pages and excludedURLs. GUEST-only excludedURLs.
+ */
+@WebFilter(urlPatterns = {"/*"})
 @Slf4j
 public class SecurityFilter implements Filter {
-    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
+    private static final List<String> DEFAULT_EXCLUDED_URLS = Arrays.asList("/login", "/", "/home", "/access-denied", "/assets/*");
+
+    private SecurityService securityService;
 
     private Map<String, UserRole> urlToRoleMap = new HashMap<>();
 
     private List<String> excludedUrls;
 
-    @Override
-    public void init(FilterConfig filterConfig) {
-        String excludedUrlsStr = filterConfig.getInitParameter("excludedUrls");
-        this.excludedUrls = Arrays.asList(excludedUrlsStr.split(","));
+    public SecurityFilter() {
+        this(ServiceLocator.getService(SecurityService.class));
+    }
+
+    SecurityFilter(SecurityService securityService) {
+        this.securityService = securityService;
+
+        this.excludedUrls = DEFAULT_EXCLUDED_URLS;
 
         urlToRoleMap.put("/logout", USER);
         urlToRoleMap.put("/orders", USER);
@@ -80,8 +85,7 @@ public class SecurityFilter implements Filter {
         }
     }
 
-    // TODO: Add Test!!!!!!!
-    private boolean isExcludedUrl(String url) {
+    boolean isExcludedUrl(String url) {
         if (excludedUrls.contains("/") && url.isEmpty()) {
             return true;
         }
@@ -100,8 +104,7 @@ public class SecurityFilter implements Filter {
         return false;
     }
 
-    // TODO: Add Test!!!!!!!
-    private boolean hasAccess(UserRole required, UserRole actual) {
+    boolean hasAccess(UserRole required, UserRole actual) {
         if (required == actual) {
             return true;
         }
@@ -111,5 +114,13 @@ public class SecurityFilter implements Filter {
         }
 
         return false;
+    }
+
+    void setExcludedUrls(List<String> excludedUrls) {
+        this.excludedUrls = excludedUrls;
+    }
+
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
     }
 }
