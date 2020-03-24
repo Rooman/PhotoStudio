@@ -13,7 +13,7 @@
     </head>
 </head>
 
-<body >
+<body>
 <div class="container">
 
     <!--Bread Crumb-->
@@ -81,7 +81,7 @@
             <div class="photo-add-delete-buttons">
 
                 <input type="file" name="photo" id="file" class="inputfile"
-                       data-multiple-caption="{count} file(s) selected" multiple/>
+                       data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
                 <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
                     <span>Add</span>
                 </label>
@@ -97,16 +97,36 @@
         <div class="order__complete-buttons">
             <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
             </button>
-            <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button">
+            <button type="button" class="btn btn-submit btn-outline-dark button order__button view-select-button"
+                    form="change_status">
                 Status to view
                 and
                 select
             </button>
+            <button type="button" class="btn btn-submit btn-outline-dark button order__button delete-button"
+                    data-toggle="modal" data-target="#delete-order">Delete order</button>
         </div>
     </form>
-    <form th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post">
-        <button class="btn btn-submit btn-outline-dark button order__button delete-button">Delete order</button>
-    </form>
+    <div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title dialog-title" id="delete-order-title">Confirm delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="dialog-body" th:text="'Are you sure you want to delete order with id '+${order.id}+' ?'"></p>
+                </div>
+                <div class="modal-footer dialog-buttons">
+                    <button class="btn btn-submit btn-outline-dark button dialog__button
+                            delete-button" data-dismiss="modal">No</button>
+                    <button class="btn btn-submit btn-outline-dark button dialog__button delete-button" form="old">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="old" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
+    <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
 </div>
 </body>
 <meta th:replace="fragment/script.html :: script">
