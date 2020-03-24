@@ -1,6 +1,7 @@
 package com.photostudio.web.filter;
 
 import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import org.junit.jupiter.api.BeforeAll;
@@ -66,11 +67,7 @@ class SecurityFilterTest {
         HttpServletRequest requestMock = mock(HttpServletRequest.class);
         FilterChain filterChainMock = mock(FilterChain.class);
 
-        User user = new User();
-        user.setUserRole(ADMIN);
-        Session session = Session.builder().user(user).build();
-
-        when(securityServiceMock.getSession(any())).thenReturn(session);
+        mockCurrentUser(ADMIN);
         when(requestMock.getServletPath()).thenReturn("/admin");
 
         //when
@@ -86,11 +83,8 @@ class SecurityFilterTest {
         HttpServletResponse responseMock = mock(HttpServletResponse.class);
         HttpServletRequest requestMock = mock(HttpServletRequest.class);
 
-        User user = new User();
-        user.setUserRole(USER);
-        Session session = Session.builder().user(user).build();
+        mockCurrentUser(USER);
 
-        when(securityServiceMock.getSession(any())).thenReturn(session);
         when(requestMock.getContextPath()).thenReturn("/home");
         when(requestMock.getServletPath()).thenReturn("/admin");
 
@@ -131,5 +125,13 @@ class SecurityFilterTest {
         assertFalse(SECURITY_FILTER.hasAccess(ADMIN, USER));
         assertFalse(SECURITY_FILTER.hasAccess(USER, null));
         assertFalse(SECURITY_FILTER.hasAccess(null, ADMIN));
+    }
+
+    void mockCurrentUser(UserRole userRole) {
+        User user = new User();
+        user.setUserRole(userRole);
+        Session userSession = Session.builder().user(user).build();
+
+        when(securityServiceMock.getSession(any())).thenReturn(userSession);
     }
 }
