@@ -1,7 +1,6 @@
 package com.photostudio.web.filter;
 
 import com.photostudio.entity.user.User;
-import com.photostudio.entity.user.UserRole;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,86 +21,84 @@ import static org.mockito.Mockito.*;
 
 class SecurityFilterTest {
     private static final SecurityFilter SECURITY_FILTER = new SecurityFilter(null);
-    private static final SecurityService securityService = mock(SecurityService.class);
+    private static final SecurityService securityServiceMock = mock(SecurityService.class);
 
     @BeforeAll
     public static void before() {
         SECURITY_FILTER.setExcludedUrls(Arrays.asList("/login", "/", "/assets/*"));
 
-        SECURITY_FILTER.setSecurityService(securityService);
+        SECURITY_FILTER.setSecurityService(securityServiceMock);
     }
 
     @Test
     public void testDoFilterOnExcludedUrl() throws IOException, ServletException {
-        // prepare
-        mockCurrentUser(USER);
-        mockCurrentUser(GUEST);
+        //prepare
+        FilterChain filterChainMock = mock(FilterChain.class);
+        HttpServletRequest requestMock = mock(HttpServletRequest.class);
+        when(requestMock.getServletPath()).thenReturn("/login");
 
-        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getServletPath()).thenReturn("/login");
+        //when
+        SECURITY_FILTER.doFilter(requestMock, null, filterChainMock);
 
-        FilterChain filterChain = mock(FilterChain.class);
-
-        // when
-        SECURITY_FILTER.doFilter(httpServletRequest, null, filterChain);
-
-        // then
-        verify(filterChain).doFilter(httpServletRequest, null);
+        //then
+        verify(filterChainMock).doFilter(requestMock, null);
     }
 
     @Test
     public void testDoFilterWithNoSession() throws IOException, ServletException {
-        // prepare
-        mockCurrentUser(ADMIN);
-        mockCurrentUser(USER);
-        mockCurrentUser(GUEST);
-        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getServletPath()).thenReturn("/login");
+        //prepare
 
-        FilterChain filterChain = mock(FilterChain.class);
+        HttpServletRequest requestMock = mock(HttpServletRequest.class);
+        HttpServletResponse responseMock = mock(HttpServletResponse.class);
 
-        // when
-        SECURITY_FILTER.doFilter(httpServletRequest, null, filterChain);
+        when(requestMock.getServletPath()).thenReturn("/admin");
 
-        // then
-        verify(filterChain).doFilter(httpServletRequest, null);
+        //when
+        SECURITY_FILTER.doFilter(requestMock, responseMock, null);
+
+        //then
+        verify(responseMock).sendRedirect(requestMock.getContextPath() + "/login");
     }
 
     @Test
     public void testDoFilterWithSuccessAccess() throws IOException, ServletException {
-        // prepare
-        mockCurrentUser(ADMIN);
+        //prepare
+        HttpServletRequest requestMock = mock(HttpServletRequest.class);
+        FilterChain filterChainMock = mock(FilterChain.class);
 
-        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getServletPath()).thenReturn("/admin");
+        User user = new User();
+        user.setUserRole(ADMIN);
+        Session session = Session.builder().user(user).build();
 
-        FilterChain filterChain = mock(FilterChain.class);
-        HttpServletResponse httpServletResponse = mock(HttpServletResponse.class);
+        when(securityServiceMock.getSession(any())).thenReturn(session);
+        when(requestMock.getServletPath()).thenReturn("/admin");
 
-        // when
-        SECURITY_FILTER.doFilter(httpServletRequest, httpServletResponse, filterChain);
+        //when
+        SECURITY_FILTER.doFilter(requestMock, null, filterChainMock);
 
-        // then
-        verify(filterChain).doFilter(httpServletRequest, httpServletResponse);
+        //then
+        verify(filterChainMock).doFilter(requestMock, null);
     }
 
     @Test
     public void testDoFilterWithNoAuthorization() throws IOException, ServletException {
-        // prepare
-        mockCurrentUser(USER);
-        mockCurrentUser(GUEST);
+        //prepare
+        HttpServletResponse responseMock = mock(HttpServletResponse.class);
+        HttpServletRequest requestMock = mock(HttpServletRequest.class);
 
-        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getServletPath()).thenReturn("/admin");
-        when(httpServletRequest.getContextPath()).thenReturn("/develop");
+        User user = new User();
+        user.setUserRole(USER);
+        Session session = Session.builder().user(user).build();
 
-        HttpServletResponse httpServletResponse = mock(HttpServletResponse.class);
+        when(securityServiceMock.getSession(any())).thenReturn(session);
+        when(requestMock.getContextPath()).thenReturn("/home");
+        when(requestMock.getServletPath()).thenReturn("/admin");
 
-        // when
-        SECURITY_FILTER.doFilter(httpServletRequest, httpServletResponse, null);
+        //when
+        SECURITY_FILTER.doFilter(requestMock, responseMock, null);
 
-        // then
-        verify(httpServletResponse).sendRedirect("/develop/access-denied");
+        //then
+        verify(responseMock).sendRedirect("/home/access-denied");
     }
 
     @Test
@@ -134,13 +131,5 @@ class SecurityFilterTest {
         assertFalse(SECURITY_FILTER.hasAccess(ADMIN, USER));
         assertFalse(SECURITY_FILTER.hasAccess(USER, null));
         assertFalse(SECURITY_FILTER.hasAccess(null, ADMIN));
-    }
-
-    private static void mockCurrentUser(UserRole userRole) {
-        User user = new User();
-        user.setUserRole(userRole);
-        Session userSession = Session.builder().user(user).build();
-
-        when(securityService.getSession(any())).thenReturn(userSession);
     }
 }

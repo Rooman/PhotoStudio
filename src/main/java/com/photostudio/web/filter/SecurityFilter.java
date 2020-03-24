@@ -120,7 +120,7 @@ public class SecurityFilter implements Filter {
         this.excludedUrls = excludedUrls;
     }
 
-    public void setSecurityService(SecurityService securityService) {
+    void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
     }
 }
