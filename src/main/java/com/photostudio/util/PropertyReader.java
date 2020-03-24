@@ -9,7 +9,7 @@ import java.util.Properties;
 
 @Slf4j
 public class PropertyReader {
-    private static final String DEVELOP_APPLICATION_PROPERTIES = "develop.application.properties";
+    private static final String DEVELOP_APPLICATION_PROPERTIES = "dev.application.properties";
     private String path;
     private Properties properties;
 
