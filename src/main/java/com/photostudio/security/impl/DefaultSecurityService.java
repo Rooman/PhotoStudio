@@ -8,8 +8,6 @@ import com.photostudio.security.entity.Session;
 import com.photostudio.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;

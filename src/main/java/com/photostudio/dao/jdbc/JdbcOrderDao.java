@@ -34,7 +34,7 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
-    private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = o.statusId + ?  WHERE o.id = ?";
+    private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ?  WHERE o.id = ?";
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
             "?, ?, ?)";
@@ -212,13 +212,12 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void changeOrderStatus(int id, boolean forward) {
-        log.info("Change order status by id: {} ", id);
-        int step = (forward) ? 1 : -1;
+    public void changeOrderStatus(int id, int orderStatusId) {
+        log.info("Change order status by id: {} new status : {}", id, orderStatusId);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS)) {
 
-            statement.setInt(1, step);
+            statement.setInt(1, orderStatusId);
             statement.setLong(2, id);
 
             statement.execute();
