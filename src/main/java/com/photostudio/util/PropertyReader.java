@@ -9,12 +9,13 @@ import java.util.Properties;
 
 @Slf4j
 public class PropertyReader {
+    private static final String DEVELOP_APPLICATION_PROPERTIES = "develop.application.properties";
     private String path;
     private Properties properties;
 
     public PropertyReader(String path) {
         this.path = path;
-        properties = getAllProperties();
+        properties = readProperties();
     }
 
     public String getString(String propertyName) {
@@ -27,7 +28,11 @@ public class PropertyReader {
         return strProperty == null ? null : Integer.valueOf(strProperty);
     }
 
-    public Properties getAllProperties() {
+    public Properties getProperties() {
+        return new Properties(properties);
+    }
+
+    private Properties readProperties() {
         log.info("Try get properties");
         String prodEnvironment = System.getenv("environment");
         if (prodEnvironment != null && prodEnvironment.equalsIgnoreCase("PROD")) {
@@ -63,12 +68,18 @@ public class PropertyReader {
 
     private Properties getDevProperties() {
         Properties properties = new Properties();
-        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path)) {
+        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(path);
+             InputStream devPropertiesStream = PropertyReader.class.getClassLoader().getResourceAsStream(DEVELOP_APPLICATION_PROPERTIES)) {
             if (inputStream == null) {
                 throw new IllegalArgumentException("No properties on path " + path);
             }
             properties.load(inputStream);
             log.debug("Read properties from path: {}", path);
+
+            if (devPropertiesStream != null) {
+                properties.load(devPropertiesStream);
+                log.debug("Read properties from path: {}", DEVELOP_APPLICATION_PROPERTIES);
+            }
             return properties;
         } catch (IOException e) {
             log.error("Can't read properties file: {} ", path, e);
