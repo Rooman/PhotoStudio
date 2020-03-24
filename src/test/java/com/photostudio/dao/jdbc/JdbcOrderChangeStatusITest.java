@@ -23,7 +23,7 @@ public class JdbcOrderChangeStatusITest {
     }
 
     @Test
-    public void testStatusToViewAndSelect() {
+    public void testStatusToViewAndSelect() throws SQLException {
         //when change from  NEW
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         jdbcOrderDao.changeOrderStatus(1, 2);
@@ -34,7 +34,7 @@ public class JdbcOrderChangeStatusITest {
     }
 
     @Test
-    public void testStatusToSelected() {
+    public void testStatusToSelected() throws SQLException {
         //when change from ViewAndSelect
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         jdbcOrderDao.changeOrderStatus(2, 3);
@@ -45,7 +45,7 @@ public class JdbcOrderChangeStatusITest {
     }
 
     @Test
-    public void testStatusToSelectedRepeat() {
+    public void testStatusToSelectedRepeat() throws SQLException {
         //when change from ViewAndSelect
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         jdbcOrderDao.changeOrderStatus(3, 3);
@@ -56,7 +56,7 @@ public class JdbcOrderChangeStatusITest {
     }
 
     @Test
-    public void testStatusToReady() {
+    public void testStatusToReady() throws SQLException {
         //when change from Selected
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         jdbcOrderDao.changeOrderStatus(3, 4);
@@ -68,7 +68,7 @@ public class JdbcOrderChangeStatusITest {
 
 
     @Test
-    public void testStatusToSelectedFromReady() {
+    public void testStatusToSelectedFromReady() throws SQLException {
         //when change from ViewAndSelect
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         jdbcOrderDao.changeOrderStatus(4, 3);

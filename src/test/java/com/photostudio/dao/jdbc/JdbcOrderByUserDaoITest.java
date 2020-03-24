@@ -16,7 +16,7 @@ public class JdbcOrderByUserDaoITest {
     private static JdbcDataSource jdbcDataSource;
 
     @BeforeAll
-    public static void addTestData() throws SQLException {
+    public static void addTestData() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
         dataSource.runScript("db/data_order_by_user.sql");
     }

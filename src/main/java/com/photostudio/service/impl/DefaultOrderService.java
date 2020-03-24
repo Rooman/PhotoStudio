@@ -43,6 +43,10 @@ public class DefaultOrderService implements OrderService {
         this.mailService = mailService;
     }
 
+    DefaultOrderService(OrderDao orderDao) {
+        this.orderDao = orderDao;
+    }
+
     @Override
     public List<Order> getAll() {
         log.info("Started service get all orders from DB");
@@ -90,10 +94,7 @@ public class DefaultOrderService implements OrderService {
         if (newStatus == null) {
             throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FORWARD, statusDb);
         }
-        if (checkUserRole(user.getUserRole(), newStatus) && checkPhoto(id, newStatus)) {
-            orderDao.changeOrderStatus(id, orderStatusService.getOrderStatusIdByStatusName(newStatus));
-            mailService.sendOnChangeStatus(user, id, newStatus);
-        }
+        changeStatus(id, user, newStatus);
     }
 
     @Override
@@ -104,13 +105,17 @@ public class DefaultOrderService implements OrderService {
         if (newStatus == null) {
             throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_BACK, statusDb);
         }
-        if (checkUserRole(user.getUserRole(), newStatus) && checkPhoto(id, newStatus)) {
-            orderDao.changeOrderStatus(id, orderStatusService.getOrderStatusIdByStatusName(newStatus));
-            mailService.sendOnChangeStatus(user, id, newStatus);
+        changeStatus(id, user, newStatus);
+    }
+
+    private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {
+        if (checkUserRole(userChanged.getUserRole(), newStatus) && checkPhoto(orderId, newStatus)) {
+            orderDao.changeOrderStatus(orderId, orderStatusService.getOrderStatusIdByStatusName(newStatus));
+            mailService.sendOnChangeStatus(userChanged, orderId, newStatus);
         }
     }
 
-    private boolean checkUserRole(UserRole userRole, OrderStatus newStatus) {
+    boolean checkUserRole(UserRole userRole, OrderStatus newStatus) {
         log.info("Check user role to change status to {} by user {}", newStatus, userRole);
         if ((newStatus == OrderStatus.VIEW_AND_SELECT || newStatus == OrderStatus.READY) && userRole == UserRole.USER) {
             throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.INCORRECT_STATUS_FOR_USER, newStatus);
@@ -123,9 +128,8 @@ public class DefaultOrderService implements OrderService {
         return true;
     }
 
-    private boolean checkPhoto(int orderId, OrderStatus newOrderStatus) {
+    boolean checkPhoto(int orderId, OrderStatus newOrderStatus) {
         log.info("Check photo in DB for order: {} new status: {}", orderId, newOrderStatus);
-        boolean result = true;
         if (newOrderStatus == OrderStatus.VIEW_AND_SELECT) {
             if (orderDao.getPhotoCount(orderId) == 0) {
                 throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_LOADED);
@@ -142,6 +146,6 @@ public class DefaultOrderService implements OrderService {
             }
         }
 
-        return result;
+        return true;
     }
 }

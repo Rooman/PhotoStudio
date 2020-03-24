@@ -6,12 +6,18 @@ import com.photostudio.entity.order.OrderStatus;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JdbcOrderDaoTest {
-    private DataSource dataSource = new TestDataSource().init();
+    private DataSource dataSource;
+
+    public JdbcOrderDaoTest() throws IOException, SQLException {
+        dataSource = new TestDataSource().init();
+    }
 
 //    @Test
 //    public void testGetPartWhereWithAllParams() {

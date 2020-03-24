@@ -5,12 +5,9 @@ import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.RunScript;
 import org.junit.jupiter.api.*;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,7 +19,7 @@ class JdbcUserDaoITest {
     private static JdbcDataSource jdbcDataSource;
 
     @BeforeAll
-    public static void addTestData() throws SQLException {
+    public static void addTestData() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
         dataSource.runScript("db/data.sql");
     }

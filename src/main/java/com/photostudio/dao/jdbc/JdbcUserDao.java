@@ -6,8 +6,6 @@ import com.photostudio.entity.user.User;
 import com.photostudio.exception.GetUserByEmailException;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -16,7 +14,6 @@ import java.util.List;
 
 @Slf4j
 public class JdbcUserDao implements UserDao {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
@@ -71,6 +68,25 @@ public class JdbcUserDao implements UserDao {
             "    u.address = ?" +
             "WHERE" +
             "    u.id = ?;";
+    private static final String GET_USER_BY_ORDER = "SELECT u.id id, " +
+            "u.email email, " +
+            "u.phoneNumber, " +
+            "u.firstName firstName, " +
+            "u.lastName lastName, " +
+            "ur.roleName roleName, " +
+            "u.passwordHash passwordHash, " +
+            "u.salt salt, " +
+            "u.country country, " +
+            "u.city city, " +
+            "u.zip zip, " +
+            "u.title title, " +
+            "u.additionalInfo additionalInfo, " +
+            "u.address address " +
+            "FROM Orders o " +
+            "JOIN Users u ON o.userId = u.id " +
+            "JOIN UserRole ur ON u.userRoleId = ur.id " +
+            "WHERE o.id = ?";
+
 
     private DataSource dataSource;
 
@@ -80,7 +96,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        LOG.info("Get all users from DB");
+        log.info("Get all users from DB");
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(GET_ALL_USERS)) {
@@ -90,18 +106,18 @@ public class JdbcUserDao implements UserDao {
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 users.add(user);
             }
-            LOG.info("Get: {} users from DB", users.size());
-            LOG.debug("Get users: {}", users);
+            log.info("Get: {} users from DB", users.size());
+            log.debug("Get users: {}", users);
             return users;
         } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to get all users", e);
+            log.error("An exception occurred while trying to get all users", e);
             throw new RuntimeException("Can't show all users", e);
         }
     }
 
     @Override
     public void add(User user) {
-        LOG.info("Add user to DB");
+        log.info("Add user to DB");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_USER)) {
             preparedStatement.setString(1, user.getEmail());
@@ -117,17 +133,17 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(11, user.getAddress());
             preparedStatement.setString(12, user.getAdditionalInfo());
             preparedStatement.executeUpdate();
-            LOG.info("Adding user to DB is completed");
-            LOG.debug("Add user: {} to DB", user);
+            log.info("Adding user to DB is completed");
+            log.debug("Add user: {} to DB", user);
         } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to add user: {} DB", user, e);
+            log.error("An exception occurred while trying to add user: {} DB", user, e);
             throw new RuntimeException("Can't add new user to DB ", e);
         }
     }
 
     @Override
     public User getUserById(long id) {
-        LOG.info("Get user by id: {}", id);
+        log.info("Get user by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)) {
             preparedStatement.setLong(1, id);
@@ -139,19 +155,19 @@ public class JdbcUserDao implements UserDao {
                 if (resultSet.next()) {
                     throw new RuntimeException("More than one users found");
                 }
-                LOG.info("Getting user by id: {} is completed", id);
-                LOG.debug("Get user: {} by id: {}", user, id);
+                log.info("Getting user by id: {} is completed", id);
+                log.debug("Get user: {} by id: {}", user, id);
                 return user;
             }
         } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to get user by id: {}", id, e);
+            log.error("An exception occurred while trying to get user by id: {}", id, e);
             throw new RuntimeException("Can't found user where id=" + id, e);
         }
     }
 
     @Override
     public void edit(User user) {
-        LOG.info("Edit user in DB");
+        log.info("Edit user in DB");
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
             preparedStatement.setString(1, user.getEmail());
@@ -167,30 +183,30 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setLong(11, user.getId());
             preparedStatement.executeUpdate();
 
-            LOG.debug("User {} was edited", user);
+            log.debug("User {} was edited", user);
         } catch (SQLException e) {
-            LOG.error("Can't edit user", e);
+            log.error("Can't edit user", e);
             throw new RuntimeException("Can't edit user", e);
         }
     }
 
     @Override
     public void delete(long id) {
-        LOG.info("Delete user by id: {}", id);
+        log.info("Delete user by id: {}", id);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-            LOG.info("Deleting user by id: {} is completed", id);
+            log.info("Deleting user by id: {} is completed", id);
         } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to delete user by id: {}", id, e);
+            log.error("An exception occurred while trying to delete user by id: {}", id, e);
             throw new RuntimeException("Can't remove user", e);
         }
     }
 
     @Override
     public User getByLogin(String login) {
-        LOG.info("Get user by login: {}", login);
+        log.info("Get user by login: {}", login);
         String resultQuery;
         if (login.contains("@")) {
             resultQuery = GET_USER_BY_PARAMS + "u.email=?";
@@ -202,20 +218,20 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
-                    LOG.error("No user with login: {}", login);
+                    log.error("No user with login: {}", login);
                     throw new LoginPasswordInvalidException("No user with login = " + login + " found");
                 }
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
-                    LOG.error("Users with login: {} is several", login);
+                    log.error("Users with login: {} is several", login);
                     throw new RuntimeException("More then one user found");
                 }
-                LOG.info("Getting user by login: {} is completed", login);
-                LOG.debug("Get user: {} by login: {}", user, login);
+                log.info("Getting user by login: {} is completed", login);
+                log.debug("Get user: {} by login: {}", user, login);
                 return user;
             }
         } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to get user with login: {}", login, e);
+            log.error("An exception occurred while trying to get user with login: {}", login, e);
             throw new RuntimeException("Get user by login error", e);
         }
     }
@@ -224,26 +240,50 @@ public class JdbcUserDao implements UserDao {
     public User getByEmail(String email) {
         log.info("Get user by email: {}", email);
         String resultQuery = GET_USER_BY_PARAMS + "u.email=?";
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
             preparedStatement.setString(1, email);
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
                     log.error("No user with email: {}", email);
                     throw new GetUserByEmailException("No user with email = " + email + " found");
                 }
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
-                    LOG.error("Users with email: {} is several", email);
+                    log.error("Users with email: {} is several", email);
                     throw new RuntimeException("More then one user found");
                 }
-                LOG.info("Getting user by email: {} is completed", email);
-                LOG.debug("Get user: {} by email: {}", user, email);
+                log.info("Getting user by email: {} is completed", email);
+                log.debug("Get user: {} by email: {}", user, email);
                 return user;
             }
         } catch (SQLException e) {
-            LOG.error("An exception occurred while trying to get user with email: {}", email, e);
+            log.error("An exception occurred while trying to get user with email: {}", email, e);
             throw new RuntimeException("Get user by email error", e);
+        }
+    }
+
+    @Override
+    public User getByOrderId(int orderId) {
+        log.info("Get user by orderId: {}", orderId);
+        String resultQuery = GET_USER_BY_ORDER;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
+            preparedStatement.setInt(1, orderId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    User user = USER_ROW_MAPPER.mapRow(resultSet);
+
+                    log.info("Getting user by orderId: {} is completed", orderId);
+                    log.debug("Get user: {} by orderId: {}", user, orderId);
+                    return user;
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            log.error("An exception occurred while trying to get user by orderId: {}", orderId, e);
+            throw new RuntimeException("Get user by orderId error", e);
         }
     }
 }

@@ -18,4 +18,6 @@ public interface UserDao {
     User getByLogin(String login);
 
     User getByEmail(String email);
+
+    User getByOrderId(int orderId);
 }

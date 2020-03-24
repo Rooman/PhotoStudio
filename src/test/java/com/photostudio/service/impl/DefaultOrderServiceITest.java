@@ -1,19 +1,22 @@
 package com.photostudio.service.impl;
 
 
+import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.JdbcOrderDao;
 import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
+import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.service.MailService;
 import com.photostudio.service.OrderStatusService;
+import com.photostudio.service.UserService;
 import com.photostudio.service.testUtils.MockMailSender;
-import com.photostudio.web.util.MailSender;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -21,34 +24,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DefaultOrderServiceITest {
-    private static TestDataSource dataSource = new TestDataSource();
+
+    private static TestDataSource dataSource;
     private static DefaultOrderService orderService;
 
     @BeforeAll
-    public static void before() throws SQLException {
+    public static void before() throws SQLException, IOException {
+        dataSource = new TestDataSource();
         JdbcDataSource jdbcDataSource = dataSource.init();
-        dataSource.runScript("db/data.sql");
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+
         JdbcOrderStatusCachedDao jdbcOrderStatusCachedDao = new JdbcOrderStatusCachedDao(jdbcDataSource);
         OrderStatusService orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
+
         MockMailSender mockMailSender = new MockMailSender(dataSource);
-        MailSender mailSender = (MailSender) mockMailSender;
-        MailService mailService = new DefaultMailService(mailSender);
+        UserDao userDao = new JdbcUserDao(jdbcDataSource);
+        UserService userService = new DefaultUserService(userDao);
+        MailService mailService = new DefaultMailService(mockMailSender, userService);
+
         orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, mailService);
     }
 
     @BeforeEach
-    public void beforeEach() throws SQLException {
+    public void beforeEach() throws SQLException, IOException {
         dataSource.execUpdate("DELETE FROM TestSentMails;");
         dataSource.runScript("db/data_change_status.sql");
     }
 
     @Test
-    public void testToViewAndSelectByAdmin() {
+    public void testToViewAndSelectByAdmin() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(1, user);
         });
@@ -60,18 +68,18 @@ public class DefaultOrderServiceITest {
         assertEquals(1, cntMails);
 
         String mailTo = dataSource.getString("SELECT mailto FROM TestSentMails");
-        assertEquals("test@test.com", mailTo);
+        assertEquals("user2@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
         assertEquals("Order 1 is created", subject);
     }
 
     @Test
-    public void testToViewAndSelectWithoutPhoto() {
+    public void testToViewAndSelectWithoutPhoto() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(5, user);
         });
@@ -85,11 +93,11 @@ public class DefaultOrderServiceITest {
 
 
     @Test
-    public void testToViewAndSelectByUser() {
+    public void testToViewAndSelectByUser() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
         //after
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(1, user);
@@ -104,11 +112,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testToSelectedByAdmin() {
+    public void testToSelectedByAdmin() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(2, user);
@@ -123,11 +131,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testToSelectedByUser() {
+    public void testToSelectedByUser() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(2, user);
@@ -143,15 +151,15 @@ public class DefaultOrderServiceITest {
         assertEquals("admin@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("User user@test.com selected photo for order:2", subject);
+        assertEquals("User user2@test.com selected photo for order: 2", subject);
     }
 
     @Test
-    public void testToSelectedWithoutSelectedPhoto() {
+    public void testToSelectedWithoutSelectedPhoto() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(6, user);
@@ -165,11 +173,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testToReadyByAdmin() {
+    public void testToReadyByAdmin() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(3, user);
@@ -183,7 +191,7 @@ public class DefaultOrderServiceITest {
         assertEquals(1, cntMails);
 
         String mailTo = dataSource.getString("SELECT mailto FROM TestSentMails");
-        assertEquals("test@test.com", mailTo);
+        assertEquals("user2@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
         assertEquals("Order 3 is ready", subject);
@@ -191,11 +199,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testToReadyByAdminWithoutReadyPhoto() {
+    public void testToReadyByAdminWithoutReadyPhoto() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(7, user);
@@ -210,11 +218,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testToReadyByUser() {
+    public void testToReadyByUser() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(3, user);
@@ -229,11 +237,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testNextStatusFromReadyByAdmin() {
+    public void testNextStatusFromReadyByAdmin() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(4, user);
@@ -248,11 +256,11 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testNextStatusFromReadyByUser() {
+    public void testNextStatusFromReadyByUser() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(4, user);
@@ -267,10 +275,10 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testPreviousStatusFromReadyByAdmin() {
+    public void testPreviousStatusFromReadyByAdmin() throws SQLException {
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(4, user);
@@ -285,10 +293,10 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testPreviousStatusFromReadyByUser() {
+    public void testPreviousStatusFromReadyByUser() throws SQLException {
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusBack(4, user);
@@ -304,15 +312,15 @@ public class DefaultOrderServiceITest {
         assertEquals("admin@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("User user@test.com selected photo for order:4", subject);
+        assertEquals("User user2@test.com selected photo for order: 4", subject);
 
     }
 
     @Test
-    public void testPreviousStatusFromReadyWithotSelectedPhoto() {
+    public void testPreviousStatusFromReadyWithotSelectedPhoto() throws SQLException {
         User user = new User();
         user.setUserRole(UserRole.USER);
-        user.setEmail("user@test.com");
+        user.setEmail("user2@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(8, user);
@@ -327,10 +335,10 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testPreviousStatusFromSelectedByAdmin() {
+    public void testPreviousStatusFromSelectedByAdmin() throws SQLException {
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
-        user.setEmail("test@test.com");
+        user.setEmail("admin@test.com");
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(3, user);
@@ -345,7 +353,7 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testPreviousStatusFromSelectedByUser() {
+    public void testPreviousStatusFromSelectedByUser() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);
@@ -364,7 +372,7 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testPreviousStatusFromViewAndSelectByAdmin() {
+    public void testPreviousStatusFromViewAndSelectByAdmin() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
@@ -383,7 +391,7 @@ public class DefaultOrderServiceITest {
     }
 
     @Test
-    public void testPreviousStatusFromViewAndSelectByUser() {
+    public void testPreviousStatusFromViewAndSelectByUser() throws SQLException {
 
         User user = new User();
         user.setUserRole(UserRole.USER);

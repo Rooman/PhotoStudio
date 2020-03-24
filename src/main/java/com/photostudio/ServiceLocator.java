@@ -59,7 +59,7 @@ public class ServiceLocator {
         MailSender mailSender = new MailSender();
         register(MailSender.class, mailSender);
 
-        MailService mailService = new DefaultMailService(mailSender);
+        MailService mailService = new DefaultMailService(mailSender, userService);
         register(MailService.class, mailService);
 
         OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
