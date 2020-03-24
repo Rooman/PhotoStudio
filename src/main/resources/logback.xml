@@ -27,4 +27,7 @@
     </root>
 
    <!-- TODO: Add console appender    -->
+
+    <!-- Disable ThymeleafEngine logs -->
+   <logger name="org.thymeleaf.TemplateEngine" level="OFF"/>
 </configuration>
