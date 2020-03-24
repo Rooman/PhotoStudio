@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../assets/css/common.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/all-users.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/all-users.css}">
     <title>Photo Studio</title>
 </head>
 <body>
@@ -23,9 +23,8 @@
     <div class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../admin">Admin page</a></li>
-                <img class="bread__crumb-arrow" src="../assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">All users</li>
+                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">All users</li>
             </ol>
         </nav>
     </div>
@@ -43,7 +42,7 @@
             <td class="table_header">Name</td>
             <td class="table_header">Address</td>
             <td class="table_header">Additional Info</td>
-            <td class="table_header"><img class="img-edit img-edit__header" src="../assets/images/user/Edit.svg"></td>
+            <td class="table_header"><img class="img-edit img-edit__header" th:src="@{/assets/images/user/Edit.svg}"></td>
         </tr>
         <div th:each="user : ${users}">
             <tr class="table_info double-click"

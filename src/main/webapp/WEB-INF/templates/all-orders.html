@@ -5,7 +5,7 @@
     <title>Orders Journal</title>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/all-orders.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/all-orders.css}">
 </head>
 
 <body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
@@ -21,9 +21,8 @@
     <div th:if="${roleAdmin}" class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">Order journal</li>
+                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Order journal</li>
             </ol>
         </nav>
     </div>
