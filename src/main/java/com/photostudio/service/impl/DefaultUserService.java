@@ -60,4 +60,10 @@ public class DefaultUserService implements UserService {
         log.info("Started service get user by email from DB");
         return userDao.getByEmail(email);
     }
+
+    @Override
+    public User getUserByOrderId(int orderId) {
+        log.info("Started service get user by order from DB");
+        return userDao.getByOrderId(orderId);
+    }
 }

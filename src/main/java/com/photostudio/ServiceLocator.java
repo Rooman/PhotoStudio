@@ -13,12 +13,12 @@ import com.photostudio.dao.jdbc.JdbcUserDao;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
 import com.photostudio.service.MailService;
-import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.OrderService;
+import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.impl.DefaultMailService;
-import com.photostudio.service.impl.DefaultOrderStatusService;
 import com.photostudio.service.impl.DefaultOrderService;
+import com.photostudio.service.impl.DefaultOrderStatusService;
 import com.photostudio.service.impl.DefaultUserService;
 import com.photostudio.util.PropertyReader;
 import com.photostudio.web.util.MailSender;
@@ -44,8 +44,8 @@ public class ServiceLocator {
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
         register(OrderStatusDao.class, orderStatusDao);
 
-        OrderStatusService orderCacheService = new DefaultOrderStatusService();
-        register(OrderStatusService.class, orderCacheService);
+        OrderStatusService orderStatusService = new DefaultOrderStatusService(orderStatusDao);
+        register(OrderStatusService.class, orderStatusService);
 
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
@@ -59,10 +59,10 @@ public class ServiceLocator {
         MailSender mailSender = new MailSender(propertyReader);
         register(MailSender.class, mailSender);
 
-        MailService mailService = new DefaultMailService(mailSender);
+        MailService mailService = new DefaultMailService(mailSender, userService);
         register(MailService.class, mailService);
 
-        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderCacheService, mailService);
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
         register(OrderService.class, orderService);
 
         SecurityService securityService = new DefaultSecurityService();
