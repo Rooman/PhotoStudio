@@ -29,9 +29,9 @@ public class TestDataSource {
     }
 
     public void runScript(String path) throws SQLException, IOException {
-        FileReader fileData = new FileReader(getClass().getClassLoader().getResource(path).getFile());
-        RunScript.execute(connection, fileData);
-        fileData.close();
+        try (FileReader fileData = new FileReader(getClass().getClassLoader().getResource(path).getFile())) {
+            RunScript.execute(connection, fileData);
+        }
     }
 
     public int getResult(String sqlQuery) throws SQLException {
