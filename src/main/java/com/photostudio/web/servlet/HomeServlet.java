@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ public class HomeServlet extends HttpServlet {
         LOG.info("Request home page received");
         Map<String, Object> paramsMap = new HashMap<>();
         CommonVariableAppendService.appendUser(paramsMap, request);
+
         response.setContentType("text/html;charset=utf-8");
 
         response.setStatus(HttpServletResponse.SC_OK);

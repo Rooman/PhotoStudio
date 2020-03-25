@@ -58,7 +58,7 @@ main {
     line-height: 13px;
 }
 
-.top-dropdown a:after {
+.top-dropdown > a:after {
     border: 0;
     font-family: "FontAwesome";
     font-size: 14px;
@@ -66,20 +66,14 @@ main {
     margin-left: 5px;
     vertical-align: 0;
     color: rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-choose {
+
 }
 
 .dropdown-menu show {
     max-width: 50px;
-}
-
-.top-dropdown a:after {
-    border: 0;
-    font-family: "FontAwesome";
-    font-size: 14px;
-    content: "\f078";
-    margin-left: 5px;
-    vertical-align: 0;
-    color: rgba(0, 0, 0, 0.8);
 }
 
 .button {
@@ -114,16 +108,10 @@ main {
 	background-color: white;
 }
 
-.bread__crumb-arrow {
-	margin-top: 1.5625rem;
-	height: 5px;
-	width: 6.25rem;
-}
-
 .breadcrumb-item {
 	width: 13.1875rem;
 	height: 3.8125rem;
-	border: 1px solid #000000;
+	border: 1px solid #989898;
 	border-radius: 0.625rem;
 	font-weight: 300;
 	font-size: 2.25rem;
@@ -134,10 +122,103 @@ main {
 }
 
 .breadcrumb-item a {
-	color: #000000;
-	text-decoration: none;
+    color: #989898;
+    text-decoration: none;
+}
+
+.breadcrumb-item:hover a {
+    color: #000000;
+}
+
+.breadcrumb__link {
+    display: inline-block;
+    width: 190px;
+    color: #989898;
+    text-decoration: none;
+}
+
+.breadcrumb-item:before {
+    content: " " !important;
+    padding-right: 0 !important;
+}
+
+.breadcrumb-item:after {
+    content: " ";
+    width: 120px;
+    height: 8px;
+    position: absolute;
+    margin-left: 11px;
+    margin-top: 15px;
+    background: url("../images/Arrow.jpg") no-repeat;
+    background-size: 120px 5px;
+}
+
+.breadcrumb-item:not(:first-child) {
+    margin-left: 122px;
+    padding-left: 0;
+}
+
+.breadcrumb-item:last-child:after{
+    content: "";
+    width: 0;
+    height: 0;
+}
+
+.breadcrumb-item:hover {
+    border-color: #000000;
+    color: black;
+}
+
+.breadcrumb-item__active {
+    border-color: #000000;
 }
 /*Bread Crumb End*/
+
+.dialog-title {
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 48px;
+    text-align: center;
+    margin: auto;
+}
+
+.dialog-body {
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.dialog__button {
+    font-size: 32px;
+    line-height: 46px;
+    height: 64px;
+    background: #FAE1DE;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.dialog__button:hover {
+    font-weight: 600;
+}
+
+.dialog__button:active {
+    font-weight: 600;
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.delete-button {
+    width: 200px;
+    height: 64px;
+    background: #FCC5D9;
+    margin-left: 25px;
+    border-color: #FCC5D9;
+}
 
 /* Table */
 table.table__rounded {
@@ -258,4 +339,7 @@ button.user-menu__item:hover {
     text-decoration:underline;
 }
 
+.error {
+ color: red;
+}
 /* User dropdown menu on Navigation end*/

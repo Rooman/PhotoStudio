@@ -6,47 +6,47 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/order/*")
+@Slf4j
 public class OrderServlet extends HttpServlet {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private OrderService defaultOrderService = ServiceLocator.getService(OrderService.class);
+    private OrderService orderService = ServiceLocator.getService(OrderService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
 
-            String uri = request.getRequestURI();
-            String[] partsOfUri = uri.split("/");
-            int id = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
-            LOG.info("Request get order page by id:{} in status NEW", id);
+        String uri = request.getRequestURI();
+        int idFromUri = Integer.parseInt(uri.substring(uri.lastIndexOf("/") + 1));
+        String newEmail = request.getParameter("newEmail");
 
-            Order order = defaultOrderService.getOrderByIdInStatusNew(id);
-            Map<String, Object> paramsMap = new HashMap<>();
-            CommonVariableAppendService.appendUser(paramsMap, request);
+        String errorMessage = (String) request.getSession().getAttribute("errorMessage");
 
-            if (OrderStatus.NEW.equals(order.getStatus())) {
-                paramsMap.put("order", order);
-                response.setContentType("text/html;charset=utf-8");
-                TemplateEngineFactory.process(request, response, "new-order", paramsMap);
-            } else {
-                LOG.info("Order with id:{} is not in status New", id);
-                response.sendRedirect(request.getContextPath() + "/orders");
-            }
+        Map<String, Object> paramsMap = new HashMap<>();
+        CommonVariableAppendService.appendUser(paramsMap, request);
 
-        } catch (IOException e) {
-            LOG.error("Get with order in status New error", e);
-            throw new RuntimeException("Get with order in status New error", e);
+        log.info("Request get order page by id:{}", idFromUri);
+        log.info("errorMessage:{}", errorMessage);
+
+        Order order = orderService.getOrderByIdInStatusNew(idFromUri);
+        request.setAttribute("orderId", idFromUri);
+
+        if (OrderStatus.NEW.equals(order.getStatus())) {
+            paramsMap.put("newEmail", newEmail);
         }
+        paramsMap.put("order", order);
+        paramsMap.put("errorMessage", errorMessage);
+
+        response.setContentType("text/html;charset=utf-8");
+        TemplateEngineFactory.process(request, response, "order", paramsMap);
+
+        request.getSession().setAttribute("errorMessage", null);
     }
 }

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/add-user.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/add-user.css}">
     <title>Photo Studio</title>
 </head>
 
@@ -16,11 +16,9 @@
     <div class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item"><a href="admin/users">All users</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">Manage user</li>
+                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin/users}">All users</a></li>
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Manage user</li>
             </ol>
         </nav>
     </div>
@@ -36,10 +34,11 @@
                 <div class="login-form_between">
 
                     <input type="email" class="form-control  " id="email" placeholder="Email "
-                           name="email">
-                    <input type="text" class="form-control  " id="phoneNumber" placeholder="Phone"
+                           name="email" required>
+                    <input type="tel" pattern="^((([+]|[0]{2})[1-9][0-9]{3,4})|((([0][1-9])|([1-9][0-9]))))[0-9]{1,10}$"
+                           placeholder="+49XXXXXXXXXX"
+                           class="form-control  " id="phoneNumber"
                            name="phoneNumber">
-
                 </div>
             </div>
             <div class="new__user-info">

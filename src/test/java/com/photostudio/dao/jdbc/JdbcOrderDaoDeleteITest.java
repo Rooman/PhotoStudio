@@ -5,9 +5,7 @@ import com.photostudio.dao.file.LocalDiskPhotoDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,19 +15,25 @@ import java.sql.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JdbcOrderDaoDeleteITest {
-    private TestDataSource dataSource = new TestDataSource();
-    private JdbcDataSource jdbcDataSource;
+    private static TestDataSource dataSource = new TestDataSource();
+    private static JdbcDataSource jdbcDataSource;
 
     private final String TEST_PATH_PHOTO = "test_delete_orders";
 
+    @BeforeAll
+    public static void setUp() throws SQLException, IOException {
+        jdbcDataSource = dataSource.init();
+        dataSource.runScript("db/clear_orders.sql");
+        dataSource.runScript("db/insert_user_data.sql");
+    }
+
     @BeforeEach
     public void before() throws SQLException, IOException {
-        jdbcDataSource = dataSource.init();
         dataSource.runScript("db/data_delete_order.sql");
     }
 
     @Test
-    public void testDeleteOrderWithoutPhotos() {
+    public void testDeleteOrderWithoutPhotos() throws SQLException {
         //before
         int cntOrdersBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
 
@@ -47,19 +51,19 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @Test
-    public void testDeleteNotExistingOrder() {
+    public void testDeleteNotExistingOrder() throws SQLException {
         //before
         int cntOrdersBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
 
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        jdbcOrderDao.delete(10);
+        jdbcOrderDao.delete(11);
 
         int cntOrdersAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
         assertEquals(cntOrdersBefore, cntOrdersAfter);
     }
 
     @Test
-    public void testDeletePhotoOrder() {
+    public void testDeletePhotoOrder() throws SQLException {
         //before
         int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
         int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
@@ -76,7 +80,7 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @Test
-    public void testDeletePhotoFromDisk() throws IOException {
+    public void testDeletePhotoFromDisk() throws IOException, SQLException {
         //before
         int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
         int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
@@ -123,7 +127,12 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @AfterEach
-    public void after() throws SQLException {
+    public void after() throws SQLException, IOException {
+        dataSource.runScript("db/clear_orders.sql");
+    }
+
+    @AfterAll
+    public static void closeConnection() throws SQLException {
         dataSource.close();
     }
 

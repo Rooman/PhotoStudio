@@ -3,9 +3,7 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.Order;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,12 +11,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JdbcOrderByUserDaoTest {
-    private TestDataSource dataSource = new TestDataSource();
-    private JdbcDataSource jdbcDataSource;
+public class JdbcOrderByUserDaoITest {
+    private static TestDataSource dataSource = new TestDataSource();
+    private static JdbcDataSource jdbcDataSource;
 
-    @BeforeEach
-    public void before() throws IOException, SQLException {
+    @BeforeAll
+    public static void addTestData() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
         dataSource.runScript("db/data_order_by_user.sql");
     }
@@ -36,7 +34,7 @@ public class JdbcOrderByUserDaoTest {
     public void testGetOrdersByUserOnlyNew() {
         //when
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        List<Order> orderList = jdbcOrderDao.getOrdersByUserId(2);
+        List<Order> orderList = jdbcOrderDao.getOrdersByUserId(1);
 
         assertEquals(0, orderList.size());
     }
@@ -45,13 +43,13 @@ public class JdbcOrderByUserDaoTest {
     public void testGetOrdersByUser() {
         //when
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        List<Order> orderList = jdbcOrderDao.getOrdersByUserId(3);
+        List<Order> orderList = jdbcOrderDao.getOrdersByUserId(2);
 
         assertEquals(3, orderList.size());
     }
 
-    @AfterEach
-    public void after() throws SQLException {
+    @AfterAll
+    public static void closeConnection() throws SQLException {
         dataSource.close();
     }
 

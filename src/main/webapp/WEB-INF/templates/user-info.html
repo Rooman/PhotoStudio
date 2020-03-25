@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/add-user.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/add-user.css}">
     <title>Photo Studio</title>
 </head>
 
-<body>
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
 
+<div th:if="${roleUser}">
+    <nav th:replace="fragment/navigation.html :: nav"></nav>
+    <hr class="header__underscore">
+</div>
 <div class="container">
-
-    <!--	Bread Crumb-->
-    <div class="bread__crumb-navigation">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item"><a href="admin/users">All users</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">Manage user</li>
-            </ol>
-        </nav>
-    </div>
-    <!--Bread Crumb End-->
+        <!--	Bread Crumb-->
+        <div th:if="${roleAdmin}" class="bread__crumb-navigation">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
+                    <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin/users}">All users</a></li>
+                    <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Manage user</li>
+                </ol>
+            </nav>
+        </div>
+        <!--Bread Crumb End-->
 
     <h1 class="page__title">Manage user</h1>
 
@@ -60,15 +61,40 @@
                 </div>
 
                 <div class="manage-buttons">
-                    <button type="submit" class="btn btn__manage btn__manage--pink btn__manage--mb">Change password</button>
+                    <button type="submit" class="btn btn__manage btn__manage--pink btn__manage--mb">Change password
+                    </button>
 
-                    <button class="btn btn__manage btn__manage--pink"
-                            th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Delete User
+                    <button type="button" class="btn btn__manage btn__manage--pink"
+                            data-toggle="modal" data-target="#delete-user">Delete user
                     </button>
                 </div>
 
             </div>
+        </div>
     </form>
+    <div class="modal fade" id="delete-user" tabindex="-1" role="dialog" aria-labelledby="delete-user-title"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title dialog-title" id="delete-order-title">Confirm delete</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="dialog-body"
+                       th:text="'Are you sure you want to delete user with id '+${user.id}+' ?'"></p>
+                </div>
+                <div class="modal-footer dialog-buttons">
+                    <button class="btn btn-submit btn-outline-dark button dialog__button
+                            delete-button" data-dismiss="modal">No
+                    </button>
+                    <button class="btn btn-submit btn-outline-dark button dialog__button
+                            delete-button"
+                            th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <meta th:replace="fragment/script.html :: script">

@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Orders Journal</title>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/all-orders.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/all-orders.css}">
 </head>
 
 <body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
-<nav th:replace="fragment/navigation.html :: nav"></nav>
-<hr class="header__underscore">
+
+<div th:if="${roleUser}">
+    <nav th:replace="fragment/navigation.html :: nav"></nav>
+    <hr class="header__underscore">
+</div>
 <main>
 <div class="container container-main orders">
 
@@ -18,9 +21,8 @@
     <div th:if="${roleAdmin}" class="bread__crumb-navigation">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="admin">Admin page</a></li>
-                <img class="bread__crumb-arrow" src="assets/images/Arrow.jpg" alt="arrow">
-                <li class="breadcrumb-item active" aria-current="page">Order journal</li>
+                <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">Order journal</li>
             </ol>
         </nav>
     </div>
@@ -33,7 +35,7 @@
         <div class="order-btn">
             <a value="Show/Hide" onClick="showHideFilterTable('filterTable')"
                class="btn btn-submit btn-outline-dark button order-btn_right">Filter</a>
-            <a href="#"
+            <a th:href="@{/order}"
                class="btn btn-submit btn-outline-dark button order-btn_left">New order</a>
         </div>
     </div>
@@ -62,8 +64,8 @@
                     </div>
                     <div class="form-group col-md-6 order-filter-group">
                         <label for="inputPhoneNumber">Phone</label>
-                        <input type="tel" pattern="[1-9][0-9]{0,3} [0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}"
-                               placeholder="49 XXX XXX XX XX" class="form-control select-selected" id="inputPhoneNumber"
+                        <input type="tel" pattern="^((([+]|[0]{2})[1-9][0-9]{3,4})|((([0][1-9])|([1-9][0-9]))))[0-9]{1,10}$"
+                               placeholder="+49XXXXXXXXXX" class="form-control select-selected" id="inputPhoneNumber"
                                name="filterPhoneNumber">
                     </div>
                 </div>

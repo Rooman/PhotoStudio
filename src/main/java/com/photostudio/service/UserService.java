@@ -17,4 +17,8 @@ public interface UserService {
     void delete(long id);
 
     User getUserByLogin(String login);
+
+    User getUserByEmail(String email);
+
+    User getUserByOrderId(int orderId);
 }

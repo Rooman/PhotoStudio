@@ -3,41 +3,6 @@
 	margin: 0 auto;
 }
 
-.bread__crumb-navigation {
-	margin-top: 50px;
-	margin-left: 100px;
-}
-
-.breadcrumb {
-	margin: 0;
-	padding: 0;
-	background-color: white;
-}
-
-.bread__crumb-arrow {
-	margin-top: 25px;
-	height: 5px;
-	width: 100px;
-}
-
-.breadcrumb-item {
-	width: 211px;
-	height: 61px;
-	border: 1px solid #000000;
-	border-radius: 10px;
-	font-weight: 300;
-	font-size: 36px;
-	line-height: 36px;
-	text-align: center;
-	text-decoration: none;
-	padding-top: 10px;
-}
-
-.breadcrumb-item a {
-	color: #000000;
-	text-decoration: none;
-}
-
 .orders__title {
 	font-weight: 300;
 	font-size: 96px;

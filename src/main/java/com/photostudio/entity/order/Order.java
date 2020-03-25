@@ -1,14 +1,10 @@
 package com.photostudio.entity.order;
 
 import com.photostudio.entity.user.User;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @ToString

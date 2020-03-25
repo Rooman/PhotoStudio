@@ -1,18 +1,14 @@
 package com.photostudio.dao.jdbc;
 
+import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.RunScript;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import com.photostudio.entity.order.Order;
-import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.sql.Connection;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,25 +17,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JdbcOrderDaoITest {
-    private Connection connection;
-    private JdbcDataSource jdbcDataSource;
+    private static TestDataSource dataSource = new TestDataSource();
+    private static JdbcDataSource jdbcDataSource;
 
-    @BeforeEach
-    public void before() throws SQLException, FileNotFoundException {
-        jdbcDataSource = new JdbcDataSource();
-        jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=MySQL");
-        jdbcDataSource.setUser("h2");
-        jdbcDataSource.setPassword("h2");
-
-        connection = jdbcDataSource.getConnection();
-
-        FileReader fileSchema = new FileReader(getClass().getClassLoader().getResource("db/schema.sql").getFile());
-
-        RunScript.execute(connection, fileSchema);
-
-        FileReader fileData = new FileReader(getClass().getClassLoader().getResource("db/data.sql").getFile());
-
-        RunScript.execute(connection, fileData);
+    @BeforeAll
+    public static void addTestData() throws SQLException, IOException {
+        jdbcDataSource = dataSource.init();
+        dataSource.runScript("db/clear_orders.sql");
+        dataSource.runScript("db/clear_users.sql");
+        dataSource.runScript("db/data.sql");
     }
 
     @Test
@@ -105,7 +91,7 @@ public class JdbcOrderDaoITest {
         LocalDateTime expectedDateTime = LocalDateTime.of(2020, 1, 15, 18, 38, 33);
 
         assertEquals(1, expected.getId());
-        assertEquals("New", expected.getStatus().getOrderStatusName());
+        assertEquals("NEW", expected.getStatus().getOrderStatusName());
         assertEquals("mymail@d.com", expected.getUser().getEmail());
         assertEquals("NEW", expected.getComment());
         assertEquals(expectedDateTime, expected.getOrderDate());
@@ -322,9 +308,10 @@ public class JdbcOrderDaoITest {
         assertEquals(0, actual.size());
     }
 
-
-    @AfterEach
-    public void after() throws SQLException {
-        connection.close();
+    @AfterAll
+    public static void closeConnection() throws SQLException, IOException {
+        dataSource.runScript("db/clear_orders.sql");
+        dataSource.runScript("db/clear_users.sql");
+        dataSource.close();
     }
 }

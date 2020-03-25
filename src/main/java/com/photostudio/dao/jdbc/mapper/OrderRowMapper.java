@@ -6,6 +6,7 @@ import com.photostudio.entity.user.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OrderRowMapper {
 
@@ -21,6 +22,7 @@ public class OrderRowMapper {
                 .status(OrderStatus.getOrderStatus(resultSet.getString("statusName")))
                 .orderDate(resultSet.getTimestamp("orderDate").toLocalDateTime())
                 .user(user)
+                .photoSources(new ArrayList<>())
                 .comment(resultSet.getString("comment"))
                 .build();
 

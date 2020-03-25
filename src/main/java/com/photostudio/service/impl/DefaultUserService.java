@@ -3,11 +3,13 @@ package com.photostudio.service.impl;
 import com.photostudio.dao.UserDao;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+@Slf4j
 public class DefaultUserService implements UserService {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
     private UserDao userDao;
@@ -51,5 +53,17 @@ public class DefaultUserService implements UserService {
     public User getUserByLogin(String login) {
         LOG.info("Started service get user by login from DB");
         return userDao.getByLogin(login);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        log.info("Started service get user by email from DB");
+        return userDao.getByEmail(email);
+    }
+
+    @Override
+    public User getUserByOrderId(int orderId) {
+        log.info("Started service get user by order from DB");
+        return userDao.getByOrderId(orderId);
     }
 }

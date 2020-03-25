@@ -26,10 +26,16 @@ public class GetAllUsersServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LOG.info("Request show all users received");
+        String search = request.getParameter("search");
+        String orderId = request.getParameter("id");
+
         List<User> users = userService.getAllUsers();
 
         Map<String, Object> variablesMap = new HashMap<>();
         variablesMap.put("users", users);
+        variablesMap.put("search", search);
+        variablesMap.put("orderId", orderId);
+
 
         CommonVariableAppendService.appendUser(variablesMap, request);
         response.setContentType("text/html;charset=utf-8");
