@@ -56,7 +56,7 @@ public class ServiceLocator {
         UserService userService = new DefaultUserService(userDao);
         register(UserService.class, userService);
 
-        MailSender mailSender = new MailSender();
+        MailSender mailSender = new MailSender(propertyReader);
         register(MailSender.class, mailSender);
 
         MailService mailService = new DefaultMailService(mailSender, userService);
