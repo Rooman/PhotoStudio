@@ -29,5 +29,5 @@
    <!-- TODO: Add console appender    -->
 
     <!-- Disable ThymeleafEngine logs -->
-   <logger name="org.thymeleaf.TemplateEngine" level="OFF"/>
+   <logger name="org.thymeleaf.TemplateEngine" level="INFO"/>
 </configuration>
