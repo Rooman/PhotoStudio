@@ -1,6 +1,7 @@
 package com.photostudio.web.util;
 
 import com.photostudio.util.PropertyReader;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.mail.*;
@@ -9,20 +10,21 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Slf4j
+@NoArgsConstructor
 public class MailSender {
     private String adminEmail;
     private String password;
     private PropertyReader propertyReader;
 
-    public MailSender() {
-        propertyReader = new PropertyReader("mail.properties");
+    public MailSender(PropertyReader propertyReader) {
+        this.propertyReader = propertyReader;
         this.adminEmail = propertyReader.getString("mail.admin.email");
         this.password = propertyReader.getString("mail.admin.password");
     }
 
     public void send(String subject, String text, String toEmail) {
         log.info("Try to send mail to {}", toEmail);
-        Session session = Session.getInstance(propertyReader.getAllProperties(), new Authenticator() {
+        Session session = Session.getInstance(propertyReader.getProperties(), new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(adminEmail, password);
             }

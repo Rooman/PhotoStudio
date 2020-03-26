@@ -46,5 +46,7 @@ public class OrderServlet extends HttpServlet {
 
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);
+
+        request.getSession().setAttribute("errorMessage", null);
     }
 }

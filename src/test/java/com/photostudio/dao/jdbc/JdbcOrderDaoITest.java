@@ -8,6 +8,7 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.*;
 import com.photostudio.entity.order.Order;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class JdbcOrderDaoITest {
     private static JdbcDataSource jdbcDataSource;
 
     @BeforeAll
-    public static void addTestData() throws SQLException {
+    public static void addTestData() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
         dataSource.runScript("db/clear_orders.sql");
         dataSource.runScript("db/clear_users.sql");
@@ -308,7 +309,7 @@ public class JdbcOrderDaoITest {
     }
 
     @AfterAll
-    public static void closeConnection() throws SQLException {
+    public static void closeConnection() throws SQLException, IOException {
         dataSource.runScript("db/clear_orders.sql");
         dataSource.runScript("db/clear_users.sql");
         dataSource.close();

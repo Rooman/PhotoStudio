@@ -21,7 +21,7 @@ public class JdbcOrderDaoDeleteITest {
     private final String TEST_PATH_PHOTO = "test_delete_orders";
 
     @BeforeAll
-    public static void setUp() throws SQLException {
+    public static void setUp() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
         dataSource.runScript("db/clear_orders.sql");
         dataSource.runScript("db/insert_user_data.sql");
@@ -33,7 +33,7 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @Test
-    public void testDeleteOrderWithoutPhotos() {
+    public void testDeleteOrderWithoutPhotos() throws SQLException {
         //before
         int cntOrdersBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
 
@@ -51,7 +51,7 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @Test
-    public void testDeleteNotExistingOrder() {
+    public void testDeleteNotExistingOrder() throws SQLException {
         //before
         int cntOrdersBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM Orders");
 
@@ -63,7 +63,7 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @Test
-    public void testDeletePhotoOrder() {
+    public void testDeletePhotoOrder() throws SQLException {
         //before
         int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
         int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
@@ -80,7 +80,7 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @Test
-    public void testDeletePhotoFromDisk() throws IOException {
+    public void testDeletePhotoFromDisk() throws IOException, SQLException {
         //before
         int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
         int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
@@ -127,7 +127,7 @@ public class JdbcOrderDaoDeleteITest {
     }
 
     @AfterEach
-    public void after() throws SQLException {
+    public void after() throws SQLException, IOException {
         dataSource.runScript("db/clear_orders.sql");
     }
 
