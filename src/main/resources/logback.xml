@@ -1,7 +1,9 @@
 <configuration>
-    <property name="LOG_DIR" value="log/" />
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
+    <property name="LOG_DIR" value="log/" />
+    <property name="pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/photostudio.log</file>
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -9,7 +11,7 @@
         </filter>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${pattern}</pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -22,9 +24,15 @@
 
     </appender>
 
+    <appender name="STD_OUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
+        <appender-ref ref="STD_OUT"/>
     </root>
 
-   <!-- TODO: Add console appender    -->
 </configuration>
