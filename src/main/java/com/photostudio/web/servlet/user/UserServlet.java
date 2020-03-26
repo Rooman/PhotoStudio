@@ -10,7 +10,6 @@ import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
 import lombok.extern.slf4j.Slf4j;
-import org.h2.util.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -84,7 +83,7 @@ public class UserServlet extends HttpServlet {
         newUser.setAddress(address);
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
-        newUser.setLanguage(userLanguageService.getLanguageById(langId));
+        newUser.setLangId(langId);
         log.debug("Request for registration user: {} received", newUser);
 
         securityService.register(newUser);

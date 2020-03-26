@@ -38,10 +38,9 @@ class UserRowMapperTest {
         when(mockResultSet.getString("title")).thenReturn("Mr.");
         when(mockResultSet.getString("additionalInfo")).thenReturn("Friendly");
         when(mockResultSet.getInt("langId")).thenReturn(1);
-        when(mockUserLanguageDao.getLanguageById(1)).thenReturn(new UserLanguage(1, "EN", "English"));
 
         //when
-        User actual = userRowMapper.mapRow(mockResultSet, mockUserLanguageDao);
+        User actual = userRowMapper.mapRow(mockResultSet);
 
         //then
         assertNotNull(actual);
@@ -59,6 +58,6 @@ class UserRowMapperTest {
         assertEquals("Krausnickstraße 15A", actual.getAddress());
         assertEquals("Mr.", actual.getTitle());
         assertEquals("Friendly", actual.getAdditionalInfo());
-        assertEquals("EN", actual.getLanguage().getShortName());
+        assertEquals(1, actual.getLangId());
     }
 }

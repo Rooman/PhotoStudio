@@ -93,11 +93,9 @@ public class JdbcUserDao implements UserDao {
 
 
     private DataSource dataSource;
-    private UserLanguageDao userLanguageDao;
 
-    public JdbcUserDao(DataSource dataSource, UserLanguageDao userLanguageDao) {
+    public JdbcUserDao(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.userLanguageDao = userLanguageDao;
     }
 
     @Override
@@ -109,7 +107,7 @@ public class JdbcUserDao implements UserDao {
             List<User> users = new ArrayList<>();
 
             while (resultSet.next()) {
-                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
                 users.add(user);
             }
             log.info("Get: {} users from DB", users.size());
@@ -138,7 +136,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(10, user.getZip());
             preparedStatement.setString(11, user.getAddress());
             preparedStatement.setString(12, user.getAdditionalInfo());
-            preparedStatement.setInt(13, user.getLanguage().getId());
+            preparedStatement.setInt(13, user.getLangId());
             preparedStatement.executeUpdate();
             log.info("Adding user to DB is completed");
             log.debug("Add user: {} to DB", user);
@@ -158,7 +156,7 @@ public class JdbcUserDao implements UserDao {
                 if (!resultSet.next()) {
                     throw new RuntimeException("User with id= " + id + "is missing");
                 }
-                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
                     throw new RuntimeException("More than one users found");
                 }
@@ -187,7 +185,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(8, user.getTitle());
             preparedStatement.setString(9, user.getAdditionalInfo());
             preparedStatement.setString(10, user.getAddress());
-            preparedStatement.setInt(11, user.getLanguage().getId());
+            preparedStatement.setInt(11, user.getLangId());
             preparedStatement.setLong(12, user.getId());
             preparedStatement.executeUpdate();
 
@@ -229,7 +227,7 @@ public class JdbcUserDao implements UserDao {
                     log.error("No user with login: {}", login);
                     throw new LoginPasswordInvalidException("No user with login = " + login + " found");
                 }
-                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
                     log.error("Users with login: {} is several", login);
                     throw new RuntimeException("More then one user found");
@@ -256,7 +254,7 @@ public class JdbcUserDao implements UserDao {
                     log.error("No user with email: {}", email);
                     throw new GetUserByEmailException("No user with email = " + email + " found");
                 }
-                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
+                User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
                     log.error("Users with email: {} is several", email);
                     throw new RuntimeException("More then one user found");
@@ -280,7 +278,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(1, orderId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
+                    User user = USER_ROW_MAPPER.mapRow(resultSet);
 
                     log.info("Getting user by orderId: {} is completed", orderId);
                     log.debug("Get user: {} by orderId: {}", user, orderId);

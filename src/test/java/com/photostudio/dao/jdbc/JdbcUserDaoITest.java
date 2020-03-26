@@ -24,8 +24,7 @@ class JdbcUserDaoITest {
     @BeforeAll
     public static void init() throws IOException, SQLException {
         jdbcDataSource = dataSource.init();
-        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(jdbcDataSource);
-        jdbcUserDao = new JdbcUserDao(jdbcDataSource, userLanguageDao);
+        jdbcUserDao = new JdbcUserDao(jdbcDataSource);
     }
 
     @BeforeEach
@@ -51,7 +50,7 @@ class JdbcUserDaoITest {
         expectedUser.setUserRole(UserRole.ADMIN);
         expectedUser.setTitle("Mr.");
         expectedUser.setAdditionalInfo("Friendly");
-        expectedUser.setLanguage(new UserLanguage(1, "EN", "English"));
+        expectedUser.setLangId(1);
         return expectedUser;
     }
 
@@ -62,7 +61,7 @@ class JdbcUserDaoITest {
         expectedUser.setPasswordHash("93ba5ffe3e90c219572a823caf3d639c527f10a36d240f4a021ad4a367b7ebce");
         expectedUser.setSalt("fd75bf19-948d-4b3e-b7c6-42dbace77271");
         expectedUser.setUserRole(UserRole.USER);
-        expectedUser.setLanguage(new UserLanguage(1, "EN", "English"));
+        expectedUser.setLangId(1);
         return expectedUser;
     }
 
@@ -76,7 +75,7 @@ class JdbcUserDaoITest {
             assertNotNull(user.getPasswordHash());
             assertNotNull(user.getSalt());
             assertNotNull(user.getUserRole());
-            assertNotNull(user.getLanguage());
+            assertTrue(user.getId() > 0);
         }
     }
 
@@ -90,24 +89,7 @@ class JdbcUserDaoITest {
 
         //then
         assertNotNull(actualUser);
-        assertEquals(expectedUser.getPasswordHash(), actualUser.getPasswordHash());
-        assertEquals(expectedUser.getSalt(), actualUser.getSalt());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getAddress(), actualUser.getAddress());
-        assertEquals(expectedUser.getCity(), actualUser.getCity());
-        assertEquals(expectedUser.getCountry(), actualUser.getCountry());
-        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getId(), actualUser.getId());
-        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-        assertEquals(expectedUser.getUserRole(), actualUser.getUserRole());
-        assertEquals(expectedUser.getZip(), actualUser.getZip());
-        assertEquals(expectedUser.getTitle(), actualUser.getTitle());
-        assertEquals(expectedUser.getAdditionalInfo(), actualUser.getAdditionalInfo());
-        assertEquals(expectedUser.getLanguage().getId(), actualUser.getLanguage().getId());
-        assertEquals(expectedUser.getLanguage().getShortName(), actualUser.getLanguage().getShortName());
-        assertEquals(expectedUser.getLanguage().getFullName(), actualUser.getLanguage().getFullName());
-
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
@@ -119,24 +101,7 @@ class JdbcUserDaoITest {
         User actualUser = jdbcUserDao.getByLogin("mymail2@d.com");
 
         //then
-        assertNotNull(actualUser);
-        assertEquals(expectedUser.getPasswordHash(), actualUser.getPasswordHash());
-        assertEquals(expectedUser.getSalt(), actualUser.getSalt());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getAddress(), actualUser.getAddress());
-        assertEquals(expectedUser.getCity(), actualUser.getCity());
-        assertEquals(expectedUser.getCountry(), actualUser.getCountry());
-        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getId(), actualUser.getId());
-        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-        assertEquals(expectedUser.getUserRole(), actualUser.getUserRole());
-        assertEquals(expectedUser.getZip(), actualUser.getZip());
-        assertEquals(expectedUser.getTitle(), actualUser.getTitle());
-        assertEquals(expectedUser.getAdditionalInfo(), actualUser.getAdditionalInfo());
-        assertEquals(expectedUser.getLanguage().getId(), actualUser.getLanguage().getId());
-        assertEquals(expectedUser.getLanguage().getShortName(), actualUser.getLanguage().getShortName());
-        assertEquals(expectedUser.getLanguage().getFullName(), actualUser.getLanguage().getFullName());
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
@@ -176,7 +141,7 @@ class JdbcUserDaoITest {
     @Test
     public void testEdit() throws SQLException {
         User expectedUser = getExpectedUser2();
-        expectedUser.setLanguage(new UserLanguage(2, "DE", "Deutch"));
+        expectedUser.setLangId(2);
         assertDoesNotThrow(() -> jdbcUserDao.edit(expectedUser));
         int langId = dataSource.getResult("SELECT langId FROM Users WHERE id = 2");
         assertEquals(2, langId);

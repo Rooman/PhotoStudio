@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JdbcUserLanguageCachedDao implements UserLanguageDao {
 
-    private static final String GET_ALL_LANGUAGES = " SELECT l.id, l.shortName, l.fullName FROM Languages l ORDER BY l.id";
+    private static final String GET_ALL_LANGUAGES = "SELECT l.id, l.shortName, l.fullName FROM Languages l ORDER BY l.shortName";
     Map<Integer, UserLanguage> languages;
 
     public JdbcUserLanguageCachedDao(DataSource dataSource) {

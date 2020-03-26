@@ -28,7 +28,7 @@ class DefaultMailServiceITest {
 
         MockMailSender mockMailSender = new MockMailSender(dataSource);
         UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(jdbcDataSource);
-        UserDao userDao = new JdbcUserDao(jdbcDataSource, userLanguageDao);
+        UserDao userDao = new JdbcUserDao(jdbcDataSource);
         UserService userService = new DefaultUserService(userDao);
         defaultMailService = new DefaultMailService(mockMailSender, userService);
     }

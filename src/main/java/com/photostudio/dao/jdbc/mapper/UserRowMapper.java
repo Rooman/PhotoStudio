@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UserRowMapper {
 
-    public User mapRow(ResultSet resultSet, UserLanguageDao userLanguageDao) throws SQLException {
+    public User mapRow(ResultSet resultSet) throws SQLException {
         User user = new User();
 
         user.setId(resultSet.getLong("id"));
@@ -26,7 +26,7 @@ public class UserRowMapper {
         user.setZip(resultSet.getInt("zip"));
         user.setTitle(resultSet.getString("title"));
         user.setAdditionalInfo(resultSet.getString("additionalInfo"));
-        user.setLanguage(userLanguageDao.getLanguageById(resultSet.getInt("langId")));
+        user.setLangId(resultSet.getInt("langId"));
         return user;
     }
 }

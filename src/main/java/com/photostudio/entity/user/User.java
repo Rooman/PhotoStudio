@@ -18,5 +18,5 @@ public class User {
     private String address;
     private String title;
     private String additionalInfo;
-    private UserLanguage language;
+    private int langId;
 }

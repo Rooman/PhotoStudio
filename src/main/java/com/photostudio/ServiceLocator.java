@@ -29,7 +29,7 @@ public class ServiceLocator {
         UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(dataSource);
         register(UserLanguageDao.class, userLanguageDao);
 
-        UserDao userDao = new JdbcUserDao(dataSource, userLanguageDao);
+        UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
