@@ -26,9 +26,6 @@ public class ServiceLocator {
         //config db connection
         DataSource dataSource = new DataSourceFactory(propertyReader).createDataSource();
 
-        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(dataSource);
-        register(UserLanguageDao.class, userLanguageDao);
-
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
@@ -44,16 +41,14 @@ public class ServiceLocator {
         PhotoDao photoDiskDao = new LocalDiskPhotoDao(propertyReader.getString("dir.photo"));
         register(PhotoDao.class, photoDiskDao);
 
-        UserLanguageService userLanguageService=new DefaultUserLanguageService(userLanguageDao);
-        register(UserLanguageService.class, userLanguageService);
-
         UserService userService = new DefaultUserService(userDao);
         register(UserService.class, userService);
 
         MailSender mailSender = new MailSender(propertyReader);
         register(MailSender.class, mailSender);
 
-        MailService mailService = new DefaultMailService(mailSender, userService);
+        EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(dataSource);
+        MailService mailService = new DefaultMailService(mailSender, userService, emailTemplateDao);
         register(MailService.class, mailService);
 
         OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
@@ -61,6 +56,12 @@ public class ServiceLocator {
 
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
+
+        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(dataSource);
+        register(UserLanguageDao.class, userLanguageDao);
+
+        UserLanguageService userLanguageService = new DefaultUserLanguageService(userLanguageDao);
+        register(UserLanguageService.class, userLanguageService);
 
         //mapper for JSON
         ObjectMapper mapper = new ObjectMapper();

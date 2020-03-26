@@ -29,12 +29,12 @@ class JdbcUserLanguageCachedDaoTest {
         assertEquals(3, languages.size());
 
         assertEquals(1, languages.get(0).getId());
-        assertEquals("EN", languages.get(0).getShortName());
-        assertEquals("English", languages.get(0).getFullName());
+        assertEquals("DE", languages.get(0).getShortName());
+        assertEquals("Deutsch", languages.get(0).getFullName());
 
         assertEquals(2, languages.get(1).getId());
-        assertEquals("DE", languages.get(1).getShortName());
-        assertEquals("Deutsch", languages.get(1).getFullName());
+        assertEquals("EN", languages.get(1).getShortName());
+        assertEquals("English", languages.get(1).getFullName());
 
         assertEquals(3, languages.get(2).getId());
         assertEquals("RU", languages.get(2).getShortName());
@@ -44,7 +44,7 @@ class JdbcUserLanguageCachedDaoTest {
     @Test
     void testGetLanguageById() {
         UserLanguage userLanguage = jdbcUserLanguageCachedDao.getLanguageById(1);
-        assertEquals("EN", userLanguage.getShortName());
+        assertEquals("DE", userLanguage.getShortName());
     }
 
     @AfterAll

@@ -1,6 +1,7 @@
 package com.photostudio.service.impl;
 
 
+import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.MailService;
@@ -9,24 +10,17 @@ import com.photostudio.service.entity.EmailTemplate;
 import com.photostudio.web.util.MailSender;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 public class DefaultMailService implements MailService {
 
     private MailSender mailSender;
     private UserService userService;
-    private Map<OrderStatus, EmailTemplate> mapOfTemplates;
+    private EmailTemplateDao emailTemplateDao;
 
-    public DefaultMailService(MailSender mailSender, UserService userService) {
-        mapOfTemplates = new HashMap<>();
-        mapOfTemplates.put(OrderStatus.VIEW_AND_SELECT, new EmailTemplate("Order %d is created", "You can choose photo in order %d"));
-        mapOfTemplates.put(OrderStatus.SELECTED, new EmailTemplate("User %s selected photo for order: %d", "User %s selected photo for order: %d"));
-        mapOfTemplates.put(OrderStatus.READY, new EmailTemplate("Order %d is ready", "You can download selected photos in the order %d"));
-
+    public DefaultMailService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao) {
         this.mailSender = mailSender;
         this.userService = userService;
+        this.emailTemplateDao = emailTemplateDao;
     }
 
     @Override
@@ -48,12 +42,14 @@ public class DefaultMailService implements MailService {
     private void sendOnChangeStatusToAdmin(User userChanged, int orderId, OrderStatus orderStatus) {
         String userMail = userChanged.getEmail();
         log.info("Send mail to admin after changing status to {} in order {} by user {}", orderStatus, orderId, userMail);
-        mailSender.sendToAdmin(mapOfTemplates.get(orderStatus).generateHeader(userMail, orderId), mapOfTemplates.get(orderStatus).generateBody(userMail, orderId));
+        EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userChanged.getLangId(), orderStatus);
+        mailSender.sendToAdmin(emailTemplate.generateHeader(userMail, orderId), emailTemplate.generateBody(userMail, orderId));
     }
 
     private void sendOnChangeStatusToUser(User userOrdered, int orderId, OrderStatus orderStatus) {
         String userMail = userOrdered.getEmail();
         log.info("Send mail to {} after changing status to {} in order {}", userMail, orderStatus, orderId);
-        mailSender.send(mapOfTemplates.get(orderStatus).generateHeader(orderId), mapOfTemplates.get(orderStatus).generateBody(orderId), userMail);
+        EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userOrdered.getLangId(), orderStatus);
+        mailSender.send(emailTemplate.generateHeader(orderId), emailTemplate.generateBody(orderId), userMail);
     }
 }
