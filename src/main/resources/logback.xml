@@ -28,6 +28,6 @@
 
    <!-- TODO: Add console appender    -->
 
-    <!-- Disable ThymeleafEngine logs -->
+    <!-- Disable unnecessary ThymeleafEngine -->
    <logger name="org.thymeleaf.TemplateEngine" level="INFO"/>
 </configuration>
