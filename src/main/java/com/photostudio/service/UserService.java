@@ -22,6 +22,4 @@ public interface UserService {
     User getUserByEmail(String email);
 
     User getUserByOrderId(int orderId);
-
-    List<UserLanguage> getAllUserLanguages();
 }

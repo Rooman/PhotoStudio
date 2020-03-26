@@ -1,27 +1,17 @@
 package com.photostudio.service.impl;
 
 import com.photostudio.dao.UserDao;
-import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.entity.user.User;
-import com.photostudio.entity.user.UserLanguage;
 import com.photostudio.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Slf4j
 public class DefaultUserService implements UserService {
     private UserDao userDao;
-    private UserLanguageDao userLanguageDao;
 
-    public DefaultUserService(UserDao userDao, UserLanguageDao userLanguageDao) {
-        this.userDao = userDao;
-        this.userLanguageDao = userLanguageDao;
-    }
-
-    DefaultUserService(UserDao userDao) {
+    public DefaultUserService(UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -74,9 +64,4 @@ public class DefaultUserService implements UserService {
         return userDao.getByOrderId(orderId);
     }
 
-    @Override
-    public List<UserLanguage> getAllUserLanguages() {
-        log.info("Started service get all languages");
-        return userLanguageDao.getAllLanguages();
-    }
 }

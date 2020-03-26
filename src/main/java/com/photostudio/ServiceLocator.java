@@ -6,14 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.dao.jdbc.*;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
-import com.photostudio.service.MailService;
-import com.photostudio.service.OrderService;
-import com.photostudio.service.OrderStatusService;
-import com.photostudio.service.UserService;
-import com.photostudio.service.impl.DefaultMailService;
-import com.photostudio.service.impl.DefaultOrderService;
-import com.photostudio.service.impl.DefaultOrderStatusService;
-import com.photostudio.service.impl.DefaultUserService;
+import com.photostudio.service.*;
+import com.photostudio.service.impl.*;
 import com.photostudio.util.PropertyReader;
 import com.photostudio.web.util.MailSender;
 
@@ -50,7 +44,10 @@ public class ServiceLocator {
         PhotoDao photoDiskDao = new LocalDiskPhotoDao(propertyReader.getString("dir.photo"));
         register(PhotoDao.class, photoDiskDao);
 
-        UserService userService = new DefaultUserService(userDao, userLanguageDao);
+        UserLanguageService userLanguageService=new DefaultUserLanguageService(userLanguageDao);
+        register(UserLanguageService.class, userLanguageService);
+
+        UserService userService = new DefaultUserService(userDao);
         register(UserService.class, userService);
 
         MailSender mailSender = new MailSender(propertyReader);
