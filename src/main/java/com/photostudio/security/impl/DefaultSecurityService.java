@@ -6,21 +6,37 @@ import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import com.photostudio.service.UserService;
+import com.photostudio.web.util.MailSender;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 public class DefaultSecurityService implements SecurityService {
-    private UserService userService = ServiceLocator.getService(UserService.class);
+    private static final int DEFAULT_PASSWORD_LENGTH = 8;
+    private static final Random RANDOM = new Random();
+
+    private UserService userService;
+    private MailSender mailSender;
+
     private List<Session> sessionList = new CopyOnWriteArrayList<>();
+
+
+    public DefaultSecurityService() {
+        this(ServiceLocator.getService(UserService.class), ServiceLocator.getService(MailSender.class));
+    }
+
+    // for test purpose
+    DefaultSecurityService(UserService userService, MailSender mailSender) {
+        this.userService = userService;
+        this.mailSender = mailSender;
+    }
 
     @Override
     public Session login(String login, String password) {
@@ -52,7 +68,7 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public Session getSession(String userToken) {
-        if(userToken!=null) {
+        if (userToken != null) {
             Iterator<Session> sessionIterator = sessionList.iterator();
             while (sessionIterator.hasNext()) {
                 Session session = sessionIterator.next();
@@ -71,6 +87,48 @@ public class DefaultSecurityService implements SecurityService {
         String saltPassword = password + salt;
         byte[] originalString = saltPassword.getBytes();
         return DigestUtils.sha256Hex(originalString);
+    }
+
+    @Override
+    public void register(User user) {
+        // generate credentials
+        String randomPassword = generatePassword(DEFAULT_PASSWORD_LENGTH);
+        String randomSalt = UUID.randomUUID().toString();
+        String passwordHash = getHashedPassword(randomSalt, randomPassword);
+
+        user.setSalt(randomSalt);
+        user.setPasswordHash(passwordHash);
+
+        // save user
+        userService.add(user);
+
+        // send email
+        mailSender.send("Your account by Miari Fotografie", "Dear Customer, your account is activated. " +
+                "You can log in using password " + randomPassword, user.getEmail());
+    }
+
+    String generatePassword(int count) {
+        final int A_LETTER_CODE = 65;
+        final int Z_LETTER_CODE = 90;
+        if (count == 0) {
+            throw new IllegalArgumentException("Password length cannot be 0");
+        }
+
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            boolean isDigit = RANDOM.nextBoolean();
+            if (isDigit) {
+                // generate digit [0-9]
+                int digit = RANDOM.nextInt(10);
+                password.append(digit);
+            } else {
+                // generate letter [A-Z]
+                int letterCode = RANDOM.nextInt(Z_LETTER_CODE - A_LETTER_CODE + 1) + A_LETTER_CODE;
+                char letter = (char) letterCode;
+                password.append(letter);
+            }
+        }
+        return password.toString();
     }
 
     //For tests
