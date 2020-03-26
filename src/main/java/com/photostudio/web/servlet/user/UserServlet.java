@@ -3,14 +3,14 @@ package com.photostudio.web.servlet.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
+
 import com.photostudio.service.UserLanguageService;
+import com.photostudio.security.SecurityService;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
-import com.photostudio.web.util.MailSender;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.h2.util.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,13 +20,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @WebServlet(urlPatterns = {"/user", "/user/*"})
 @Slf4j
 public class UserServlet extends HttpServlet {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private UserService userService = ServiceLocator.getService(UserService.class);
     private UserLanguageService userLanguageService = ServiceLocator.getService(UserLanguageService.class);
     private ObjectMapper mapper = ServiceLocator.getService(ObjectMapper.class);
+    private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
 
 
     private static boolean isNotEmpty(String value) {
@@ -84,15 +85,9 @@ public class UserServlet extends HttpServlet {
         newUser.setTitle(title);
         newUser.setAdditionalInfo(additionalInfo);
         newUser.setLanguage(userLanguageService.getLanguageById(langId));
-        LOG.debug("Request for registration user: {} received", newUser);
+        log.debug("Request for registration user: {} received", newUser);
 
-        newUser.setPasswordHash("96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e");
-        newUser.setSalt("123");
-
-        userService.add(newUser);
-
-        MailSender mailSender = ServiceLocator.getService(MailSender.class);
-        mailSender.send("Your account by Miari Fotografie", "Dear Customer, your account is activated. You can log in using password 123", email);// todo change hardcoded password
+        securityService.register(newUser);
 
         response.sendRedirect(request.getContextPath() + "/admin/users");
     }
