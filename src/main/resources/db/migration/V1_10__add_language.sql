@@ -1,14 +1,19 @@
 CREATE TABLE Languages (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    short_name VARCHAR(3) NOT NULL,
-    full_name  VARCHAR(15)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    shortName VARCHAR(3) NOT NULL,
+    fullName  VARCHAR(15)
+) DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO Languages (short_name, full_name) VALUES ('ENG', 'English');
-INSERT INTO Languages (short_name, full_name) VALUES ('GER', 'Deutsch');
-INSERT INTO Languages (short_name, full_name) VALUES ('RUS', 'Russian');
+INSERT INTO Languages (shortName, fullName) VALUES ('EN', 'English');
+INSERT INTO Languages (shortName, fullName) VALUES ('DE', 'Deutsch');
+INSERT INTO Languages (shortName, fullName) VALUES ('RU', 'Русский');
 COMMIT;
 
 ALTER TABLE Users
-ADD COLUMN langId INT DEFAULT(1),
+ADD COLUMN langId INT;
+
+UPDATE Users
+SET langId = 1;
+
+ALTER TABLE Users
 ADD FOREIGN KEY (langId) REFERENCES Languages(id);

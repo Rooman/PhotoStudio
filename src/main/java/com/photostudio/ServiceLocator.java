@@ -1,15 +1,9 @@
 package com.photostudio;
 
-import com.photostudio.dao.OrderStatusDao;
-import com.photostudio.dao.PhotoDao;
+import com.photostudio.dao.*;
 import com.photostudio.dao.file.LocalDiskPhotoDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.photostudio.dao.OrderDao;
-import com.photostudio.dao.UserDao;
-import com.photostudio.dao.jdbc.DataSourceFactory;
-import com.photostudio.dao.jdbc.JdbcOrderDao;
-import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
-import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.*;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
 import com.photostudio.service.MailService;
@@ -38,7 +32,10 @@ public class ServiceLocator {
         //config db connection
         DataSource dataSource = new DataSourceFactory(propertyReader).createDataSource();
 
-        UserDao userDao = new JdbcUserDao(dataSource);
+        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(dataSource);
+        register(UserLanguageDao.class, userLanguageDao);
+
+        UserDao userDao = new JdbcUserDao(dataSource, userLanguageDao);
         register(UserDao.class, userDao);
 
         OrderStatusDao orderStatusDao = new JdbcOrderStatusCachedDao(dataSource);
@@ -53,7 +50,7 @@ public class ServiceLocator {
         PhotoDao photoDiskDao = new LocalDiskPhotoDao(propertyReader.getString("dir.photo"));
         register(PhotoDao.class, photoDiskDao);
 
-        UserService userService = new DefaultUserService(userDao);
+        UserService userService = new DefaultUserService(userDao, userLanguageDao);
         register(UserService.class, userService);
 
         MailSender mailSender = new MailSender(propertyReader);

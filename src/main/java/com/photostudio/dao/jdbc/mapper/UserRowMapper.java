@@ -1,5 +1,6 @@
 package com.photostudio.dao.jdbc.mapper;
 
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 
 public class UserRowMapper {
 
-    public User mapRow(ResultSet resultSet) throws SQLException {
+    public User mapRow(ResultSet resultSet, UserLanguageDao userLanguageDao) throws SQLException {
         User user = new User();
 
         user.setId(resultSet.getLong("id"));
@@ -25,7 +26,7 @@ public class UserRowMapper {
         user.setZip(resultSet.getInt("zip"));
         user.setTitle(resultSet.getString("title"));
         user.setAdditionalInfo(resultSet.getString("additionalInfo"));
-
+        user.setLanguage(userLanguageDao.getLanguageById(resultSet.getInt("langId")));
         return user;
     }
 }

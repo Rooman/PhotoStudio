@@ -1,7 +1,9 @@
 package com.photostudio.service.impl;
 
 import com.photostudio.dao.UserDao;
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.JdbcUserLanguageCachedDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
@@ -15,7 +17,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DefaultMailServiceTest {
+class DefaultMailServiceITest {
     private static TestDataSource dataSource = new TestDataSource();
     private static DefaultMailService defaultMailService;
 
@@ -25,7 +27,8 @@ class DefaultMailServiceTest {
         dataSource.runScript("db/data_change_status.sql");
 
         MockMailSender mockMailSender = new MockMailSender(dataSource);
-        UserDao userDao = new JdbcUserDao(jdbcDataSource);
+        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(jdbcDataSource);
+        UserDao userDao = new JdbcUserDao(jdbcDataSource, userLanguageDao);
         UserService userService = new DefaultUserService(userDao);
         defaultMailService = new DefaultMailService(mockMailSender, userService);
     }

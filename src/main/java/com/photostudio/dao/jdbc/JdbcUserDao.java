@@ -1,6 +1,7 @@
 package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.UserDao;
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
 import com.photostudio.exception.GetUserByEmailException;
@@ -19,13 +20,13 @@ public class JdbcUserDao implements UserDao {
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
             " lastName, title, roleName, passwordHash, salt, country, city, zip," +
-            " address, additionalInfo FROM Users " +
+            " address, additionalInfo, langId FROM Users " +
             " INNER JOIN UserRole ON Users.userRoleId=UserRole.id;";
 
     private static final String ADD_NEW_USER = "INSERT INTO Users (email,phoneNumber," +
-            "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo) " +
+            "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo,langId) " +
             "VALUES (?,?,?,?,?," +
-            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?,?)";
+            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?,?,?)";
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
 
@@ -42,7 +43,8 @@ public class JdbcUserDao implements UserDao {
             "u.zip zip, " +
             "u.title title, " +
             "u.additionalInfo additionalInfo, " +
-            "u.address address " +
+            "u.address address, " +
+            "u.langId langId " +
             "FROM Users u " +
             "JOIN UserRole ur ON u.userRoleId = ur.id " +
             "WHERE ";
@@ -51,7 +53,7 @@ public class JdbcUserDao implements UserDao {
             " u.firstName firstName, u.lastName lastName, ur.roleName roleName, " +
             " u.title title, u.additionalInfo additionalInfo, " +
             " u.passwordHash passwordHash, u.salt salt, u.country country," +
-            " u.city city, u.zip zip, u.address address  FROM  Users u " +
+            " u.city city, u.zip zip, u.address address, u.langId langId  FROM  Users u " +
             "INNER JOIN UserRole ur ON u.userRoleId=ur.id " +
             "WHERE u.id=?;";
     private static final String EDIT_USER = "UPDATE Users u " +
@@ -65,7 +67,8 @@ public class JdbcUserDao implements UserDao {
             "    u.zip = ?," +
             "    u.title = ?," +
             "    u.additionalInfo = ?," +
-            "    u.address = ?" +
+            "    u.address = ?," +
+            "    u.langId = ? " +
             "WHERE" +
             "    u.id = ?;";
     private static final String GET_USER_BY_ORDER = "SELECT u.id id, " +
@@ -81,7 +84,8 @@ public class JdbcUserDao implements UserDao {
             "u.zip zip, " +
             "u.title title, " +
             "u.additionalInfo additionalInfo, " +
-            "u.address address " +
+            "u.address address, " +
+            "u.langId langId " +
             "FROM Orders o " +
             "JOIN Users u ON o.userId = u.id " +
             "JOIN UserRole ur ON u.userRoleId = ur.id " +
@@ -89,9 +93,11 @@ public class JdbcUserDao implements UserDao {
 
 
     private DataSource dataSource;
+    private UserLanguageDao userLanguageDao;
 
-    public JdbcUserDao(DataSource dataSource) {
+    public JdbcUserDao(DataSource dataSource, UserLanguageDao userLanguageDao) {
         this.dataSource = dataSource;
+        this.userLanguageDao = userLanguageDao;
     }
 
     @Override
@@ -103,7 +109,7 @@ public class JdbcUserDao implements UserDao {
             List<User> users = new ArrayList<>();
 
             while (resultSet.next()) {
-                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
                 users.add(user);
             }
             log.info("Get: {} users from DB", users.size());
@@ -132,6 +138,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(10, user.getZip());
             preparedStatement.setString(11, user.getAddress());
             preparedStatement.setString(12, user.getAdditionalInfo());
+            preparedStatement.setInt(13, user.getLanguage().getId());
             preparedStatement.executeUpdate();
             log.info("Adding user to DB is completed");
             log.debug("Add user: {} to DB", user);
@@ -151,7 +158,7 @@ public class JdbcUserDao implements UserDao {
                 if (!resultSet.next()) {
                     throw new RuntimeException("User with id= " + id + "is missing");
                 }
-                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
                 if (resultSet.next()) {
                     throw new RuntimeException("More than one users found");
                 }
@@ -180,7 +187,8 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(8, user.getTitle());
             preparedStatement.setString(9, user.getAdditionalInfo());
             preparedStatement.setString(10, user.getAddress());
-            preparedStatement.setLong(11, user.getId());
+            preparedStatement.setInt(11, user.getLanguage().getId());
+            preparedStatement.setLong(12, user.getId());
             preparedStatement.executeUpdate();
 
             log.debug("User {} was edited", user);
@@ -221,7 +229,7 @@ public class JdbcUserDao implements UserDao {
                     log.error("No user with login: {}", login);
                     throw new LoginPasswordInvalidException("No user with login = " + login + " found");
                 }
-                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
                 if (resultSet.next()) {
                     log.error("Users with login: {} is several", login);
                     throw new RuntimeException("More then one user found");
@@ -248,7 +256,7 @@ public class JdbcUserDao implements UserDao {
                     log.error("No user with email: {}", email);
                     throw new GetUserByEmailException("No user with email = " + email + " found");
                 }
-                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
                 if (resultSet.next()) {
                     log.error("Users with email: {} is several", email);
                     throw new RuntimeException("More then one user found");
@@ -272,7 +280,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(1, orderId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    User user = USER_ROW_MAPPER.mapRow(resultSet);
+                    User user = USER_ROW_MAPPER.mapRow(resultSet, userLanguageDao);
 
                     log.info("Getting user by orderId: {} is completed", orderId);
                     log.debug("Get user: {} by orderId: {}", user, orderId);

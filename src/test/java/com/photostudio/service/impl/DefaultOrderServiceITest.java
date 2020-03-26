@@ -2,9 +2,11 @@ package com.photostudio.service.impl;
 
 
 import com.photostudio.dao.UserDao;
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.dao.jdbc.JdbcOrderDao;
 import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.JdbcUserLanguageCachedDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
@@ -38,7 +40,8 @@ public class DefaultOrderServiceITest {
         OrderStatusService orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
 
         MockMailSender mockMailSender = new MockMailSender(dataSource);
-        UserDao userDao = new JdbcUserDao(jdbcDataSource);
+        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(jdbcDataSource);
+        UserDao userDao = new JdbcUserDao(jdbcDataSource, userLanguageDao);
         UserService userService = new DefaultUserService(userDao);
         MailService mailService = new DefaultMailService(mockMailSender, userService);
 
