@@ -35,4 +35,6 @@
         <appender-ref ref="STD_OUT"/>
     </root>
 
+    <!-- Disable unnecessary ThymeleafEngine logs -->
+   <logger name="org.thymeleaf.TemplateEngine" level="INFO"/>
 </configuration>
