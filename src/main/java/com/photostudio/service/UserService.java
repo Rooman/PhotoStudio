@@ -2,8 +2,6 @@
 package com.photostudio.service;
 
 import com.photostudio.entity.user.User;
-import com.photostudio.entity.user.UserLanguage;
-
 import java.util.List;
 
 public interface UserService {
