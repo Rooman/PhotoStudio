@@ -61,8 +61,8 @@
                 </div>
 
                 <div class="manage-buttons">
-                    <button type="submit" class="btn btn__manage btn__manage--pink btn__manage--mb">Change password
-                    </button>
+                    <a th:href="@{'/security/change-password'(userId=${user.id})}" class="btn btn__manage btn__manage--pink btn__manage--mb">Change password
+                    </a>
 
                     <button type="button" class="btn btn__manage btn__manage--pink"
                             data-toggle="modal" data-target="#delete-user">Delete user

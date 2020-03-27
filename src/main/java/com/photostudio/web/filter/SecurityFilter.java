@@ -49,10 +49,16 @@ public class SecurityFilter implements Filter {
         urlToRoleMap.put("/photo", USER);
         urlToRoleMap.put("/order/forward", USER);
         urlToRoleMap.put("/user", USER);
+        urlToRoleMap.put("/security/change-password", USER);
 
         urlToRoleMap.put("/admin/users", ADMIN);
         urlToRoleMap.put("/admin", ADMIN);
         urlToRoleMap.put("/order/delete", ADMIN);
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
     }
 
     @Override
