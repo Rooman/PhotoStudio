@@ -1,25 +1,13 @@
 package com.photostudio;
 
-import com.photostudio.dao.OrderStatusDao;
-import com.photostudio.dao.PhotoDao;
+import com.photostudio.dao.*;
 import com.photostudio.dao.file.LocalDiskPhotoDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.photostudio.dao.OrderDao;
-import com.photostudio.dao.UserDao;
-import com.photostudio.dao.jdbc.DataSourceFactory;
-import com.photostudio.dao.jdbc.JdbcOrderDao;
-import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
-import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.*;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.impl.DefaultSecurityService;
-import com.photostudio.service.MailService;
-import com.photostudio.service.OrderService;
-import com.photostudio.service.OrderStatusService;
-import com.photostudio.service.UserService;
-import com.photostudio.service.impl.DefaultMailService;
-import com.photostudio.service.impl.DefaultOrderService;
-import com.photostudio.service.impl.DefaultOrderStatusService;
-import com.photostudio.service.impl.DefaultUserService;
+import com.photostudio.service.*;
+import com.photostudio.service.impl.*;
 import com.photostudio.util.PropertyReader;
 import com.photostudio.web.util.MailSender;
 
@@ -59,7 +47,8 @@ public class ServiceLocator {
         MailSender mailSender = new MailSender(propertyReader);
         register(MailSender.class, mailSender);
 
-        MailService mailService = new DefaultMailService(mailSender, userService);
+        EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(dataSource);
+        MailService mailService = new DefaultMailService(mailSender, userService, emailTemplateDao);
         register(MailService.class, mailService);
 
         OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
@@ -67,6 +56,12 @@ public class ServiceLocator {
 
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
+
+        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(dataSource);
+        register(UserLanguageDao.class, userLanguageDao);
+
+        UserLanguageService userLanguageService = new DefaultUserLanguageService(userLanguageDao);
+        register(UserLanguageService.class, userLanguageService);
 
         //mapper for JSON
         ObjectMapper mapper = new ObjectMapper();

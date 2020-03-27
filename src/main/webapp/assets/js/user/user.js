@@ -64,6 +64,7 @@ function updateUser(id) {
     user.address = document.getElementById("address").value;
     user.zip = document.getElementById("zip").value;
     user.additionalInfo = document.getElementById("additionalInfo").value;
+    user.langId = document.getElementById("langId").value;
 
     const json = JSON.stringify(user);
 

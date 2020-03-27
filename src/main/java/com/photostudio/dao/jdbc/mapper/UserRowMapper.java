@@ -1,5 +1,6 @@
 package com.photostudio.dao.jdbc.mapper;
 
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 
@@ -25,7 +26,7 @@ public class UserRowMapper {
         user.setZip(resultSet.getInt("zip"));
         user.setTitle(resultSet.getString("title"));
         user.setAdditionalInfo(resultSet.getString("additionalInfo"));
-
+        user.setLangId(resultSet.getInt("langId"));
         return user;
     }
 }

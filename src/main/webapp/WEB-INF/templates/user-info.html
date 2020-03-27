@@ -54,6 +54,11 @@
                            th:value="${user.address}">
                     <input type="text" class="form-control " id="zip" placeholder="ZIP code"
                            th:value="*{user.zip != 0}? *{user.zip} : ''">
+                    <select class="form-control" id="langId">
+                        <option th:each="lang : ${userLanguages}" th:value="${lang.getId()}"
+                                th:text="${lang.getFullName()}"
+                                th:selected="${lang.getId()==user.getLangId()}"></option>
+                    </select>
                     <input type="text" class="form-control form-control_info" id="additionalInfo"
                            placeholder="Additional Information" th:value="${user.additionalInfo}">
                     <button class="btn btn__manage" th:onclick="'updateUser(\'' + ${user.getId()} + '\');'">Save

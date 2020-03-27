@@ -1,6 +1,8 @@
 package com.photostudio.dao.jdbc.mapper;
 
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserLanguage;
 import com.photostudio.entity.user.UserRole;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +21,7 @@ class UserRowMapperTest {
         UserRowMapper userRowMapper = new UserRowMapper();
 
         ResultSet mockResultSet = mock(ResultSet.class);
+        UserLanguageDao mockUserLanguageDao = mock(UserLanguageDao.class);
 
         when(mockResultSet.getLong("id")).thenReturn((long) 555);
         when(mockResultSet.getString("email")).thenReturn("email@gmail.com");
@@ -34,6 +37,7 @@ class UserRowMapperTest {
         when(mockResultSet.getInt("zipCode")).thenReturn(10178);
         when(mockResultSet.getString("title")).thenReturn("Mr.");
         when(mockResultSet.getString("additionalInfo")).thenReturn("Friendly");
+        when(mockResultSet.getInt("langId")).thenReturn(1);
 
         //when
         User actual = userRowMapper.mapRow(mockResultSet);
@@ -54,6 +58,6 @@ class UserRowMapperTest {
         assertEquals("Krausnickstraße 15A", actual.getAddress());
         assertEquals("Mr.", actual.getTitle());
         assertEquals("Friendly", actual.getAdditionalInfo());
-
+        assertEquals(1, actual.getLangId());
     }
 }
