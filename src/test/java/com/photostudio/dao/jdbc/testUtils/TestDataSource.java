@@ -25,6 +25,8 @@ public class TestDataSource {
         runScript("db/migration/V1_5__insert_UserRole.sql");
         runScript("db/migration/V1_6__insert_OrderStatus.sql");
         runScript("db/migration/V1_7__insert_PhotoStatus.sql");
+        runScript("db/migration/V1_10__add_language.sql");
+        runScript("db/migration/V1_11__add_email_templates.sql");
         return jdbcDataSource;
     }
 
