@@ -1,10 +1,9 @@
 package com.photostudio.service.impl;
 
 
+import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.UserDao;
-import com.photostudio.dao.jdbc.JdbcOrderDao;
-import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
-import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.*;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
@@ -40,7 +39,9 @@ public class DefaultOrderServiceITest {
         MockMailSender mockMailSender = new MockMailSender(dataSource);
         UserDao userDao = new JdbcUserDao(jdbcDataSource);
         UserService userService = new DefaultUserService(userDao);
-        MailService mailService = new DefaultMailService(mockMailSender, userService);
+
+        EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(jdbcDataSource);
+        MailService mailService = new DefaultMailService(mockMailSender, userService, emailTemplateDao);
 
         orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, mailService);
     }
@@ -71,7 +72,7 @@ public class DefaultOrderServiceITest {
         assertEquals("user2@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("Order 1 is created", subject);
+        assertEquals("Your order 1 is ready.", subject);
     }
 
     @Test
@@ -98,6 +99,8 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
+
         //after
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(1, user);
@@ -136,6 +139,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusForward(2, user);
@@ -151,7 +155,7 @@ public class DefaultOrderServiceITest {
         assertEquals("admin@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("User user2@test.com selected photo for order: 2", subject);
+        assertEquals("User user2@test.com has selected photo for order 2", subject);
     }
 
     @Test
@@ -160,6 +164,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(6, user);
@@ -194,7 +199,7 @@ public class DefaultOrderServiceITest {
         assertEquals("user2@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("Order 3 is ready", subject);
+        assertEquals("Your Order 3 is ready.", subject);
 
     }
 
@@ -223,6 +228,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(3, user);
@@ -261,6 +267,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusForward(4, user);
@@ -297,6 +304,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
 
         assertDoesNotThrow(() -> {
             orderService.moveStatusBack(4, user);
@@ -312,7 +320,7 @@ public class DefaultOrderServiceITest {
         assertEquals("admin@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("User user2@test.com selected photo for order: 4", subject);
+        assertEquals("User user2@test.com has selected photo for order 4", subject);
 
     }
 
@@ -321,6 +329,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user2@test.com");
+        user.setLangId(2);
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(8, user);
@@ -358,6 +367,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user@test.com");
+        user.setLangId(2);
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(3, user);
@@ -396,6 +406,7 @@ public class DefaultOrderServiceITest {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setEmail("user@test.com");
+        user.setLangId(2);
 
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.moveStatusBack(2, user);

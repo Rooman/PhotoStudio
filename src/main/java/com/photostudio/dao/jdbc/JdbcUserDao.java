@@ -1,6 +1,7 @@
 package com.photostudio.dao.jdbc;
 
 import com.photostudio.dao.UserDao;
+import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
 import com.photostudio.exception.GetUserByEmailException;
@@ -19,13 +20,13 @@ public class JdbcUserDao implements UserDao {
 
     private static final String GET_ALL_USERS = "SELECT Users.id, email, phoneNumber, firstName," +
             " lastName, title, roleName, passwordHash, salt, country, city, zip," +
-            " address, additionalInfo FROM Users " +
+            " address, additionalInfo, langId FROM Users " +
             " INNER JOIN UserRole ON Users.userRoleId=UserRole.id;";
 
     private static final String ADD_NEW_USER = "INSERT INTO Users (email,phoneNumber," +
-            "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo) " +
+            "firstName,lastName, title, userRoleId,passwordHash,salt, country,city,zip,address,additionalInfo,langId) " +
             "VALUES (?,?,?,?,?," +
-            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?,?)";
+            "( SELECT id FROM UserRole WHERE roleName ='User'),?,?,?,?,?,?,?,?)";
 
     private static final String DELETE_USER = "DELETE FROM Users WHERE id=?;";
 
@@ -42,7 +43,8 @@ public class JdbcUserDao implements UserDao {
             "u.zip zip, " +
             "u.title title, " +
             "u.additionalInfo additionalInfo, " +
-            "u.address address " +
+            "u.address address, " +
+            "u.langId langId " +
             "FROM Users u " +
             "JOIN UserRole ur ON u.userRoleId = ur.id " +
             "WHERE ";
@@ -51,7 +53,7 @@ public class JdbcUserDao implements UserDao {
             " u.firstName firstName, u.lastName lastName, ur.roleName roleName, " +
             " u.title title, u.additionalInfo additionalInfo, " +
             " u.passwordHash passwordHash, u.salt salt, u.country country," +
-            " u.city city, u.zip zip, u.address address  FROM  Users u " +
+            " u.city city, u.zip zip, u.address address, u.langId langId  FROM  Users u " +
             "INNER JOIN UserRole ur ON u.userRoleId=ur.id " +
             "WHERE u.id=?;";
     private static final String EDIT_USER = "UPDATE Users u " +
@@ -67,7 +69,8 @@ public class JdbcUserDao implements UserDao {
             "    u.additionalInfo = ?," +
             "    u.address = ?," +
             "    u.salt = ?," +
-            "    u.passwordHash = ?" +
+            "    u.passwordHash = ?," +
+            "    u.langId = ? " +
             "WHERE" +
             "    u.id = ?;";
     private static final String GET_USER_BY_ORDER = "SELECT u.id id, " +
@@ -83,7 +86,8 @@ public class JdbcUserDao implements UserDao {
             "u.zip zip, " +
             "u.title title, " +
             "u.additionalInfo additionalInfo, " +
-            "u.address address " +
+            "u.address address, " +
+            "u.langId langId " +
             "FROM Orders o " +
             "JOIN Users u ON o.userId = u.id " +
             "JOIN UserRole ur ON u.userRoleId = ur.id " +
@@ -134,6 +138,7 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setInt(10, user.getZip());
             preparedStatement.setString(11, user.getAddress());
             preparedStatement.setString(12, user.getAdditionalInfo());
+            preparedStatement.setInt(13, user.getLangId());
             preparedStatement.executeUpdate();
             log.info("Adding user to DB is completed");
             log.debug("Add user: {} to DB", user);
@@ -185,6 +190,8 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(11, user.getSalt());
             preparedStatement.setString(12, user.getPasswordHash());
             preparedStatement.setLong(13, user.getId());
+            preparedStatement.setInt(14, user.getLangId());
+            preparedStatement.setLong(15, user.getId());
             preparedStatement.executeUpdate();
 
             log.debug("User {} was edited", user);

@@ -1,7 +1,11 @@
 package com.photostudio.service.impl;
 
+import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.UserDao;
+import com.photostudio.dao.UserLanguageDao;
+import com.photostudio.dao.jdbc.JdbcEmailTemplateCachedDao;
 import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.JdbcUserLanguageCachedDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
@@ -15,7 +19,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DefaultMailServiceTest {
+class DefaultMailServiceITest {
     private static TestDataSource dataSource = new TestDataSource();
     private static DefaultMailService defaultMailService;
 
@@ -25,9 +29,11 @@ class DefaultMailServiceTest {
         dataSource.runScript("db/data_change_status.sql");
 
         MockMailSender mockMailSender = new MockMailSender(dataSource);
+        UserLanguageDao userLanguageDao = new JdbcUserLanguageCachedDao(jdbcDataSource);
         UserDao userDao = new JdbcUserDao(jdbcDataSource);
         UserService userService = new DefaultUserService(userDao);
-        defaultMailService = new DefaultMailService(mockMailSender, userService);
+        EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(jdbcDataSource);
+        defaultMailService = new DefaultMailService(mockMailSender, userService, emailTemplateDao);
     }
 
     @BeforeEach
@@ -39,6 +45,8 @@ class DefaultMailServiceTest {
     public void sendOnChangeStatusViewAndSelect() throws SQLException {
         User user = new User();
         user.setEmail("admin@test.com");
+        user.setLangId(2);
+
         defaultMailService.sendOnChangeStatus(user, 1, OrderStatus.VIEW_AND_SELECT);
         int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
         assertEquals(1, cntMails);
@@ -47,13 +55,15 @@ class DefaultMailServiceTest {
         assertEquals("user2@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("Order 1 is created", subject);
+        assertEquals("Your order 1 is ready.", subject);
     }
 
     @Test
     public void sendOnChangeStatusSelected() throws SQLException {
         User user = new User();
         user.setEmail("user2@test.com");
+        user.setLangId(2);
+
         defaultMailService.sendOnChangeStatus(user, 2, OrderStatus.SELECTED);
         int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
         assertEquals(1, cntMails);
@@ -62,13 +72,15 @@ class DefaultMailServiceTest {
         assertEquals("admin@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("User user2@test.com selected photo for order: 2", subject);
+        assertEquals("User user2@test.com has selected photo for order 2", subject);
     }
 
     @Test
     public void sendOnChangeStatusReady() throws SQLException {
         User user = new User();
         user.setEmail("admin@test.com");
+        user.setLangId(2);
+
         defaultMailService.sendOnChangeStatus(user, 3, OrderStatus.READY);
         int cntMails = dataSource.getResult("SELECT COUNT(*) FROM TestSentMails");
         assertEquals(1, cntMails);
@@ -77,7 +89,7 @@ class DefaultMailServiceTest {
         assertEquals("user2@test.com", mailTo);
 
         String subject = dataSource.getString("SELECT subject FROM TestSentMails");
-        assertEquals("Order 3 is ready", subject);
+        assertEquals("Your Order 3 is ready.", subject);
     }
 
 

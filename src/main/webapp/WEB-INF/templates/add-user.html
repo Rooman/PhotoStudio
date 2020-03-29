@@ -51,6 +51,10 @@
                 <input type="text" class="form-control " placeholder="City" name="city">
                 <input type="text" class="form-control " placeholder="Address" name="address">
                 <input type="text" class="form-control " placeholder="ZIP code" name="zipCode">
+                <select class="form-control" name="langId">
+                    <option th:each="lang : ${userLanguages}" th:value="${lang.getId()}"
+                            th:text="${lang.getFullName()}"></option>
+                </select>
                 <input type="text" class="form-control form-control_info" placeholder="Additional Information"
                        name="additionalInfo">
 
