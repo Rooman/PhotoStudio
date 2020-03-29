@@ -7,8 +7,8 @@ import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
 import com.photostudio.service.UserService;
 import com.photostudio.web.util.MailSender;
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
@@ -43,7 +43,7 @@ public class DefaultSecurityService implements SecurityService {
         log.info("Connect user by login: {}", login);
         User user = userService.getUserByLogin(login);
         if (user != null) {
-            String hashedPassword = getHashedPassword(user.getSalt(), password);
+            String hashedPassword = UtilClass.getHashedString(password, user.getSalt());
             String actualPassword = user.getPasswordHash();
             if (!hashedPassword.equals(actualPassword)) {
                 log.error("Login/password invalid for user with login: {}", login);
@@ -83,18 +83,12 @@ public class DefaultSecurityService implements SecurityService {
         return null;
     }
 
-    String getHashedPassword(String salt, String password) {
-        String saltPassword = password + salt;
-        byte[] originalString = saltPassword.getBytes();
-        return DigestUtils.sha256Hex(originalString);
-    }
-
     @Override
     public void register(User user) {
         // generate credentials
         String randomPassword = generatePassword(DEFAULT_PASSWORD_LENGTH);
         String randomSalt = UUID.randomUUID().toString();
-        String passwordHash = getHashedPassword(randomSalt, randomPassword);
+        String passwordHash = UtilClass.getHashedString(randomPassword, randomSalt);
 
         user.setSalt(randomSalt);
         user.setPasswordHash(passwordHash);
@@ -105,6 +99,13 @@ public class DefaultSecurityService implements SecurityService {
         // send email
         mailSender.send("Your account by Miari Fotografie", "Dear Customer, your account is activated. " +
                 "You can log in using password " + randomPassword, user.getEmail());
+    }
+
+    @Override
+    public boolean isOldPassword(String inputOldPassword, User user) {
+        String inputOldPasswordHash = UtilClass.getHashedString(inputOldPassword, user.getSalt());
+
+        return inputOldPasswordHash.equals(user.getPasswordHash());
     }
 
     String generatePassword(int count) {

@@ -61,7 +61,8 @@
                 </div>
 
                 <div class="manage-buttons">
-                    <a th:href="@{'/security/change-password'(userId=${user.id})}" class="btn btn__manage btn__manage--pink btn__manage--mb">Change password
+
+                    <a th:if="${isMe}" th:href="@{/security/change-password}" class="btn btn__manage btn__manage--pink btn__manage--mb" style="line-height: 40px">Change password
                     </a>
 
                     <button type="button" class="btn btn__manage btn__manage--pink"

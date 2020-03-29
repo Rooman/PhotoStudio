@@ -3,11 +3,13 @@ package com.photostudio.service.impl;
 import com.photostudio.dao.UserDao;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 public class DefaultUserService implements UserService {
@@ -65,5 +67,15 @@ public class DefaultUserService implements UserService {
     public User getUserByOrderId(int orderId) {
         log.info("Started service get user by order from DB");
         return userDao.getByOrderId(orderId);
+    }
+
+    @Override
+    public void changeUserPassword(User user, String newPassword) {
+        log.info("Started service get change user password");
+        String randomSalt = UUID.randomUUID().toString();
+        String newPasswordHash = UtilClass.getHashedString(newPassword, randomSalt);
+        user.setSalt(randomSalt);
+        user.setPasswordHash(newPasswordHash);
+        userDao.edit(user);
     }
 }

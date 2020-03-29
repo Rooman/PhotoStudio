@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
 import com.photostudio.security.SecurityService;
+import com.photostudio.security.entity.Session;
 import com.photostudio.service.UserService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
@@ -40,9 +41,14 @@ public class UserServlet extends HttpServlet {
             LOG.info("Request of registration form received");
             long userId = Long.parseLong(request.getParameter("id"));
 
+            Session session = (Session) request.getAttribute("session");
+            User loggedInUser = session.getUser();
+            long loggedInUserId = loggedInUser.getId();
+
             User user = userService.getUserById(userId);
             Map<String, Object> paramsMap = new HashMap<>();
             paramsMap.put("user", user);
+            paramsMap.put("isMe", userId == loggedInUserId);
 
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);

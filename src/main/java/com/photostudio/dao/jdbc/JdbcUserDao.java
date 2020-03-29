@@ -65,7 +65,9 @@ public class JdbcUserDao implements UserDao {
             "    u.zip = ?," +
             "    u.title = ?," +
             "    u.additionalInfo = ?," +
-            "    u.address = ?" +
+            "    u.address = ?," +
+            "    u.salt = ?," +
+            "    u.passwordHash = ?" +
             "WHERE" +
             "    u.id = ?;";
     private static final String GET_USER_BY_ORDER = "SELECT u.id id, " +
@@ -180,7 +182,9 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(8, user.getTitle());
             preparedStatement.setString(9, user.getAdditionalInfo());
             preparedStatement.setString(10, user.getAddress());
-            preparedStatement.setLong(11, user.getId());
+            preparedStatement.setString(11, user.getSalt());
+            preparedStatement.setString(12, user.getPasswordHash());
+            preparedStatement.setLong(13, user.getId());
             preparedStatement.executeUpdate();
 
             log.debug("User {} was edited", user);
