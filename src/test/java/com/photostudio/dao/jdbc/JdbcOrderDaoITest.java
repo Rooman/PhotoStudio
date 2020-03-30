@@ -3,6 +3,8 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.photo.Photo;
+import com.photostudio.entity.photo.PhotoStatus;
 import com.photostudio.entity.user.User;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.*;
@@ -75,9 +77,9 @@ public class JdbcOrderDaoITest {
         User user = new User();
         user.setEmail("mymail@d.com");
 
-        List<String> photoList = new ArrayList<>();
-        photoList.add("/home/myPhoto1");
-        photoList.add("/home/myPhoto2");
+        List<Photo> photoList = new ArrayList<>();
+        photoList.add(new Photo(1, "/home/myPhoto1", PhotoStatus.UNSELECTED));
+        photoList.add(new Photo(2, "/home/myPhoto2", PhotoStatus.UNSELECTED));
 
         Order expected = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
@@ -96,7 +98,7 @@ public class JdbcOrderDaoITest {
         assertEquals("NEW", expected.getComment());
         assertEquals(expectedDateTime, expected.getOrderDate());
 
-        for (String expectedSource : expected.getPhotoSources()) {
+        for (Photo expectedSource : expected.getPhotoSources()) {
             photoList.removeIf(x -> x.equals(expectedSource));
         }
     }
@@ -306,6 +308,14 @@ public class JdbcOrderDaoITest {
             actual.removeIf(x -> x.equals(expectedOrder));
         }
         assertEquals(0, actual.size());
+    }
+
+    @Test
+    public void testGetPhotoPathById() {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        String path = jdbcOrderDao.getPathByPhotoId(1);
+
+        assertEquals("/home/myPhoto1", path);
     }
 
     @AfterAll
