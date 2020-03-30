@@ -50,13 +50,16 @@ public class ChangePasswordServlet extends HttpServlet {
 
         if (securityService.isOldPassword(oldPassword, user)) {
             if (newPassword.equals(repeatNewPassword)) {
+                log.info("Old and new passwords are correct");
                 userService.changeUserPassword(user, newPassword);
                 response.sendRedirect(request.getContextPath() + "/user?id=" + user.getId());
             } else {
+                log.error("Password do not match");
                 paramsMap.put("invalid", "notMatchPassword");
                 TemplateEngineFactory.process(request, response, "change-password", paramsMap);
             }
         } else {
+            log.error("Old password is incorrect");
             paramsMap.put("invalid", "incorrectPassword");
             TemplateEngineFactory.process(request, response, "change-password", paramsMap);
         }
