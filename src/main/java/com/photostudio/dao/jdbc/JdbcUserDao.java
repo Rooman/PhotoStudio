@@ -189,9 +189,8 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(10, user.getAddress());
             preparedStatement.setString(11, user.getSalt());
             preparedStatement.setString(12, user.getPasswordHash());
-            preparedStatement.setLong(13, user.getId());
-            preparedStatement.setInt(14, user.getLangId());
-            preparedStatement.setLong(15, user.getId());
+            preparedStatement.setInt(13, user.getLangId());
+            preparedStatement.setLong(14, user.getId());
             preparedStatement.executeUpdate();
 
             log.debug("User {} was edited", user);
