@@ -1,9 +1,7 @@
 package com.photostudio.security.impl;
 
-import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
 import com.photostudio.security.entity.Session;
-import com.photostudio.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
