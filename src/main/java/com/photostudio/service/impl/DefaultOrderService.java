@@ -114,6 +114,11 @@ public class DefaultOrderService implements OrderService {
         return orderDao.getPathByPhotoId(photoId);
     }
 
+    @Override
+    public String getPathToOrderDir(int orderId) {
+        return photoDao.getPathToOrderDir(orderId);
+    }
+
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {
         if (checkUserRole(userChanged.getUserRole(), newStatus) && checkPhoto(orderId, newStatus)) {
             orderDao.changeOrderStatus(orderId, orderStatusService.getOrderStatusIdByStatusName(newStatus));

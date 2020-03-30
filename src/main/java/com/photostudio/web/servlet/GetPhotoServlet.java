@@ -20,9 +20,10 @@ public class GetPhotoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         long photoId = Long.parseLong(request.getParameter("id"));
-        log.info("Request to photo {} source received", photoId);
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        log.info("Request to photo {} source received in order {}", photoId, orderId);
 
-        String photoPath = orderService.getPathByPhotoId(photoId);
+        String photoPath = orderService.getPathToOrderDir(orderId) + File.separator + orderService.getPathByPhotoId(photoId);
 
         log.debug("loading photo {}", photoPath);
 
