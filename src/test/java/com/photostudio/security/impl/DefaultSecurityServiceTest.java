@@ -5,6 +5,7 @@ import com.photostudio.security.entity.Session;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,5 +59,22 @@ class DefaultSecurityServiceTest {
         //then
         assertNotNull(session);
         assertEquals(user.getEmail(), session.getUser().getEmail());
+    }
+
+    @Test
+    void testGetSessionIfExpired() throws InterruptedException {
+        //prepare
+        User user = new User();
+        user.setId(1);
+        user.setEmail("user@test.com");
+        String userToken = UUID.randomUUID().toString();
+        securityService.addNewSession(user, userToken);
+
+        Session session = securityService.getSession(userToken);
+        session.setExpireDate(LocalDateTime.now());
+        //when
+        session = securityService.getSession(userToken);
+        //then
+        assertNull(session);
     }
 }
