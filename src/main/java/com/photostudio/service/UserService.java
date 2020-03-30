@@ -20,4 +20,6 @@ public interface UserService {
     User getUserByEmail(String email);
 
     User getUserByOrderId(int orderId);
+
+    void changeUserPassword(User user, String newPassword);
 }

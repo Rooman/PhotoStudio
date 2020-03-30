@@ -1,10 +1,10 @@
 package com.photostudio.security.impl;
 
+import com.photostudio.entity.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultSecurityServiceTest {
 
@@ -26,5 +26,29 @@ class DefaultSecurityServiceTest {
                 assertTrue(Character.isUpperCase(value));
             }
         }
+    }
+
+    @Test
+    void testIsTrueOldPassword() {
+        //prepare
+        String correctPassword = "12345";
+        User user = new User();
+        user.setSalt("3d47ccde-5b58-4c7b-a84c-28c27d566f8e");
+        user.setPasswordHash("8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257");
+
+        //then
+        assertTrue(securityService.isOldPassword(correctPassword, user));
+    }
+
+    @Test
+    void testIsFalseOldPassword() {
+        //prepare
+        String notCorrectPassword = "1234567";
+        User user = new User();
+        user.setSalt("3d47ccde-5b58-4c7b-a84c-28c27d566f8e");
+        user.setPasswordHash("8bbefdbdeea504b1d886d071d071cc02eba8fd06cef7fe735a241107db052257");
+
+        //then
+        assertFalse(securityService.isOldPassword(notCorrectPassword, user));
     }
 }
