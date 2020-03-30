@@ -108,6 +108,15 @@ public class DefaultOrderService implements OrderService {
         changeStatus(id, user, newStatus);
     }
 
+    @Override
+    public void deleteAllOrdersByUserId(long id) {
+        List<Order> orderList = getOrdersByUserId(id);
+        if (!orderList.isEmpty()) {
+            orderDao.deleteOrders(orderList);
+            orderList.stream().map(Order::getId).forEach(orderId -> photoDao.deleteByOrder(orderId));
+        }
+    }
+
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {
         if (checkUserRole(userChanged.getUserRole(), newStatus) && checkPhoto(orderId, newStatus)) {
             orderDao.changeOrderStatus(orderId, orderStatusService.getOrderStatusIdByStatusName(newStatus));

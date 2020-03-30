@@ -34,6 +34,8 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+    private static final String DELETE_PHOTOS_BY_ORDERS_ID = "DELETE FROM OrderPhotos WHERE orderId IN ";
+    private static final String DELETE_ORDERS_BY_USER_ID = "DELETE FROM Orders WHERE userId = ?";
     private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ?  WHERE o.id = ?";
 
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
@@ -208,6 +210,17 @@ public class JdbcOrderDao implements OrderDao {
         } catch (SQLException e) {
             log.error("Error during delete order {}", id, e);
             throw new RuntimeException("Error - Order is not deleted from db", e);
+        }
+    }
+
+    @Override
+    public void deleteOrders(List<Order> orderList) {
+        log.info("Delete orders by user id: {}", orderList.get(0).getUser().getId());
+        try (Connection connection = dataSource.getConnection();
+        PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDERS_ID);
+        PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID)) {
+
+        } catch (SQLException e) {
         }
     }
 
