@@ -109,6 +109,12 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
+    public String getPathByPhotoId(long photoId) {
+        log.info("Started service get path to photo by id:{}", photoId);
+        return orderDao.getPathByPhotoId(photoId);
+    }
+
+    @Override
     public void deleteAllOrdersByUserId(long id) {
         List<Order> orderList = getOrdersByUserId(id);
         if (!orderList.isEmpty()) {

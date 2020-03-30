@@ -6,6 +6,7 @@ import com.photostudio.dao.jdbc.mapper.PhotoSourceRowMapper;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.photo.Photo;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -30,7 +31,7 @@ public class JdbcOrderDao implements OrderDao {
             "JOIN Users u ON o.userId = u.id " +
             "WHERE o.id=? and statusName='NEW';";
 
-    private static final String GET_PHOTOS_BY_ORDER_ID = "SELECT source FROM OrderPhotos WHERE orderId=?;";
+    private static final String GET_PHOTOS_BY_ORDER_ID = "SELECT id, source, photoStatusId FROM OrderPhotos WHERE orderId=?;";
     private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
@@ -43,6 +44,7 @@ public class JdbcOrderDao implements OrderDao {
     private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
     private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
+    private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final PhotoSourceRowMapper PHOTO_SOURCE_ROW_MAPPER = new PhotoSourceRowMapper();
@@ -157,12 +159,12 @@ public class JdbcOrderDao implements OrderDao {
             preparedStatement.setInt(2, id);
 
             preparedStatement.execute();
-            List<String> photoSources = new ArrayList<>();
+            List<Photo> photoSources = new ArrayList<>();
 
             try (ResultSet photoResultSet = preparedStatement.getResultSet()) {
                 log.info("Assemble photo sources for order with id: {}", id);
                 while (photoResultSet.next()) {
-                    String photoSource = PHOTO_SOURCE_ROW_MAPPER.mapRow(photoResultSet);
+                    Photo photoSource = PHOTO_SOURCE_ROW_MAPPER.mapRow(photoResultSet);
                     photoSources.add(photoSource);
                 }
             }
@@ -352,6 +354,25 @@ public class JdbcOrderDao implements OrderDao {
                 log.error("Error during save photo to DB with orderId {}", orderId, e);
                 throw new RuntimeException("Error during save photo to DB", e);
             }
+        }
+    }
+
+    public String getPathByPhotoId(long photoId) {
+        log.info("Get path by photo id: {}", photoId);
+        String result = "";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_PATH_PHOTO_BY_ID)) {
+            statement.setLong(1, photoId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getString(1);
+                    log.info("PhotoPath: {}", result);
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            log.error("Error during execution query get photo path by id = {}", photoId, e);
+            throw new RuntimeException("Error during execution query get photo path by id = " + photoId, e);
         }
     }
 

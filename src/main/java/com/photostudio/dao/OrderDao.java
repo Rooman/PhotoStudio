@@ -30,5 +30,7 @@ public interface OrderDao {
 
     int getPhotoCountByStatus(int id, int idPhotoStatus);
 
+    String getPathByPhotoId(long photoId);
+
     void deleteOrders(List<Order> orderList);
 }
