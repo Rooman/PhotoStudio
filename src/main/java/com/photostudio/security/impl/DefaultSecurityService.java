@@ -50,11 +50,7 @@ public class DefaultSecurityService implements SecurityService {
                 throw new LoginPasswordInvalidException("Login/password invalid for user with login: " + login);
             }
             String userToken = UUID.randomUUID().toString();
-            Session session = Session.builder().user(user)
-                    .token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
-            sessionList.add(session);
-            log.info("User with login: {} is logged in", login);
-            return session;
+            return addNewSession(user, userToken);
         } else {
             log.error("User with login: {} not found", login);
             throw new LoginPasswordInvalidException("Login/password invalid for user" + login);
@@ -72,11 +68,14 @@ public class DefaultSecurityService implements SecurityService {
             Iterator<Session> sessionIterator = sessionList.iterator();
             while (sessionIterator.hasNext()) {
                 Session session = sessionIterator.next();
-                if (userToken.equals(session.getToken())) {
+                String sessionToken = session.getToken();
+                if (userToken.equals(sessionToken)) {
                     if (session.getExpireDate().isAfter(LocalDateTime.now())) {
                         return session;
+                    } else {
+                        log.debug("Session with token {} is expired. Removing session from the sessionList", sessionToken);
+                        sessionList.remove(session);
                     }
-                    sessionIterator.remove();
                 }
             }
         }
@@ -135,5 +134,15 @@ public class DefaultSecurityService implements SecurityService {
     //For tests
     void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    //Extracted this logic into separate method for test purposes
+    Session addNewSession(User user, String userToken) {
+        String login = user.getEmail() != null ? user.getEmail() : user.getPhoneNumber();
+        Session session = Session.builder().user(user)
+                .token(userToken).expireDate(LocalDateTime.now().plusHours(2)).build();
+        sessionList.add(session);
+        log.info("User with login: {} is logged in", login);
+        return session;
     }
 }
