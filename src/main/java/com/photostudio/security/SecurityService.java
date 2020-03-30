@@ -12,4 +12,6 @@ public interface SecurityService {
     Session getSession(String userToken);
 
     void register(User user);
+
+    boolean isOldPassword(String inputOldPassword, User user);
 }

@@ -68,6 +68,8 @@ public class JdbcUserDao implements UserDao {
             "    u.title = ?," +
             "    u.additionalInfo = ?," +
             "    u.address = ?," +
+            "    u.salt = ?," +
+            "    u.passwordHash = ?," +
             "    u.langId = ? " +
             "WHERE" +
             "    u.id = ?;";
@@ -185,8 +187,10 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(8, user.getTitle());
             preparedStatement.setString(9, user.getAdditionalInfo());
             preparedStatement.setString(10, user.getAddress());
-            preparedStatement.setInt(11, user.getLangId());
-            preparedStatement.setLong(12, user.getId());
+            preparedStatement.setString(11, user.getSalt());
+            preparedStatement.setString(12, user.getPasswordHash());
+            preparedStatement.setInt(13, user.getLangId());
+            preparedStatement.setLong(14, user.getId());
             preparedStatement.executeUpdate();
 
             log.debug("User {} was edited", user);
