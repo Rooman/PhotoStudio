@@ -68,10 +68,12 @@ public class DefaultSecurityService implements SecurityService {
             Iterator<Session> sessionIterator = sessionList.iterator();
             while (sessionIterator.hasNext()) {
                 Session session = sessionIterator.next();
-                if (userToken.equals(session.getToken())) {
+                String sessionToken = session.getToken();
+                if (userToken.equals(sessionToken)) {
                     if (session.getExpireDate().isAfter(LocalDateTime.now())) {
                         return session;
                     } else {
+                        log.debug("Session with token {} is expired. Removing session from the sessionList", sessionToken);
                         sessionList.remove(session);
                     }
                 }
