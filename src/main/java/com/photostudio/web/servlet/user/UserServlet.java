@@ -36,8 +36,12 @@ public class UserServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("Request get user received");
+        Map<String, Object> paramsMap = new HashMap<>();
+        CommonVariableAppendService.appendUser(paramsMap, request);
+        response.setContentType("text/html;charset=utf-8");
         if (isNotEmpty(request.getParameter("id"))) {
-            log.info("Request of registration form received");
+            log.debug("Edit user");
             long userId = Long.parseLong(request.getParameter("id"));
 
             Session session = (Session) request.getAttribute("session");
@@ -45,18 +49,15 @@ public class UserServlet extends HttpServlet {
             long loggedInUserId = loggedInUser.getId();
 
             User user = userService.getUserById(userId);
-            Map<String, Object> paramsMap = new HashMap<>();
-            paramsMap.put("user", user);
+
+            paramsMap.put("userToEdit", user);
             paramsMap.put("isMe", userId == loggedInUserId);
             paramsMap.put("userLanguages", userLanguageService.getAllLanguages());
 
-            response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
             TemplateEngineFactory.process(request, response, "user-info", paramsMap);
         } else {
-            Map<String, Object> paramsMap = new HashMap<>();
-            CommonVariableAppendService.appendUser(paramsMap, request);
-            response.setContentType("text/html;charset=utf-8");
+            log.debug("Add new user");
             paramsMap.put("userLanguages", userLanguageService.getAllLanguages());
             TemplateEngineFactory.process(request, response, "add-user", paramsMap);
         }
