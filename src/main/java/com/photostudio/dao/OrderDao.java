@@ -29,4 +29,6 @@ public interface OrderDao {
     int getPhotoCount(int id);
 
     int getPhotoCountByStatus(int id, int idPhotoStatus);
+
+    String getPathByPhotoId(long photoId);
 }

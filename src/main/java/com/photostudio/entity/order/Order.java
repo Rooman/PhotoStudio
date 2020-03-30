@@ -1,5 +1,6 @@
 package com.photostudio.entity.order;
 
+import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.user.User;
 import lombok.*;
 
@@ -16,5 +17,5 @@ public final class Order {
     private LocalDateTime orderDate;
     private User user;
     private String comment;
-    private List<String> photoSources;
+    private List<Photo> photoSources;
 }
