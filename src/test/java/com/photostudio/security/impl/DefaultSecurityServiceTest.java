@@ -99,4 +99,5 @@ class DefaultSecurityServiceTest {
         session = securityService.getSession(userToken);
         //then
         assertNull(session);
+    }
 }
