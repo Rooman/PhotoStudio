@@ -36,32 +36,32 @@
 
                 <div class="login-form_between">
                     <input type="email" class="form-control  " name="email" id="email" placeholder="Email "
-                           th:value="${user.email}">
+                           th:value="${userToEdit.email}">
                     <input type="text" class="form-control  " id="phoneNumber" placeholder="Phone"
-                           th:value="${user.phoneNumber}">
+                           th:value="${userToEdit.phoneNumber}">
                 </div>
                 <div class="new__user-info">
                     <input type="text" class="form-control " id="title" placeholder="Title"
-                           th:value="${user.title}">
+                           th:value="${userToEdit.title}">
                     <input type="text" class="form-control" id="firstName" placeholder="First name"
-                           th:value="${user.firstName}">
+                           th:value="${userToEdit.firstName}">
                     <input type="text" class="form-control " id="lastName" placeholder="Last name"
-                           th:value="${user.lastName}">
+                           th:value="${userToEdit.lastName}">
                     <input type="text" class="form-control " id="country" placeholder="Country"
-                           th:value="${user.country}">
-                    <input type="text" class="form-control " id="city" placeholder="City" th:value="${user.city}">
+                           th:value="${userToEdit.country}">
+                    <input type="text" class="form-control " id="city" placeholder="City" th:value="${userToEdit.city}">
                     <input type="text" class="form-control " id="address" placeholder="Address"
-                           th:value="${user.address}">
+                           th:value="${userToEdit.address}">
                     <input type="text" class="form-control " id="zip" placeholder="ZIP code"
-                           th:value="*{user.zip != 0}? *{user.zip} : ''">
+                           th:value="*{userToEdit.zip != 0}? *{userToEdit.zip} : ''">
                     <select class="form-control" id="langId">
                         <option th:each="lang : ${userLanguages}" th:value="${lang.getId()}"
                                 th:text="${lang.getFullName()}"
-                                th:selected="${lang.getId()==user.getLangId()}"></option>
+                                th:selected="${lang.getId()==userToEdit.getLangId()}"></option>
                     </select>
                     <input type="text" class="form-control form-control_info" id="additionalInfo"
-                           placeholder="Additional Information" th:value="${user.additionalInfo}">
-                    <button class="btn btn__manage" th:onclick="'updateUser(\'' + ${user.getId()} + '\');'">Save
+                           placeholder="Additional Information" th:value="${userToEdit.additionalInfo}">
+                    <button class="btn btn__manage" th:onclick="'updateUser(\'' + ${userToEdit.getId()} + '\');'">Save
                     </button>
                 </div>
 
@@ -86,7 +86,7 @@
                 </div>
                 <div class="modal-body">
                     <p class="dialog-body"
-                       th:text="'Are you sure you want to delete user with id '+${user.id}+' ?'"></p>
+                       th:text="'Are you sure you want to delete user with id '+${userToEdit.id}+' ?'"></p>
                 </div>
                 <div class="modal-footer dialog-buttons">
                     <button class="btn btn-submit btn-outline-dark button dialog__button
@@ -94,7 +94,7 @@
                     </button>
                     <button class="btn btn-submit btn-outline-dark button dialog__button
                             delete-button"
-                            th:onclick="'deleteUser(\'' + ${user.getId()} + '\');'">Yes
+                            th:onclick="'deleteUser(\'' + ${userToEdit.getId()} + '\');'">Yes
                     </button>
                 </div>
             </div>
