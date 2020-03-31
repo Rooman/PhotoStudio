@@ -37,7 +37,10 @@ public class LocalDiskPhotoDao implements PhotoDao {
         File dir = new File(orderPath);
         if (dir.exists()) {
             if (deleteDir(dir)) {
-                log.info("Directory {} was deleted", orderPath);
+                log.info("Directory was deleted: {}", orderPath);
+            } else {
+                log.error("Directory was not deleted : {}", orderPath);
+                throw new RuntimeException("Directory was not deleted " + orderPath);
             }
         }
     }
@@ -51,6 +54,9 @@ public class LocalDiskPhotoDao implements PhotoDao {
         if (!dirOrder.exists()) {
             if (dirOrder.mkdir()) {
                 log.info("Directory was created : {}", orderPath);
+            } else {
+                log.error("Directory was not created : {}", orderPath);
+                throw new RuntimeException("Directory was not created " + orderPath);
             }
         }
         for (Part photo : photos) {
