@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public String getPathToOrderDir(int orderId) {
-        Path orderDir = Paths.get(path, "Order-" + orderId);
+        Path orderDir = Paths.get("/",path, "Order-" + orderId);
         return orderDir.toAbsolutePath().toString();
     }
 
@@ -50,25 +51,27 @@ public class LocalDiskPhotoDao implements PhotoDao {
         String orderPath = getPathToOrderDir(orderId);
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
-        File dirOrder = new File(orderPath);
-        if (!dirOrder.exists()) {
-            if (dirOrder.mkdir()) {
+        Path path = Paths.get(orderPath);
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectory(path);
                 log.info("Directory was created : {}", orderPath);
-            } else {
-                log.error("Directory was not created : {}", orderPath);
-                throw new RuntimeException("Directory was not created " + orderPath);
+            } catch (IOException e) {
+                log.error("Directory was not created : {}", orderPath, e);
+                throw new RuntimeException("Directory was not created " + orderPath, e);
             }
+
         }
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
-                    String photoPath = new File(dirOrder, fileName).getAbsolutePath();
+                    String photoPath = new File(orderPath, fileName).getAbsolutePath();
                     try {
                         photo.write(photoPath);
                         photosPaths.add(fileName);
                     } catch (IOException e) {
-                        log.error("Can't save photos on local disk by path : {}", orderPath);
+                        log.error("Can't save photos on local disk by path : {}", orderPath, e);
                         throw new RuntimeException("Can't save photos on local disk", e);
                     }
                 }
