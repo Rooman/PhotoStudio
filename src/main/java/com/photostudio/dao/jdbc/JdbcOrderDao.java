@@ -77,7 +77,7 @@ public class JdbcOrderDao implements OrderDao {
 
     public List<Order> getOrdersByUserId(long userId) {
         log.info("Start get all orders by userId:{} from DB", userId);
-        String sql = GET_ALL_ORDERS + " WHERE o.statusId!=1 AND o.userId = ?";
+        String sql = GET_ALL_ORDERS + " WHERE o.userId = ?";
         sql = addSort(sql);
         log.debug("execute sql query:" + sql);
         try (Connection connection = dataSource.getConnection();
@@ -216,13 +216,33 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void deleteOrders(List<Order> orderList) {
-        log.info("Delete orders by user id: {}", orderList.get(0).getUser().getId());
+    public void deleteOrdersByUserId(List<Order> orderList, long id) {
+        log.info("Delete orders by user id: {}", id);
+        String deletePhotosStatement = getDeletePhotoStatement(orderList);
         try (Connection connection = dataSource.getConnection();
-        PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDERS_ID);
-        PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID)) {
-
+             PreparedStatement statementPhotos = connection.prepareStatement(deletePhotosStatement);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID)) {
+            connection.setAutoCommit(false);
+            try {
+                int count = 1;
+                for (Order order : orderList) {
+                    statementPhotos.setLong(count++, order.getId());
+                }
+                statementPhotos.executeUpdate();
+                statementOrders.setLong(1, id);
+                statementOrders.executeUpdate();
+                connection.commit();
+                log.info("Order by user id: {} and photos deleted from DB", id);
+            } catch (SQLException e) {
+                connection.rollback();
+                log.error("Rollback- Error during delete orders by user id: {}", id, e);
+                throw new RuntimeException("Error during delete order by user id " + id, e);
+            } finally {
+                connection.setAutoCommit(true);
+            }
         } catch (SQLException e) {
+            log.error("Error during delete order by user id: {}", id, e);
+            throw new RuntimeException("Error - Orders are not deleted from db", e);
         }
     }
 
@@ -398,5 +418,11 @@ public class JdbcOrderDao implements OrderDao {
 
     private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
+    }
+
+    private String getDeletePhotoStatement(List<Order> orderList) {
+        StringJoiner stringJoiner = new StringJoiner(", ", DELETE_PHOTOS_BY_ORDERS_ID + "(", ")");
+        orderList.forEach(order -> stringJoiner.add("?"));
+        return stringJoiner.toString();
     }
 }

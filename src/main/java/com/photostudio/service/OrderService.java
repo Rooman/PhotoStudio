@@ -28,4 +28,6 @@ public interface OrderService {
     void deleteAllOrdersByUserId(long id);
 
     String getPathByPhotoId(long photoId);
+
+    List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
 }

@@ -43,7 +43,7 @@ public class AllOrdersServlet extends HttpServlet {
         } else {
             long userId = user.getId();
             log.info("Show all orders for user {}", userId);
-            paramsMap.put("orders", orderService.getOrdersByUserId(userId));
+            paramsMap.put("orders", orderService.getOrdersWithOrderStatusNotNewByUserId(userId));
         }
 
         TemplateEngineFactory.process(request, response, "all-orders", paramsMap);
