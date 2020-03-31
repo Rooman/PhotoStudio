@@ -27,6 +27,7 @@ class DefaultOrderServiceTest {
     public static void beforeAll() throws SQLException, IOException {
         JdbcDataSource jdbcDataSource = dataSource.init();
         dataSource.runScript("db/data_change_status.sql");
+        dataSource.runScript("db/data_get_orders.sql");
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         orderService = new DefaultOrderService(jdbcOrderDao);
     }
@@ -123,15 +124,15 @@ class DefaultOrderServiceTest {
 
     @Test
     void getOrdersWithOrderStatusNotNewByUserIdNotFound() {
-        List<Order> orderList = orderService.getOrdersWithOrderStatusNotNewByUserId(1);
+        List<Order> orderList = orderService.getOrdersWithOrderStatusNotNewByUserId(4);
 
         assertEquals(0, orderList.size());
     }
 
     @Test
     void getOrdersWithOrderStatusNotNewByUserId() {
-        List<Order> orderList = orderService.getOrdersWithOrderStatusNotNewByUserId(6);
-        assertEquals(0, orderList.size());
+        List<Order> orderList = orderService.getOrdersWithOrderStatusNotNewByUserId(5);
+        assertEquals(2, orderList.size());
     }
 
     @AfterAll

@@ -311,7 +311,7 @@ public class JdbcOrderDaoITest {
     }
 
     @Test
-    public void deleteOrdersByUserId() throws IOException, SQLException {
+    public void testDeleteOrdersByUserId() throws IOException, SQLException {
         //prepare
         dataSource.runScript("db/insert_orders_for_test_delete.sql");
         User user3 = new User();
