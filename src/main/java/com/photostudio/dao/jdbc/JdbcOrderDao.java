@@ -21,11 +21,12 @@ public class JdbcOrderDao implements OrderDao {
             "o.orderDate orderDate, " +
             "u.email email, " +
             "u.phoneNumber phoneNumber, " +
-            "o.comment comment " +
+            "o.commentAdmin commentAdmin, " +
+            "o.commentUser commentUser " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, phoneNumber, comment " +
+    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, phoneNumber, commentAdmin, commentUser " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
@@ -37,9 +38,9 @@ public class JdbcOrderDao implements OrderDao {
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
     private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ?  WHERE o.id = ?";
 
-    private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
+    private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, commentAdmin) VALUES (?, " +
             "?, ?, ?)";
-    private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
+    private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId, orderId) VALUES(?,?,?);";
     private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
@@ -305,7 +306,7 @@ public class JdbcOrderDao implements OrderDao {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setInt(2, orderStatusId);
             preparedStatement.setLong(3, order.getUser().getId());
-            preparedStatement.setString(4, order.getComment());
+            preparedStatement.setString(4, order.getCommentAdmin());
             preparedStatement.executeUpdate();
 
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
