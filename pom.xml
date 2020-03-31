@@ -59,7 +59,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <url>http://${localserver.host}:${localserver.port}/manager/text</url>
+                    <url>http://${localserverserver.host}:${localserverserver.port}/manager/text</url>
                     <server>${localserver.name}</server>
                     <path>${context.path}</path>
                     <update>true</update>
@@ -107,8 +107,8 @@
                 <version>6.2.1</version>
                 <configuration>
                     <user>root</user>
-                    <password>toor</password>
-                    <url>jdbc:mysql://localhost:3306/photostudio_test?serverTimezone=UTC</url>
+                    <password>P@ssw0rd</password>
+                    <url>jdbc:mysql://localhost:3306/photostudio</url>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
             </plugin>
@@ -123,6 +123,7 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+
         <!--Web-->
         <dependency>
             <groupId>org.thymeleaf</groupId>
