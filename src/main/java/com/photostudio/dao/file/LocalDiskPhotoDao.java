@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,8 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public String getPathToOrderDir(int orderId) {
-        return path + File.separator + "Order-" + orderId;
+        Path orderDir = Paths.get(path, "Order-" + orderId);
+        return orderDir.toAbsolutePath().toString();
     }
 
     @Override
@@ -33,9 +36,10 @@ public class LocalDiskPhotoDao implements PhotoDao {
         log.info("delete photos from local disk by path:{}", orderPath);
         File dir = new File(orderPath);
         if (dir.exists()) {
-            deleteDir(dir);
+            if (deleteDir(dir)) {
+                log.info("Directory {} was deleted", orderPath);
+            }
         }
-        log.info("photos for order {} were deleted", orderId);
     }
 
     @Override
@@ -45,7 +49,9 @@ public class LocalDiskPhotoDao implements PhotoDao {
         List<String> photosPaths = new ArrayList<>();
         File dirOrder = new File(orderPath);
         if (!dirOrder.exists()) {
-            dirOrder.mkdir();
+            if (dirOrder.mkdir()) {
+                log.info("Directory was created : {}", orderPath);
+            }
         }
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
@@ -76,7 +82,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
         return "";
     }
 
-    private void deleteDir(File dir) {
+    private boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             File[] content = dir.listFiles();
             if (content != null) {
@@ -85,6 +91,6 @@ public class LocalDiskPhotoDao implements PhotoDao {
                 }
             }
         }
-        dir.delete();
+        return dir.delete();
     }
 }
