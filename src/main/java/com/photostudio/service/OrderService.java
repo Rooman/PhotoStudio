@@ -26,4 +26,6 @@ public interface OrderService {
     void moveStatusBack(int id, User user);
 
     String getPathByPhotoId(long photoId);
+
+    String getPathToOrderDir(int orderId);
 }

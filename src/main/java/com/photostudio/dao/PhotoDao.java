@@ -5,7 +5,9 @@ import java.util.List;
 
 public interface PhotoDao {
 
-    void deleteByOrder(long orderId);
+    void deleteByOrder(int orderId);
 
-    List<String> savePhotoByOrder(List<Part> photos,long orderId);
+    List<String> savePhotoByOrder(List<Part> photos,int orderId);
+
+    String getPathToOrderDir(int orderId);
 }

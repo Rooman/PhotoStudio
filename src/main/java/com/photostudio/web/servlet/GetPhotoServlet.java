@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = "/photo/*")
 @Slf4j
@@ -20,9 +22,11 @@ public class GetPhotoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         long photoId = Long.parseLong(request.getParameter("id"));
-        log.info("Request to photo {} source received", photoId);
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        log.info("Request to photo {} source received in order {}", photoId, orderId);
 
-        String photoPath = orderService.getPathByPhotoId(photoId);
+        Path path = Paths.get(orderService.getPathToOrderDir(orderId), orderService.getPathByPhotoId(photoId));
+        String photoPath = path.toAbsolutePath().toString();
 
         log.debug("loading photo {}", photoPath);
 

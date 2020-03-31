@@ -2,44 +2,62 @@ package com.photostudio.dao.file;
 
 import com.photostudio.dao.PhotoDao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class LocalDiskPhotoDao implements PhotoDao {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
     private String path;
 
     public LocalDiskPhotoDao(String path) {
         if (path == null) {
-            LOG.error("can't create object LocalDiskPhotoDao: path is null");
+            log.error("can't create object LocalDiskPhotoDao: path is null");
             throw new RuntimeException("path to Photo folder is null");
         }
         this.path = path;
     }
 
     @Override
-    public void deleteByOrder(long orderId) {
-        LOG.info("delete photos from local disk by path:{}", path);
-        File dir = new File(path, String.valueOf(orderId));
-        if (dir.exists()) {
-            deleteDir(dir);
-        }
-        LOG.info("photos for order {} were deleted", orderId);
+    public String getPathToOrderDir(int orderId) {
+        Path orderDir = Paths.get(path, "Order-" + orderId);
+        return orderDir.toAbsolutePath().toString();
     }
 
     @Override
-    public List<String> savePhotoByOrder(List<Part> photos, long orderId) {
-        LOG.info("save photos on local disk by path : {}", path);
+    public void deleteByOrder(int orderId) {
+        String orderPath = getPathToOrderDir(orderId);
+        log.info("delete photos from local disk by path:{}", orderPath);
+        File dir = new File(orderPath);
+        if (dir.exists()) {
+            if (deleteDir(dir)) {
+                log.info("Directory was deleted: {}", orderPath);
+            } else {
+                log.error("Directory was not deleted : {}", orderPath);
+                throw new RuntimeException("Directory was not deleted " + orderPath);
+            }
+        }
+    }
+
+    @Override
+    public List<String> savePhotoByOrder(List<Part> photos, int orderId) {
+        String orderPath = getPathToOrderDir(orderId);
+        log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
-        File dirOrder = new File(path, "Order-" + orderId);
+        File dirOrder = new File(orderPath);
         if (!dirOrder.exists()) {
-            dirOrder.mkdir();
+            if (dirOrder.mkdir()) {
+                log.info("Directory was created : {}", orderPath);
+            } else {
+                log.error("Directory was not created : {}", orderPath);
+                throw new RuntimeException("Directory was not created " + orderPath);
+            }
         }
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
@@ -48,9 +66,9 @@ public class LocalDiskPhotoDao implements PhotoDao {
                     String photoPath = new File(dirOrder, fileName).getAbsolutePath();
                     try {
                         photo.write(photoPath);
-                        photosPaths.add(photoPath);
+                        photosPaths.add(fileName);
                     } catch (IOException e) {
-                        LOG.error("Can't save photos on local disk by path : {}", path);
+                        log.error("Can't save photos on local disk by path : {}", orderPath);
                         throw new RuntimeException("Can't save photos on local disk", e);
                     }
                 }
@@ -70,7 +88,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
         return "";
     }
 
-    private void deleteDir(File dir) {
+    private boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             File[] content = dir.listFiles();
             if (content != null) {
@@ -79,6 +97,6 @@ public class LocalDiskPhotoDao implements PhotoDao {
                 }
             }
         }
-        dir.delete();
+        return dir.delete();
     }
 }
