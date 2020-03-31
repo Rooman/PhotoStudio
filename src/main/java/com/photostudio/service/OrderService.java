@@ -30,4 +30,6 @@ public interface OrderService {
     String getPathByPhotoId(long photoId);
 
     List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
+
+    String getPathToOrderDir(int orderId);
 }

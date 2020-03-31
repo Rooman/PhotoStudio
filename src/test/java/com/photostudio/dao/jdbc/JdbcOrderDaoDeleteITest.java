@@ -86,7 +86,7 @@ public class JdbcOrderDaoDeleteITest {
         int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
 
         //create dirs and files
-        String path = TEST_PATH_PHOTO + File.separator + "3";
+        String path = TEST_PATH_PHOTO + File.separator + "Order-3";
         File dir = new File(path);
         dir.mkdirs();
         for (int i = 1; i <= cntPhotosByOrder; i++) {
@@ -115,7 +115,7 @@ public class JdbcOrderDaoDeleteITest {
     @Test
     public void testDeletePhotoFromEmptyFolder() throws IOException {
         //create dirs, but no files
-        String path = TEST_PATH_PHOTO + File.separator + "3";
+        String path = TEST_PATH_PHOTO + File.separator + "Order-3";
         File dir = new File(path);
         dir.mkdirs();
 
