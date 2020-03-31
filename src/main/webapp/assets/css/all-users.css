@@ -12,6 +12,12 @@
     text-align: center;
 }
 
+.close__button-position {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 30px;
+}
+
 .all-users_title {
     text-align: center;
     font-weight: 300;

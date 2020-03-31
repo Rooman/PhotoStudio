@@ -2,6 +2,7 @@ package com.photostudio.service.impl;
 
 import com.photostudio.dao.jdbc.JdbcOrderDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
+import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,6 +119,19 @@ class DefaultOrderServiceTest {
         assertThrows(ChangeOrderStatusInvalidException.class, () -> {
             orderService.checkPhoto(7, OrderStatus.READY);
         });
+    }
+
+    @Test
+    void getOrdersWithOrderStatusNotNewByUserIdNotFound() {
+        List<Order> orderList = orderService.getOrdersWithOrderStatusNotNewByUserId(1);
+
+        assertEquals(0, orderList.size());
+    }
+
+    @Test
+    void getOrdersWithOrderStatusNotNewByUserId() {
+        List<Order> orderList = orderService.getOrdersWithOrderStatusNotNewByUserId(6);
+        assertEquals(0, orderList.size());
     }
 
     @AfterAll

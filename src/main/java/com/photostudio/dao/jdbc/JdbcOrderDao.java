@@ -420,7 +420,7 @@ public class JdbcOrderDao implements OrderDao {
         return query + " ORDER BY o.id DESC";
     }
 
-    private String getDeletePhotoStatement(List<Order> orderList) {
+    String getDeletePhotoStatement(List<Order> orderList) {
         StringJoiner stringJoiner = new StringJoiner(", ", DELETE_PHOTOS_BY_ORDERS_ID + "(", ")");
         orderList.forEach(order -> stringJoiner.add("?"));
         return stringJoiner.toString();

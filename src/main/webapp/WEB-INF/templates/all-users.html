@@ -42,7 +42,8 @@
             <td class="table_header">Name</td>
             <td class="table_header">Address</td>
             <td class="table_header">Additional Info</td>
-            <td class="table_header"><img class="img-edit img-edit__header" th:src="@{/assets/images/user/Edit.svg}"></td>
+            <td class="table_header"><img class="img-edit img-edit__header" th:src="@{/assets/images/user/Edit.svg}">
+            </td>
         </tr>
         <div th:each="user : ${users}">
             <tr class="table_info double-click"
@@ -62,7 +63,8 @@
         </div>
         </tbody>
     </table>
-    <a th:if="${search} != null" th:href="${orderId} == 0 ? @{'/order'} : @{'/order/' + ${orderId}}" class="btn new-user_button">Close</a>
+    <a th:if="${search} != null" th:href="${orderId} == null ? @{'/order'} : @{'/order/' + ${orderId}}"
+       class="btn new-user_button close__button-position">Close</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

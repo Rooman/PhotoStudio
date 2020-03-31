@@ -72,7 +72,7 @@
                         password
                     </a>
 
-                    <button type="button" class="btn btn__manage btn__manage--pink"
+                    <button th:if="${roleAdmin}" type="button" class="btn btn__manage btn__manage--pink"
                             data-toggle="modal" data-target="#delete-user">Delete user
                     </button>
                 </div>
@@ -89,7 +89,7 @@
                 </div>
                 <div class="modal-body">
                     <p class="dialog-body"
-                       th:text="'Are you sure you want to delete user with id '+${userToEdit.id}+' ?'"></p>
+                       th:text="'Are you sure you want to delete user with email '+${userToEdit.email}+' ?'"></p>
                 </div>
                 <div class="modal-footer dialog-buttons">
                     <button class="btn btn-submit btn-outline-dark button dialog__button
