@@ -13,7 +13,7 @@ public interface OrderService {
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
-    Order getOrderByIdInStatusNew(int id);
+    Order getOrderById(int id);
 
     List<Order> getOrdersByUserId(long userId);
 

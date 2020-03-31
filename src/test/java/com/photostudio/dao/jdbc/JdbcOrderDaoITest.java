@@ -87,7 +87,7 @@ public class JdbcOrderDaoITest {
 
         //when
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        Order actual = jdbcOrderDao.getOrderByIdInStatusNew(1);
+        Order actual = jdbcOrderDao.getOrderById(1);
 
         //then
         LocalDateTime expectedDateTime = LocalDateTime.of(2020, 1, 15, 18, 38, 33);

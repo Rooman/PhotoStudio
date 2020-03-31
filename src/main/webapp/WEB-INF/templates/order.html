@@ -13,8 +13,8 @@
     </head>
 </head>
 
-<body>
-<div class="container">
+<body th:with="isAdmin=${user.userRole.getName()=='ADMIN'}" >
+<div class="container" th:if="${isAdmin}">
 
     <!--Bread Crumb-->
     <div class="bread__crumb-navigation">
@@ -50,8 +50,8 @@
                             placeholder=${order.user == null and newEmail == null ? 'Email' : null}"
                    name="email" required>
             <a th:href="${order.id} == 0 ? @{/admin/users?search=userForOrder} : @{'/admin/users?search=userForOrder&id=' + ${order.id}}"
-               class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user</a>
-            <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
+               class="btn btn-submit btn-outline-dark button order__button order__search-button" th:if="${isAdmin}">Search user</a>
+            <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button" th:if="${isAdmin}">Create
                 new
                 user</a>
         </div>
@@ -92,17 +92,25 @@
                 </a>
             </div>
         </div>
+        <div class="container" th:if="${isAdmin==false and order.status.getOrderStatusName()=='SELECTED'}">
+
+            <div class="row">
+                <div class="col">
+                    <p th:text="#{order.thankyou}">Thanks for your choice! Photos will be available after payment.</p>
+                </div>
+            </div>
+        </div>
         <div class="order__complete-buttons">
             <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
             </button>
-            <button th:if="${order.id != 0}"
+            <button th:if="${isAdmin and order.id != 0}"
                     class="btn btn-submit btn-outline-dark button order__button view-select-button"
                     form="change_status">
                 Status to view
                 and
                 select
             </button>
-            <button th:if="${order.id != 0}" type="button"
+            <button th:if="${isAdmin and order.id != 0}" type="button"
                     class="btn btn-submit btn-outline-dark button order__button delete-button"
                     data-toggle="modal" data-target="#delete-order">Delete order
             </button>
