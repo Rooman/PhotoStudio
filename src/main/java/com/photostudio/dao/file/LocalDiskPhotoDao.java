@@ -5,11 +5,8 @@ import com.photostudio.dao.PhotoDao;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +24,13 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public String getPathToOrderDir(int orderId) {
-        Path orderDir = Paths.get("/",path, "Order-" + orderId);
+        Path orderDir = Paths.get(path, "Order-" + orderId);
         return orderDir.toAbsolutePath().toString();
     }
 
     @Override
     public void deleteByOrder(int orderId) {
-        String orderPath = getPathToOrderDir(orderId);
+        String orderPath = getPathToOrderDir(orderId).toString();
         log.info("delete photos from local disk by path:{}", orderPath);
         File dir = new File(orderPath);
         if (dir.exists()) {
@@ -48,27 +45,25 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public List<String> savePhotoByOrder(List<Part> photos, int orderId) {
-        String orderPath = getPathToOrderDir(orderId);
+        Path orderPath = Paths.get(getPathToOrderDir(orderId));
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
-        Path path = Paths.get(orderPath);
-        if (!Files.exists(path)) {
+        if (!Files.exists(orderPath)) {
             try {
-                Files.createDirectory(path);
+                Files.createDirectory(orderPath);
                 log.info("Directory was created : {}", orderPath);
             } catch (IOException e) {
                 log.error("Directory was not created : {}", orderPath, e);
                 throw new RuntimeException("Directory was not created " + orderPath, e);
             }
-
         }
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
-                    String photoPath = new File(orderPath, fileName).getAbsolutePath();
-                    try {
-                        photo.write(photoPath);
+                    Path photoPath = Paths.get(orderPath.toString(), fileName);
+                    try (InputStream inputStream = photo.getInputStream()) {
+                        Files.copy(inputStream, photoPath, new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
                         photosPaths.add(fileName);
                     } catch (IOException e) {
                         log.error("Can't save photos on local disk by path : {}", orderPath, e);
@@ -102,4 +97,5 @@ public class LocalDiskPhotoDao implements PhotoDao {
         }
         return dir.delete();
     }
+
 }

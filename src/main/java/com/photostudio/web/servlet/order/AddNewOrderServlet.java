@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/order")
-@MultipartConfig(location = "/", maxFileSize = 1024 * 1024 * 50)
+@MultipartConfig(maxFileSize = 1024 * 1024 * 50)
 @Slf4j
 public class AddNewOrderServlet extends HttpServlet {
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
