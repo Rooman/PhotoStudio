@@ -59,7 +59,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <url>http://${localserverserver.host}:${localserverserver.port}/manager/text</url>
+                    <url>http://${localserver.host}:${localserver.port}/manager/text</url>
                     <server>${localserver.name}</server>
                     <path>${context.path}</path>
                     <update>true</update>
