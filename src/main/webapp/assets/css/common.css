@@ -10,6 +10,7 @@ main {
   min-height:90%;
 }
 
+/*needed for the footer*/
 .container-main {
   overflow:auto;
   padding-bottom:187px;
