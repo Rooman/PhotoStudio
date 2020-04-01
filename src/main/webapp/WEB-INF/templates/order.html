@@ -108,20 +108,33 @@
                     </div>-->
 
                     <div class="col-md-3" th:each="photo : ${order.photoSources}">
-                        <!-- Trigger the Modal -->
-                        <img id="myImg" src="https://upload.wikimedia.org/wikipedia/commons/c/c4/PM5544_with_non-PAL_signals.png" alt="Snow" style="width:100%;max-width:300px">
+                        <div th:with="photoImg=${'photoImg'+photo.getId()}, image=${'image'+photo.getId()}, modalElement=${'modalElement'+photo.getId()}">
+                            <!-- Trigger the Modal -->
+                            <img th:id="${photoImg}" th:src="@{/photo(id= ${photo.getId()})}" alt="photo" style="width:100%;max-width:300px">
 
-                        <!-- The Modal -->
-                        <div id="myModal" class="modal">
+                            <!-- The Modal -->
+                            <div th:id="${modalElement}" class="modal">
 
-                            <!-- The Close Button -->
-                            <span class="close">&times;</span>
+                                <!-- The Close Button -->
+                                <span class="close">&times;</span>
 
-                            <!-- Modal Content (The Image) -->
-                            <img class="modal-content" id="img01">
+                                <!-- Modal Content (The Image) -->
+                                <img class="modal-content" th:id="${image}">
 
-                            <!-- Modal Caption (Image Text) -->
-                            <div id="caption"></div>
+                                <!-- Modal Caption (Image Text) -->
+                                <div id="caption"></div>
+                            </div>
+                            <script th:inline="javascript">
+                            /*<![CDATA[*/
+                                ...
+
+                                var modalElement = [[${modalElement}]];
+                                var photoImg = [[${photoImg}]];
+                                var image = [[${image}]];
+                                ...
+                            /*]]>*/
+                            </script>
+                            <script th:src="@{/assets/js/order/image-expand.js}"></script>
                         </div>
                     </div>
                 </div>
@@ -129,7 +142,7 @@
 
 
 
-            <div class="photo-add-delete-buttons" th:if="${isAdmin}">
+            <div class="photo-add-delete-buttons" th:if="${isAdmin and order.status.getOrderStatusName()=='NEW'}">
 
                 <input type="file" name="photo" id="file" class="inputfile"
                        data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
@@ -197,9 +210,8 @@
 </body>
 <meta th:replace="fragment/script.html :: script">
 
+
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
 <script th:src="@{/assets/js/order/checkbox-selected.js}"></script>
-<script th:src="@{/assets/js/order/image-expand.js}"></script>
-
 
 </html>
