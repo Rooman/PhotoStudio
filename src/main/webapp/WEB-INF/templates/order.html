@@ -80,9 +80,8 @@
                 <div class="row order__block">
                     <div class="col-md-3" th:each="photo : ${order.photoSources}">
                         <div class="order__photo-block">
-                            <div class="photo-select-checkbox form-check">
-                                <!--id="selectPhoto" th:value="${photo.getId()}"-->
-                                <input class="form-check-input" type="checkbox" th:name="'order'+${order.id}+'Photo'+${photo.getId()}"
+                            <div class="photo-element">
+                                <input class="photo-select-checkbox" type="checkbox" th:name="'order'+${order.id}+'Photo'+${photo.getId()}"
                                        value="selected">
                             </div>
                             <img class="order__photo" th:src="@{/photo(id= ${photo.getId()})}" alt="photo">
@@ -167,5 +166,6 @@
 <meta th:replace="fragment/script.html :: script">
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
+<script th:src="@{/assets/js/order/checkbox-selected.js}"></script>
 
 </html>

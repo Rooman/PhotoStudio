@@ -124,9 +124,15 @@
     margin-bottom: 30px;
 }
 
+div.selected {
+    background: #f00;
+}
+
 .order__photo {
+    padding-right: 10px;
+    padding-left: 10px;
     max-height: 200px;
-    max-width: 256px;
+    max-width: 250px;
 }
 
 .photo__buttons {
@@ -214,9 +220,7 @@
 }
 
 .photo-select-checkbox {
-    position: relative;
+    /*position: relative;
     right: 5px;
-    top: 5px;
+    top: 5px;*/
 }
-
-
