@@ -24,8 +24,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public String getPathToOrderDir(int orderId) {
-        Path orderDir = Paths.get(path, "Order-" + orderId);
-        return orderDir.toAbsolutePath().toString();
+        return getOrderPath(orderId).toAbsolutePath().toString();
     }
 
     @Override
@@ -45,7 +44,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public List<String> savePhotoByOrder(List<Part> photos, int orderId) {
-        Path orderPath = Paths.get(getPathToOrderDir(orderId));
+        Path orderPath = getOrderPath(orderId);
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
         if (!Files.exists(orderPath)) {
@@ -84,6 +83,10 @@ public class LocalDiskPhotoDao implements PhotoDao {
             }
         }
         return "";
+    }
+
+    private Path getOrderPath(int orderId) {
+        return Paths.get(path, "Order-" + orderId);
     }
 
     private boolean deleteDir(File dir) {
