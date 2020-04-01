@@ -30,7 +30,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public void deleteByOrder(int orderId) {
-        String orderPath = getPathToOrderDir(orderId).toString();
+        String orderPath = getPathToOrderDir(orderId);
         log.info("delete photos from local disk by path:{}", orderPath);
         File dir = new File(orderPath);
         if (dir.exists()) {
