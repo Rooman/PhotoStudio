@@ -55,7 +55,7 @@ public class AddNewOrderServlet extends HttpServlet {
         String email = request.getParameter("email");
         User user = userService.getUserByEmail(email);
 
-        String comment = request.getParameter("comment");
+        String comment = request.getParameter("commentAdmin");
 
         Order.OrderBuilder orderBuilder = Order.builder()
                 .orderDate(LocalDateTime.now())
@@ -63,7 +63,7 @@ public class AddNewOrderServlet extends HttpServlet {
                 .user(user);
 
         if (!comment.isEmpty()) {
-            orderBuilder.comment(comment);
+            orderBuilder.commentAdmin(comment);
         }
         log.info("Save photo to new order");
 

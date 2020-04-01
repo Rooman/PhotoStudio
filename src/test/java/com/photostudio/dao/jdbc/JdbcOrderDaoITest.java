@@ -70,6 +70,7 @@ public class JdbcOrderDaoITest {
         }
         assertEquals(0, actual.size());
     }
+  
 // The test does not work. The h2 base does not understand Multiple Queries
 //    @Test
 //    public void testGetOrderByIdInStatusNew() {

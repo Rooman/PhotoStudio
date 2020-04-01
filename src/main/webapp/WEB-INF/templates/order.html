@@ -13,7 +13,7 @@
     </head>
 </head>
 
-<body>
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
 <div class="container">
 
     <!--Bread Crumb-->
@@ -55,11 +55,20 @@
                 new
                 user</a>
         </div>
-        <div>
+        <div th:if="${roleAdmin}">
             <textarea class="form-control order__detail-info order__comment"
-                      id="comment" rows="5" name="comment"
-                      th:attr="placeholder=${order.comment == null ? 'Comment' : null}"
-                      th:text="${order.comment != null}?${order.comment}"></textarea>
+                      id="commentAdmin" rows="5" name="commentAdmin"
+                      th:attr="placeholder=${order.commentAdmin == null ? 'Comment' : null}"
+                      th:text="${order.commentAdmin != null}?${order.commentAdmin}"></textarea>
+
+        </div>
+        <div th:if="${roleUser} or ${order.commentUser != null}">
+            <textarea class="form-control order__detail-info order__comment"
+                      id="commentUser" rows="5" name="commentUser"
+                      th:attr="placeholder=${order.commentUser == null ? 'Comment' : null}"
+                      th:text="${order.commentUser}"
+                      th:disabled="${roleAdmin}">
+            </textarea>
 
         </div>
         <div class="order__photos">
@@ -67,7 +76,8 @@
                 <div class="row order__block">
                     <div class="col-md-3" th:each="photo : ${order.photoSources}">
                         <div class="order__photo-block">
-                            <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}" alt="photo">
+                            <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
+                                 alt="photo">
                         </div>
                         <div class="photo__buttons">
                             <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
