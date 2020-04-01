@@ -43,11 +43,11 @@ public class JdbcOrderDaoITest {
 
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         expected.add(order1);
         Order order2 = Order.builder().id(2)
                 .orderDate(LocalDateTime.of(2020, 1, 21, 18, 38, 33))
-                .comment("OLD").user(user2).status(OrderStatus.VIEW_AND_SELECT).photoSources(new ArrayList<>()).build();
+                .commentAdmin("OLD").user(user2).status(OrderStatus.VIEW_AND_SELECT).photoSources(new ArrayList<>()).build();
         expected.add(order2);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
@@ -119,11 +119,11 @@ public class JdbcOrderDaoITest {
 
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         expected.add(order1);
         Order order2 = Order.builder().id(2)
                 .orderDate(LocalDateTime.of(2020, 1, 21, 18, 38, 33))
-                .comment("OLD").user(user2).status(OrderStatus.VIEW_AND_SELECT).photoSources(new ArrayList<>()).build();
+                .commentAdmin("OLD").user(user2).status(OrderStatus.VIEW_AND_SELECT).photoSources(new ArrayList<>()).build();
         expected.add(order2);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
@@ -165,11 +165,11 @@ public class JdbcOrderDaoITest {
 
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         expected.add(order1);
         Order order2 = Order.builder().id(2)
                 .orderDate(LocalDateTime.of(2020, 1, 21, 18, 38, 33))
-                .comment("OLD").user(user2).status(OrderStatus.VIEW_AND_SELECT).photoSources(new ArrayList<>()).build();
+                .commentAdmin("OLD").user(user2).status(OrderStatus.VIEW_AND_SELECT).photoSources(new ArrayList<>()).build();
         expected.add(order2);
 
         //when
@@ -198,7 +198,7 @@ public class JdbcOrderDaoITest {
 
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         expected.add(order1);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
@@ -231,7 +231,7 @@ public class JdbcOrderDaoITest {
 
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         expected.add(order1);
         Order order3 = Order.builder().id(3)
                 .orderDate(LocalDateTime.of(2020, 1, 29, 18, 38, 33))
@@ -296,7 +296,7 @@ public class JdbcOrderDaoITest {
 
         Order order1 = Order.builder().id(1)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user1).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         expected.add(order1);
 
         //when
@@ -328,11 +328,11 @@ public class JdbcOrderDaoITest {
         List<Order> orderList = new ArrayList<>();
         Order order5 = Order.builder().id(5)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user3).status(OrderStatus.NEW).photoSources(photoList).build();
+                .commentAdmin("NEW").user(user3).status(OrderStatus.NEW).photoSources(photoList).build();
         orderList.add(order5);
         Order order6 = Order.builder().id(6)
                 .orderDate(LocalDateTime.of(2020, 1, 15, 18, 38, 33))
-                .comment("NEW").user(user3).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
+                .commentAdmin("NEW").user(user3).status(OrderStatus.NEW).photoSources(new ArrayList<>()).build();
         orderList.add(order6);
 
 
