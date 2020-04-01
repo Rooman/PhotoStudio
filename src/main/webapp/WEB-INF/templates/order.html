@@ -80,11 +80,20 @@
                 <div class="row order__block">
                     <div class="col-md-3" th:each="photo : ${order.photoSources}">
                         <div class="order__photo-block">
+                            <div class="photo-select-checkbox form-check">
+                                <!--id="selectPhoto" th:value="${photo.getId()}"-->
+                                <input class="form-check-input" type="checkbox" th:name="'order'+${order.id}+'Photo'+${photo.getId()}"
+                                       value="selected">
+                            </div>
                             <img class="order__photo" th:src="@{/photo(id= ${photo.getId()})}" alt="photo">
                         </div>
                         <div class="photo__buttons">
-                            <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
-                            <a class="photo-option" href="#"><i class="fas fa-trash-alt"></i></a>
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
+                                    <a class="photo-option" href="#" th:if="${isAdmin}"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +122,8 @@
             </div>
         </div>
         <div class="order__complete-buttons">
-            <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button" th:text="#{order.save.button}">Save
+            <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button" th:text="#{order.save.button}">
+                Save
             </button>
             <button th:if="${isAdmin and order.id != 0}"
                     class="btn btn-submit btn-outline-dark button order__button view-select-button"

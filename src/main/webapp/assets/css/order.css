@@ -213,4 +213,10 @@
    border-color: #FCC5D9;
 }
 
+.photo-select-checkbox {
+    position: relative;
+    right: 5px;
+    top: 5px;
+}
+
 

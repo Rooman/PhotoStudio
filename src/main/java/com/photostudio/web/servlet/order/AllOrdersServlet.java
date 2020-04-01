@@ -33,6 +33,9 @@ public class AllOrdersServlet extends HttpServlet {
         CommonVariableAppendService.appendUser(paramsMap, request);
         response.setContentType("text/html;charset=utf-8");
 
+        String selectedPhotos = request.getParameter("selectedPhotos");
+        log.debug("Parsed selectedPhotos parameter String: {}", selectedPhotos);
+
         User user = (User) paramsMap.get("user");
 
         FilterParameters filterParameters;
