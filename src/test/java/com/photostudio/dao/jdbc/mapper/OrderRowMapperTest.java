@@ -23,7 +23,8 @@ public class OrderRowMapperTest {
         when(mockResultSet.getString("statusName")).thenReturn("New");
         when(mockResultSet.getString("phoneNumber")).thenReturn("3806767676");
         when(mockResultSet.getString("email")).thenReturn("email@gmail.com");
-        when(mockResultSet.getString("comment")).thenReturn("new Comment");
+        when(mockResultSet.getString("commentAdmin")).thenReturn("new Comment");
+        when(mockResultSet.getString("commentUser")).thenReturn("user Comment");
 
         LocalDateTime dateTime = LocalDateTime.of(2020, 1, 20, 1, 20, 0);
         Timestamp sqlDate = Timestamp.valueOf(dateTime);
@@ -42,7 +43,8 @@ public class OrderRowMapperTest {
         assertEquals("NEW", actualOrder.getStatus().getOrderStatusName());
         assertEquals("3806767676", actualOrder.getUser().getPhoneNumber());
         assertEquals("email@gmail.com", actualOrder.getUser().getEmail());
-        assertEquals("new Comment", actualOrder.getComment());
+        assertEquals("new Comment", actualOrder.getCommentAdmin());
+        assertEquals("user Comment", actualOrder.getCommentUser());
         assertEquals(expectedDateTime, actualOrder.getOrderDate());
 
     }

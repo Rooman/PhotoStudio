@@ -27,6 +27,7 @@ public class TestDataSource {
         runScript("db/migration/V1_7__insert_PhotoStatus.sql");
         runScript("db/migration/V1_10__add_language.sql");
         runScript("db/migration/V1_11__add_email_templates.sql");
+        runScript("db/migration/V1_14__change_order_comment.sql");
         return jdbcDataSource;
     }
 
