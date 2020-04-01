@@ -5,7 +5,6 @@ import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 
 import java.util.List;
-import java.util.Map;
 
 public interface OrderDao {
     List<Order> getAll();
@@ -31,4 +30,6 @@ public interface OrderDao {
     int getPhotoCountByStatus(int id, int idPhotoStatus);
 
     String getPathByPhotoId(long photoId);
+
+    void deleteOrdersByUserId(List<Order> orderList, long id);
 }

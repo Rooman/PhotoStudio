@@ -2,6 +2,7 @@ package com.photostudio.service.impl;
 
 import com.photostudio.dao.UserDao;
 import com.photostudio.entity.user.User;
+import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
 import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Slf4j
 public class DefaultUserService implements UserService {
     private UserDao userDao;
+    private OrderService orderService;
 
     public DefaultUserService(UserDao userDao) {
         this.userDao = userDao;
@@ -45,6 +47,7 @@ public class DefaultUserService implements UserService {
     @Override
     public void delete(long id) {
         log.info("Started service delete user with id from DB");
+        orderService.deleteAllOrdersByUserId(id);
         userDao.delete(id);
     }
 
@@ -74,5 +77,10 @@ public class DefaultUserService implements UserService {
         user.setSalt(randomSalt);
         user.setPasswordHash(newPasswordHash);
         userDao.edit(user);
+    }
+
+    @Override
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }
