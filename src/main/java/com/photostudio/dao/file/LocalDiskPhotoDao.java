@@ -1,7 +1,7 @@
 package com.photostudio.dao.file;
 
 import com.photostudio.dao.PhotoDao;
-
+import com.photostudio.entity.photo.Photo;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Part;
@@ -9,6 +9,9 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 @Slf4j
 public class LocalDiskPhotoDao implements PhotoDao {
@@ -72,6 +75,34 @@ public class LocalDiskPhotoDao implements PhotoDao {
             }
         }
         return photosPaths;
+    }
+
+    @Override
+    public InputStream addPhotoToArchive(int orderId, List<Photo> photos) {
+        if(photos.isEmpty()){
+            log.error("No paid photos in order with id : {}", orderId);
+            throw new RuntimeException ("No paid photos in order with id "+orderId);
+        }
+        String pathToArchive = getPathToOrderDir(orderId);
+        log.info("Add to archive photos on local disk by path : {}", pathToArchive);
+        String archiveName = orderId + ".zip";
+        File archive = new File(pathToArchive, archiveName);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(archive);
+             ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
+            for (Photo photo : photos) {
+                zipOutputStream.putNextEntry(new ZipEntry(photo.getSource()));
+                byte[] buffer = Files.readAllBytes(Paths.get(pathToArchive, photo.getSource()));
+                zipOutputStream.write(buffer);
+                zipOutputStream.closeEntry();
+            }
+            return new FileInputStream(archive);
+        } catch (FileNotFoundException ex) {
+            log.error("A zip file on path : {} does not exist: ", pathToArchive);
+            throw new RuntimeException("A zip file does not exist: ", ex);
+        } catch (IOException ex) {
+            log.error("File for add to zip on path : {} not found", pathToArchive);
+            throw new RuntimeException("File for add to zip not found: ", ex);
+        }
     }
 
     private String getFileName(Part part) {

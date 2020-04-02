@@ -6,6 +6,7 @@ import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.photo.PhotoStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 import javax.servlet.http.Part;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,6 +136,12 @@ public class DefaultOrderService implements OrderService {
     @Override
     public String getPathToOrderDir(int orderId) {
         return photoDao.getPathToOrderDir(orderId);
+    }
+
+    @Override
+    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus){
+        List<Photo> photos = orderDao.getPhotosByStatus(orderId, photoStatus);
+        return photoDao.addPhotoToArchive(orderId, photos);
     }
 
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {
