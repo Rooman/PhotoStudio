@@ -15,8 +15,8 @@
 
 
 
-<body th:with="isAdmin=${user.userRole.getName()=='ADMIN'}" >
-<div th:if="${isAdmin==false}">
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}" >
+<div th:if="${roleAdmin==false}">
     <header class="header">
         <div class="container-fluid">
             <!--NavBar-->
@@ -27,7 +27,7 @@
     </header>
 </div>
 
-<div class="container" th:if="${isAdmin}">
+<div class="container" th:if="${roleAdmin}">
 
     <!--Bread Crumb-->
     <div class="bread__crumb-navigation">
@@ -56,7 +56,7 @@
     </div>
     <form id="new" th:action="${order.id} == 0 ? @{/order} : @{/orders}" th:method="${order.id} == 0 ? post : get"
           th:enctype="${order.id} == 0 ? 'multipart/form-data' : null">
-        <div class="order__user-info" th:if="${isAdmin}">
+        <div class="order__user-info" th:if="${roleAdmin}">
             <input type="email" class="form-control order__detail-info order__user-email"
                    id="email"
                    th:attr="value=${((newEmail != null) ? newEmail : (order.id != 0) ? order.user.email : null)},
@@ -78,63 +78,21 @@
         <div class="order__photos">
             <div class="photo-aria overflow-auto">
                 <div class="row order__block">
-                    <!--<div class="col-md-3" th:each="photo : ${order.photoSources}">
-                        <div class="order__photo-block">
-                            <div class="photo-element">
-                                <input class="photo-select-checkbox" type="checkbox" th:name="'order'+${order.id}+'Photo'+${photo.getId()}"
-                                       value="selected">
-                            </div>
-                            <img class="order__photo" th:src="@{/photo(id= ${photo.getId()})}" alt="photo">
-                            <a class="btn" data-toggle="collapse" th:href="'#expandPhoto'+${photo.getId()}" role="button" aria-expanded="false" aria-controls="'collapseExample'+${photo.getId()}">
-                            </a>
+                    <div class="col-md-3" th:each="photo : ${order.photoSources}" th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}">
+                        <label class="checkbox-container">
+                            <input type="checkbox" th:checked="${photoStatus=='SELECTED' or isPaid}">
+                            <span class="custom-checkmark"></span>
+                        </label>
+                        <div th:class="order__photo-block" th:classappend="${isPaid} ? order__photo-block-paid : ''">
+                            <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
+                                 alt="photo">
                         </div>
-
                         <div class="photo__buttons">
-                            <div class="container">
-                                <div class="row justify-content-center">
-                                    <a class="photo-option btn" data-toggle="collapse" th:href="'#expandPhoto'+${photo.getId()}" role="button" aria-expanded="false" th:aria-controls="'collapseExample'+${photo.getId()}">
-                                        <i class="fas fa-search-plus"></i></a>
-                                    <a class="photo-option" href="#" th:if="${isAdmin}"><i class="fas fa-trash-alt"></i></a>
-                                </div>
+                            <div class=" row justify-content-center">
+                                <a class="photo-option col-auto text-center" href="#"><i class="fas fa-search-plus"></i></a>
+                                <a class="photo-option col-auto text-center" href="#" th:if="${roleUser and isPaid}"><i class="fas fa-arrow-down"></i></a>
+                                <a class="photo-option col-auto text-center" href="#" th:if="${roleAdmin}"><i class="fas fa-trash-alt"></i></a>
                             </div>
-                        </div>
-
-                        <div class="collapse" th:id="'collapseExample'+${photo.getId()}">
-                            <div class="order__photo-block-expanded">
-                                &lt;!&ndash;<a class="photo-option btn" data-toggle="collapse" th:href="'#expandPhoto'+${photo.getId()}" role="button" aria-expanded="false" th:aria-controls="'collapseExample'+${photo.getId()}"><i class="fas fa-times-circle"></i></a>&ndash;&gt;
-                                <img class="order__photo__expanded" th:src="@{/photo(id= ${photo.getId()})}" alt="photo">
-                            </div>
-                        </div>
-                    </div>-->
-
-                    <div class="col-md-3" th:each="photo : ${order.photoSources}">
-                        <div th:with="photoImg=${'photoImg'+photo.getId()}, image=${'image'+photo.getId()}, modalElement=${'modalElement'+photo.getId()}">
-                            <!-- Trigger the Modal -->
-                            <img th:id="${photoImg}" th:src="@{/photo(id= ${photo.getId()})}" alt="photo" style="width:100%;max-width:300px">
-
-                            <!-- The Modal -->
-                            <div th:id="${modalElement}" class="modal">
-
-                                <!-- The Close Button -->
-                                <span class="close">&times;</span>
-
-                                <!-- Modal Content (The Image) -->
-                                <img class="modal-content" th:id="${image}">
-
-                                <!-- Modal Caption (Image Text) -->
-                                <div id="caption"></div>
-                            </div>
-                            <script th:inline="javascript">
-                            /*<![CDATA[*/
-                                ...
-
-                                var modalElement = [[${modalElement}]];
-                                var photoImg = [[${photoImg}]];
-                                var image = [[${image}]];
-                                ...
-                            /*]]>*/
-                            </script>
-                            <script th:src="@{/assets/js/order/image-expand.js}"></script>
                         </div>
                     </div>
                 </div>
@@ -142,7 +100,7 @@
 
 
 
-            <div class="photo-add-delete-buttons" th:if="${isAdmin and order.status.getOrderStatusName()=='NEW'}">
+            <div class="photo-add-delete-buttons" th:if="${roleAdmin and order.status.getOrderStatusName()=='NEW'}">
 
                 <input type="file" name="photo" id="file" class="inputfile"
                        data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
@@ -158,7 +116,7 @@
                 </a>
             </div>
         </div>
-        <div class="container" th:if="${isAdmin==false and order.status.getOrderStatusName()=='SELECTED'}">
+        <div class="container" th:if="${roleAdmin==false and order.status.getOrderStatusName()=='SELECTED'}">
             <div class="row align-items-center">
                 <div class="col justify-content-center">
                     <p th:text="#{order.thank.you}">Thanks for your choice! Photos will be available after payment.</p>
@@ -169,14 +127,14 @@
             <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button" th:text="#{order.save.button}">
                 Save
             </button>
-            <button th:if="${isAdmin and order.id != 0}"
+            <button th:if="${roleAdmin and order.id != 0}"
                     class="btn btn-submit btn-outline-dark button order__button view-select-button"
                     form="change_status">
                 Status to view
                 and
                 select
             </button>
-            <button th:if="${isAdmin and order.id != 0}" type="button"
+            <button th:if="${roleAdmin and order.id != 0}" type="button"
                     class="btn btn-submit btn-outline-dark button order__button delete-button"
                     data-toggle="modal" data-target="#delete-order">Delete order
             </button>
@@ -212,6 +170,5 @@
 
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
-<script th:src="@{/assets/js/order/checkbox-selected.js}"></script>
 
 </html>
