@@ -126,6 +126,62 @@ public class JdbcOrderDaoDeleteITest {
         assertEquals(false, dirAfter.exists());
     }
 
+    @Test
+    void testDeletePhotoDB() throws SQLException {
+        int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.deletePhoto(2);
+
+        //after
+        int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+        int cntPhotosById = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE id=2");
+
+        assertEquals(cntPhotosBefore - 1, cntPhotosAfter);
+        assertEquals(cntPhotosByOrder - 1, cntPhotosByOrderAfter);
+        assertEquals(0, cntPhotosById);
+    }
+
+    @Test
+    void testDeletePhotoDBNotExisting() throws SQLException {
+        int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+        int cntPhotosByIdBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=10");
+
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.deletePhoto(10);
+
+        //after
+        int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+        int cntPhotosById = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE id=10");
+
+        assertEquals(cntPhotosBefore, cntPhotosAfter);
+        assertEquals(cntPhotosByOrder, cntPhotosByOrderAfter);
+        assertEquals(0, cntPhotosById);
+    }
+
+    @Test
+    void testDeletePhotosDB() throws SQLException {
+        //before
+        int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.deletePhotos(2);
+        //after
+        int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
+
+        assertEquals(0, cntPhotosByOrderAfter);
+        assertEquals(cntPhotosBefore - cntPhotosByOrder, cntPhotosAfter);
+
+    }
+
     @AfterEach
     public void after() throws SQLException, IOException {
         dataSource.runScript("db/clear_orders.sql");
