@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,8 +23,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.2</version>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -107,8 +108,8 @@
                 <version>6.2.1</version>
                 <configuration>
                     <user>root</user>
-                    <password>toor</password>
-                    <url>jdbc:mysql://localhost:3306/photostudio_test?serverTimezone=UTC</url>
+                    <password>P@ssw0rd</password>
+                    <url>jdbc:mysql://localhost:3306/photostudio</url>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
             </plugin>
@@ -123,7 +124,6 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
-
 
         <!--Web-->
         <dependency>
