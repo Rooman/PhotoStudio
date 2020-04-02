@@ -81,7 +81,10 @@
                         </div>
                         <div class="photo__buttons">
                             <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
-                            <a class="photo-option" href="#"><i class="fas fa-trash-alt"></i></a>
+                            <a class="photo-option" href="#" th:onclick="|deletePhoto(${photo.getId()})|"
+                               form="delete_photos">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -95,8 +98,8 @@
                 </label>
 
                 <a class="photo-option" href="#">
-                    <button type="button"
-                            class="btn btn-submit btn-outline-dark button order__button photo-delete-button">
+                    <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button"
+                            form="delete_photos">
                         Delete all
                     </button>
                 </a>
@@ -142,10 +145,13 @@
     </div>
     <form id="delete_order" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
+    <form id="delete_photos" th:if="${order.id != 0}" th:action="@{'/order/delete-photos/'+${order.id}}" method="post">
+        <input type='hidden' name='photoId' value='0' id='photoId'/>
+    </form>
 </div>
 </body>
 <meta th:replace="fragment/script.html :: script">
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
-
+<script th:src="@{/assets/js/order/delete-photo.js}"></script>
 </html>
