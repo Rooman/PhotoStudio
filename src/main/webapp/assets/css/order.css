@@ -72,6 +72,8 @@
     background: #FAE1DE;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
+    margin-left: 25px;
+    margin-right: 20px;
 }
 
 .order__button:hover {
@@ -105,6 +107,7 @@
     border: 2px solid #FCC5D9;
     border-radius: 10px;
     margin-left: 9px;
+    margin-bottom: 15px;
 }
 
 .photo-aria {
@@ -116,28 +119,26 @@
     margin: 50px 41px 30px 24px;
 }
 
-.order__photo-block {
-    height: 200px;
+.order-photo-card {
+    height: 240px;
     width: 258px;
     border: 1px solid #FCC5D9;
-    display: flex;
-    justify-content: center;
+    border-radius: 10px;
     margin-bottom: 30px;
 }
 
-.order__photo-block-paid {
-    height: 200px;
-    width: 258px;
-    border: 1px solid #FCC5D9;
+.order__photo-block {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.order__photo-block-paid {
     background-color: rgba(252, 197, 217, 0.6);
 }
 
 .order__photo {
-    padding-right: 10px;
-    padding-left: 10px;
+    padding: 10px;
     max-height: 200px;
     max-width: 250px;
 }
@@ -151,14 +152,12 @@
 
 .photo__buttons {
     background: #FCC5D9;
-    position: absolute;
-    width: 256px;
+    width: auto;
     height: 40px;
-    left: 16px;
-    top: 161px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 78px;
+    /*left: 16px;
+    top: 161px;*/
+    padding: 2% 78px 0;
+    border-radius: 0px 0px 10px 10px;
 }
 
 .photo-option {
@@ -179,40 +178,17 @@
     justify-content: flex-end;
 }
 
-.photo-add-button {
-    height: 64px;
-}
-
-.photo-delete-button {
-    width: 176px;
-    height: 64px;
-    margin-right: 48px;
-    margin-left: 40px;
-}
-
 .order__complete-buttons {
     display: flex;
     justify-content: center;
     margin-bottom: 150px;
 }
 
-.save-button {
-    width: auto;
-    height: 64px;
+.main-button-big {
     background: #FCC5D9;
-    margin-left: 45px;
-    margin-right: 20px;
     border-color: #FCC5D9;
 }
 
-.select-button {
-    width: auto;
-    height: 64px;
-    background: #FAE1DE;
-    margin-left: 45px;
-    margin-right: 20px;
-    border-color: #FAE1DE;
-}
 .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -223,14 +199,6 @@
 }
 .inputfile + label {
 	cursor: pointer; /* "hand" cursor */
-}
-
-.view-select-button {
-    width: 359px;
-    height: 64px;
-    background: #FCC5D9;
-    margin-left: 5px;
-    border-color: #FCC5D9;
 }
 
 .delete-button {
@@ -246,7 +214,6 @@
     font-weight: 300;
     font-size: 24px;
     line-height: 36px;
-    margin-top: 15px;
 }
 
 
