@@ -19,6 +19,10 @@ public interface OrderService {
 
     void delete(int id);
 
+    void deletePhoto(int orderId, long photoId);
+
+    void deletePhotos(int orderId);
+
     int add(Order order, List<Part> photoToUpload);
 
     void moveStatusForward(int id, User user);
