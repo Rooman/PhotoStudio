@@ -68,6 +68,7 @@
     font-size: 32px;
     line-height: 46px;
     height: 64px;
+    width: auto;
     background: #FAE1DE;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
@@ -192,17 +193,25 @@
 .order__complete-buttons {
     display: flex;
     justify-content: center;
-    margin-top: 41px;
     margin-bottom: 150px;
 }
 
 .save-button {
-    width: 121px;
+    width: auto;
     height: 64px;
     background: #FCC5D9;
     margin-left: 45px;
     margin-right: 20px;
     border-color: #FCC5D9;
+}
+
+.select-button {
+    width: auto;
+    height: 64px;
+    background: #FAE1DE;
+    margin-left: 45px;
+    margin-right: 20px;
+    border-color: #FAE1DE;
 }
 .inputfile {
 	width: 0.1px;
@@ -232,10 +241,12 @@
    border-color: #FCC5D9;
 }
 
-.photo-select-checkbox {
-    /*position: relative;
-    right: 5px;
-    top: 5px;*/
+.thank-you-label {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 36px;
+    margin-top: 15px;
 }
 
 

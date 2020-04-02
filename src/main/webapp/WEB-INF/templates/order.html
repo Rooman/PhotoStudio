@@ -52,7 +52,7 @@
         <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"></div>
         <div class="order__detail-info order__date"
              th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
-        <div class="order__detail-info order__status" th:text="${order.status}"></div>
+        <div class="order__detail-info order__status" th:text="${order.status}" th:if="${roleAdmin}"></div>
     </div>
     <form id="new" th:action="${order.id} == 0 ? @{/order} : @{/orders}" th:method="${order.id} == 0 ? post : get"
           th:enctype="${order.id} == 0 ? 'multipart/form-data' : null">
@@ -78,9 +78,9 @@
         <div class="order__photos">
             <div class="photo-aria overflow-auto">
                 <div class="row order__block">
-                    <div class="col-md-3" th:each="photo : ${order.photoSources}" th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}">
+                    <div class="col-md-3" th:each="photo : ${order.photoSources}" th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}, isSelected=${photo.getPhotoStatus().getName()=='SELECTED'}">
                         <label class="checkbox-container">
-                            <input type="checkbox" th:checked="${photoStatus=='SELECTED' or isPaid}">
+                            <input type="checkbox" th:checked="${isSelected or isPaid}">
                             <span class="custom-checkmark"></span>
                         </label>
                         <div th:class="order__photo-block" th:classappend="${isPaid} ? order__photo-block-paid : ''">
@@ -114,30 +114,58 @@
                         Delete all
                     </button>
                 </a>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="order__complete-buttons">
+                <div th:if="${roleUser}">
+                    <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button select-button" th:text="#{order.select.button}">
+                        Select All
+                    </button>
+                    <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button select-button" th:text="#{order.deselect.button}">
+                        Deselect All
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="container" th:if="${roleAdmin==false and order.status.getOrderStatusName()=='SELECTED'}">
-            <div class="row align-items-center">
-                <div class="col justify-content-center">
-                    <p th:text="#{order.thank.you}">Thanks for your choice! Photos will be available after payment.</p>
+        <div class="container" th:if="${roleUser and order.status.getOrderStatusName()=='SELECTED'}">
+            <div class="row justify-content-center">
+                <div class="col-auto text-center">
+                    <p class="thank-you-label" th:text="#{order.thank.you}">Thanks for your choice! Photos will be available after payment.</p>
                 </div>
             </div>
         </div>
         <div class="order__complete-buttons">
-            <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button" th:text="#{order.save.button}">
-                Save
-            </button>
-            <button th:if="${roleAdmin and order.id != 0}"
-                    class="btn btn-submit btn-outline-dark button order__button view-select-button"
-                    form="change_status">
-                Status to view
-                and
-                select
-            </button>
-            <button th:if="${roleAdmin and order.id != 0}" type="button"
-                    class="btn btn-submit btn-outline-dark button order__button delete-button"
-                    data-toggle="modal" data-target="#delete-order">Delete order
-            </button>
+            <div th:if="${roleUser}">
+                <button th:if="${order.status.getOrderStatusName() != 'PAID'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button" th:text="#{order.submit.button}">
+                    Submit
+                </button>
+                <button th:if="${order.status.getOrderStatusName()=='PAID'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button" th:text="#{order.resubmit.button}">
+                    Re-submit
+                </button>
+            </div>
+            <div th:if="${roleAdmin}">
+                <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button save-button">
+                    Save
+                </button>
+                <button th:if="${order.id != 0 and order.status.getOrderStatusName()=='NEW'}"
+                        class="btn btn-submit btn-outline-dark button order__button view-select-button"
+                        form="change_status">
+                    Status to view
+                    and
+                    select
+                </button>
+                <button th:if="${order.id != 0}" type="button"
+                        class="btn btn-submit btn-outline-dark button order__button delete-button"
+                        data-toggle="modal" data-target="#delete-order">
+                    Delete order
+                </button>
+            </div>
+
         </div>
     </form>
     <div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"
