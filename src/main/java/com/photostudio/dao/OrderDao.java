@@ -17,8 +17,6 @@ public interface OrderDao {
 
     Order getOrderByIdInStatusNew(int id);
 
-    void delete(int id);
-
     int add(Order order, int orderStatusId);
 
     void savePhotos(Order order, int orderId, List<String> photosPath);
@@ -36,4 +34,10 @@ public interface OrderDao {
     void deleteOrdersByUserId(List<Order> orderList, long id);
 
     List<Photo> getPhotosByStatus (int orderId, PhotoStatus photoStatus);
+
+    void delete(int id);
+
+    void deletePhoto(long photoId);
+
+    void deletePhotos(int orderId);
 }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 
-@WebServlet(urlPatterns = "/paid/*")
+@WebServlet(urlPatterns = "/order/download-zip/*")
 @Slf4j
 public class GetPaidPhotosServlet extends HttpServlet {
     private static final int BUFFER_SIZE = 8192;
@@ -33,20 +33,14 @@ public class GetPaidPhotosServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader("Content-Disposition", "attachment; filename=" + orderId + ".zip");
 
-
-        try (InputStream inputStream = orderService.downloadPhotosByStatus(orderId, PhotoStatus.PAID);
-             ServletOutputStream outputStream = response.getOutputStream()) {
+        try (InputStream inputStream = orderService.downloadPhotosByStatus(orderId, PhotoStatus.PAID)) {
+            ServletOutputStream outputStream = response.getOutputStream();
             int count;
             byte[] buffer = new byte[BUFFER_SIZE];
             while ((count = inputStream.read(buffer)) > -1) {
                 outputStream.write(buffer, 0, count);
             }
-        } catch (
-                FileNotFoundException e) {
-            log.error("Paid photo not found", e);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             log.error("Loading photo error", e);
             throw new RuntimeException("Loading photo by path error", e);
         }

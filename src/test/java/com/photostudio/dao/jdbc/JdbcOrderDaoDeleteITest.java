@@ -10,9 +10,11 @@ import org.junit.jupiter.api.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JdbcOrderDaoDeleteITest {
     private static TestDataSource dataSource = new TestDataSource();
@@ -122,6 +124,88 @@ public class JdbcOrderDaoDeleteITest {
         LocalDiskPhotoDao photoDao = new LocalDiskPhotoDao(TEST_PATH_PHOTO);
         photoDao.deleteByOrder(3);
 
+        File dirAfter = new File(path);
+        assertEquals(false, dirAfter.exists());
+    }
+
+    @Test
+    void testDeletePhotoDB() throws SQLException {
+        int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.deletePhoto(2);
+
+        //after
+        int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+        int cntPhotosById = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE id=2");
+
+        assertEquals(cntPhotosBefore - 1, cntPhotosAfter);
+        assertEquals(cntPhotosByOrder - 1, cntPhotosByOrderAfter);
+        assertEquals(0, cntPhotosById);
+    }
+
+    @Test
+    void testDeletePhotoDBNotExisting() throws SQLException {
+        int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+        int cntPhotosByIdBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=10");
+
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.deletePhoto(10);
+
+        //after
+        int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=3");
+        int cntPhotosById = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE id=10");
+
+        assertEquals(cntPhotosBefore, cntPhotosAfter);
+        assertEquals(cntPhotosByOrder, cntPhotosByOrderAfter);
+        assertEquals(0, cntPhotosById);
+    }
+
+    @Test
+    void testDeletePhotosDB() throws SQLException {
+        //before
+        int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrder = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
+        //when
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.deletePhotos(2);
+        //after
+        int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos");
+        int cntPhotosByOrderAfter = dataSource.getResult("SELECT COUNT(*) CNT FROM OrderPhotos WHERE orderId=2");
+
+        assertEquals(0, cntPhotosByOrderAfter);
+        assertEquals(cntPhotosBefore - cntPhotosByOrder, cntPhotosAfter);
+
+    }
+
+    @Test
+    void testDeletePhotoFromLocalDisk() throws IOException {
+        //create dirs and files
+        String path = Paths.get(TEST_PATH_PHOTO, "Order-3").toString();
+        File dir = new File(path);
+        dir.mkdirs();
+        for (int i = 1; i <= 3; i++) {
+            File newFile = new File(path, String.valueOf(i) + ".jpg");
+            newFile.createNewFile();
+        }
+
+        LocalDiskPhotoDao photoDao = new LocalDiskPhotoDao(TEST_PATH_PHOTO);
+        photoDao.deletePhoto(3, "2.jpg");
+
+        File fileAfter = new File(path, "2.jpg");
+        assertEquals(false, fileAfter.exists());
+
+        assertThrows(Exception.class, () -> {
+            photoDao.deletePhoto(3, "5.jpg");
+        });
+
+        photoDao.deleteByOrder(3);
         File dirAfter = new File(path);
         assertEquals(false, dirAfter.exists());
     }
