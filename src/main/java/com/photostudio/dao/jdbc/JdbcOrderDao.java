@@ -1,6 +1,8 @@
 package com.photostudio.dao.jdbc;
 
+import com.photostudio.ServiceLocator;
 import com.photostudio.dao.OrderDao;
+import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.jdbc.mapper.OrderRowMapper;
 import com.photostudio.dao.jdbc.mapper.PhotoSourceRowMapper;
 import com.photostudio.entity.order.FilterParameters;
@@ -35,6 +37,7 @@ public class JdbcOrderDao implements OrderDao {
 
     private static final String GET_PHOTOS_BY_ORDER_ID = "SELECT id, source, photoStatusId FROM OrderPhotos WHERE orderId=?;";
     private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
+    private static final String DELETE_PHOTO_BY_ID = "DELETE FROM OrderPhotos WHERE id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
     private static final String DELETE_PHOTOS_BY_ORDERS_ID = "DELETE FROM OrderPhotos WHERE orderId IN ";
@@ -191,17 +194,35 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
+    public void deletePhoto(long photoId) {
+        log.info("Delete photo by id: {} ", photoId);
+        try (Connection connection = dataSource.getConnection()) {
+            Executor.execUpdate(connection, DELETE_PHOTO_BY_ID, photoId);
+        } catch (SQLException e) {
+            log.error("Error during delete photo {}", photoId, e);
+            throw new RuntimeException("Error during delete photo " + photoId, e);
+        }
+    }
+
+    @Override
+    public void deletePhotos(int orderId) {
+        log.info("Delete photos from order {}", orderId);
+        try (Connection connection = dataSource.getConnection()) {
+            Executor.execUpdate(connection, DELETE_PHOTOS_BY_ORDER, orderId);
+        } catch (SQLException e) {
+            log.error("Error during delete photo from order{}", orderId, e);
+            throw new RuntimeException("Error during delete photo from order " + orderId, e);
+        }
+    }
+
+    @Override
     public void delete(int id) {
         log.info("Delete order by id: {}", id);
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statementPhotos = connection.prepareStatement(DELETE_PHOTOS_BY_ORDER);
-             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
+        try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                statementPhotos.setLong(1, id);
-                statementPhotos.executeUpdate();
-                statementOrders.setLong(1, id);
-                statementOrders.executeUpdate();
+                Executor.execUpdate(connection, DELETE_PHOTOS_BY_ORDER, id);
+                Executor.execUpdate(connection, DELETE_ORDER_BY_ID, id);
                 connection.commit();
                 log.info("Order by id: {} and photos deleted from DB", id);
             } catch (SQLException e) {
