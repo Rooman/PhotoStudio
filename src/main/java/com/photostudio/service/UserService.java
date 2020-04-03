@@ -21,7 +21,7 @@ public interface UserService {
 
     User getUserByOrderId(int orderId);
 
-    void changeUserPassword(User user, String newPassword);
+    void changeUserPassword(long userId, String newPassword);
 
     void setOrderService(OrderService orderService);
 }

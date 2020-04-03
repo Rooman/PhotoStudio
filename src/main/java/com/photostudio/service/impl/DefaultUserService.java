@@ -70,13 +70,11 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public void changeUserPassword(User user, String newPassword) {
-        log.info("Started service get change user password");
+    public void changeUserPassword(long userId, String newPassword) {
+        log.info("Started service get change password for user with id " + userId);
         String randomSalt = UUID.randomUUID().toString();
         String newPasswordHash = UtilClass.getHashedString(newPassword, randomSalt);
-        user.setSalt(randomSalt);
-        user.setPasswordHash(newPasswordHash);
-        userDao.edit(user);
+        userDao.changePassword(userId, randomSalt, newPasswordHash);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.photostudio.web.servlet.user;
+package com.photostudio.web.servlet.security;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
@@ -51,7 +51,7 @@ public class ChangePasswordServlet extends HttpServlet {
         if (securityService.isOldPassword(oldPassword, user)) {
             if (newPassword.equals(repeatNewPassword)) {
                 log.info("Old and new passwords are correct");
-                userService.changeUserPassword(user, newPassword);
+                userService.changeUserPassword(user.getId(), newPassword);
                 response.sendRedirect(request.getContextPath() + "/user?id=" + user.getId());
             } else {
                 log.error("Password do not match");

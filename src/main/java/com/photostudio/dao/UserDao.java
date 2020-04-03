@@ -20,4 +20,6 @@ public interface UserDao {
     User getByEmail(String email);
 
     User getByOrderId(int orderId);
+
+    void changePassword(long userId, String salt, String passwordHash);
 }

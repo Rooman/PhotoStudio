@@ -68,8 +68,6 @@ public class JdbcUserDao implements UserDao {
             "    u.title = ?," +
             "    u.additionalInfo = ?," +
             "    u.address = ?," +
-            "    u.salt = ?," +
-            "    u.passwordHash = ?," +
             "    u.langId = ? " +
             "WHERE" +
             "    u.id = ?;";
@@ -92,6 +90,13 @@ public class JdbcUserDao implements UserDao {
             "JOIN Users u ON o.userId = u.id " +
             "JOIN UserRole ur ON u.userRoleId = ur.id " +
             "WHERE o.id = ?";
+
+    private static final String CHANGE_PASSWORD = "UPDATE Users " +
+            "SET " +
+            "salt = ?, " +
+            "passwordHash = ? " +
+            "WHERE " +
+            "id = ?;";
 
 
     private DataSource dataSource;
@@ -294,6 +299,23 @@ public class JdbcUserDao implements UserDao {
         } catch (SQLException e) {
             log.error("An exception occurred while trying to get user by orderId: {}", orderId, e);
             throw new RuntimeException("Get user by orderId error", e);
+        }
+    }
+
+    @Override
+    public void changePassword(long userId, String salt, String passwordHash) {
+        log.info("Change password for user with id {} in DB", userId);
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD)) {
+            preparedStatement.setString(1, salt);
+            preparedStatement.setString(2, passwordHash);
+            preparedStatement.setLong(3, userId);
+
+            preparedStatement.executeUpdate();
+            log.debug("Password for user with id {} was changed", userId);
+        } catch (SQLException e) {
+            log.error("Can't changed password for user with id {}", userId, e);
+            throw new RuntimeException("Can't changed password for user with id " + userId, e);
         }
     }
 }
