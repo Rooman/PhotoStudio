@@ -19,7 +19,7 @@ public class JdbcOrderChangeStatusITest {
     @BeforeEach
     public void before() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
-        dataSource.runScript("db/data.sql");
+        dataSource.runScript("db/data_change_status.sql");
     }
 
     @Test
@@ -76,6 +76,27 @@ public class JdbcOrderChangeStatusITest {
         //after
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(3, statusOrder);
+    }
+
+    @Test
+    public void testEditOrderByAdmin() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.editOrderByAdmin(1, 1, "Comment from Admin");
+
+        int newUserId = dataSource.getResult("SELECT userId FROM Orders WHERE id = 1");
+        assertEquals(1, newUserId);
+
+        String commentAdmin = dataSource.getString("SELECT commentAdmin FROM Orders WHERE id = 1");
+        assertEquals("Comment from Admin", commentAdmin);
+    }
+
+    @Test
+    public void testEditOrderByUser() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.editOrderByUser(1, "Comment from User");
+
+        String commentAdmin = dataSource.getString("SELECT commentUser FROM Orders WHERE id = 1");
+        assertEquals("Comment from User", commentAdmin);
     }
 
     @AfterEach

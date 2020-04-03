@@ -42,7 +42,8 @@ public class JdbcOrderDao implements OrderDao {
     private static final String DELETE_PHOTOS_BY_ORDERS_ID = "DELETE FROM OrderPhotos WHERE orderId IN ";
     private static final String DELETE_ORDERS_BY_USER_ID = "DELETE FROM Orders WHERE userId = ?";
     private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ?  WHERE o.id = ?";
-
+    private static final String UPDATE_ORDER_BY_ADMIN = "UPDATE Orders o SET o.userId = ?, o.commentAdmin = ?  WHERE o.id = ?";
+    private static final String UPDATE_ORDER_BY_USER = "UPDATE Orders o SET o.commentUser = ?  WHERE o.id = ?";
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, commentAdmin) VALUES (?, " +
             "?, ?, ?)";
     private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId, orderId) VALUES(?,?,?);";
@@ -380,9 +381,47 @@ public class JdbcOrderDao implements OrderDao {
         return orderId;
     }
 
+    @Override
+    public void editOrderByAdmin(int orderId, long userId, String commentAdmin) {
+        log.info("Edit order by admin in DB");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_ADMIN);
+        ) {
+
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setString(2, commentAdmin);
+            preparedStatement.setInt(3, orderId);
+
+            preparedStatement.execute();
+
+            log.info("Admin info was updated in DB for order {}", orderId);
+        } catch (SQLException e) {
+            log.error("Error during edit order info by Admin in DB {}", orderId, e);
+            throw new RuntimeException("Error during edit order info by Admin in DB", e);
+        }
+    }
 
     @Override
-    public void savePhotos(Order order, int orderId, List<String> photosPaths) {
+    public void editOrderByUser(int orderId, String commentUser) {
+        log.info("Edit order by admin in DB");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_USER);
+        ) {
+
+            preparedStatement.setString(1, commentUser);
+            preparedStatement.setInt(2, orderId);
+
+            preparedStatement.execute();
+
+            log.info("User comment was updated in DB for order {}", orderId);
+        } catch (SQLException e) {
+            log.error("Error during edit order info by User in DB {}", orderId, e);
+            throw new RuntimeException("Error during edit order info by User in DB", e);
+        }
+    }
+
+    @Override
+    public void savePhotos(int orderId, List<String> photosPaths) {
         log.info("Save photos to DB");
         for (String pathToPhoto : photosPaths) {
             try (Connection connection = dataSource.getConnection();

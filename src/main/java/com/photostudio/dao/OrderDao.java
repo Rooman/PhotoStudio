@@ -17,7 +17,11 @@ public interface OrderDao {
 
     int add(Order order, int orderStatusId);
 
-    void savePhotos(Order order, int orderId, List<String> photosPath);
+    void editOrderByAdmin(int orderId, long userId, String commentAdmin);
+
+    void editOrderByUser(int orderId, String commentUser);
+
+    void savePhotos(int orderId, List<String> photosPath);
 
     void changeOrderStatus(int id, int orderStatusId);
 

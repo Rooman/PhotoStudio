@@ -51,9 +51,12 @@ public class SecurityFilter implements Filter {
         urlToRoleMap.put("/user", USER);
         urlToRoleMap.put("/security/change-password", USER);
 
+
         urlToRoleMap.put("/admin/users", ADMIN);
         urlToRoleMap.put("/admin", ADMIN);
         urlToRoleMap.put("/order/delete", ADMIN);
+        urlToRoleMap.put("/order/delete-photos", ADMIN);
+        urlToRoleMap.put("/order/edit", ADMIN);
     }
 
     @Override

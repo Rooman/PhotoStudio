@@ -2,6 +2,7 @@ package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.service.OrderService;
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,7 @@ public class DeletePhotoServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         String uri = request.getRequestURI();
-        String[] partsOfUri = uri.split("/");
-        int orderId = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
+        int orderId = UtilClass.getIdFromPath(uri);
 
         long photoId = Long.parseLong(request.getParameter("photoId"));
         log.info("Request delete photo is received: photo {}", orderId);

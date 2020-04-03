@@ -6,6 +6,7 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +25,7 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         String uri = request.getRequestURI();
-        int idFromUri = Integer.parseInt(uri.substring(uri.lastIndexOf("/") + 1));
+        int idFromUri = UtilClass.getIdFromPath(uri);
         String newEmail = request.getParameter("newEmail");
 
         String errorMessage = (String) request.getSession().getAttribute("errorMessage");

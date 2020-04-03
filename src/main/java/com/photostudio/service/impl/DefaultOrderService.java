@@ -72,12 +72,26 @@ public class DefaultOrderService implements OrderService {
         return orderDao.getOrdersByUserId(userId);
     }
 
+    @Override
     public int add(Order order, List<Part> photoToUpload) {
         log.info("Started creating new order {}", order);
         int orderId = orderDao.add(order, orderStatusService.getOrderStatusIdByStatusName(order.getStatus()));
         List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
-        orderDao.savePhotos(order, orderId, photosPath);
+        orderDao.savePhotos(orderId, photosPath);
         return orderId;
+    }
+
+    @Override
+    public void editOrderByAdmin(int orderId, long userId, String commentAdmin) {
+        log.info("Started service edit order {} by Admin", orderId);
+        orderDao.editOrderByAdmin(orderId, userId, commentAdmin);
+    }
+
+    @Override
+    public void addPhotos(int orderId, List<Part> photoToUpload) {
+        log.info("Started service add photos to order {}", orderId);
+        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
+        orderDao.savePhotos(orderId, photosPath);
     }
 
     @Override

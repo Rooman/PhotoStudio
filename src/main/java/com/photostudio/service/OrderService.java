@@ -17,7 +17,11 @@ public interface OrderService {
 
     List<Order> getOrdersByUserId(long userId);
 
+    List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
+
     void delete(int id);
+
+    void deleteAllOrdersByUserId(long id);
 
     void deletePhoto(int orderId, long photoId);
 
@@ -29,11 +33,11 @@ public interface OrderService {
 
     void moveStatusBack(int id, User user);
 
-    void deleteAllOrdersByUserId(long id);
+    void editOrderByAdmin(int orderId, long userId, String commentAdmin);
 
-    String getPathByPhotoId(long photoId);
-
-    List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
+    void addPhotos(int orderId, List<Part> photoToUpload);
 
     String getPathToOrderDir(int orderId);
+
+    String getPathByPhotoId(long photoId);
 }

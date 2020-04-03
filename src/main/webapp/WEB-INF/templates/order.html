@@ -41,8 +41,11 @@
              th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
         <div class="order__detail-info order__status" th:text="${order.status}"></div>
     </div>
-    <form id="new" th:action="${order.id} == 0 ? @{/order} : @{/orders}" th:method="${order.id} == 0 ? post : get"
-          th:enctype="${order.id} == 0 ? 'multipart/form-data' : null">
+    <form id="new" th:action="${order.id} == 0 ? @{/order} : @{'/order/edit/'+${order.id}}" th:method="post"
+          enctype="multipart/form-data">
+        <input type="hidden" name='emailOld' value='${order.user.email}' id='emailOld'>
+        <input type="hidden" name='commentAdminOld' value='${order.commentAdmin}' id='commentAdminOld'>
+        <input type="hidden" name='commentUserOld' value='${order.commentUser}' id='commentUserOld'>
         <div class="order__user-info">
             <input type="email" class="form-control order__detail-info order__user-email"
                    id="email"
