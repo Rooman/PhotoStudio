@@ -28,6 +28,20 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     @Override
+    public void deletePhoto(int orderId, String source) {
+        log.info("delete file {} from order {}", source, orderId);
+        Path photoPath = Paths.get(getPathToOrderDir(orderId), source);
+        try {
+            if (!Files.deleteIfExists(photoPath)) {
+                throw new RuntimeException("File " + source + " does not exist");
+            }
+        } catch (IOException e) {
+            log.error("File was not deleted : {}", photoPath, e);
+            throw new RuntimeException("File was not deleted " + photoPath, e);
+        }
+    }
+
+    @Override
     public void deleteByOrder(int orderId) {
         String orderPath = getPathToOrderDir(orderId);
         log.info("delete photos from local disk by path:{}", orderPath);
