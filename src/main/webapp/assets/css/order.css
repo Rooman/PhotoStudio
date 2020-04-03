@@ -128,6 +128,7 @@
 }
 
 .order__photo-block {
+    height: auto;
     display: flex;
     justify-content: center;
     border-radius: 10px 10px 0px 0px;
@@ -138,8 +139,8 @@
 }
 
 .order__photo {
-    padding: 10px;
-    max-height: 200px;
+    padding: 15px 15px 40px;
+    max-height: 230px;
     max-width: 250px;
 }
 
@@ -152,10 +153,11 @@
 
 .photo__buttons {
     background: #FCC5D9;
-    width: auto;
+    width: 256px;
     height: 40px;
-    /*left: 16px;
-    top: 161px;*/
+    position: absolute;
+    bottom: 30px;
+
     padding: 2% 78px 0;
     border-radius: 0px 0px 10px 10px;
 }
@@ -325,16 +327,16 @@
 .custom-checkmark {
   position: absolute;
   top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
+  left: 7px;
+  height: 20px;
+  width: 20px;
   background-color: rgb(100%, 100%, 100%, 0.3);
-  border: 1px solid rgba(0, 0, 0, 0.4);;
+  border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 5px;
 }
 
 .checkbox-container:hover input ~ .custom-checkmark {
-  background-color: rgb(88%, 60%, 90%, 0.5);;
+  background-color: rgb(88%, 60%, 90%, 0.5);
 }
 
 .checkbox-container input:checked ~ .custom-checkmark {
@@ -352,11 +354,11 @@
 }
 
 .checkbox-container .custom-checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid rgba(0, 0, 0, 0.4);;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid rgba(0, 0, 0, 0.4);
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);

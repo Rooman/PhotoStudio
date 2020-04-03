@@ -105,35 +105,30 @@
 
 
 
-            <div class="photo-add-delete-buttons" th:if="${roleAdmin and order.status.getOrderStatusName()=='NEW'}">
+            <div class="photo-add-delete-buttons">
+                <div th:if="${roleAdmin and order.status.getOrderStatusName()=='NEW'}">
+                    <input type="file" name="photo" id="file" class="inputfile"
+                           data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
+                    <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
+                        <span>Add</span>
+                    </label>
 
-                <input type="file" name="photo" id="file" class="inputfile"
-                       data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
-                <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
-                    <span>Add</span>
-                </label>
-
-                <a class="photo-option" href="#">
-                    <button type="button"
-                            class="btn btn-submit btn-outline-dark button order__button">
-                        Delete all
-                    </button>
-                </a>
-                <div>
-
+                    <a class="photo-option" href="#">
+                        <button type="button"
+                                class="btn btn-submit btn-outline-dark button order__button">
+                            Delete all
+                        </button>
+                    </a>
                 </div>
-                <div>
-
-                </div>
-            </div>
-            <div class="order__complete-buttons">
-                <div th:if="${roleUser}">
-                    <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button" th:text="#{order.select.button}">
-                        Select All
-                    </button>
-                    <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button" th:text="#{order.deselect.button}">
-                        Deselect All
-                    </button>
+                <div class="order__complete-buttons">
+                    <div th:if="${roleUser}">
+                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button" th:text="#{order.select.button}">
+                            Select All
+                        </button>
+                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button" th:text="#{order.deselect.button}">
+                            Deselect All
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
