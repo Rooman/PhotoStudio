@@ -69,8 +69,7 @@
         <div th:if="${roleAdmin}">
             <textarea class="form-control order__detail-info order__comment"
                       id="commentAdmin" rows="5" name="commentAdmin"
-                      th:attr="placeholder=${
-                               Admin == null ? 'Comment' : null}"
+                      th:attr="placeholder=${order.commentAdmin == null ? 'Comment' : null}"
                       th:text="${order.commentAdmin != null}?${order.commentAdmin}"></textarea>
 
         </div>
@@ -102,7 +101,8 @@
                                         <i class="fas fa-search-plus"></i></a>
                                     <a class="photo-option col-auto text-center" href="#" th:if="${roleUser and isPaid}">
                                         <i class="fas fa-arrow-down"></i></a>
-                                    <a class="photo-option col-auto text-center" href="#" th:if="${roleAdmin}">
+                                    <a class="photo-option col-auto text-center" href="#" th:if="${roleAdmin}" th:onclick="|deletePhoto(${photo.getId()})|"
+                                       form="delete_photos">
                                         <i class="fas fa-trash-alt"></i></a>
                                 </div>
                             </div>
@@ -110,8 +110,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             <div class="photo-add-delete-buttons">
                 <div th:if="${roleAdmin and order.status.getOrderStatusName()=='NEW'}">
@@ -123,7 +121,8 @@
 
                     <a class="photo-option" href="#">
                         <button type="button"
-                                class="btn btn-submit btn-outline-dark button order__button">
+                                class="btn btn-submit btn-outline-dark button order__button"
+                                form="delete_photos">
                             Delete all
                         </button>
                     </a>
@@ -145,6 +144,12 @@
                 <div class="col-auto text-center">
                     <p class="thank-you-label" th:text="#{order.thank.you}">Thanks for your choice! Photos will be available after payment.</p>
                 </div>
+                <a class="photo-option" href="#">
+                    <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button"
+                            form="delete_photos">
+                        Delete all
+                    </button>
+                </a>
             </div>
         </div>
         <div class="order__complete-buttons">
@@ -203,10 +208,12 @@
     </div>
     <form id="delete_order" th:if="${order.id != 0}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${order.id != 0}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
+    <form id="delete_photos" th:if="${order.id != 0}" th:action="@{'/order/delete-photos/'+${order.id}}" method="post">
+        <input type='hidden' name='photoId' value='0' id='photoId'/>
+    </form>
 </div>
 </body>
 <meta th:replace="fragment/script.html :: script">
-
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
 
