@@ -25,5 +25,11 @@ public interface OrderService {
 
     void moveStatusBack(int id, User user);
 
+    void deleteAllOrdersByUserId(long id);
+
     String getPathByPhotoId(long photoId);
+
+    List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
+
+    String getPathToOrderDir(int orderId);
 }

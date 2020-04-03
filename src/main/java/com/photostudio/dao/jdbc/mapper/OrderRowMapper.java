@@ -23,7 +23,8 @@ public class OrderRowMapper {
                 .orderDate(resultSet.getTimestamp("orderDate").toLocalDateTime())
                 .user(user)
                 .photoSources(new ArrayList<>())
-                .comment(resultSet.getString("comment"))
+                .commentAdmin(resultSet.getString("commentAdmin"))
+                .commentUser(resultSet.getString("commentUser"))
                 .build();
 
         return order;

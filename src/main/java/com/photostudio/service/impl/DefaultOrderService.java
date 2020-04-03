@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Part;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -112,6 +113,27 @@ public class DefaultOrderService implements OrderService {
     public String getPathByPhotoId(long photoId) {
         log.info("Started service get path to photo by id:{}", photoId);
         return orderDao.getPathByPhotoId(photoId);
+    }
+
+    @Override
+    public List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId) {
+        return getOrdersByUserId(userId).stream()
+                .filter(order -> order.getStatus() != OrderStatus.NEW)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAllOrdersByUserId(long id) {
+        List<Order> orderList = getOrdersByUserId(id);
+        if (!orderList.isEmpty()) {
+            orderDao.deleteOrdersByUserId(orderList, id);
+            orderList.stream().map(Order::getId).forEach(orderId -> photoDao.deleteByOrder(orderId));
+        }
+    }
+
+    @Override
+    public String getPathToOrderDir(int orderId) {
+        return photoDao.getPathToOrderDir(orderId);
     }
 
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {

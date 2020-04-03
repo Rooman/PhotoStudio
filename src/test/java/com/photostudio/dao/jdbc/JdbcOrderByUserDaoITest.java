@@ -31,21 +31,12 @@ public class JdbcOrderByUserDaoITest {
     }
 
     @Test
-    public void testGetOrdersByUserOnlyNew() {
+    public void testGetOrdersByUserId() {
         //when
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
         List<Order> orderList = jdbcOrderDao.getOrdersByUserId(1);
 
-        assertEquals(0, orderList.size());
-    }
-
-    @Test
-    public void testGetOrdersByUser() {
-        //when
-        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        List<Order> orderList = jdbcOrderDao.getOrdersByUserId(2);
-
-        assertEquals(3, orderList.size());
+        assertEquals(1, orderList.size());
     }
 
     @AfterAll
