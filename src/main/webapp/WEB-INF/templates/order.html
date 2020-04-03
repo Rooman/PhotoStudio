@@ -149,10 +149,10 @@
         </div>
         <div class="order__complete-buttons">
             <div th:if="${roleUser}">
-                <button th:if="${order.status.getOrderStatusName() != 'PAID'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.submit.button}">
+                <button th:if="${order.status.getOrderStatusName() != 'READY'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.submit.button}">
                     Submit
                 </button>
-                <button th:if="${order.status.getOrderStatusName()=='PAID'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.resubmit.button}">
+                <button th:if="${order.status.getOrderStatusName()=='READY'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.resubmit.button}">
                     Re-submit
                 </button>
                 <button th:if="${order.status.getOrderStatusName()=='READY'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.download.all.button}">
