@@ -18,7 +18,9 @@ import java.io.*;
 @WebServlet(urlPatterns = "/paid/*")
 @Slf4j
 public class GetPaidPhotosServlet extends HttpServlet {
+    private static final int BUFFER_SIZE = 8192;
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -34,8 +36,11 @@ public class GetPaidPhotosServlet extends HttpServlet {
 
         try (InputStream inputStream = orderService.downloadPhotosByStatus(orderId, PhotoStatus.PAID);
              ServletOutputStream outputStream = response.getOutputStream()) {
-            byte[] buffer = inputStream.readAllBytes();
-            outputStream.write(buffer);
+            int count;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((count = inputStream.read(buffer)) > -1) {
+                outputStream.write(buffer, 0, count);
+            }
         } catch (
                 FileNotFoundException e) {
             log.error("Paid photo not found", e);
