@@ -16,6 +16,7 @@ public final class Order {
     private OrderStatus status;
     private LocalDateTime orderDate;
     private User user;
-    private String comment;
+    private String commentAdmin;
+    private String commentUser;
     private List<Photo> photoSources;
 }

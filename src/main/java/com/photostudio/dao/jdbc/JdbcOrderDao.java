@@ -21,11 +21,13 @@ public class JdbcOrderDao implements OrderDao {
             "o.orderDate orderDate, " +
             "u.email email, " +
             "u.phoneNumber phoneNumber, " +
-            "o.comment comment " +
+            "o.commentAdmin commentAdmin, " +
+            "o.commentUser commentUser " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID = "SELECT o.id, statusName, orderDate, email, phoneNumber, comment " +
+  
+    private static final String GET_ORDER_BY_ID = "SELECT o.id, statusName, orderDate, email, phoneNumber, commentAdmin, commentUser " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
@@ -35,11 +37,13 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
     private static final String DELETE_PHOTOS_BY_ORDER = "DELETE FROM OrderPhotos WHERE orderId = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM Orders WHERE id = ?";
+    private static final String DELETE_PHOTOS_BY_ORDERS_ID = "DELETE FROM OrderPhotos WHERE orderId IN ";
+    private static final String DELETE_ORDERS_BY_USER_ID = "DELETE FROM Orders WHERE userId = ?";
     private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ?  WHERE o.id = ?";
 
-    private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, comment) VALUES (?, " +
+    private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, commentAdmin) VALUES (?, " +
             "?, ?, ?)";
-    private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId,orderId) VALUES(?,?,?);";
+    private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId, orderId) VALUES(?,?,?);";
     private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
@@ -75,7 +79,7 @@ public class JdbcOrderDao implements OrderDao {
 
     public List<Order> getOrdersByUserId(long userId) {
         log.info("Start get all orders by userId:{} from DB", userId);
-        String sql = GET_ALL_ORDERS + " WHERE o.statusId!=1 AND o.userId = ?";
+        String sql = GET_ALL_ORDERS + " WHERE o.userId = ?";
         sql = addSort(sql);
         log.debug("execute sql query:" + sql);
         try (Connection connection = dataSource.getConnection();
@@ -214,6 +218,37 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
+    public void deleteOrdersByUserId(List<Order> orderList, long id) {
+        log.info("Delete orders by user id: {}", id);
+        String deletePhotosStatement = getDeletePhotoStatement(orderList);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statementPhotos = connection.prepareStatement(deletePhotosStatement);
+             PreparedStatement statementOrders = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID)) {
+            connection.setAutoCommit(false);
+            try {
+                int count = 1;
+                for (Order order : orderList) {
+                    statementPhotos.setLong(count++, order.getId());
+                }
+                statementPhotos.executeUpdate();
+                statementOrders.setLong(1, id);
+                statementOrders.executeUpdate();
+                connection.commit();
+                log.info("Order by user id: {} and photos deleted from DB", id);
+            } catch (SQLException e) {
+                connection.rollback();
+                log.error("Rollback- Error during delete orders by user id: {}", id, e);
+                throw new RuntimeException("Error during delete order by user id " + id, e);
+            } finally {
+                connection.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            log.error("Error during delete order by user id: {}", id, e);
+            throw new RuntimeException("Error - Orders are not deleted from db", e);
+        }
+    }
+
+    @Override
     public void changeOrderStatus(int id, int orderStatusId) {
         log.info("Change order status by id: {} new status : {}", id, orderStatusId);
         try (Connection connection = dataSource.getConnection();
@@ -305,7 +340,7 @@ public class JdbcOrderDao implements OrderDao {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setInt(2, orderStatusId);
             preparedStatement.setLong(3, order.getUser().getId());
-            preparedStatement.setString(4, order.getComment());
+            preparedStatement.setString(4, order.getCommentAdmin());
             preparedStatement.executeUpdate();
 
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
@@ -385,5 +420,11 @@ public class JdbcOrderDao implements OrderDao {
 
     private String addSort(String query) {
         return query + " ORDER BY o.id DESC";
+    }
+
+    String getDeletePhotoStatement(List<Order> orderList) {
+        StringJoiner stringJoiner = new StringJoiner(", ", DELETE_PHOTOS_BY_ORDERS_ID + "(", ")");
+        orderList.forEach(order -> stringJoiner.add("?"));
+        return stringJoiner.toString();
     }
 }

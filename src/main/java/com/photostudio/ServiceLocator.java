@@ -53,6 +53,7 @@ public class ServiceLocator {
 
         OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
         register(OrderService.class, orderService);
+        userService.setOrderService(orderService);
 
         SecurityService securityService = new DefaultSecurityService();
         register(SecurityService.class, securityService);
