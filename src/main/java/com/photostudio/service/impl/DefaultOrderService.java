@@ -82,9 +82,24 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public void delete(int id) {
-        log.info("Started service delete order by id ");
+        log.info("Started service delete order by id {}", id);
         photoDao.deleteByOrder(id);
         orderDao.delete(id);
+    }
+
+    @Override
+    public void deletePhoto(int orderId, long photoId) {
+        log.info("Started service delete photo by id {}", photoId);
+        String photoSource = orderDao.getPathByPhotoId(photoId);
+        orderDao.deletePhoto(photoId);
+        photoDao.deletePhoto(orderId, photoSource);
+    }
+
+    @Override
+    public void deletePhotos(int orderId) {
+        log.info("Started service delete all photos from order {}", orderId);
+        orderDao.deletePhotos(orderId);
+        photoDao.deleteByOrder(orderId);
     }
 
     @Override
