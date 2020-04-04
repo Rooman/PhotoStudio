@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/contact.css">
+    <title th:text="#{contact.title}">Contact</title>
+</head>
+<body>
+<header class="header">
+    <div class="container-fluid">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <p class="page_main-title">Miari Fotografie</p>
+    </div>
+    <div class="container-main-custom">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="contact-text-block">
+                        <p class="contact-text">
+                            Thank you for your interest!
+                            <br><br>
+                            I am happy to answer any of your questions or reserve a date for the shooting. Please tell us a little about yourself and your child (or children) by filling out the form. All your wishes regarding the props, suits or color preferences for the photo shoot, please leave this information in the "message" field. If you decide to shoot with me, we can discuss all the details with you in detail after booking the date.
+                            <br><br>
+                            You can also call me at: +49 (0) 157-77777777777.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="contact-form-block">
+                        <form id="contact" action="#" method="get"
+                              enctype="form-data">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control form-default-info"
+                                               id="name" value="" th:placeholder="#{name.placeholder}" name="name" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="email" class="form-control form-default-info"
+                                               id="email" value="" th:placeholder="#{email.placeholder}" name="email" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control form-default-info"
+                                               id="city" value="" th:placeholder="#{city.placeholder}" name="city" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control form-default-info"
+                                               id="index" value="" th:placeholder="#{index.placeholder}" name="index" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <p class="radio-title">Child gender</p>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <div class="container">
+                                            <div class="row justify-content-center text-center">
+                                                <div class="col-4">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
+                                                        <label class="custom-control-label" for="customRadioInline1">Boy</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
+                                                        <label class="custom-control-label" for="customRadioInline2">Girl</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="customRadioInline3" name="customRadioInline1" class="custom-control-input">
+                                                        <label class="custom-control-label" for="customRadioInline3">Twins</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea class="form-control form-default-info contact-message-area"
+                                                  id="message" rows="5" name="message"
+                                                  th:placeholder="#{message.placeholder}">
+                                        </textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="checkbox-container">I want to receive newsletters about special offers and discounts
+                                            <input type="checkbox" checked="checked">
+                                            <span class="custom-checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<meta th:replace="fragment/footer.html :: footer">
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
+
