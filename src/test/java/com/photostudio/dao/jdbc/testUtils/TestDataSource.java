@@ -30,6 +30,7 @@ public class TestDataSource {
         runScript("db/migration/V1_12__change_datatype_OrderPhotos.sql");
         runScript("db/migration/V1_13__change_datatype_autoincrement.sql");
         runScript("db/migration/V1_14__change_order_comment.sql");
+        runScript("db/migration/V1_15__add_password_email_templates.sql");
         return jdbcDataSource;
     }
 

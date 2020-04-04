@@ -2,7 +2,7 @@ package com.photostudio.entity.email;
 
 import java.util.Arrays;
 
-public enum  MessageType {
+public enum MessageType {
     NEW_PASSWORD(1, "NEW PASSWORD"),
     RESET_PASSWORD(2, "RESET PASSWORD");
 

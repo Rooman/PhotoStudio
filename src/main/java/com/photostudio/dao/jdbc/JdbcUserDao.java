@@ -192,10 +192,8 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(8, user.getTitle());
             preparedStatement.setString(9, user.getAdditionalInfo());
             preparedStatement.setString(10, user.getAddress());
-            preparedStatement.setString(11, user.getSalt());
-            preparedStatement.setString(12, user.getPasswordHash());
-            preparedStatement.setInt(13, user.getLangId());
-            preparedStatement.setLong(14, user.getId());
+            preparedStatement.setInt(11, user.getLangId());
+            preparedStatement.setLong(12, user.getId());
             preparedStatement.executeUpdate();
 
             log.debug("User {} was edited", user);
@@ -261,7 +259,7 @@ public class JdbcUserDao implements UserDao {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
                     log.error("No user with email: {}", email);
-                    throw new GetUserByEmailException("No user with email = " + email + " found");
+                    return null;
                 }
                 User user = USER_ROW_MAPPER.mapRow(resultSet);
                 if (resultSet.next()) {
@@ -305,8 +303,8 @@ public class JdbcUserDao implements UserDao {
     @Override
     public void changePassword(long userId, String salt, String passwordHash) {
         log.info("Change password for user with id {} in DB", userId);
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD)) {
             preparedStatement.setString(1, salt);
             preparedStatement.setString(2, passwordHash);
             preparedStatement.setLong(3, userId);

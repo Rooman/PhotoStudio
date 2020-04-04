@@ -4,6 +4,7 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
+import com.photostudio.exception.GetUserByEmailException;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
 import com.photostudio.util.PropertyReader;
@@ -54,6 +55,10 @@ public class AddNewOrderServlet extends HttpServlet {
 
         String email = request.getParameter("email");
         User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            throw new GetUserByEmailException("No user with email = " + email + " found");
+        }
 
         String comment = request.getParameter("commentAdmin");
 

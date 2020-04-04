@@ -47,6 +47,7 @@ public class ResetPasswordServlet extends HttpServlet {
             log.info("User with email {} does not exist", email);
             Map<String, Object> paramsMap = new HashMap<>();
             paramsMap.put("invalid", "yes");
+            response.setContentType("text/html;charset=utf-8");
             TemplateEngineFactory.process(request, response, "reset-password", paramsMap);
         }
     }
