@@ -21,7 +21,6 @@ import java.util.Map;
 @Slf4j
 public class ChangePasswordServlet extends HttpServlet {
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
-    private UserService userService = ServiceLocator.getService(UserService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -51,7 +50,7 @@ public class ChangePasswordServlet extends HttpServlet {
         if (securityService.isOldPassword(oldPassword, user)) {
             if (newPassword.equals(repeatNewPassword)) {
                 log.info("Old and new passwords are correct");
-                userService.changeUserPassword(user.getId(), newPassword);
+                securityService.changePassword(user.getId(), newPassword);
                 response.sendRedirect(request.getContextPath() + "/user?id=" + user.getId());
             } else {
                 log.error("Password do not match");
