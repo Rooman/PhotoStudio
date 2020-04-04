@@ -29,11 +29,12 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-    private static final String GET_ORDER_BY_ID_IN_STATUS_NEW = "SELECT o.id, statusName, orderDate, email, phoneNumber, commentAdmin, commentUser " +
+  
+    private static final String GET_ORDER_BY_ID = "SELECT o.id, statusName, orderDate, email, phoneNumber, commentAdmin, commentUser " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id " +
-            "WHERE o.id=? and statusName='NEW';";
+            "WHERE o.id=?;";
 
     private static final String GET_PHOTOS_BY_ORDER_ID = "SELECT id, source, photoStatusId FROM OrderPhotos WHERE orderId=?;";
     private static final String GET_ORDER_STATUS = "SELECT os.statusName FROM Orders o JOIN OrderStatus os ON o.statusId = os.id WHERE o.id = ?";
@@ -156,9 +157,9 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public Order getOrderByIdInStatusNew(int id) {
+    public Order getOrderById(int id) {
         log.info("Started service get order by id: {} in status NEW from DB", id);
-        String resultQuery = GET_PHOTOS_BY_ORDER_ID + GET_ORDER_BY_ID_IN_STATUS_NEW;
+        String resultQuery = GET_PHOTOS_BY_ORDER_ID + GET_ORDER_BY_ID;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(resultQuery)) {
             preparedStatement.setInt(1, id);
