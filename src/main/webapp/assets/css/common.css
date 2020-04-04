@@ -18,6 +18,14 @@ main {
     margin-left: 5%;
 }
 
+.container-main-custom {
+    margin-top: 30px;
+    padding-top: 100px;
+    padding-bottom: 200px;
+    background: url("../images/admin-page-background.png") repeat-y;
+    background-size: cover;
+}
+
 /*needed for the footer*/
 .container-main {
   overflow:auto;

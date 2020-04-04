@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@WebServlet(urlPatterns = {"/legal-information", "/data-protection","/portfolio", "/portfolio/*", "/contact", "/price"})
+@WebServlet(urlPatterns = {"/legal-information", "/data-protection","/portfolio", "/portfolio-newborns", "/portfolio-babies", "/contact", "/price"})
 public class StaticPageServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

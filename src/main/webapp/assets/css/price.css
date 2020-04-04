@@ -1,8 +1,5 @@
-.container-main {
-    margin-top: 150px;
-    margin-bottom: 200px;
+.container-main-custom {
     background: url("../images/login-page-fon.png") repeat-y;
-    background-size: cover;
 }
 
 .main-margin {

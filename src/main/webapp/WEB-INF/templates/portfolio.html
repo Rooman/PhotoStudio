@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/portfolio.css">
+    <title th:text="#{portfolio.title}">Portfolio</title>
+</head>
+<body>
+<header class="header">
+    <div class="container-fluid">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <p class="page_main-title">Miari Fotografie</p>
+    </div>
+    <div class="container-main-custom">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-6 d-flex justify-content-center align-items-center">
+                    <div class="portfolio-title title-newborns">
+                        <p th:text="#{newborns.title}">Newborns</p>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-center align-items-center">
+                    <div class="portfolio-title title-babies">
+                        <p th:text="#{babies.title}">Babies</p>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-center align-items-center">
+                    <a href="portfolio-newborns">
+                        <img class="rounded-circle" src="assets/images/portfolio/circle-newborns.png" alt="Newborns">
+                    </a>
+                </div>
+                <div class="col-6 d-flex justify-content-center align-items-center">
+                    <a href="portfolio-babies">
+                        <img class="rounded-circle" src="assets/images/portfolio/circle-babies.png" alt="Babies">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<meta th:replace="fragment/footer.html :: footer">
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
+
