@@ -23,6 +23,10 @@ public interface OrderDao {
 
     void savePhotos(int orderId, List<String> photosPath);
 
+    void selectPhotos(int orderId, String selectedPhotos);
+
+    void setPhotosStatusPaid(int orderId);
+
     void changeOrderStatus(int id, int orderStatusId);
 
     OrderStatus getOrderStatus(int id);

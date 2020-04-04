@@ -1,9 +1,11 @@
 package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
+import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
+import com.photostudio.web.util.CommonVariableAppendService;
 import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(urlPatterns = "/order/edit/*")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 50)
@@ -36,17 +40,21 @@ public class EditOrderServlet extends HttpServlet {
         String email = request.getParameter("email");
         String emailOld = request.getParameter("emailOld");
 
+        User userOrdered = userService.getUserByEmail(email);
+
         String commentAdmin = request.getParameter("commentAdmin");
         String commentAdminOld = request.getParameter("commentAdminOld");
 
-        if (!email.equals(emailOld) || UtilClass.isChanged(commentAdmin, commentAdminOld)) {
-            User user = userService.getUserByEmail(email);
-            orderService.editOrderByAdmin(orderId, user.getId(), commentAdmin);
-        }
+        String orderStatusName = request.getParameter("orderStatusName");
+        OrderStatus orderStatus = OrderStatus.getOrderStatus(orderStatusName);
 
-        if (!photoToUpload.isEmpty()) {
-            orderService.addPhotos(orderId, photoToUpload);
-        }
+        Map<String, Object> paramsMap = new HashMap<>();
+        CommonVariableAppendService.appendUser(paramsMap, request);
+
+        User userChanged = (User) paramsMap.get("user");
+
+        boolean orderIsChanged = !email.equals(emailOld) || UtilClass.isChanged(commentAdmin, commentAdminOld);
+        orderService.editOrderByAdmin(orderId, commentAdmin, userOrdered, userChanged, orderIsChanged, orderStatus, photoToUpload);
 
         response.sendRedirect(request.getContextPath() + "/order/" + orderId);
     }

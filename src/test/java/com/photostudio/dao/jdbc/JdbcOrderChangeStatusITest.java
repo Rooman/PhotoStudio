@@ -99,6 +99,36 @@ public class JdbcOrderChangeStatusITest {
         assertEquals("Comment from User", commentAdmin);
     }
 
+    @Test
+    public void testSelectAllPhotos() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.selectPhotos(9, "all");
+
+        int cntSelected = dataSource.getResult("SELECT count(*) FROM OrderPhotos WHERE orderId = 9 AND photoStatusId = 2");
+        assertEquals(4, cntSelected);
+
+    }
+
+    @Test
+    public void testSelectOnePhoto() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.selectPhotos(9, "10");
+
+        int photoStatusId = dataSource.getResult("SELECT photoStatusId FROM OrderPhotos WHERE id = 10");
+        assertEquals(2, photoStatusId);
+    }
+
+    @Test
+    public void testSelectListPhotos() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.selectPhotos(9, "10 , 11 , 12");
+
+        int cntSelected = dataSource.getResult("SELECT count(*) FROM OrderPhotos WHERE orderId = 9 AND photoStatusId = 2");
+        assertEquals(3, cntSelected);
+
+    }
+
+
     @AfterEach
     public void after() throws SQLException {
         dataSource.close();

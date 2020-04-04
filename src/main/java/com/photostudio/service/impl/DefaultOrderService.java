@@ -82,9 +82,33 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void editOrderByAdmin(int orderId, long userId, String commentAdmin) {
+    public void editOrderByAdmin(int orderId, String commentAdmin, User userOrdered, User userChanged, boolean isChanged, OrderStatus orderStatus, List<Part> photoToUpload) {
         log.info("Started service edit order {} by Admin", orderId);
-        orderDao.editOrderByAdmin(orderId, userId, commentAdmin);
+        if (isChanged) {
+            orderDao.editOrderByAdmin(orderId, userOrdered.getId(), commentAdmin);
+        }
+        if (!photoToUpload.isEmpty()) {
+            addPhotos(orderId, photoToUpload);
+        }
+
+        if (orderStatus == OrderStatus.SELECTED) {
+            orderDao.setPhotosStatusPaid(orderId);
+            moveStatusForward(orderId, userChanged);
+        }
+    }
+
+    @Override
+    public void editOrderByUser(int orderId, String commentUser, User userChanged, boolean isChanged, OrderStatus orderStatus, String selectedPhoto) {
+        log.info("Started service edit order {} by User", orderId);
+        if (isChanged) {
+            orderDao.editOrderByUser(orderId, commentUser);
+        }
+        if (selectedPhoto != null) {
+            orderDao.selectPhotos(orderId, selectedPhoto);
+        }
+        if (orderStatus == OrderStatus.VIEW_AND_SELECT) {
+            moveStatusForward(orderId, userChanged);
+        }
     }
 
     @Override
