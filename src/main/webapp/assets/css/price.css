@@ -1,0 +1,43 @@
+.container-main {
+    margin-top: 150px;
+    margin-bottom: 200px;
+    background: url("../images/login-page-fon.png") repeat-y;
+    background-size: cover;
+}
+
+.main-margin {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.package-block {
+    border: 2px solid #FAE1DE;
+    box-sizing: border-box;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 5%;
+
+}
+
+.package-block-m {
+    border-color: #89CBC9;
+}
+
+.package-title {
+    font-family: Cormorant Upright;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 48px;
+    color: #000000;
+}
+
+.package-text {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 36px;
+    color: #000000;
+}

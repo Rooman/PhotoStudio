@@ -10,6 +10,14 @@ main {
   min-height:90%;
 }
 
+.page_main-title {
+    font-weight: 300;
+    font-size: 144px;
+    line-height: 150px;
+    margin-top: 50px;
+    margin-left: 5%;
+}
+
 /*needed for the footer*/
 .container-main {
   overflow:auto;

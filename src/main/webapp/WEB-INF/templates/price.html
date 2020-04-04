@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/price.css">
+    <title th:text="#{price.title}">Pricing</title>
+</head>
+<body>
+<header class="header">
+    <div class="container-fluid">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <p class="page_main-title">Miari Fotografie</p>
+    </div>
+    <div class="container-main">
+        <div class="container">
+            <div class="row justify-content-center ml-5 mr-5">
+                <div class="col-6">
+                    <div class="package-block">
+                        <p class="package-title" th:text="#{package.s.label}">
+                            Package S
+                        </p>
+                        <p class="package-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vehicula nunc sed felis euismod blandit. Suspendisse sed quam vehicula lectus placerat dictum. Vestibulum fermentum augue sed ex laoreet tristique. Nunc quis feugiat leo. Nullam ut magna eget augue dapibus Nunc porttitor semper arcu vitae accumsan. Praesent non nibh fermentum, faucibus urna eu, efficitur felis. Duis vel vehicula diam, ac tempor ligula. Etiam faucibus at nibh id imperdiet. Mauris purus purus, tincidunt ac risus non, rhoncus euismod risus. Etiam in enim odio. Mauris urna dui, rhoncus at feugiat vitae, lacinia non sem. Cras finibus augue id tempus laoreet. Pellentesque congue porta iaculis. Vestibulum a nunc at felis laoreet ornare.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="package-block package-block-m">
+                        <p class="package-title" th:text="#{package.m.label}">
+                            Package M
+                        </p>
+                        <p class="package-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vehicula nunc sed felis euismod blandit. Suspendisse sed quam vehicula lectus placerat dictum. Vestibulum fermentum augue sed ex laoreet tristique. Nunc quis feugiat leo. Nullam ut magna eget augue dapibus Nunc porttitor semper arcu vitae accumsan. Praesent non nibh fermentum, faucibus urna eu, efficitur felis. Duis vel vehicula diam, ac tempor ligula. Etiam faucibus at nibh id imperdiet. Mauris purus purus, tincidunt ac risus non, rhoncus euismod risus. Etiam in enim odio. Mauris urna dui, rhoncus at feugiat vitae, lacinia non sem. Cras finibus augue id tempus laoreet. Pellentesque congue porta iaculis. Vestibulum a nunc at felis laoreet ornare.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="package-block">
+                        <p class="package-title" th:text="#{package.l.label}">
+                            Package L
+                        </p>
+                        <p class="package-text">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vehicula nunc sed felis euismod blandit. Suspendisse sed quam vehicula lectus placerat dictum. Vestibulum fermentum augue sed ex laoreet tristique. Nunc quis feugiat leo. Nullam ut magna eget augue dapibus Nunc porttitor semper arcu vitae accumsan. Praesent non nibh fermentum, faucibus urna eu, efficitur felis. Duis vel vehicula diam, ac tempor ligula. Etiam faucibus at nibh id imperdiet. Mauris purus purus, tincidunt ac risus non, rhoncus euismod risus. Etiam in enim odio. Mauris urna dui, rhoncus at feugiat vitae, lacinia non sem. Cras finibus augue id tempus laoreet. Pellentesque congue porta iaculis. Vestibulum a nunc at felis laoreet ornare.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<meta th:replace="fragment/footer.html :: footer">
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
+
