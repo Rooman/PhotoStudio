@@ -13,7 +13,7 @@ public interface OrderDao {
 
     List<Order> getOrdersByUserId(long userId);
 
-    Order getOrderByIdInStatusNew(int id);
+    Order getOrderById(int id);
 
     int add(Order order, int orderStatusId);
 

@@ -36,7 +36,7 @@ public class OrderServlet extends HttpServlet {
         log.info("Request get order page by id:{}", idFromUri);
         log.info("errorMessage:{}", errorMessage);
 
-        Order order = orderService.getOrderByIdInStatusNew(idFromUri);
+        Order order = orderService.getOrderById(idFromUri);
         request.setAttribute("orderId", idFromUri);
 
         if (OrderStatus.NEW.equals(order.getStatus())) {

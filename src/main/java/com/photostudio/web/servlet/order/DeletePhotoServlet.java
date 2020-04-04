@@ -4,9 +4,6 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

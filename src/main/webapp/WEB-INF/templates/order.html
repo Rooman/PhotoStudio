@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" class="no-js">
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml" class="no-js">
 
 <head>
     <head>
@@ -9,12 +9,23 @@
               integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
               crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" th:href="@{/assets/css/order.css}">
-        <title>Photo Studio</title>
+        <title>Order Page</title>
     </head>
 </head>
 
-<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}">
-<div class="container">
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'}" >
+<div th:if="${roleAdmin==false}">
+    <header class="header">
+        <div class="container-fluid">
+            <!--NavBar-->
+            <nav th:replace="fragment/navigation.html :: nav"></nav>
+            <hr class="header__underscore">
+            <!--NavBarEnd-->
+        </div>
+    </header>
+</div>
+
+<div class="container" th:if="${roleAdmin}">
 
     <!--Bread Crumb-->
     <div class="bread__crumb-navigation">
@@ -29,7 +40,7 @@
 </div>
 <!--Bread Crumb End-->
 
-<h1 class="order__title">Order</h1>
+<h1 class="order__title" th:text="#{order.title}">Order</h1>
 
 <h2 class="error" align="center" th:if="${errorMessage!=null}" th:text="${errorMessage}"></h2>
 
@@ -39,14 +50,14 @@
         <div th:if="${order.id != 0}" class="order__detail-info order__number" th:text="${order.id}"></div>
         <div class="order__detail-info order__date"
              th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
-        <div class="order__detail-info order__status" th:text="${order.status}"></div>
+        <div class="order__detail-info order__status" th:text="${order.status}" th:if="${roleAdmin}"></div>
     </div>
     <form id="new" th:action="${order.id} == 0 ? @{/order} : @{'/order/edit/'+${order.id}}" th:method="post"
           enctype="multipart/form-data">
         <input type="hidden" name='emailOld' value='${order.user.email}' id='emailOld'>
         <input type="hidden" name='commentAdminOld' value='${order.commentAdmin}' id='commentAdminOld'>
         <input type="hidden" name='commentUserOld' value='${order.commentUser}' id='commentUserOld'>
-        <div class="order__user-info">
+        <div class="order__user-info" th:if="${roleAdmin}">
             <input type="email" class="form-control order__detail-info order__user-email"
                    id="email"
                    th:attr="value=${((newEmail != null) ? newEmail : (order.id != 0) ? order.user.email : null)},
@@ -77,29 +88,65 @@
         <div class="order__photos">
             <div class="photo-aria overflow-auto">
                 <div class="row order__block">
-                    <div class="col-md-3" th:each="photo : ${order.photoSources}">
-                        <div class="order__photo-block">
-                            <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
-                                 alt="photo">
-                        </div>
-                        <div class="photo__buttons">
-                            <a class="photo-option" href="#"><i class="fas fa-search-plus"></i></a>
-                            <a class="photo-option" href="#" th:onclick="|deletePhoto(${photo.getId()})|"
-                               form="delete_photos">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                    <div class="col-md-3" th:each="photo : ${order.photoSources}" th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}, isSelected=${photo.getPhotoStatus().getName()=='SELECTED'}">
+                        <div class="order-photo-card">
+                            <label class="checkbox-container">
+                                <input type="checkbox" th:checked="${isSelected or isPaid}">
+                                <span class="custom-checkmark"></span>
+                            </label>
+                            <div th:class="order__photo-block" th:classappend="${isPaid} ? order__photo-block-paid : ''">
+                                <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
+                                     alt="photo">
+                            </div>
+                            <div class="photo__buttons">
+                                <div class="row justify-content-center">
+                                    <a class="photo-option col-auto text-center" href="#">
+                                        <i class="fas fa-search-plus"></i></a>
+                                    <a class="photo-option col-auto text-center" href="#" th:if="${roleUser and isPaid}">
+                                        <i class="fas fa-arrow-down"></i></a>
+                                    <a class="photo-option col-auto text-center" href="#" th:if="${roleAdmin}" th:onclick="|deletePhoto(${photo.getId()})|"
+                                       form="delete_photos">
+                                        <i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="photo-add-delete-buttons">
+                <div th:if="${roleAdmin and order.status.getOrderStatusName()=='NEW'}">
+                    <input type="file" name="photo" id="file" class="inputfile"
+                           data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
+                    <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
+                        <span>Add</span>
+                    </label>
 
-                <input type="file" name="photo" id="file" class="inputfile"
-                       data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
-                <label for="file" class="btn  btn-submit btn-outline-dark button order__button photo-add-button">
-                    <span>Add</span>
-                </label>
-
+                    <a class="photo-option" href="#">
+                        <button type="button"
+                                class="btn btn-submit btn-outline-dark button order__button"
+                                form="delete_photos">
+                            Delete all
+                        </button>
+                    </a>
+                </div>
+                <div class="order__complete-buttons">
+                    <div th:if="${roleUser}">
+                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button" th:text="#{order.select.button}">
+                            Select All
+                        </button>
+                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button" th:text="#{order.deselect.button}">
+                            Deselect All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" th:if="${roleUser and order.status.getOrderStatusName()=='SELECTED'}">
+            <div class="row justify-content-center">
+                <div class="col-auto text-center">
+                    <p class="thank-you-label" th:text="#{order.thank.you}">Thanks for your choice! Photos will be available after payment.</p>
+                </div>
                 <a class="photo-option" href="#">
                     <button class="btn btn-submit btn-outline-dark button order__button photo-delete-button"
                             form="delete_photos">
@@ -109,19 +156,35 @@
             </div>
         </div>
         <div class="order__complete-buttons">
-            <button type="submit" class="btn btn-submit btn-outline-dark button order__button save-button">Save
-            </button>
-            <button th:if="${order.id != 0}"
-                    class="btn btn-submit btn-outline-dark button order__button view-select-button"
-                    form="change_status">
-                Status to view
-                and
-                select
-            </button>
-            <button th:if="${order.id != 0}" type="button"
-                    class="btn btn-submit btn-outline-dark button order__button delete-button"
-                    data-toggle="modal" data-target="#delete-order">Delete order
-            </button>
+            <div th:if="${roleUser}">
+                <button th:if="${order.status.getOrderStatusName() != 'READY'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.submit.button}">
+                    Submit
+                </button>
+                <button th:if="${order.status.getOrderStatusName()=='READY'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.resubmit.button}">
+                    Re-submit
+                </button>
+                <button th:if="${order.status.getOrderStatusName()=='READY'}" type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big" th:text="#{order.download.all.button}">
+                    Download All
+                </button>
+            </div>
+            <div th:if="${roleAdmin}">
+                <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
+                    Save
+                </button>
+                <button th:if="${order.id != 0 and order.status.getOrderStatusName()=='NEW'}"
+                        class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                        form="change_status">
+                    Status to view
+                    and
+                    select
+                </button>
+                <button th:if="${order.id != 0}" type="button"
+                        class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                        data-toggle="modal" data-target="#delete-order">
+                    Delete order
+                </button>
+            </div>
+
         </div>
     </form>
     <div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"
@@ -156,5 +219,5 @@
 <meta th:replace="fragment/script.html :: script">
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
-<script th:src="@{/assets/js/order/delete-photo.js}"></script>
+
 </html>
