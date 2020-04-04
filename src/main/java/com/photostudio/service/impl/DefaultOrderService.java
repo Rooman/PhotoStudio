@@ -62,7 +62,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public Order getOrderById(int id) {
-        log.info("Started service get order by id:{} in status NEW from DB", id);
+        log.info("Started service get order by id:{}", id);
         return orderDao.getOrderById(id);
     }
 
