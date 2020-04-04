@@ -4,12 +4,10 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.jdbc.entity.EmailTemplateRow;
 import com.photostudio.dao.jdbc.mapper.EmailTemplateRowMapper;
-import com.photostudio.dao.jdbc.mapper.LanguageRowMapper;
 import com.photostudio.dao.jdbc.mapper.PasswordEmailTemplateRowMapper;
 import com.photostudio.entity.email.MessageType;
 import com.photostudio.entity.email.PasswordEmailTemplate;
 import com.photostudio.entity.order.OrderStatus;
-import com.photostudio.entity.user.UserLanguage;
 import com.photostudio.service.entity.EmailTemplate;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,12 +35,12 @@ public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
             "PasswordEmailTemplate;";
 
     private final DataSource dataSource;
-    private List<PasswordEmailTemplate> passwordEmailTemplateCache;
+    private volatile List<PasswordEmailTemplate> passwordEmailTemplateCache;
 
     public JdbcEmailTemplateCachedDao(DataSource dataSource) {
         this.dataSource = dataSource;
         load(dataSource);
-        setPasswordEmailTemplates();
+        passwordEmailTemplateCache = Collections.unmodifiableList(getPasswordEmailTemplates());
     }
 
     @Override
@@ -59,12 +57,13 @@ public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
                 .filter(passwordEmailTemplate -> passwordEmailTemplate.getMessageType() == messageType)
                 .filter(passwordEmailTemplate -> passwordEmailTemplate.getLangId() == langId)
                 .findFirst();
-        if (optionalPasswordEmailTemplate.isPresent()) {
-            return optionalPasswordEmailTemplate.get();
-        } else {
+
+        if (!optionalPasswordEmailTemplate.isPresent()) {
             log.info("PasswordEmailTemplate with messageType {} and langId {} does not exist", messageType, langId);
             throw new RuntimeException("PasswordEmailTemplate with messageType " + messageType + " and langId " + langId + " does not exist");
         }
+
+        return optionalPasswordEmailTemplate.get();
     }
 
     void load(DataSource dataSource) {
@@ -84,14 +83,15 @@ public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
         }
     }
 
-    private void setPasswordEmailTemplates() {
+    private List<PasswordEmailTemplate> getPasswordEmailTemplates() {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_PASSWORD_EMAIL_TEMPLATES);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            passwordEmailTemplateCache = new ArrayList<>();
+            List<PasswordEmailTemplate> passwordEmailTemplateList = new ArrayList<>();
             while (resultSet.next()) {
-                passwordEmailTemplateCache.add(PASSWORD_EMAIL_TEMPLATE_ROW_MAPPER.mapRow(resultSet));
+                passwordEmailTemplateList.add(PASSWORD_EMAIL_TEMPLATE_ROW_MAPPER.mapRow(resultSet));
             }
+            return passwordEmailTemplateList;
         } catch (SQLException e) {
             log.info("Error setting passwordEmailTemplateCache", e);
             throw new RuntimeException("Error setting passwordEmailTemplateCache", e);

@@ -36,13 +36,9 @@ public class AddNewOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String newEmail = request.getParameter("newEmail");
-        Map<String, Object> paramsMap = new HashMap<>();
-        CommonVariableAppendService.appendUser(paramsMap, request);
         log.info("Request get order page to create a new order");
-        Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
-        paramsMap.put("order", order);
-        paramsMap.put("newEmail", newEmail);
-        paramsMap.put("acceptedFileTypes", propertyReader.getString("order.photo.fileType"));
+
+        Map<String, Object> paramsMap = getParametersMap(request, newEmail);
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);
     }
@@ -57,23 +53,39 @@ public class AddNewOrderServlet extends HttpServlet {
         User user = userService.getUserByEmail(email);
 
         if (user == null) {
-            throw new GetUserByEmailException("No user with email = " + email + " found");
+            log.error("User with email {} doesn't found", email);
+            Map<String, Object> paramsMap = getParametersMap(request, email);
+
+            paramsMap.put("invalid", "yes");
+            response.setContentType("text/html;charset=utf-8");
+            TemplateEngineFactory.process(request, response, "order", paramsMap);
+        } else {
+            String comment = request.getParameter("commentAdmin");
+
+            Order.OrderBuilder orderBuilder = Order.builder()
+                    .orderDate(LocalDateTime.now())
+                    .status(OrderStatus.NEW)
+                    .user(user);
+
+            if (!comment.isEmpty()) {
+                orderBuilder.commentAdmin(comment);
+            }
+            log.info("Save photo to new order");
+
+            int orderId = orderService.add(orderBuilder.build(), photoToUpload);
+
+            response.sendRedirect(request.getContextPath() + "/order/" + orderId);
         }
+    }
 
-        String comment = request.getParameter("commentAdmin");
+    private Map<String, Object> getParametersMap(HttpServletRequest request, String email) {
+        Map<String, Object> paramsMap = new HashMap<>();
 
-        Order.OrderBuilder orderBuilder = Order.builder()
-                .orderDate(LocalDateTime.now())
-                .status(OrderStatus.NEW)
-                .user(user);
-
-        if (!comment.isEmpty()) {
-            orderBuilder.commentAdmin(comment);
-        }
-        log.info("Save photo to new order");
-
-        int orderId = orderService.add(orderBuilder.build(), photoToUpload);
-
-        response.sendRedirect(request.getContextPath() + "/order/" + orderId);
+        CommonVariableAppendService.appendUser(paramsMap, request);
+        Order order = Order.builder().status(OrderStatus.NEW).orderDate(LocalDateTime.now()).build();
+        paramsMap.put("order", order);
+        paramsMap.put("newEmail", email);
+        paramsMap.put("acceptedFileTypes", propertyReader.getString("order.photo.fileType"));
+        return paramsMap;
     }
 }

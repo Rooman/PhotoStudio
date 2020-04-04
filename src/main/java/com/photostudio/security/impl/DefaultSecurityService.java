@@ -112,7 +112,7 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public void changePassword(long userId, String newPassword) {
-        log.info("Started service change password for user with id " + userId);
+        log.info("Started service change password for user with id: {}", userId);
         String randomSalt = UUID.randomUUID().toString();
         String newPasswordHash = UtilClass.getHashedString(newPassword, randomSalt);
         userService.changeUserPassword(userId, randomSalt, newPasswordHash);
@@ -120,7 +120,7 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public void resetUserPassword(User user) {
-        log.info("Started service reset password for user with id " + user.getId());
+        log.info("Started service reset password for user with id: {}", user.getId());
         String randomPassword = generatePassword(DEFAULT_PASSWORD_LENGTH);
         changePassword(user.getId(), randomPassword);
         mailService.sendNewPassword(user, randomPassword);
