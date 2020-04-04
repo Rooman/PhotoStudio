@@ -19,6 +19,10 @@ public class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();
 
     static {
+        //mapper for JSON
+        ObjectMapper mapper = new ObjectMapper();
+        register(ObjectMapper.class, mapper);
+
         //config property reader util class
         PropertyReader propertyReader = new PropertyReader("application.properties");
         register(PropertyReader.class, propertyReader);
@@ -51,7 +55,10 @@ public class ServiceLocator {
         MailService mailService = new DefaultMailService(mailSender, userService, emailTemplateDao);
         register(MailService.class, mailService);
 
-        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
+        NotificationService notificationService = new WSNotificationService(mapper);
+        register(NotificationService.class, notificationService);
+
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService, notificationService);
         register(OrderService.class, orderService);
         userService.setOrderService(orderService);
 
@@ -63,10 +70,6 @@ public class ServiceLocator {
 
         UserLanguageService userLanguageService = new DefaultUserLanguageService(userLanguageDao);
         register(UserLanguageService.class, userLanguageService);
-
-        //mapper for JSON
-        ObjectMapper mapper = new ObjectMapper();
-        register(ObjectMapper.class, mapper);
 
     }
 

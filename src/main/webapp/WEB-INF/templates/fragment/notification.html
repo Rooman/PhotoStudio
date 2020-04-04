@@ -1,0 +1,11 @@
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<div th:if="${user!=null}" id="notification" class="notification-form-message notification-form-message--hidden">
+    <div id="notification-close">x</div>
+    <div id="notification-message">
+    </div>
+</div>
+
+<script th:if="${user!=null}" th:src="@{/assets/js/notification.js}"></script>
+</body>
+</html>

@@ -19,15 +19,15 @@
 <main class="home">
     <div class=" container-main">
         <div class=" baby-image_intro">
-            <p class="home__main-title" th:text="#{home.title}" >Zii<br> Fotografie</p>
+            <p class="home__main-title" th:text="#{home.title}">Zii<br> Fotografie</p>
         </div>
         <div class="home__content">
-            <h2 class="home__content-title" th:text="#{content.title}" >Rood rood
+            <h2 class="home__content-title" th:text="#{content.title}">Rood rood
                 <br>and children up to a year</h2>
             <div class="description__card shooting-age">
-                <h3 class="description__card-header" th:text="#{card.title}" >Low</h3>
-                <p class="description__card-text" th:text="#{card.content1}" > fancy!</p>
-                <p class="description__card-text" th:text="#{card.content2}" > he</p>
+                <h3 class="description__card-header" th:text="#{card.title}">Low</h3>
+                <p class="description__card-text" th:text="#{card.content1}"> fancy!</p>
+                <p class="description__card-text" th:text="#{card.content2}"> he</p>
             </div>
 
             <div class="baby-images">
@@ -35,14 +35,17 @@
                 <div class="baby-image baby-image_right"><img src="assets/images/baby-2.jpg" alt="baby"></div>
             </div>
             <div class="description__card shooting-location">
-                <h3 class="description__card-header" th:text="#{location.title}" >Location of the photo shoot</h3>
-                <p class="description__card-text" th:text="#{location.text}" > A photo session can be held at home or in a specialized studio for
+                <h3 class="description__card-header" th:text="#{location.title}">Location of the photo shoot</h3>
+                <p class="description__card-text" th:text="#{location.text}"> A photo session can be held at home or in
+                    a specialized studio for
                     newborns. We discuss all the nuances in a personal conversation. </p>
             </div>
         </div>
     </div>
 </main>
 
+
+<meta th:replace="fragment/notification.html :: body">
 <meta th:replace="fragment/footer.html :: footer">
 <meta th:replace="fragment/script.html :: script">
 </body>
