@@ -32,6 +32,9 @@
                     <div th:if="${invalid == 'yes'}"  class="form-text error">
                         The mail/phone or password incorrect
                     </div>
+                    <div class="form-text reset-password">
+                        <a th:href="@{/security/reset-password}" th:text="#{forgot.password.text}" class="reset-password__link"></a>
+                    </div>
                 </div>
                 <button type="submit" class="btn sign-in-button" th:text="#{sign.in.button}">Sing in</button>
             </form>
