@@ -13,11 +13,11 @@ class UtilClassTest {
 
     @Test
     void isChanged() {
-        assertEquals(false, UtilClass.isChanged(null, null));
-        assertEquals(false, UtilClass.isChanged("Comment", "Comment"));
-        assertEquals(true, UtilClass.isChanged(null, "Comment"));
-        assertEquals(true, UtilClass.isChanged("Comment", null));
-        assertEquals(true, UtilClass.isChanged("Comment1", "Comment2"));
+        assertFalse(UtilClass.isChanged(null, null));
+        assertFalse(UtilClass.isChanged("Comment", "Comment"));
+        assertTrue(UtilClass.isChanged(null, "Comment"));
+        assertTrue(UtilClass.isChanged("Comment", null));
+        assertTrue(UtilClass.isChanged("Comment1", "Comment2"));
     }
 
     @Test

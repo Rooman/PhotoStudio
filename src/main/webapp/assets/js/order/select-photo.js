@@ -10,8 +10,8 @@ function unSelectAll() {
 
 function onClickCheckBox(idPhoto)
 {
-  var checkbox = document.getElementById('checkbox'+String(idPhoto));
-  var selected = document.getElementById('selectedPhotos').value;
+  let checkbox = document.getElementById('checkbox'+String(idPhoto));
+  let selected = document.getElementById('selectedPhotos').value;
   if(checkbox.checked==true) {
      if (selected!='') {
         selected = selected +' , ' + String(idPhoto);
@@ -30,8 +30,8 @@ function onClickCheckBox(idPhoto)
 }
 
 function setCheckboxCheckedValue(value){
-   var x = document.querySelectorAll("input[type='checkbox']");
-   var i;
+   let x = document.querySelectorAll("input[type='checkbox']");
+   let i;
    for (i = 0; i < x.length; i++) {
       x[i].checked = value;
    }
