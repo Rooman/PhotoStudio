@@ -25,60 +25,69 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="contact-text-block">
-                        <p class="contact-text">
-                            Thank you for your interest!
-                            <br><br>
-                            I am happy to answer any of your questions or reserve a date for the shooting. Please tell us a little about yourself and your child (or children) by filling out the form. All your wishes regarding the props, suits or color preferences for the photo shoot, please leave this information in the "message" field. If you decide to shoot with me, we can discuss all the details with you in detail after booking the date.
-                            <br><br>
-                            You can also call me at: +49 (0) 157-77777777777.
-                        </p>
+                        <div class="contact-text">
+                            <p>
+                                Thank you for your interest!
+                            </p>
+                            <br>
+                            <p>
+                                I am happy to answer any of your questions or reserve a date for the shooting. Please tell us a little about yourself and your child (or children) by filling out the form. All your wishes regarding the props, suits or color preferences for the photo shoot, please leave this information in the "message" field. If you decide to shoot with me, we can discuss all the details with you in detail after booking the date.
+                            </p>
+                            <br>
+                            <p>
+                                You can also call me at: +49 (0) 157-77777777777.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-9">
                     <div class="contact-form-block">
                         <form id="contact" action="#" method="get"
                               enctype="form-data">
                             <div class="container">
                                 <div class="row justify-content-center">
-                                    <div class="col-6">
+                                    <div class="col-6 pr-4 pl-4 pb-3">
                                         <input type="text" class="form-control form-default-info"
                                                id="name" value="" th:placeholder="#{name.placeholder}" name="name" required>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6 pr-4 pl-4 pb-3">
                                         <input type="email" class="form-control form-default-info"
                                                id="email" value="" th:placeholder="#{email.placeholder}" name="email" required>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6 pr-4 pl-4 pb-3">
                                         <input type="text" class="form-control form-default-info"
                                                id="city" value="" th:placeholder="#{city.placeholder}" name="city" required>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-6 pr-4 pl-4 pb-3">
                                         <input type="text" class="form-control form-default-info"
                                                id="index" value="" th:placeholder="#{index.placeholder}" name="index" required>
                                     </div>
                                     <div class="col-12">
-                                        <p class="radio-title">Child gender</p>
+                                        <p class="radio-title p-3" th:text="#{child.gender.label}">Child gender</p>
                                     </div>
-                                    <div class="col-12 text-center">
+                                    <div class="col-12">
                                         <div class="container">
-                                            <div class="row justify-content-center text-center">
-                                                <div class="col-4">
-                                                    <div class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-                                                        <label class="custom-control-label" for="customRadioInline1">Boy</label>
-                                                    </div>
+                                            <div class="row justify-content-center">
+                                                <div class="col-3">
+                                                    <label class="radio-container">
+                                                        <div th:text="#{boy.label}">Boy</div>
+                                                        <input type="radio" name="radio">
+                                                        <span class="radio-checkmark checkmark-boy"></span>
+                                                    </label>
                                                 </div>
-                                                <div class="col-4">
-                                                    <div class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-                                                        <label class="custom-control-label" for="customRadioInline2">Girl</label>
-                                                    </div>
+                                                <div class="col-3">
+                                                    <label class="radio-container">
+                                                        <div th:text="#{girl.label}">Girl</div>
+                                                        <input type="radio" name="radio">
+                                                        <span class="radio-checkmark checkmark-girl"></span>
+                                                    </label>
                                                 </div>
-                                                <div class="col-4">
-                                                    <div class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" id="customRadioInline3" name="customRadioInline1" class="custom-control-input">
-                                                        <label class="custom-control-label" for="customRadioInline3">Twins</label>
-                                                    </div>
+                                                <div class="col-3">
+                                                    <label class="radio-container">
+                                                        <div th:text="#{twins.label}">Twins</div>
+                                                        <input type="radio" name="radio">
+                                                        <span class="radio-checkmark checkmark-twins"></span>
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -89,14 +98,15 @@
                                                   th:placeholder="#{message.placeholder}">
                                         </textarea>
                                     </div>
-                                    <div class="col-12">
-                                        <label class="checkbox-container">I want to receive newsletters about special offers and discounts
+                                    <div class="col-12 p-2 pl-5">
+                                        <label class="checkbox-container">
+                                            <p th:text="#{checkbox.label}">I want to receive newsletters about special offers and discounts</p>
                                             <input type="checkbox" checked="checked">
                                             <span class="custom-checkmark"></span>
                                         </label>
                                     </div>
                                     <div class="col-12 text-center">
-                                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
+                                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button" th:text="#{send.button}">
                                             Send
                                         </button>
                                     </div>
