@@ -35,9 +35,9 @@ public interface OrderService {
 
     void moveStatusBack(int id, User user);
 
-    void editOrderByAdmin(int orderId, String commentAdmin, User userOrdered, User userChanged, boolean isChanged, OrderStatus orderStatus, List<Part> photoToUpload);
+    void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<Part> photoToUpload);
 
-    void editOrderByUser(int orderId, String commentUser, User userChanged, boolean isChanged, OrderStatus orderStatus, String selectedPhoto);
+    void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto);
 
     void addPhotos(int orderId, List<Part> photoToUpload);
 

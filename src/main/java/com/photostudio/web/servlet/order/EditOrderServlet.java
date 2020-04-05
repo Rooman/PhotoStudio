@@ -1,6 +1,7 @@
 package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
+import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
@@ -53,8 +54,18 @@ public class EditOrderServlet extends HttpServlet {
 
         User userChanged = (User) paramsMap.get("user");
 
+        Order.OrderBuilder orderBuilder = Order.builder()
+                .id(orderId)
+                .status(orderStatus)
+                .user(userOrdered);
+
+        if (!commentAdmin.isEmpty()) {
+            orderBuilder.commentAdmin(commentAdmin);
+        }
+
+
         boolean orderIsChanged = !email.equals(emailOld) || UtilClass.isChanged(commentAdmin, commentAdminOld);
-        orderService.editOrderByAdmin(orderId, commentAdmin, userOrdered, userChanged, orderIsChanged, orderStatus, photoToUpload);
+        orderService.editOrderByAdmin(orderBuilder.build(), userChanged, orderIsChanged, photoToUpload);
 
         response.sendRedirect(request.getContextPath() + "/order/" + orderId);
     }

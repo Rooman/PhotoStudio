@@ -82,31 +82,34 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public void editOrderByAdmin(int orderId, String commentAdmin, User userOrdered, User userChanged, boolean isChanged, OrderStatus orderStatus, List<Part> photoToUpload) {
+
+    public void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<Part> photoToUpload) {
+        int orderId = order.getId();
         log.info("Started service edit order {} by Admin", orderId);
         if (isChanged) {
-            orderDao.editOrderByAdmin(orderId, userOrdered.getId(), commentAdmin);
+            orderDao.editOrderByAdmin(orderId, order.getUser().getId(), order.getCommentAdmin());
         }
         if (!photoToUpload.isEmpty()) {
             addPhotos(orderId, photoToUpload);
         }
 
-        if (orderStatus == OrderStatus.SELECTED) {
+        if (order.getStatus() == OrderStatus.SELECTED) {
             orderDao.setPhotosStatusPaid(orderId);
             moveStatusForward(orderId, userChanged);
         }
     }
 
     @Override
-    public void editOrderByUser(int orderId, String commentUser, User userChanged, boolean isChanged, OrderStatus orderStatus, String selectedPhoto) {
+    public void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto) {
+        int orderId = order.getId();
         log.info("Started service edit order {} by User", orderId);
         if (isChanged) {
-            orderDao.editOrderByUser(orderId, commentUser);
+            orderDao.editOrderByUser(orderId, order.getCommentUser());
         }
         if (selectedPhoto != null && !selectedPhoto.isEmpty()) {
             orderDao.selectPhotos(orderId, selectedPhoto);
         }
-        if (orderStatus == OrderStatus.VIEW_AND_SELECT) {
+        if (order.getStatus() == OrderStatus.VIEW_AND_SELECT) {
             moveStatusForward(orderId, userChanged);
         }
     }
