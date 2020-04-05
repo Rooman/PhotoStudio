@@ -391,9 +391,7 @@ public class JdbcOrderDao implements OrderDao {
     public void editOrderByAdmin(int orderId, long userId, String commentAdmin) {
         log.info("Edit order by admin in DB");
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_ADMIN);
-        ) {
-
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_ADMIN)) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setString(2, commentAdmin);
             preparedStatement.setInt(3, orderId);
