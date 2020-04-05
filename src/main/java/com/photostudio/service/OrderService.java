@@ -2,10 +2,8 @@ package com.photostudio.service;
 
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
-import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.Part;
 import java.util.List;
 
