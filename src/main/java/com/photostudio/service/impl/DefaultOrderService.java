@@ -103,7 +103,7 @@ public class DefaultOrderService implements OrderService {
         if (isChanged) {
             orderDao.editOrderByUser(orderId, commentUser);
         }
-        if (selectedPhoto != null) {
+        if (selectedPhoto != null && !selectedPhoto.isEmpty()) {
             orderDao.selectPhotos(orderId, selectedPhoto);
         }
         if (orderStatus == OrderStatus.VIEW_AND_SELECT) {
