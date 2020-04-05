@@ -9,6 +9,7 @@ import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.photo.Photo;
+import com.photostudio.entity.photo.PhotoStatus;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -50,6 +51,7 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
+    private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final PhotoSourceRowMapper PHOTO_SOURCE_ROW_MAPPER = new PhotoSourceRowMapper();
@@ -397,6 +399,29 @@ public class JdbcOrderDao implements OrderDao {
                 log.error("Error during save photo to DB with orderId {}", orderId, e);
                 throw new RuntimeException("Error during save photo to DB", e);
             }
+        }
+    }
+
+    @Override
+    public List<Photo> getPhotosByStatus(int orderId, PhotoStatus photoStatus) {
+        log.info("Get photos with status : {} from DB", photoStatus.getName());
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_PHOTOS_BY_STATUS_AND_ORDER_ID)) {
+            preparedStatement.setInt(1, orderId);
+            preparedStatement.setInt(2, photoStatus.getId());
+            preparedStatement.execute();
+            List<Photo> photos = new ArrayList<>();
+            try (ResultSet photoResultSet = preparedStatement.getResultSet()) {
+                log.info("Assemble photo sources for order with id: {}", orderId);
+                while (photoResultSet.next()) {
+                    Photo photo = PHOTO_SOURCE_ROW_MAPPER.mapRow(photoResultSet);
+                    photos.add(photo);
+                }
+            }
+            return photos;
+        } catch (SQLException e) {
+            log.error("Get paid photos by orderId: {} error", orderId, e);
+            throw new RuntimeException("Get paid photos by orderId" + orderId + "error", e);
         }
     }
 

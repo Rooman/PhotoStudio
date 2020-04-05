@@ -3,6 +3,8 @@ package com.photostudio.dao;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.photo.Photo;
+import com.photostudio.entity.photo.PhotoStatus;
 
 import java.util.List;
 
@@ -30,6 +32,8 @@ public interface OrderDao {
     String getPathByPhotoId(long photoId);
 
     void deleteOrdersByUserId(List<Order> orderList, long id);
+
+    List<Photo> getPhotosByStatus (int orderId, PhotoStatus photoStatus);
 
     void delete(int id);
 

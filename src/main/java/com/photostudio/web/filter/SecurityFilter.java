@@ -50,6 +50,7 @@ public class SecurityFilter implements Filter {
         urlToRoleMap.put("/order/forward", USER);
         urlToRoleMap.put("/user", USER);
         urlToRoleMap.put("/security/change-password", USER);
+        urlToRoleMap.put("/order/download-zip", USER);
 
         urlToRoleMap.put("/admin/users", ADMIN);
         urlToRoleMap.put("/admin", ADMIN);
