@@ -1,7 +1,8 @@
 package com.photostudio.dao.jdbc;
 
-import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
+import com.photostudio.entity.email.MessageType;
+import com.photostudio.entity.email.PasswordEmailTemplate;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.service.entity.EmailTemplate;
 import org.h2.jdbcx.JdbcDataSource;
@@ -41,6 +42,23 @@ class JdbcEmailTemplateCachedDaoTest {
     void testLoad() {
         assertDoesNotThrow(() -> emailTemplateDao.load(jdbcDataSource));
         assertEquals(9, emailTemplateDao.templateRows.size());
+    }
+
+    @Test
+    void testGetPasswordEmailTemplateByLangIdAndMessageType() {
+        //prepare
+        String expectedSubject = "Miari Fotografie Reset password";
+        String expectedBody = "Ihr neues Passwort lautet <password>";
+
+        //when
+        PasswordEmailTemplate actualSubjectENPasswordEmailTemplate = emailTemplateDao
+                .getPasswordEmailTemplateByLangIdAndMessageType(2, MessageType.RESET_PASSWORD);
+        PasswordEmailTemplate actualBodyDEPasswordEmailTemplate = emailTemplateDao
+                .getPasswordEmailTemplateByLangIdAndMessageType(1, MessageType.RESET_PASSWORD);
+
+        //then
+        assertEquals(expectedBody, actualBodyDEPasswordEmailTemplate.getBody());
+        assertEquals(expectedSubject, actualSubjectENPasswordEmailTemplate.getSubject());
     }
 
     @AfterAll

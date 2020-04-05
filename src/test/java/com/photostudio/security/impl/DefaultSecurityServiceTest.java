@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultSecurityServiceTest {
 
-    DefaultSecurityService securityService = new DefaultSecurityService(null, null);
+    DefaultSecurityService securityService = new DefaultSecurityService(null, null, null);
 
     @Test
     void testGeneratePasswordWithIncorrectCount() {
