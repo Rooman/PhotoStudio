@@ -1,7 +1,7 @@
 package com.photostudio.dao.file;
 
 import com.photostudio.dao.PhotoDao;
-
+import com.photostudio.entity.photo.Photo;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Part;
@@ -9,9 +9,12 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Slf4j
 public class LocalDiskPhotoDao implements PhotoDao {
+    private static final int BUFFER_SIZE = 8192;
     private String path;
 
     public LocalDiskPhotoDao(String path) {
@@ -86,6 +89,40 @@ public class LocalDiskPhotoDao implements PhotoDao {
             }
         }
         return photosPaths;
+    }
+
+    @Override
+    public InputStream addPhotoToArchive(int orderId, List<Photo> photos) {
+        if (photos.isEmpty()) {
+            log.error("No paid photos in order with id : {}", orderId);
+            throw new RuntimeException("No paid photos in order with id " + orderId);
+        }
+        String pathToOrderPhoto = getPathToOrderDir(orderId);
+        log.info("Add to archive photos on local disk by path : {}", pathToOrderPhoto);
+        String archiveName = orderId + ".zip";
+        File archive = new File(pathToOrderPhoto, archiveName);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(archive);
+             ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
+            int count;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            for (Photo photo : photos) {
+                File pathToPhoto = new File(pathToOrderPhoto, photo.getSource());
+                try (FileInputStream filePhotoInputStream = new FileInputStream(pathToPhoto)) {
+                    zipOutputStream.putNextEntry(new ZipEntry(photo.getSource()));
+                    while ((count = filePhotoInputStream.read(buffer)) > -1) {
+                        zipOutputStream.write(buffer, 0, count);
+                    }
+                    zipOutputStream.closeEntry();
+                }
+            }
+            return new FileInputStream(archive);
+        } catch (FileNotFoundException ex) {
+            log.error("A zip file on path : {} does not exist: ", pathToOrderPhoto);
+            throw new RuntimeException("A zip file does not exist: ", ex);
+        } catch (IOException ex) {
+            log.error("File for add to zip on path : {} not found", pathToOrderPhoto);
+            throw new RuntimeException("File for add to zip not found: ", ex);
+        }
     }
 
     private String getFileName(Part part) {
