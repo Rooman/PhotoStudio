@@ -64,7 +64,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public Order getOrderById(int id) {
-        log.info("Started service get order by id:{} in status NEW from DB", id);
+        log.info("Started service get order by id:{}", id);
         return orderDao.getOrderById(id);
     }
 
@@ -74,12 +74,53 @@ public class DefaultOrderService implements OrderService {
         return orderDao.getOrdersByUserId(userId);
     }
 
+    @Override
     public int add(Order order, List<Part> photoToUpload) {
         log.info("Started creating new order {}", order);
         int orderId = orderDao.add(order, orderStatusService.getOrderStatusIdByStatusName(order.getStatus()));
         List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
-        orderDao.savePhotos(order, orderId, photosPath);
+        orderDao.savePhotos(orderId, photosPath);
         return orderId;
+    }
+
+    @Override
+
+    public void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<Part> photoToUpload) {
+        int orderId = order.getId();
+        log.info("Started service edit order {} by Admin", orderId);
+        if (isChanged) {
+            orderDao.editOrderByAdmin(orderId, order.getUser().getId(), order.getCommentAdmin());
+        }
+        if (!photoToUpload.isEmpty()) {
+            addPhotos(orderId, photoToUpload);
+        }
+
+        if (order.getStatus() == OrderStatus.SELECTED) {
+            orderDao.setPhotosStatusPaid(orderId);
+            moveStatusForward(orderId, userChanged);
+        }
+    }
+
+    @Override
+    public void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto) {
+        int orderId = order.getId();
+        log.info("Started service edit order {} by User", orderId);
+        if (isChanged) {
+            orderDao.editOrderByUser(orderId, order.getCommentUser());
+        }
+        if (selectedPhoto != null && !selectedPhoto.isEmpty()) {
+            orderDao.selectPhotos(orderId, selectedPhoto);
+        }
+        if (order.getStatus() == OrderStatus.VIEW_AND_SELECT) {
+            moveStatusForward(orderId, userChanged);
+        }
+    }
+
+    @Override
+    public void addPhotos(int orderId, List<Part> photoToUpload) {
+        log.info("Started service add photos to order {}", orderId);
+        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
+        orderDao.savePhotos(orderId, photosPath);
     }
 
     @Override

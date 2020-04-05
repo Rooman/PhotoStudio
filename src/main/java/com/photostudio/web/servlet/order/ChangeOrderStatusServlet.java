@@ -5,6 +5,7 @@ import com.photostudio.entity.user.User;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.util.CommonVariableAppendService;
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -25,9 +26,7 @@ public class ChangeOrderStatusServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         String uri = request.getRequestURI();
-        log.info("Request change order status is received: order {}", uri);
-        String[] partsOfUri = uri.split("/");
-        int orderId = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
+        int orderId = UtilClass.getIdFromPath(uri);
 
         log.info("Request change order status is received: order {}", orderId);
 

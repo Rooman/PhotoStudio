@@ -29,7 +29,7 @@ public class JdbcOrderDao implements OrderDao {
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
             "JOIN Users u ON o.userId = u.id";
-  
+
     private static final String GET_ORDER_BY_ID = "SELECT o.id, statusName, orderDate, email, phoneNumber, commentAdmin, commentUser " +
             "FROM Orders o " +
             "JOIN OrderStatus os ON o.statusId = os.id " +
@@ -44,13 +44,17 @@ public class JdbcOrderDao implements OrderDao {
     private static final String DELETE_PHOTOS_BY_ORDERS_ID = "DELETE FROM OrderPhotos WHERE orderId IN ";
     private static final String DELETE_ORDERS_BY_USER_ID = "DELETE FROM Orders WHERE userId = ?";
     private static final String UPDATE_STATUS = "UPDATE Orders o SET o.statusId = ?  WHERE o.id = ?";
-
+    private static final String UPDATE_ORDER_BY_ADMIN = "UPDATE Orders o SET o.userId = ?, o.commentAdmin = ?  WHERE o.id = ?";
+    private static final String UPDATE_ORDER_BY_USER = "UPDATE Orders o SET o.commentUser = ?  WHERE o.id = ?";
     private static final String ADD_NEW_ORDER = "INSERT INTO Orders (orderDate, statusId, userId, commentAdmin) VALUES (?, " +
             "?, ?, ?)";
     private static final String SAVE_PHOTO_PATH = "INSERT INTO OrderPhotos  (source, photoStatusId, orderId) VALUES(?,?,?);";
     private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
+    private static final String UPDATE_ALL_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ?";
+    private static final String UPDATE_LIST_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ? AND id IN (%s)";
+    private static final String UPDATE_PAID_PHOTOS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE orderId = ? AND photoStatusId = 2";
     private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
@@ -383,9 +387,45 @@ public class JdbcOrderDao implements OrderDao {
         return orderId;
     }
 
+    @Override
+    public void editOrderByAdmin(int orderId, long userId, String commentAdmin) {
+        log.info("Edit order by admin in DB");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_ADMIN)) {
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setString(2, commentAdmin);
+            preparedStatement.setInt(3, orderId);
+
+            preparedStatement.execute();
+
+            log.info("Admin info was updated in DB for order {}", orderId);
+        } catch (SQLException e) {
+            log.error("Error during edit order info by Admin in DB {}", orderId, e);
+            throw new RuntimeException("Error during edit order info by Admin in DB", e);
+        }
+    }
 
     @Override
-    public void savePhotos(Order order, int orderId, List<String> photosPaths) {
+    public void editOrderByUser(int orderId, String commentUser) {
+        log.info("Edit order by user in DB: commentUser = {}", commentUser);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_USER);
+        ) {
+
+            preparedStatement.setString(1, commentUser);
+            preparedStatement.setInt(2, orderId);
+
+            preparedStatement.execute();
+
+            log.info("User comment was updated in DB for order {}", orderId);
+        } catch (SQLException e) {
+            log.error("Error during edit order info by User in DB {}", orderId, e);
+            throw new RuntimeException("Error during edit order info by User in DB", e);
+        }
+    }
+
+    @Override
+    public void savePhotos(int orderId, List<String> photosPaths) {
         log.info("Save photos to DB");
         for (String pathToPhoto : photosPaths) {
             try (Connection connection = dataSource.getConnection();
@@ -403,6 +443,30 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
+    public void selectPhotos(int orderId, String selectedPhotos) {
+        log.info("Select photos in DB, order : {}, photos : {}", orderId, selectedPhotos);
+        String sql = (selectedPhotos.equals("all")) ? UPDATE_ALL_PHOTOS_SELECTED : String.format(UPDATE_LIST_PHOTOS_SELECTED, selectedPhotos);
+        try (Connection connection = dataSource.getConnection()) {
+            Executor.execute(connection, sql, orderId);
+            log.info("Photos with {} ids selected", selectedPhotos);
+        } catch (SQLException e) {
+            log.error("Error during execution update photos to selected", e);
+            throw new RuntimeException("Error during execution update photos to selected", e);
+        }
+    }
+
+    @Override
+    public void setPhotosStatusPaid(int orderId) {
+        log.info("Set photo status Paid : {}", orderId);
+        try (Connection connection = dataSource.getConnection()) {
+            Executor.execute(connection, UPDATE_PAID_PHOTOS, orderId);
+            log.info("Photo status PAID is set successfully");
+        } catch (SQLException e) {
+            log.error("Error during execution update photos to paid", e);
+            throw new RuntimeException("Error during execution update photos to paid", e);
+        }
+    }
+
     public List<Photo> getPhotosByStatus(int orderId, PhotoStatus photoStatus) {
         log.info("Get photos with status : {} from DB", photoStatus.getName());
         try (Connection connection = dataSource.getConnection();
