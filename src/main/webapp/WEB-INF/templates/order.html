@@ -13,7 +13,13 @@
     </head>
 </head>
 
-<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'} , servletEdit=${roleAdmin} ? @{'/order/edit/'+${order.id}} : @{'/order/select-photos/'+${order.id}}">
+<body th:with="roleUser=${user.userRole.getName()=='USER'}, roleAdmin=${user.userRole.getName()=='ADMIN'} , servletEdit=${roleAdmin} ? @{'/order/edit/'+${order.id}} : @{'/order/select-photos/'+${order.id}},
+               addNewOrder=${order.id==0},
+               editOrder=${order.id!=0},
+               orderSelected=${addNewOrder ? false : order.status.getOrderStatusName()=='SELECTED'},
+               orderReady=${addNewOrder ? false : order.status.getOrderStatusName()=='READY'},
+               orderNew=${addNewOrder ? false : order.status.getOrderStatusName()=='NEW'}
+">
 <div th:if="${roleAdmin==false}">
     <header class="header">
         <div class="container-fluid">
@@ -85,8 +91,8 @@
                       id="commentUser" rows="5" name="commentUser"
                       th:attr="placeholder=${order.commentUser == null ? 'Comment' : null}"
                       th:text="${order.commentUser}"
-                      th:disabled="${roleAdmin}">
-            </textarea>
+                      th:disabled="${roleAdmin}"></textarea>
+
 
         </div>
         <div class="order__photos">
@@ -97,7 +103,7 @@
                         <div class="order-photo-card">
                             <label class="checkbox-container">
                                 <input type="checkbox" th:checked="${isSelected or isPaid}"
-                                       th:disabled="${order.status.getOrderStatusName()}=='NEW'"
+                                       th:disabled="${orderNew or orderSelected or roleAdmin}"
                                        th:onclick="|onClickCheckBox(${photo.getId()})|"
                                        th:id="'checkbox'+${photo.getId()}">
                                 <span class="custom-checkmark"></span>
@@ -114,7 +120,8 @@
                                     <a class="photo-option col-auto text-center" href="#"
                                        th:if="${roleUser and isPaid}">
                                         <i class="fas fa-arrow-down"></i></a>
-                                    <a class="photo-option col-auto text-center" href="#" th:if="${roleAdmin}"
+                                    <a class="photo-option col-auto text-center" href="#"
+                                       th:if="${roleAdmin and orderNew}"
                                        th:onclick="|deletePhoto(${photo.getId()})|"
                                        form="delete_photos">
                                         <i class="fas fa-trash-alt"></i></a>
@@ -126,22 +133,22 @@
             </div>
 
             <div class="photo-add-delete-buttons">
-                <div th:if="${roleAdmin and (order.status.getOrderStatusName()=='NEW' or order.status.getOrderStatusName()=='SELECTED' ) }">
+                <div th:if="${roleAdmin and (addNewOrder or orderNew or orderSelected)}">
                     <input type="file" name="photo" id="file" class="inputfile"
                            data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
                     <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
                         <span>Add</span>
                     </label>
 
-                    <a th:if="${order.status.getOrderStatusName()}!='SELECTED'" class="photo-option" href="#">
+                    <a th:if="${roleAdmin and (addNewOrder or orderNew)}" class="photo-option" href="#">
                         <button class="btn btn-submit btn-outline-dark button order__button"
-                                form="delete_photos">
+                                form="delete_photos" th:disabled="${addNewOrder}">
                             Delete all
                         </button>
                     </a>
                 </div>
                 <div class="order__complete-buttons">
-                    <div th:if="${roleUser}">
+                    <div th:if="${roleUser and !orderSelected}">
                         <input type="hidden" id="selectedPhotos" name="selectedPhotos">
                         <button type="button" class="btn btn-submit btn-outline-dark btn-lg button order__button"
                                 th:text="#{order.select.button}" onclick="selectAll()">
@@ -155,7 +162,7 @@
                 </div>
             </div>
         </div>
-        <div class="container" th:if="${roleUser and order.status.getOrderStatusName()=='SELECTED'}">
+        <div class="container" th:if="${roleUser and orderSelected}">
             <div class="row justify-content-center">
                 <div class="col-auto text-center">
                     <p class="thank-you-label" th:text="#{order.thank.you}">Thanks for your choice! Photos will be
@@ -164,36 +171,36 @@
             </div>
         </div>
         <div class="order__complete-buttons">
-            <div th:if="${roleUser}">
-                <button th:if="${order.status.getOrderStatusName() != 'READY'}" type="submit"
+            <div th:if="${roleUser and !orderSelected}">
+                <button th:if="${!orderReady}" type="submit"
                         class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                         th:text="#{order.submit.button}">
                     Submit
                 </button>
-                <button th:if="${order.status.getOrderStatusName()=='READY'}" type="submit"
+                <button th:if="${orderReady}" type="submit"
                         class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                         th:text="#{order.resubmit.button}">
                     Re-submit
                 </button>
-                <button th:if="${order.status.getOrderStatusName()=='READY'}" type="submit"
+                <button th:if="${orderReady}" type="submit"
                         class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                         th:text="#{order.download.all.button}">
                     Download All
                 </button>
             </div>
             <div th:if="${roleAdmin}">
-                <button type="submit"
+                <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
                         class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
                     Save
                 </button>
-                <button th:if="${order.id != 0 and order.status.getOrderStatusName()=='NEW'}"
+                <button th:if="${orderNew}"
                         class="btn btn-submit btn-outline-dark button order__button main-button-big"
                         form="change_status">
                     Status to view
                     and
                     select
                 </button>
-                <button th:if="${order.id != 0}" type="button"
+                <button th:if="${editOrder}" type="button"
                         class="btn btn-submit btn-outline-dark button order__button main-button-big"
                         data-toggle="modal" data-target="#delete-order">
                     Delete order
