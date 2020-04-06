@@ -23,8 +23,8 @@
                    aria-haspopup="true" aria-expanded="false" th:text="${language == null ? 'Eng' : language}">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="?lang=en">Eng</a>
-                    <a class="dropdown-item" href="?lang=de">Ger</a>
+                    <a class="dropdown-item" href="?lang=en">En</a>
+                    <a class="dropdown-item" href="?lang=de">Ge</a>
                     <a class="dropdown-item" href="?lang=ru">Ru</a>
                 </div>
             </li>
@@ -35,7 +35,7 @@
 
             <li th:if="${user!=null}" class="nav-item">
                 <div class="user-dropdown">
-                    <a class="nav-link user-dropdown__link" href="#" th:utext="#{welcome.label(${user.email})}" >
+                    <a class="nav-link user-dropdown__link welcome__label"  href="#" th:utext="#{welcome.label(${user.email})}" >
                         WELCOME!
                     </a>
 

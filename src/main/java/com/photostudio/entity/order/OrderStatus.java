@@ -67,6 +67,6 @@ public enum OrderStatus {
         return Arrays.stream(OrderStatus.values())
                 .filter(orderStatus -> orderStatus.orderStatusName.equalsIgnoreCase(orderStatusName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("OrderStatus name is not correct!"));
+                .orElseThrow(() -> new IllegalArgumentException("OrderStatus name " + orderStatusName + " is not correct!"));
     }
 }

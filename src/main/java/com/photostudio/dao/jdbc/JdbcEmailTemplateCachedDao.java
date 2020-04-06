@@ -4,21 +4,20 @@ package com.photostudio.dao.jdbc;
 import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.jdbc.entity.EmailTemplateRow;
 import com.photostudio.dao.jdbc.mapper.EmailTemplateRowMapper;
-import com.photostudio.dao.jdbc.mapper.LanguageRowMapper;
+import com.photostudio.dao.jdbc.mapper.PasswordEmailTemplateRowMapper;
+import com.photostudio.entity.email.MessageType;
+import com.photostudio.entity.email.PasswordEmailTemplate;
 import com.photostudio.entity.order.OrderStatus;
-import com.photostudio.entity.user.UserLanguage;
 import com.photostudio.service.entity.EmailTemplate;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 @Slf4j
 public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
+    private static final PasswordEmailTemplateRowMapper PASSWORD_EMAIL_TEMPLATE_ROW_MAPPER = new PasswordEmailTemplateRowMapper();
     List<EmailTemplateRow> templateRows;
     private static final String GET_ALL_TEMPLATES = "SELECT t.langId, " +
             "s.statusName, " +
@@ -27,8 +26,21 @@ public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
             "FROM EmailTemplates t " +
             "JOIN OrderStatus s ON (t.orderStatusId = s.id)";
 
+    private static final String GET_ALL_PASSWORD_EMAIL_TEMPLATES = "SELECT id, " +
+            "langId, " +
+            "subject, " +
+            "body, " +
+            "messageType " +
+            "FROM " +
+            "PasswordEmailTemplate;";
+
+    private final DataSource dataSource;
+    private volatile List<PasswordEmailTemplate> passwordEmailTemplateCache;
+
     public JdbcEmailTemplateCachedDao(DataSource dataSource) {
+        this.dataSource = dataSource;
         load(dataSource);
+        passwordEmailTemplateCache = Collections.unmodifiableList(getPasswordEmailTemplates());
     }
 
     @Override
@@ -37,6 +49,21 @@ public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
                 .filter(emailTemplateRow -> langId == emailTemplateRow.getLangId() && orderStatus == emailTemplateRow.getOrderStatus())
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Email template is not found")).getEmailTemplate();
+    }
+
+    @Override
+    public PasswordEmailTemplate getPasswordEmailTemplateByLangIdAndMessageType(int langId, MessageType messageType) {
+        Optional<PasswordEmailTemplate> optionalPasswordEmailTemplate = passwordEmailTemplateCache.stream()
+                .filter(passwordEmailTemplate -> passwordEmailTemplate.getMessageType() == messageType)
+                .filter(passwordEmailTemplate -> passwordEmailTemplate.getLangId() == langId)
+                .findFirst();
+
+        if (!optionalPasswordEmailTemplate.isPresent()) {
+            log.info("PasswordEmailTemplate with messageType {} and langId {} does not exist", messageType, langId);
+            throw new RuntimeException("PasswordEmailTemplate with messageType " + messageType + " and langId " + langId + " does not exist");
+        }
+
+        return optionalPasswordEmailTemplate.get();
     }
 
     void load(DataSource dataSource) {
@@ -53,6 +80,21 @@ public class JdbcEmailTemplateCachedDao implements EmailTemplateDao {
         } catch (SQLException e) {
             log.error("Get email templates cache error", e);
             throw new RuntimeException("Get email templates cache error", e);
+        }
+    }
+
+    private List<PasswordEmailTemplate> getPasswordEmailTemplates() {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_PASSWORD_EMAIL_TEMPLATES);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            List<PasswordEmailTemplate> passwordEmailTemplateList = new ArrayList<>();
+            while (resultSet.next()) {
+                passwordEmailTemplateList.add(PASSWORD_EMAIL_TEMPLATE_ROW_MAPPER.mapRow(resultSet));
+            }
+            return passwordEmailTemplateList;
+        } catch (SQLException e) {
+            log.info("Error setting passwordEmailTemplateCache", e);
+            throw new RuntimeException("Error setting passwordEmailTemplateCache", e);
         }
     }
 }

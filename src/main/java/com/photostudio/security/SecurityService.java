@@ -14,4 +14,8 @@ public interface SecurityService {
     void register(User user);
 
     boolean isOldPassword(String inputOldPassword, User user);
+
+    void changePassword(long userId, String newPassword);
+
+    void resetUserPassword(User user);
 }

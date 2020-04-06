@@ -27,7 +27,11 @@ public class TestDataSource {
         runScript("db/migration/V1_7__insert_PhotoStatus.sql");
         runScript("db/migration/V1_10__add_language.sql");
         runScript("db/migration/V1_11__add_email_templates.sql");
+        runScript("db/migration/V1_12__change_datatype_OrderPhotos.sql");
+        runScript("db/migration/V1_13__change_datatype_autoincrement.sql");
         runScript("db/migration/V1_14__change_order_comment.sql");
+        runScript("db/migration/V1_15__add_password_email_templates.sql");
+        runScript("db/migration/V1_16__add_unique_photo_index.sql");
         return jdbcDataSource;
     }
 
