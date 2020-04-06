@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-9">
                     <div class="contact-form-block">
-                        <form id="contact" action="#" method="get"
+                        <form id="contact" th:action="@{/contact}" method="post"
                               enctype="form-data">
                             <div class="container">
                                 <div class="row justify-content-center">
@@ -71,21 +71,21 @@
                                                 <div class="col-3">
                                                     <label class="radio-container">
                                                         <div th:text="#{boy.label}">Boy</div>
-                                                        <input type="radio" name="radio">
+                                                        <input type="radio" name="childGender" value="Boy">
                                                         <span class="radio-checkmark checkmark-boy"></span>
                                                     </label>
                                                 </div>
                                                 <div class="col-3">
                                                     <label class="radio-container">
                                                         <div th:text="#{girl.label}">Girl</div>
-                                                        <input type="radio" name="radio">
+                                                        <input type="radio" name="childGender" value="Girl">
                                                         <span class="radio-checkmark checkmark-girl"></span>
                                                     </label>
                                                 </div>
                                                 <div class="col-3">
                                                     <label class="radio-container">
                                                         <div th:text="#{twins.label}">Twins</div>
-                                                        <input type="radio" name="radio">
+                                                        <input type="radio" name="childGender" value="Twins">
                                                         <span class="radio-checkmark checkmark-twins"></span>
                                                     </label>
                                                 </div>
