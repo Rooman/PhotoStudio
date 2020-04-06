@@ -6,6 +6,7 @@ import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.photo.PhotoStatus;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface OrderDao {
@@ -17,17 +18,17 @@ public interface OrderDao {
 
     Order getOrderById(int id);
 
-    int add(Order order, int orderStatusId);
+    int add(Connection connection, Order order, int orderStatusId);
 
-    void editOrderByAdmin(int orderId, long userId, String commentAdmin);
+    void editOrderByAdmin(Connection connection, int orderId, long userId, String commentAdmin);
 
     void editOrderByUser(int orderId, String commentUser);
 
-    void savePhotos(int orderId, List<String> photosPath);
+    void savePhotos(Connection connection, int orderId, List<String> photosPath);
 
     void selectPhotos(int orderId, String selectedPhotos);
 
-    void setPhotosStatusPaid(int orderId);
+    void setPhotosStatusPaid(Connection connection, int orderId);
 
     void changeOrderStatus(int id, int orderStatusId);
 
@@ -41,7 +42,7 @@ public interface OrderDao {
 
     void deleteOrdersByUserId(List<Order> orderList, long id);
 
-    List<Photo> getPhotosByStatus (int orderId, PhotoStatus photoStatus);
+    List<Photo> getPhotosByStatus(int orderId, PhotoStatus photoStatus);
 
     void delete(int id);
 

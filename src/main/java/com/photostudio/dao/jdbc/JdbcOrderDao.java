@@ -358,12 +358,10 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public int add(Order order, int orderStatusId) {
+    public int add(Connection connection, Order order, int orderStatusId) {
         log.info("Create new order");
         int orderId = 0;
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setInt(2, orderStatusId);
             preparedStatement.setLong(3, order.getUser().getId());
@@ -374,8 +372,8 @@ public class JdbcOrderDao implements OrderDao {
                 if (generatedKeys.next()) {
                     orderId = generatedKeys.getInt(1);
                 }
-                log.info("Order {} created and added to DB", order);
             }
+            log.info("Order {} created and added to DB, connection isClose {}", order, connection.isClosed());
         } catch (SQLException e) {
             log.info("Error during create order", e);
             throw new RuntimeException("Error during create order", e);
@@ -384,10 +382,9 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void editOrderByAdmin(int orderId, long userId, String commentAdmin) {
+    public void editOrderByAdmin(Connection connection, int orderId, long userId, String commentAdmin) {
         log.info("Edit order by admin in DB");
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_ADMIN)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_BY_ADMIN)) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setString(2, commentAdmin);
             preparedStatement.setInt(3, orderId);
@@ -421,11 +418,10 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void savePhotos(int orderId, List<String> photosPaths) {
+    public void savePhotos(Connection connection, int orderId, List<String> photosPaths) {
         log.info("Save photos to DB");
         for (String pathToPhoto : photosPaths) {
-            try (Connection connection = dataSource.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PHOTO_PATH)) {
                 preparedStatement.setString(1, pathToPhoto);
                 preparedStatement.setInt(2, 1);
                 preparedStatement.setInt(3, orderId);
@@ -452,9 +448,9 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void setPhotosStatusPaid(int orderId) {
+    public void setPhotosStatusPaid(Connection connection, int orderId) {
         log.info("Set photo status Paid : {}", orderId);
-        try (Connection connection = dataSource.getConnection()) {
+        try {
             Executor.execute(connection, UPDATE_PAID_PHOTOS, orderId);
             log.info("Photo status PAID is set successfully");
         } catch (SQLException e) {

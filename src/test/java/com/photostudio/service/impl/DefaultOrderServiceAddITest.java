@@ -2,18 +2,17 @@ package com.photostudio.service.impl;
 
 
 import com.photostudio.dao.EmailTemplateDao;
+import com.photostudio.dao.TransactionManager;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.entity.PhotoFile;
 import com.photostudio.dao.file.LocalDiskPhotoDao;
-import com.photostudio.dao.jdbc.JdbcEmailTemplateCachedDao;
-import com.photostudio.dao.jdbc.JdbcOrderDao;
-import com.photostudio.dao.jdbc.JdbcOrderStatusCachedDao;
-import com.photostudio.dao.jdbc.JdbcUserDao;
+import com.photostudio.dao.jdbc.*;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.MailService;
+import com.photostudio.service.OrderService;
 import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.testUtils.MockMailSender;
@@ -34,22 +33,29 @@ public class DefaultOrderServiceAddITest {
     private static TestDataSource dataSource;
     private static DefaultOrderService orderService;
     private static final String TEST_PATH_PHOTO = "test_delete_orders";
+    private static JdbcOrderDao jdbcOrderDao;
+    private static OrderStatusService orderStatusService;
+    private static TransactionManager transactionManager;
 
     @BeforeAll
     public static void before() throws SQLException, IOException {
         dataSource = new TestDataSource();
         JdbcDataSource jdbcDataSource = dataSource.init();
-        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
 
         JdbcOrderStatusCachedDao jdbcOrderStatusCachedDao = new JdbcOrderStatusCachedDao(jdbcDataSource);
-        OrderStatusService orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
+        orderStatusService = new DefaultOrderStatusService(jdbcOrderStatusCachedDao);
 
         //create dirs and files
         File dir = new File(TEST_PATH_PHOTO);
         dir.mkdirs();
         LocalDiskPhotoDao photoDao = new LocalDiskPhotoDao(TEST_PATH_PHOTO);
 
+
         orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, photoDao);
+
+        transactionManager = new JdbcTransactionManager(jdbcDataSource);
+        orderService.setTransactionManager(transactionManager);
 
         dataSource.runScript("db/data_change_status.sql");
     }
@@ -110,13 +116,15 @@ public class DefaultOrderServiceAddITest {
         int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) cnt FROM OrderPhotos");
 
         LocalDiskPhotoDao photoDao = new LocalDiskPhotoDao("X:/test_orders");
-        orderService.setPhotoDao(photoDao);
+
+        DefaultOrderService orderServiceW = new DefaultOrderService(jdbcOrderDao, orderStatusService, photoDao);
+        orderServiceW.setTransactionManager(transactionManager);
 
         List<PhotoFile> fileList = getTestListFiles();
         Order order = getNewOrderTest();
 
         assertThrows(Exception.class, () -> {
-            orderService.add(order, fileList);
+            orderServiceW.add(order, fileList);
         });
 
         int cntOrdersAfter = dataSource.getResult("SELECT COUNT(*) cnt FROM Orders");
@@ -135,13 +143,15 @@ public class DefaultOrderServiceAddITest {
         int cntPhotosBefore = dataSource.getResult("SELECT COUNT(*) cnt FROM OrderPhotos");
 
         List<PhotoFile> fileList = getTestListFiles();
-        PhotoFile photoFile = getWrongPhotoFile();
-        fileList.add(photoFile);
-
         Order order = getNewOrderTest();
+
+        dataSource.execUpdate("ALTER TABLE OrderPhotos RENAME COLUMN photoStatusId TO photoStatus");
+
         assertThrows(Exception.class, () -> {
             orderService.add(order, fileList);
         });
+
+        dataSource.execUpdate("ALTER TABLE OrderPhotos RENAME COLUMN photoStatus TO photoStatusId");
 
         int cntOrdersAfter = dataSource.getResult("SELECT COUNT(*) cnt FROM Orders");
         int cntPhotosAfter = dataSource.getResult("SELECT COUNT(*) cnt FROM OrderPhotos");
@@ -170,15 +180,6 @@ public class DefaultOrderServiceAddITest {
         return fileList;
     }
 
-    private PhotoFile getWrongPhotoFile() {
-        InputStream fakeStream = new ByteArrayInputStream("secondFile".getBytes());
-        String fileName = "secondFile.txt";
-        String wrongFileName = "";
-        for (int i = 0; i < 20; i++) {
-            wrongFileName += fileName;
-        }
-        return new PhotoFile(wrongFileName, fakeStream);
-    }
 
     private Order getNewOrderTest() {
 

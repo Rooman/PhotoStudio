@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,7 +82,10 @@ public class JdbcOrderChangeStatusITest {
     @Test
     public void testEditOrderByAdmin() throws SQLException {
         JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
-        jdbcOrderDao.editOrderByAdmin(1, 1, "Comment from Admin");
+        Connection connection = jdbcDataSource.getConnection();
+        jdbcOrderDao.editOrderByAdmin(connection, 1, 1, "Comment from Admin");
+        connection.commit();
+        connection.close();
 
         int newUserId = dataSource.getResult("SELECT userId FROM Orders WHERE id = 1");
         assertEquals(1, newUserId);

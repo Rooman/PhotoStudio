@@ -1,7 +1,9 @@
 package com.photostudio.service.impl;
 
+import com.photostudio.ServiceLocator;
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.OrderDao;
+import com.photostudio.dao.TransactionManager;
 import com.photostudio.dao.entity.PhotoFile;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
@@ -22,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 
 
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,7 @@ public class DefaultOrderService implements OrderService {
     private PhotoDao photoDao;
     private OrderStatusService orderStatusService;
     private MailService mailService;
+    private TransactionManager transactionManager = ServiceLocator.getService(TransactionManager.class);
 
     public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderStatusService, MailService mailService) {
         this.orderDao = orderDao;
@@ -83,9 +88,25 @@ public class DefaultOrderService implements OrderService {
     @Override
     public int add(Order order, List<PhotoFile> photoToUpload) {
         log.info("Started creating new order {}", order);
-        int orderId = orderDao.add(order, orderStatusService.getOrderStatusIdByStatusName(order.getStatus()));
-        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
-        orderDao.savePhotos(orderId, photosPath);
+        int orderId = 0;
+        try (Connection connection = transactionManager.startTransaction()) {
+            orderId = orderDao.add(connection, order, orderStatusService.getOrderStatusIdByStatusName(order.getStatus()));
+            List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
+            orderDao.savePhotos(connection, orderId, photosPath);
+            transactionManager.commit();
+        } catch (Exception ex) {
+            try {
+                if (orderId > 0) {
+                    photoDao.deleteByOrder(orderId);
+                }
+                transactionManager.rollback();
+                log.error("Error during adding new order", ex);
+                throw new RuntimeException(ex);
+            } catch (SQLException e) {
+                log.error("Error during adding new order, rollback", e);
+                throw new RuntimeException(e);
+            }
+        }
         return orderId;
     }
 
@@ -93,18 +114,33 @@ public class DefaultOrderService implements OrderService {
     public void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<PhotoFile> photoToUpload) {
         int orderId = order.getId();
         log.info("Started service edit order {} by Admin", orderId);
-        if (isChanged) {
-            orderDao.editOrderByAdmin(orderId, order.getUser().getId(), order.getCommentAdmin());
-        }
-        if (!photoToUpload.isEmpty()) {
-            addPhotos(orderId, photoToUpload);
-        }
+        try (Connection connection = transactionManager.startTransaction()) {
+            if (isChanged) {
+                orderDao.editOrderByAdmin(connection, orderId, order.getUser().getId(), order.getCommentAdmin());
+            }
+            if (!photoToUpload.isEmpty()) {
+                List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
+                orderDao.savePhotos(connection, orderId, photosPath);
+            }
 
-        if (order.getStatus() == OrderStatus.SELECTED) {
-            orderDao.setPhotosStatusPaid(orderId);
-            moveStatusForward(orderId, userChanged);
+            if (order.getStatus() == OrderStatus.SELECTED) {
+                orderDao.setPhotosStatusPaid(connection, orderId);
+                moveStatusForward(orderId, userChanged);
+            }
+
+            transactionManager.commit();
+        } catch (Exception ex) {
+            try {
+                transactionManager.rollback();
+                log.error("Error during adding new order", ex);
+                throw new RuntimeException(ex);
+            } catch (SQLException e) {
+                log.error("Error during adding new order, rollback", ex);
+                throw new RuntimeException(ex);
+            }
         }
     }
+
 
     @Override
     public void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto) {
@@ -119,12 +155,6 @@ public class DefaultOrderService implements OrderService {
         if (order.getStatus() == OrderStatus.VIEW_AND_SELECT) {
             moveStatusForward(orderId, userChanged);
         }
-    }
-
-    private void addPhotos(int orderId, List<PhotoFile> photoToUpload) {
-        log.info("Started service add photos to order {}", orderId);
-        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
-        orderDao.savePhotos(orderId, photosPath);
     }
 
     @Override
@@ -245,7 +275,8 @@ public class DefaultOrderService implements OrderService {
         return true;
     }
 
-    void setPhotoDao(PhotoDao photoDao) {
-        this.photoDao = photoDao;
+    void setTransactionManager(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
+
 }

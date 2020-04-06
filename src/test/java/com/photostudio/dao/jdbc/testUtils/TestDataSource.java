@@ -9,9 +9,9 @@ import java.sql.*;
 
 public class TestDataSource {
     private Connection connection;
+    private JdbcDataSource jdbcDataSource = new JdbcDataSource();
 
     public JdbcDataSource init() throws SQLException, IOException {
-        JdbcDataSource jdbcDataSource = new JdbcDataSource();
         jdbcDataSource.setURL("jdbc:h2:mem:photostudio;MODE=MySQL");
         jdbcDataSource.setUser("h2");
         jdbcDataSource.setPassword("h2");

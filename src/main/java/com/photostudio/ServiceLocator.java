@@ -26,6 +26,9 @@ public class ServiceLocator {
         //config db connection
         DataSource dataSource = new DataSourceFactory(propertyReader).createDataSource();
 
+        TransactionManager transactionManager = new JdbcTransactionManager(dataSource);
+        register(TransactionManager.class, transactionManager);
+
         UserDao userDao = new JdbcUserDao(dataSource);
         register(UserDao.class, userDao);
 
