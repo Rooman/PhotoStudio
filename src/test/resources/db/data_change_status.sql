@@ -16,14 +16,20 @@ INSERT INTO Orders (id, orderDate, statusId, userId, commentAdmin) VALUES (5, '2
 INSERT INTO Orders (id, orderDate, statusId, userId, commentAdmin) VALUES (6, '2020-01-21 18:38:33', 2, 2, 'view and select, no selected photo');
 INSERT INTO Orders (id, orderDate, statusId, userId, commentAdmin) VALUES (7, '2020-01-21 18:38:33', 3, 2, 'selected, no ready photo');
 INSERT INTO Orders (id, orderDate, statusId, userId, commentAdmin) VALUES (8, '2020-01-21 18:38:33', 4, 2, 'ready, ready photo');
+INSERT INTO Orders (id, orderDate, statusId, userId, commentAdmin) VALUES (9, '2020-01-21 18:38:33', 2, 2, 'test select photos');
 
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (1, '/home/myPhoto1', 1, 1);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (2, '/home/myPhoto1', 2, 2);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (3, '/home/myPhoto1', 3, 3);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (4, '/home/myPhoto1', 4, 3);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (5, '/home/myPhoto1', 4, 2);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (6, '/home/myPhoto1', 6, 1);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (7, '/home/myPhoto1', 7, 2);
-INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (8, '/home/myPhoto1', 8, 3);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (1, 'myPhoto1.jpg', 1, 1);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (2, 'myPhoto1.jpg', 2, 2);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (3, 'myPhoto1.jpg', 3, 3);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (4, 'myPhoto1.jpg', 4, 3);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (5, 'myPhoto2.jpg', 4, 2);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (6, 'myPhoto1.jpg', 6, 1);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (7, 'myPhoto1.jpg', 7, 2);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (8, 'myPhoto1.jpg', 8, 3);
+
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (9, 'myPhoto1.jpg', 9, 1);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (10, 'myPhoto2.jpg', 9, 1);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (11, 'myPhoto3.jpg', 9, 1);
+INSERT INTO OrderPhotos (id, source, orderId, photoStatusId) VALUES (12, 'myPhoto4.jpg', 9, 1);
 
 COMMIT;

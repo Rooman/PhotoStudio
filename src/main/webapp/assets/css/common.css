@@ -63,6 +63,9 @@ main {
     line-height: 26px;
     padding: 5px;
 }
+.welcome__label {
+  text-transform: none !important;
+}
 
 .top-dropdown {
     border: 2px solid rgba(0, 0, 0, 0.4);
@@ -75,7 +78,7 @@ main {
     line-height: 13px;
 }
 
-.top-dropdown > a:after {
+.top-dropdown  a:after {
     border: 0;
     font-family: "FontAwesome";
     font-size: 14px;
@@ -85,12 +88,32 @@ main {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.dropdown-choose {
-
+.dropdown-menu{
+   margin-top:10px;
+   max-width: 100px;
+   padding-top:0;
+   padding-bottom:0;
+   background: #FFFFFF;
+   border: 1px solid #999999;
+   border-radius: 10px;
+   min-width: 1rem;
+   left: -18px;
 }
 
-.dropdown-menu show {
-    max-width: 50px;
+.dropdown-item {
+    width:80px ;
+    height: 36px;
+    font-family: Cormorant Upright;
+    font-size: 13px;
+    line-height: 13px;
+    opacity: 0.4;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:10px 10px 10px 10px;
+    margin:10px 10px 10px 10px;
 }
 
 .button {

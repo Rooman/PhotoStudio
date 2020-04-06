@@ -19,7 +19,7 @@ public class JdbcOrderChangeStatusITest {
     @BeforeEach
     public void before() throws SQLException, IOException {
         jdbcDataSource = dataSource.init();
-        dataSource.runScript("db/data.sql");
+        dataSource.runScript("db/data_change_status.sql");
     }
 
     @Test
@@ -77,6 +77,57 @@ public class JdbcOrderChangeStatusITest {
         int statusOrder = dataSource.getResult("SELECT statusId FROM Orders WHERE id = 4");
         assertEquals(3, statusOrder);
     }
+
+    @Test
+    public void testEditOrderByAdmin() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.editOrderByAdmin(1, 1, "Comment from Admin");
+
+        int newUserId = dataSource.getResult("SELECT userId FROM Orders WHERE id = 1");
+        assertEquals(1, newUserId);
+
+        String commentAdmin = dataSource.getString("SELECT commentAdmin FROM Orders WHERE id = 1");
+        assertEquals("Comment from Admin", commentAdmin);
+    }
+
+    @Test
+    public void testEditOrderByUser() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.editOrderByUser(1, "Comment from User");
+
+        String commentAdmin = dataSource.getString("SELECT commentUser FROM Orders WHERE id = 1");
+        assertEquals("Comment from User", commentAdmin);
+    }
+
+    @Test
+    public void testSelectAllPhotos() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.selectPhotos(9, "all");
+
+        int cntSelected = dataSource.getResult("SELECT count(*) FROM OrderPhotos WHERE orderId = 9 AND photoStatusId = 2");
+        assertEquals(4, cntSelected);
+
+    }
+
+    @Test
+    public void testSelectOnePhoto() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.selectPhotos(9, "10");
+
+        int photoStatusId = dataSource.getResult("SELECT photoStatusId FROM OrderPhotos WHERE id = 10");
+        assertEquals(2, photoStatusId);
+    }
+
+    @Test
+    public void testSelectListPhotos() throws SQLException {
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        jdbcOrderDao.selectPhotos(9, "10 , 11 , 12");
+
+        int cntSelected = dataSource.getResult("SELECT count(*) FROM OrderPhotos WHERE orderId = 9 AND photoStatusId = 2");
+        assertEquals(3, cntSelected);
+
+    }
+
 
     @AfterEach
     public void after() throws SQLException {

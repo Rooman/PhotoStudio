@@ -4,11 +4,9 @@ import com.photostudio.dao.UserDao;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
-import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 public class DefaultUserService implements UserService {
@@ -70,13 +68,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public void changeUserPassword(User user, String newPassword) {
-        log.info("Started service get change user password");
-        String randomSalt = UUID.randomUUID().toString();
-        String newPasswordHash = UtilClass.getHashedString(newPassword, randomSalt);
-        user.setSalt(randomSalt);
-        user.setPasswordHash(newPasswordHash);
-        userDao.edit(user);
+    public void changeUserPassword(long userId, String salt, String newPasswordHash) {
+        userDao.changePassword(userId, salt, newPasswordHash);
     }
 
     @Override
