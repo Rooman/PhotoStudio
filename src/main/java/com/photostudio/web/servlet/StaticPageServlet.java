@@ -19,21 +19,19 @@ import java.util.Map;
 // Probably for "/contact" page there's separate servlet needed, so we'll need to remove "/contact" mapping from here.
 
 @Slf4j
-@WebServlet(urlPatterns = {"/legal-information", "/data-protection","/portfolio", "/portfolio-newborns", "/portfolio-babies", "/contact", "/price"})
+@WebServlet(urlPatterns = {"/legal-information", "/data-protection","/portfolio", "/portfolio-newborns", "/portfolio-babies", "/price"})
 public class StaticPageServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String uri = request.getRequestURI();
-        log.info("Request change order status is received: order {}", uri);
+        log.info("Request for page received. Uri: {}", uri);
         String[] partsOfUri = uri.split("/");
 
         String templateName;
-
         templateName = partsOfUri[partsOfUri.length - 1];
 
-
-        log.info("Request home page received");
+        log.info("Request for page received. Page: {}", templateName);
         Map<String, Object> paramsMap = new HashMap<>();
         CommonVariableAppendService.appendUser(paramsMap, request);
 

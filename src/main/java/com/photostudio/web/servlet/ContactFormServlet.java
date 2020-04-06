@@ -15,47 +15,36 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-
-// This servlet is only required to have access to static pages.
-// Probably for "/contact" page there's separate servlet needed, so we'll need to remove "/contact" mapping from here.
-
 @Slf4j
 @WebServlet(urlPatterns = {"/contact"})
 public class ContactFormServlet extends HttpServlet {
     MailSender mailSender = ServiceLocator.getService(MailSender.class);
 
-    /*@Override
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Boolean isSent = Boolean.parseBoolean(request.getParameter("isSent"));
 
-        String uri = request.getRequestURI();
-        log.info("Request change order status is received: order {}", uri);
-        String[] partsOfUri = uri.split("/");
-
-        String templateName;
-
-        templateName = partsOfUri[partsOfUri.length - 1];
-
-
-        log.info("Request home page received");
+        log.info("Request contact page received");
         Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("isSent", isSent);
         CommonVariableAppendService.appendUser(paramsMap, request);
 
         response.setContentType("text/html;charset=utf-8");
 
         response.setStatus(HttpServletResponse.SC_OK);
-        TemplateEngineFactory.process(request, response, templateName, paramsMap);
-    }*/
+        TemplateEngineFactory.process(request, response, "contact", paramsMap);
+    }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String city = request.getParameter("city");
-        String index = request.getParameter("index");
-        String childGender = request.getParameter("childGender");
-        String message = request.getParameter("message");
+        String name = "Name: " + request.getParameter("name");
+        String email = "Email: " + request.getParameter("email");
+        String city = "City: " + request.getParameter("city");
+        String index = "Index: " + request.getParameter("index");
+        String childGender = "Child gender: " + request.getParameter("childGender");
+        String message = "Message: " + request.getParameter("message");
 
-        StringBuilder stringBuilder = new StringBuilder();
+        /*StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Name: ");
         stringBuilder.append(name);
         stringBuilder.append("\n");
@@ -72,8 +61,16 @@ public class ContactFormServlet extends HttpServlet {
         stringBuilder.append(childGender);
         stringBuilder.append("\n");
         stringBuilder.append("Message: ");
-        stringBuilder.append(message);
+        stringBuilder.append(message);*/
 
-        mailSender.send("New message via contact form", stringBuilder.toString(), "nomarchia2@gmail.com");
+        StringJoiner stringJoiner = new StringJoiner("\n", "", "");
+        stringJoiner.add(email);
+        stringJoiner.add(city);
+        stringJoiner.add(index);
+        stringJoiner.add(childGender);
+        stringJoiner.add(message);
+
+        mailSender.sendToAdmin("New message via Contact form", stringJoiner.toString());
+        response.sendRedirect("contact?isSent=true");
     }
 }

@@ -2,6 +2,16 @@
     background: url("../images/contact-bg.png") repeat-y;
 }
 
+.message-sent {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 40px;
+    line-height: 50px;
+    color: red;
+    text-align: center;
+    margin-top: 60px;
+}
+
 .contact-text-block {
     background: rgba(250, 225, 222, 0.8);
     opacity: 0.8;
