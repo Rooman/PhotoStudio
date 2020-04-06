@@ -1,6 +1,10 @@
+.container-main-custom {
+    background: url("../images/contact-bg.png") repeat-y;
+}
+
 .contact-text-block {
     background: rgba(250, 225, 222, 0.8);
-    opacity: 0.6;
+    opacity: 0.8;
     border-radius: 10px;
     padding: 50px;
     margin-bottom: 100px;
@@ -16,6 +20,7 @@
 }
 
 .contact-form-block {
+ background: rgba(255, 255, 255, 0.6);
     border: 2px solid #FAE1DE;
     box-sizing: border-box;
     border-radius: 10px;
@@ -28,7 +33,6 @@
     font-style: normal;
     font-weight: normal;
     font-size: 30px;
-    /*padding: 1%;*/
     line-height: 46px;
     color: #000000;
     opacity: 0.8;
@@ -42,73 +46,11 @@
     opacity: 0.6;
     border: 1px solid #FCC5D9;
     border-radius: 10px;
-    /*margin: 1%;*/
 }
 
 .contact-message-area {
     height: 169px !important;
     margin-bottom: 40px;
-}
-
-/*checkbox customization*/
-.checkbox-container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.checkbox-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
-.custom-checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    border: 2px solid #FCC5D9;
-}
-
-.checkbox-container:hover input ~ .custom-checkmark {
-    background-color: rgba(250, 225, 222, 0.8);
-}
-
-.checkbox-container input:checked ~ .custom-checkmark {
-    background-color: background: rgba(252, 197, 217, 0.6);
-}
-
-.custom-checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-
-.checkbox-container input:checked ~ .custom-checkmark:after {
-    display: block;
-}
-
-.checkbox-container .custom-checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid grey;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
 }
 
 /*radio customization*/

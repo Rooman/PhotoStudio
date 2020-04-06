@@ -1,14 +1,6 @@
 .container-main-custom {
-    background: url("../images/admin-page-background.png") repeat-y;
-    padding-bottom: 200px;
-    /*fix to remove space between footer and bg image: */
-    margin-bottom: 187px;
+    background: url("../images/portfolio/portfolio-general.png") repeat-y;
 }
-
-.custom-alt-bg {
-    background: url("../images/home-page-fon.png") repeat-y;
-}
-
 
 .portfolio-title {
     font-family: Cormorant Upright;

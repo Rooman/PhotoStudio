@@ -1,3 +1,7 @@
+.container-main-custom {
+    background: url("../images/legal-and-data-bg.png") repeat-y;
+}
+
 .info-text-block {
     height: auto;
     margin-top: 150px;
