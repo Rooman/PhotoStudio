@@ -135,10 +135,6 @@ class DefaultOrderServiceTest {
         assertEquals(2, orderList.size());
     }
 
-    @Test
-    void addAllFine() {
-    }
-
     @AfterAll
     public static void after() throws SQLException {
         dataSource.close();

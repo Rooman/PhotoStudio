@@ -375,14 +375,10 @@ public class JdbcOrderDao implements OrderDao {
                     orderId = generatedKeys.getInt(1);
                 }
                 log.info("Order {} created and added to DB", order);
-            } catch (SQLException e) {
-                log.error("Error during create order {}", order, e);
-                throw new RuntimeException("Error during create order", e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-
-            log.info("Order {} created and added to DB", order);
+            log.info("Error during create order", e);
+            throw new RuntimeException("Error during create order", e);
         }
         return orderId;
     }

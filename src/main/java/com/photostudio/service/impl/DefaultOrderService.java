@@ -46,6 +46,12 @@ public class DefaultOrderService implements OrderService {
         this.mailService = mailService;
     }
 
+    DefaultOrderService(OrderDao orderDao, OrderStatusService orderStatusService, PhotoDao photoDao) {
+        this.orderDao = orderDao;
+        this.orderStatusService = orderStatusService;
+        this.photoDao = photoDao;
+    }
+
     DefaultOrderService(OrderDao orderDao) {
         this.orderDao = orderDao;
     }
@@ -237,5 +243,9 @@ public class DefaultOrderService implements OrderService {
         }
 
         return true;
+    }
+
+    void setPhotoDao(PhotoDao photoDao) {
+        this.photoDao = photoDao;
     }
 }
