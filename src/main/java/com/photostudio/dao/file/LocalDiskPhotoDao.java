@@ -1,6 +1,7 @@
 package com.photostudio.dao.file;
 
 import com.photostudio.dao.PhotoDao;
+import com.photostudio.dao.entity.PhotoFile;
 import com.photostudio.entity.photo.Photo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,7 +61,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     @Override
-    public List<String> savePhotoByOrder(List<Part> photos, int orderId) {
+    public List<String> savePhotoByOrder(List<PhotoFile> photos, int orderId) {
         Path orderPath = getOrderPath(orderId);
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
@@ -73,19 +74,15 @@ public class LocalDiskPhotoDao implements PhotoDao {
                 throw new RuntimeException("Directory was not created " + orderPath, e);
             }
         }
-        for (Part photo : photos) {
-            if (photo != null && photo.getSize() > 0) {
-                if (photo.getName().equalsIgnoreCase("photo")) {
-                    String fileName = getFileName(photo);
-                    Path photoPath = Paths.get(orderPath.toString(), fileName);
-                    try (InputStream inputStream = photo.getInputStream()) {
-                        Files.copy(inputStream, photoPath, new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
-                        photosPaths.add(fileName);
-                    } catch (IOException e) {
-                        log.error("Can't save photos on local disk by path : {}", orderPath, e);
-                        throw new RuntimeException("Can't save photos on local disk", e);
-                    }
-                }
+        for (PhotoFile photo : photos) {
+            String fileName = photo.getFileName();
+            Path photoPath = Paths.get(orderPath.toString(), fileName);
+            try (InputStream inputStream = photo.getFileDataStream()) {
+                Files.copy(inputStream, photoPath, new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+                photosPaths.add(fileName);
+            } catch (IOException e) {
+                log.error("Can't save photos on local disk by path : {}", orderPath, e);
+                throw new RuntimeException("Can't save photos on local disk", e);
             }
         }
         return photosPaths;

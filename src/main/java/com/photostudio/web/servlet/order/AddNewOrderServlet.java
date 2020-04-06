@@ -1,15 +1,16 @@
 package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
+import com.photostudio.dao.entity.PhotoFile;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
-import com.photostudio.exception.GetUserByEmailException;
 import com.photostudio.service.OrderService;
 import com.photostudio.service.UserService;
 import com.photostudio.util.PropertyReader;
 import com.photostudio.web.templater.TemplateEngineFactory;
 import com.photostudio.web.util.CommonVariableAppendService;
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -48,6 +49,7 @@ public class AddNewOrderServlet extends HttpServlet {
         log.info("Create new order");
 
         List<Part> photoToUpload = (List<Part>) request.getParts();
+        List<PhotoFile> photoFiles = UtilClass.getListPhotoFiles(photoToUpload);
 
         String email = request.getParameter("email");
         User user = userService.getUserByEmail(email);
@@ -72,7 +74,7 @@ public class AddNewOrderServlet extends HttpServlet {
             }
             log.info("Save photo to new order");
 
-            int orderId = orderService.add(orderBuilder.build(), photoToUpload);
+            int orderId = orderService.add(orderBuilder.build(), photoFiles);
 
             response.sendRedirect(request.getContextPath() + "/order/" + orderId);
         }

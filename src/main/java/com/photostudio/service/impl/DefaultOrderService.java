@@ -2,6 +2,7 @@ package com.photostudio.service.impl;
 
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.dao.OrderDao;
+import com.photostudio.dao.entity.PhotoFile;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 
@@ -20,7 +21,6 @@ import com.photostudio.service.OrderStatusService;
 import lombok.extern.slf4j.Slf4j;
 
 
-import javax.servlet.http.Part;
 import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,7 +75,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public int add(Order order, List<Part> photoToUpload) {
+    public int add(Order order, List<PhotoFile> photoToUpload) {
         log.info("Started creating new order {}", order);
         int orderId = orderDao.add(order, orderStatusService.getOrderStatusIdByStatusName(order.getStatus()));
         List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
@@ -84,8 +84,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-
-    public void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<Part> photoToUpload) {
+    public void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<PhotoFile> photoToUpload) {
         int orderId = order.getId();
         log.info("Started service edit order {} by Admin", orderId);
         if (isChanged) {
@@ -116,8 +115,7 @@ public class DefaultOrderService implements OrderService {
         }
     }
 
-    @Override
-    public void addPhotos(int orderId, List<Part> photoToUpload) {
+    private void addPhotos(int orderId, List<PhotoFile> photoToUpload) {
         log.info("Started service add photos to order {}", orderId);
         List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
         orderDao.savePhotos(orderId, photosPath);
@@ -195,7 +193,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus){
+    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus) {
         List<Photo> photos = orderDao.getPhotosByStatus(orderId, photoStatus);
         return photoDao.addPhotoToArchive(orderId, photos);
     }

@@ -1,5 +1,6 @@
 package com.photostudio.service;
 
+import com.photostudio.dao.entity.PhotoFile;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.photo.PhotoStatus;
@@ -29,17 +30,15 @@ public interface OrderService {
 
     void deletePhotos(int orderId);
 
-    int add(Order order, List<Part> photoToUpload);
+    int add(Order order, List<PhotoFile> photoToUpload);
 
     void moveStatusForward(int id, User user);
 
     void moveStatusBack(int id, User user);
 
-    void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<Part> photoToUpload);
+    void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<PhotoFile> photoToUpload);
 
     void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto);
-
-    void addPhotos(int orderId, List<Part> photoToUpload);
 
     String getPathToOrderDir(int orderId);
 
