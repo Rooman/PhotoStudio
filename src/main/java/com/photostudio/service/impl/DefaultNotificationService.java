@@ -64,7 +64,8 @@ public class DefaultNotificationService implements NotificationService {
         log.info("Send mail to admin after changing status to {} in order {} by user {}", orderStatus, orderId, userMail);
         EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userChanged.getLangId(), orderStatus);
         mailSender.sendToAdmin(emailTemplate.generateHeader(userMail, orderId), emailTemplate.generateBody(userMail, orderId));
-        notificationService.notification(orderId, userChanged, emailTemplate.generateHeader(userMail, orderId));
+        User userAdmin = userService.getAmin();
+        notificationService.notification(orderId, userAdmin, emailTemplate.generateHeader(userMail, orderId));
     }
 
     private void sendOnChangeStatusToUser(User userOrdered, int orderId, OrderStatus orderStatus) {

@@ -1,5 +1,6 @@
 package com.photostudio.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.UserLanguageDao;
@@ -10,6 +11,7 @@ import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.UserService;
+import com.photostudio.service.WebNotificationService;
 import com.photostudio.service.testUtils.MockMailSender;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.*;
@@ -33,7 +35,11 @@ class DefaultNotificationServiceITest {
         UserDao userDao = new JdbcUserDao(jdbcDataSource);
         UserService userService = new DefaultUserService(userDao);
         EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(jdbcDataSource);
-        defaultMailService = new DefaultNotificationService(mockMailSender, userService, emailTemplateDao);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        WebNotificationService webNotificationService = new WSNotificationService(objectMapper);
+
+        defaultMailService = new DefaultNotificationService(mockMailSender, userService, emailTemplateDao, webNotificationService);
     }
 
     @BeforeEach

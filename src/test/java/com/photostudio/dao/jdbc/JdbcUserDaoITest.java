@@ -147,6 +147,13 @@ class JdbcUserDaoITest {
         assertEquals(2, langId);
     }
 
+    @Test
+    public void testGetAdmin() {
+        User expectedUser = getExpectedUser1();
+        User actualUser = jdbcUserDao.getAdmin();
+        assertEquals(expectedUser, actualUser);
+    }
+
     @AfterAll
     public static void closeConnection() throws SQLException {
         dataSource.close();
