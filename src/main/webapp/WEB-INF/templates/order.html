@@ -120,7 +120,7 @@
                             </div>
                             <div class="photo__buttons">
                                 <div class="row justify-content-center">
-                                    <a class="photo-option col-auto text-center" href="#">
+                                    <a class="photo-option col-auto text-center zoom__button" href="#">
                                         <i class="fas fa-search-plus"></i></a>
                                     <a class="photo-option col-auto text-center" href="#"
                                        th:if="${roleUser and isPaid}">
@@ -134,6 +134,13 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div id="photoModal" class="modal">
+                <div class="zoom-photo__position">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="photoModalId">
                 </div>
             </div>
 
