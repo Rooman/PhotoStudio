@@ -4,6 +4,7 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
+import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.service.OrderService;
 import com.photostudio.web.util.CommonVariableAppendService;
 import com.photostudio.web.util.UtilClass;
@@ -49,8 +50,15 @@ public class SelectPhotosServlet extends HttpServlet {
             orderBuilder.commentUser(commentUser);
         }
 
-
-        orderService.editOrderByUser(orderBuilder.build(), userChanged, isChanged, selectedPhotos);
-        response.sendRedirect(request.getContextPath() + "/orders");
+        try {
+            orderService.editOrderByUser(orderBuilder.build(), userChanged, isChanged, selectedPhotos);
+            response.sendRedirect(request.getContextPath() + "/orders");
+        } catch (ChangeOrderStatusInvalidException ex) {
+            log.error(ex.getLocalizedMessage());
+            request.getSession().setAttribute("errorMessage", ex.getLocalizedMessage());
+            String path = request.getContextPath() + "/order/" + orderId;
+            log.info("redirect to {}", path);
+            response.sendRedirect(path);
+        }
     }
 }
