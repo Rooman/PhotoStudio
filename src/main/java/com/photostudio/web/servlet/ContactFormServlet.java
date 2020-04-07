@@ -24,7 +24,7 @@ public class ContactFormServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Boolean isSent = Boolean.parseBoolean(request.getParameter("isSent"));
 
-        log.info("Request contact page received");
+        log.info("Request for contact page received");
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("isSent", isSent);
         CommonVariableAppendService.appendUser(paramsMap, request);
