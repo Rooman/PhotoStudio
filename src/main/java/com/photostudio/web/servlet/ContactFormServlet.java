@@ -37,40 +37,24 @@ public class ContactFormServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String name = "Name: " + request.getParameter("name");
-        String email = "Email: " + request.getParameter("email");
-        String city = "City: " + request.getParameter("city");
-        String index = "Index: " + request.getParameter("index");
-        String childGender = "Child gender: " + request.getParameter("childGender");
-        String message = "Message: " + request.getParameter("message");
+        String name =  request.getParameter("name");
+        String email = request.getParameter("email");
+        String city = request.getParameter("city");
+        String index = request.getParameter("index");
+        String childGender = request.getParameter("childGender");
+        String message = request.getParameter("message");
 
-        /*StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Name: ");
-        stringBuilder.append(name);
-        stringBuilder.append("\n");
-        stringBuilder.append("Email: ");
-        stringBuilder.append(email);
-        stringBuilder.append("\n");
-        stringBuilder.append("City: ");
-        stringBuilder.append(city);
-        stringBuilder.append("\n");
-        stringBuilder.append("Index: ");
-        stringBuilder.append(index);
-        stringBuilder.append("\n");
-        stringBuilder.append("Child gender: ");
-        stringBuilder.append(childGender);
-        stringBuilder.append("\n");
-        stringBuilder.append("Message: ");
-        stringBuilder.append(message);*/
+        String[] fieldNames = {"Name: ", "Email: ", "City: ", "Index: ", "Child gender: ", "Message: "};
+        String[] values = {name, email, city, index, childGender, message};
 
-        StringJoiner stringJoiner = new StringJoiner("\n", "", "");
-        stringJoiner.add(email);
-        stringJoiner.add(city);
-        stringJoiner.add(index);
-        stringJoiner.add(childGender);
-        stringJoiner.add(message);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < fieldNames.length; i++) {
+            stringBuilder.append(fieldNames[i]);
+            stringBuilder.append(values[i]);
+            stringBuilder.append("\n");
+        }
 
-        mailSender.sendToAdmin("New message via Contact form", stringJoiner.toString());
+        mailSender.sendToAdmin("New message via Contact form", stringBuilder.toString());
         response.sendRedirect("contact?isSent=true");
     }
 }

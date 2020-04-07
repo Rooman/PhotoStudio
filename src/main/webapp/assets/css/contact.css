@@ -9,7 +9,10 @@
     line-height: 50px;
     color: red;
     text-align: center;
-    margin-top: 60px;
+    margin-top: 50px;
+    padding: 40px;
+    background: rgba(250, 225, 222, 0.8);
+    border-radius: 10px;
 }
 
 .contact-text-block {
