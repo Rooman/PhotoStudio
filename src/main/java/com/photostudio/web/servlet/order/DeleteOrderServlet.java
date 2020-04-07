@@ -2,6 +2,7 @@ package com.photostudio.web.servlet.order;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.service.OrderService;
+import com.photostudio.web.util.UtilClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +20,7 @@ public class DeleteOrderServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         String uri = request.getRequestURI();
-        String[] partsOfUri = uri.split("/");
-        int orderId = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
+        int orderId = UtilClass.getIdFromPath(uri);
 
         LOG.info("Request delete order is received: order {}", orderId);
 

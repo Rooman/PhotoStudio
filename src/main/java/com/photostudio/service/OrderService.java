@@ -2,9 +2,11 @@ package com.photostudio.service;
 
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
+import com.photostudio.entity.photo.PhotoStatus;
 import com.photostudio.entity.user.User;
 
 import javax.servlet.http.Part;
+import java.io.InputStream;
 import java.util.List;
 
 public interface OrderService {
@@ -13,11 +15,19 @@ public interface OrderService {
 
     List<Order> getOrdersByParameters(FilterParameters filterParameters);
 
-    Order getOrderByIdInStatusNew(int id);
+    Order getOrderById(int id);
 
     List<Order> getOrdersByUserId(long userId);
 
+    List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
+
     void delete(int id);
+
+    void deleteAllOrdersByUserId(long id);
+
+    void deletePhoto(int orderId, long photoId);
+
+    void deletePhotos(int orderId);
 
     int add(Order order, List<Part> photoToUpload);
 
@@ -25,11 +35,15 @@ public interface OrderService {
 
     void moveStatusBack(int id, User user);
 
-    void deleteAllOrdersByUserId(long id);
+    void editOrderByAdmin(Order order, User userChanged, boolean isChanged, List<Part> photoToUpload);
+
+    void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto);
+
+    void addPhotos(int orderId, List<Part> photoToUpload);
+
+    String getPathToOrderDir(int orderId);
 
     String getPathByPhotoId(long photoId);
 
-    List<Order> getOrdersWithOrderStatusNotNewByUserId(long userId);
-
-    String getPathToOrderDir(int orderId);
+    InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus);
 }

@@ -3,6 +3,8 @@ package com.photostudio.dao;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.photo.Photo;
+import com.photostudio.entity.photo.PhotoStatus;
 
 import java.util.List;
 
@@ -13,13 +15,19 @@ public interface OrderDao {
 
     List<Order> getOrdersByUserId(long userId);
 
-    Order getOrderByIdInStatusNew(int id);
-
-    void delete(int id);
+    Order getOrderById(int id);
 
     int add(Order order, int orderStatusId);
 
-    void savePhotos(Order order, int orderId, List<String> photosPath);
+    void editOrderByAdmin(int orderId, long userId, String commentAdmin);
+
+    void editOrderByUser(int orderId, String commentUser);
+
+    void savePhotos(int orderId, List<String> photosPath);
+
+    void selectPhotos(int orderId, String selectedPhotos);
+
+    void setPhotosStatusPaid(int orderId);
 
     void changeOrderStatus(int id, int orderStatusId);
 
@@ -32,4 +40,12 @@ public interface OrderDao {
     String getPathByPhotoId(long photoId);
 
     void deleteOrdersByUserId(List<Order> orderList, long id);
+
+    List<Photo> getPhotosByStatus (int orderId, PhotoStatus photoStatus);
+
+    void delete(int id);
+
+    void deletePhoto(long photoId);
+
+    void deletePhotos(int orderId);
 }

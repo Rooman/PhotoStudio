@@ -2,6 +2,8 @@ package com.photostudio.service.impl;
 
 
 import com.photostudio.dao.EmailTemplateDao;
+import com.photostudio.entity.email.MessageType;
+import com.photostudio.entity.email.PasswordEmailTemplate;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.MailService;
@@ -45,6 +47,15 @@ public class DefaultMailService implements MailService {
             log.error("Error during sending email", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void sendNewPassword(User user, String password) {
+        log.info("Send mail to user {} with new password", user.getEmail());
+        PasswordEmailTemplate passwordEmailTemplate = emailTemplateDao
+                .getPasswordEmailTemplateByLangIdAndMessageType(user.getLangId(), MessageType.RESET_PASSWORD);
+        mailSender.send(passwordEmailTemplate.getSubject(), passwordEmailTemplate.getBody()
+                .replace("<password>", password), user.getEmail());
     }
 
 
