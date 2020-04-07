@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/price.css">
+    <title th:text="#{price.title}">Pricing</title>
+</head>
+<body>
+<header class="header">
+    <div class="container-fluid">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <p class="page_main-title">Miari Fotografie</p>
+    </div>
+    <div class="container-main-custom">
+        <div class="container">
+            <div class="row justify-content-center ml-5 mr-5">
+                <div class="col-6">
+                    <div class="package-block">
+                        <p class="package-title" th:text="#{package.s.label}">
+                            Package S
+                        </p>
+                        <p class="package-text" th:text="#{package.s.description.1}"></p>
+                        <p class="package-text" th:text="#{package.s.description.2}"></p>
+                        <p class="package-text" th:text="#{package.s.description.3}"></p>
+                        <p class="package-text" th:text="#{package.s.description.4}"></p>
+                        <p class="package-text" th:text="#{package.s.description.5}"></p>
+                        <br>
+                        <p class="package-text" th:text="#{package.s.description.6}"></p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="package-block package-block-m">
+                        <p class="package-title" th:text="#{package.m.label}">
+                            Package M
+                        </p>
+                        <p class="package-text" th:text="#{package.m.description.1}"></p>
+                        <p class="package-text" th:text="#{package.m.description.2}"></p>
+                        <p class="package-text" th:text="#{package.m.description.3}"></p>
+                        <p class="package-text" th:text="#{package.m.description.4}"></p>
+                        <p class="package-text" th:text="#{package.m.description.5}"></p>
+                        <br>
+                        <p class="package-text" th:text="#{package.m.description.6}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="package-block">
+                        <p class="package-title" th:text="#{package.l.label}">
+                            Package L
+                        </p>
+                        <p class="package-text" th:text="#{package.l.description.1}"></p>
+                        <p class="package-text" th:text="#{package.l.description.2}"></p>
+                        <p class="package-text" th:text="#{package.l.description.3}"></p>
+                        <p class="package-text" th:text="#{package.l.description.4}"></p>
+                        <p class="package-text" th:text="#{package.l.description.5}"></p>
+                        <br>
+                        <p class="package-text" th:text="#{package.l.description.6}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<meta th:replace="fragment/footer.html :: footer">
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/portfolio.css">
+    <title th:text="#{portfolio.newborns.title}">Newborns</title>
+</head>
+<body>
+<header class="header">
+    <div class="container-fluid">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
+</header>
+
+<main>
+    <div class="container text-center">
+        <p class="page_main-title" th:text="#{portfolio.newborns.title}">Newborns</p>
+    </div>
+    <div class="container-main-custom custom-alt-bg">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-4 justify-content-center reduce-margin">
+                    <div class="portfolio-image-block text-center">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn1.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn2.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn3.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn4.png">
+                    </div>
+                </div>
+                <div class="col-4 justify-content-center reduce-margin">
+                    <div class="portfolio-image-block text-center">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn5.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn6.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn7.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn8.jpg">
+                    </div>
+                </div>
+                <div class="col-4 justify-content-center reduce-margin">
+                    <div class="portfolio-image-block text-center">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn9.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn10.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn11.jpg">
+                        <img class="portfolio-image" src="assets/images/portfolio/newborns/newborn12.jpg">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <a href="portfolio" type="submit" class="btn btn-submit btn-outline-dark btn-lg button back-button" th:text="#{back.to.portfolio.button}">
+                    Back to Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<meta th:replace="fragment/footer.html :: footer">
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
+

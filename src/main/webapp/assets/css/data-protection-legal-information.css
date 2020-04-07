@@ -1,0 +1,38 @@
+.container-main-custom {
+    background: url("../images/legal-and-data-bg.png") repeat-y;
+}
+
+.info-text-block {
+    height: auto;
+    margin-top: 150px;
+    margin-right: 170px;
+    margin-left: 170px;
+    margin-bottom: 350px;
+    padding: 50px;
+    text-align: center;
+
+    background: rgba(250, 225, 222, 0.8);
+    opacity: 0.6;
+    border-radius: 10px;
+}
+
+.info-title {
+    font-family: Cormorant Upright;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 64px;
+    line-height: 70px;
+    color: #000000;
+
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.info-text {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 36px;
+    color: #000000;
+}
