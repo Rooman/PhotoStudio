@@ -1,9 +1,8 @@
 package com.photostudio.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
-import com.photostudio.service.NotificationService;
+import com.photostudio.service.WebNotificationService;
 import com.photostudio.service.entity.OrderIdAndStatusDto;
 import com.photostudio.service.entity.UserWSSession;
 import lombok.SneakyThrows;
@@ -12,7 +11,7 @@ import javax.websocket.Session;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class WSNotificationService implements NotificationService {
+public class WSNotificationService implements WebNotificationService {
     private ObjectMapper objectMapper;
 
     private List<UserWSSession> sessionList = new CopyOnWriteArrayList<>();

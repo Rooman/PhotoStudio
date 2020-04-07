@@ -3,7 +3,7 @@ package com.photostudio.web.ws;
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.user.User;
 import com.photostudio.security.SecurityService;
-import com.photostudio.service.NotificationService;
+import com.photostudio.service.WebNotificationService;
 import com.photostudio.service.entity.UserWSSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/notification", configurator = MyEndpointConfigurator.class)
 @Slf4j
 public class NotificationEndpoint {
-    private NotificationService notificationService = ServiceLocator.getService(NotificationService.class);
+    private WebNotificationService notificationService = ServiceLocator.getService(WebNotificationService.class);
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
 
     @OnOpen

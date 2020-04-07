@@ -19,9 +19,9 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DefaultMailServiceITest {
+class DefaultNotificationServiceITest {
     private static TestDataSource dataSource = new TestDataSource();
-    private static DefaultMailService defaultMailService;
+    private static DefaultNotificationService defaultMailService;
 
     @BeforeAll
     public static void init() throws SQLException, IOException {
@@ -33,7 +33,7 @@ class DefaultMailServiceITest {
         UserDao userDao = new JdbcUserDao(jdbcDataSource);
         UserService userService = new DefaultUserService(userDao);
         EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(jdbcDataSource);
-        defaultMailService = new DefaultMailService(mockMailSender, userService, emailTemplateDao);
+        defaultMailService = new DefaultNotificationService(mockMailSender, userService, emailTemplateDao);
     }
 
     @BeforeEach

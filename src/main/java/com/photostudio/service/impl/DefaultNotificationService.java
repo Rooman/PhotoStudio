@@ -6,28 +6,28 @@ import com.photostudio.entity.email.MessageType;
 import com.photostudio.entity.email.PasswordEmailTemplate;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.user.User;
-import com.photostudio.service.MailService;
 import com.photostudio.service.NotificationService;
+import com.photostudio.service.WebNotificationService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.entity.EmailTemplate;
 import com.photostudio.web.util.MailSender;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DefaultMailService implements MailService {
+public class DefaultNotificationService implements NotificationService {
 
     private MailSender mailSender;
     private UserService userService;
     private EmailTemplateDao emailTemplateDao;
-    private NotificationService notificationService;
+    private WebNotificationService notificationService;
 
-    public DefaultMailService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao) {
+    public DefaultNotificationService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao) {
         this.mailSender = mailSender;
         this.userService = userService;
         this.emailTemplateDao = emailTemplateDao;
     }
 
-    public DefaultMailService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao, NotificationService notificationService) {
+    public DefaultNotificationService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao, WebNotificationService notificationService) {
         this.mailSender = mailSender;
         this.userService = userService;
         this.emailTemplateDao = emailTemplateDao;

@@ -8,7 +8,7 @@ import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
-import com.photostudio.service.MailService;
+import com.photostudio.service.NotificationService;
 import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.testUtils.MockMailSender;
@@ -41,9 +41,9 @@ public class DefaultOrderServiceITest {
         UserService userService = new DefaultUserService(userDao);
 
         EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(jdbcDataSource);
-        MailService mailService = new DefaultMailService(mockMailSender, userService, emailTemplateDao);
+        NotificationService notificationService = new DefaultNotificationService(mockMailSender, userService, emailTemplateDao);
 
-        orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, mailService);
+        orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, notificationService);
     }
 
     @BeforeEach

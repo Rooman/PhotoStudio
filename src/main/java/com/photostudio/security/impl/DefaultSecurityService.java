@@ -5,7 +5,7 @@ import com.photostudio.entity.user.User;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import com.photostudio.security.SecurityService;
 import com.photostudio.security.entity.Session;
-import com.photostudio.service.MailService;
+import com.photostudio.service.NotificationService;
 import com.photostudio.service.UserService;
 import com.photostudio.web.util.MailSender;
 import com.photostudio.web.util.UtilClass;
@@ -25,20 +25,20 @@ public class DefaultSecurityService implements SecurityService {
 
     private UserService userService;
     private MailSender mailSender;
-    private MailService mailService;
+    private NotificationService notificationService;
 
     private List<Session> sessionList = new CopyOnWriteArrayList<>();
 
 
     public DefaultSecurityService() {
-        this(ServiceLocator.getService(UserService.class), ServiceLocator.getService(MailSender.class), ServiceLocator.getService(MailService.class));
+        this(ServiceLocator.getService(UserService.class), ServiceLocator.getService(MailSender.class), ServiceLocator.getService(NotificationService.class));
     }
 
     // for test purpose
-    DefaultSecurityService(UserService userService, MailSender mailSender, MailService mailService) {
+    DefaultSecurityService(UserService userService, MailSender mailSender, NotificationService notificationService) {
         this.userService = userService;
         this.mailSender = mailSender;
-        this.mailService = mailService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DefaultSecurityService implements SecurityService {
         log.info("Started service reset password for user with id: {}", user.getId());
         String randomPassword = generatePassword(DEFAULT_PASSWORD_LENGTH);
         changePassword(user.getId(), randomPassword);
-        mailService.sendNewPassword(user, randomPassword);
+        notificationService.sendNewPassword(user, randomPassword);
     }
 
     String generatePassword(int count) {

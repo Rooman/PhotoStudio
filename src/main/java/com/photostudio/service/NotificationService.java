@@ -1,14 +1,11 @@
 package com.photostudio.service;
 
-import com.photostudio.entity.user.User;
-import com.photostudio.service.entity.UserWSSession;
 
-import javax.websocket.Session;
+import com.photostudio.entity.order.OrderStatus;
+import com.photostudio.entity.user.User;
 
 public interface NotificationService {
-    void notification(int orderId, User user, String message);
+    void sendOnChangeStatus(User userChanged, int orderId, OrderStatus orderStatus);
 
-    void addSession(UserWSSession session);
-
-    void removeSession(Session session);
+    void sendNewPassword(User user, String password);
 }
