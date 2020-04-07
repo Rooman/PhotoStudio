@@ -33,6 +33,8 @@ function setCheckboxCheckedValue(value){
    let x = document.querySelectorAll("input[type='checkbox']");
    let i;
    for (i = 0; i < x.length; i++) {
-      x[i].checked = value;
+     if (!x[i].disabled) {
+        x[i].checked = value;
+      }
    }
 }
