@@ -150,8 +150,10 @@ class JdbcUserDaoITest {
     @Test
     public void testGetAdmin() {
         User expectedUser = getExpectedUser1();
-        User actualUser = jdbcUserDao.getAdmin();
-        assertEquals(expectedUser, actualUser);
+        List<User> actualUserList = jdbcUserDao.getAdmins();
+
+        assertEquals(1, actualUserList.size());
+        assertEquals(expectedUser, actualUserList.get(0));
     }
 
     @AfterAll

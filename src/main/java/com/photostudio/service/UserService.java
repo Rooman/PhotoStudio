@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     List<User> getAllUsers();
 
-    User getAmin();
+    List<User> getAmins();
 
     void add(User user);
 

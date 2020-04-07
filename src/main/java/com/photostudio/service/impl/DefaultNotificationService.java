@@ -13,19 +13,21 @@ import com.photostudio.service.entity.EmailTemplate;
 import com.photostudio.web.util.MailSender;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 public class DefaultNotificationService implements NotificationService {
 
     private MailSender mailSender;
     private UserService userService;
     private EmailTemplateDao emailTemplateDao;
-    private WebNotificationService notificationService;
+    private WebNotificationService webNotificationService;
 
-    public DefaultNotificationService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao, WebNotificationService notificationService) {
+    public DefaultNotificationService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao, WebNotificationService webNotificationService) {
         this.mailSender = mailSender;
         this.userService = userService;
         this.emailTemplateDao = emailTemplateDao;
-        this.notificationService = notificationService;
+        this.webNotificationService = webNotificationService;
     }
 
     @Override
@@ -58,8 +60,10 @@ public class DefaultNotificationService implements NotificationService {
         log.info("Send mail to admin after changing status to {} in order {} by user {}", orderStatus, orderId, userMail);
         EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userChanged.getLangId(), orderStatus);
         mailSender.sendToAdmin(emailTemplate.generateHeader(userMail, orderId), emailTemplate.generateBody(userMail, orderId));
-        User userAdmin = userService.getAmin();
-        notificationService.notification(orderId, userAdmin, emailTemplate.generateHeader(userMail, orderId));
+        List<User> userAdmins = userService.getAmins();
+        for (User userAdmin : userAdmins) {
+            webNotificationService.notification(orderId, userAdmin, emailTemplate.generateHeader(userMail, orderId));
+        }
     }
 
     private void sendOnChangeStatusToUser(User userOrdered, int orderId, OrderStatus orderStatus) {
@@ -67,6 +71,6 @@ public class DefaultNotificationService implements NotificationService {
         log.info("Send mail to {} after changing status to {} in order {}", userMail, orderStatus, orderId);
         EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userOrdered.getLangId(), orderStatus);
         mailSender.send(emailTemplate.generateHeader(orderId), emailTemplate.generateBody(orderId), userMail);
-        notificationService.notification(orderId, userOrdered, emailTemplate.generateHeader(orderId) + " " + emailTemplate.generateBody(orderId));
+        webNotificationService.notification(orderId, userOrdered, emailTemplate.generateHeader(orderId) + " " + emailTemplate.generateBody(orderId));
     }
 }

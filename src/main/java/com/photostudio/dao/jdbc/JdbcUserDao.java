@@ -128,22 +128,21 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getAdmin() {
+    public List<User> getAdmins() {
         log.info("Get admin user from DB");
         String sql = GET_USER_BY_PARAMS + " u.userRoleId = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, 1);
+            List<User> users = new ArrayList<>();
             try (ResultSet resultSet = statement.executeQuery()) {
                 User user = null;
-                if (resultSet.next()) {
+                while (resultSet.next()) {
                     user = USER_ROW_MAPPER.mapRow(resultSet);
-                } else {
-                    log.error("Admin user is not found in DB");
-                    throw new RuntimeException("Admin user is not found in DB");
+                    users.add(user);
                 }
-                log.info("Get admin user: {} from DB", user);
-                return user;
+                log.info("Get admin user: {} from DB", users);
+                return users;
             }
         } catch (SQLException e) {
             log.error("An exception occurred while trying to get admin user", e);

@@ -24,9 +24,9 @@ public class DefaultUserService implements UserService {
         return allUsers;
     }
 
-    public User getAmin() {
-        log.info("Started service get admin user");
-        return userDao.getAdmin();
+    @Override
+    public List<User> getAmins() {
+        return userDao.getAdmins();
     }
 
     @Override
