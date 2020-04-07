@@ -23,11 +23,11 @@ public class WSNotificationService implements NotificationService {
 
     @Override
     @SneakyThrows
-    public void notification(int orderId, User user, OrderStatus orderStatus) {
+    public void notification(int orderId, User user, String message) {
         for (UserWSSession wsSession : sessionList) {
             User userSession = wsSession.getUser();
             if (userSession.getId() == user.getId()) {
-                String sendMessage = createMessage(orderId, orderStatus);
+                String sendMessage = createMessage(orderId, message);
                 Session session = wsSession.getSession();
                 session.getBasicRemote().sendText(sendMessage);
             }
@@ -49,8 +49,8 @@ public class WSNotificationService implements NotificationService {
     }
 
     @SneakyThrows
-    String createMessage(int orderId, OrderStatus orderStatus) {
-        OrderIdAndStatusDto orderIdAndStatusDto = new OrderIdAndStatusDto(orderId, orderStatus);
+    String createMessage(int orderId, String message) {
+        OrderIdAndStatusDto orderIdAndStatusDto = new OrderIdAndStatusDto(orderId, message);
         return objectMapper.writeValueAsString(orderIdAndStatusDto);
     }
 }

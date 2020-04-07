@@ -1,3 +1,7 @@
+html, body {
+   height:100%;
+}
+
 body {
     font-family: "Cormorant Upright", sans-serif;
 }
@@ -350,17 +354,16 @@ button.user-menu__item:hover {
     background-color: #fff;
     opacity: .8;
     margin: auto 10px 10px auto;
-    width: 220px;
-    height: 80px;
+    width: 250px;
+    height: 150px;
     bottom:10px;
     right:10px;
+    display:flex;
     align-items:center;
     justify-content:center;
-    font-family: Cormorant Upright;
     font-size: 15px;
     text-align: center;
     color: #000000;
-    display:flex;
     transition: opacity 1s ease-in;
 }
 

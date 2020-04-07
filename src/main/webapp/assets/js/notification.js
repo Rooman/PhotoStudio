@@ -19,9 +19,9 @@ function message(msgEvent){
 
 function createNotificationHtml(message) {
  const orderId=message.orderId;
- const orderStatus=message.orderStatus;
+ const messageText=message.message;
 
- const messageStatus ='Your <a href="/order/' + orderId+ '">order</a> in Status: ' + orderStatus;
+ const messageStatus = messageText.replace( orderId, ' <a href="order/' + orderId+ '">' + orderId + '</a> ');
  return messageStatus;
 }
 
@@ -32,7 +32,9 @@ notificationCloseDiv.addEventListener('click', function(){
     notificationDiv.classList.add("notification-form-message--hidden");
 });
 
-const ws = new WebSocket("ws://localhost:8080/notification");
+const path = /*@{/notification}*/ "localhost:8080/dev/notification";
+const ws = new WebSocket("ws://" + path);
+//const ws = new WebSocket("ws://localhost:8080/dev/notification");
 ws.onopen = open;
 ws.onmessage=message;
 ws.onclose = close;

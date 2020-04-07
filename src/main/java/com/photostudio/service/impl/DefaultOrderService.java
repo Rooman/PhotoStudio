@@ -31,15 +31,6 @@ public class DefaultOrderService implements OrderService {
     private PhotoDao photoDao;
     private OrderStatusService orderStatusService;
     private MailService mailService;
-    private NotificationService notificationService;
-
-    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderStatusService, MailService mailService, NotificationService notificationService) {
-        this.orderDao = orderDao;
-        this.photoDao = photoDao;
-        this.orderStatusService = orderStatusService;
-        this.mailService = mailService;
-        this.notificationService = notificationService;
-    }
 
     public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderStatusService, MailService mailService) {
         this.orderDao = orderDao;
@@ -150,7 +141,6 @@ public class DefaultOrderService implements OrderService {
         if (checkUserRole(userChanged.getUserRole(), newStatus) && checkPhoto(orderId, newStatus)) {
             orderDao.changeOrderStatus(orderId, orderStatusService.getOrderStatusIdByStatusName(newStatus));
             mailService.sendOnChangeStatus(userChanged, orderId, newStatus);
-            notificationService.notification(orderId, userChanged, newStatus);
         }
 
 

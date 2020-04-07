@@ -1,15 +1,11 @@
 package com.photostudio.service.entity;
 
-import com.photostudio.entity.order.OrderStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class OrderIdAndStatusDto {
     private long orderId;
-    private OrderStatus orderStatus;
-
-    public OrderIdAndStatusDto(long orderId, OrderStatus orderStatus) {
-        this.orderId = orderId;
-        this.orderStatus = orderStatus;
-    }
+    private String message;
 }
