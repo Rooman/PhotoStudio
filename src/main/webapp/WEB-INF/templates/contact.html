@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html th:lang="${language}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta th:replace="fragment/head.html :: meta">
+    <link th:replace="fragment/head.html :: link">
+    <link rel="stylesheet" type="text/css" href="assets/css/contact.css">
+    <title th:text="#{contact.title}">Contact</title>
+</head>
+<body>
+<header class="header">
+    <div class="container-fluid">
+        <!--NavBar-->
+        <nav th:replace="fragment/navigation.html :: nav"></nav>
+        <hr class="header__underscore">
+        <!--NavBarEnd-->
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <p class="page_main-title">Miari Fotografie</p>
+    </div>
+    <div class="container">
+        <p class="message-sent" th:if="${isSent}">Thanks for your message!</p>
+    </div>
+    <div class="container-main-custom">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="contact-text-block">
+                        <div class="contact-text">
+                            <p>
+                                Thank you for your interest!
+                            </p>
+                            <br>
+                            <p>
+                                I am happy to answer any of your questions or reserve a date for the shooting. Please tell us a little about yourself and your child (or children) by filling out the form. All your wishes regarding the props, suits or color preferences for the photo shoot, please leave this information in the "message" field. If you decide to shoot with me, we can discuss all the details with you in detail after booking the date.
+                            </p>
+                            <br>
+                            <p>
+                                You can also call me at: +49 (0) 157-77777777777.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="contact-form-block">
+                        <form id="contact" th:action="@{/contact}" method="post"
+                              enctype="form-data">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-6 pr-4 pl-4 pb-3">
+                                        <input type="text" class="form-control form-default-info"
+                                               id="name" value="" th:placeholder="#{name.placeholder}" name="name" required>
+                                    </div>
+                                    <div class="col-6 pr-4 pl-4 pb-3">
+                                        <input type="email" class="form-control form-default-info"
+                                               id="email" value="" th:placeholder="#{email.placeholder}" name="email" required>
+                                    </div>
+                                    <div class="col-6 pr-4 pl-4 pb-3">
+                                        <input type="text" class="form-control form-default-info"
+                                               id="city" value="" th:placeholder="#{city.placeholder}" name="city" required>
+                                    </div>
+                                    <div class="col-6 pr-4 pl-4 pb-3">
+                                        <input type="number" class="form-control form-default-info"
+                                               id="index" value="" th:placeholder="#{index.placeholder}" name="index" min="1000" max="99999" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <p class="radio-title p-3" th:text="#{child.gender.label}">Child gender</p>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="container">
+                                            <div class="row justify-content-center">
+                                                <div class="col-3">
+                                                    <label class="radio-container">
+                                                        <div th:text="#{boy.label}">Boy</div>
+                                                        <input type="radio" name="childGender" value="Boy" required>
+                                                        <span class="radio-checkmark checkmark-boy"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label class="radio-container">
+                                                        <div th:text="#{girl.label}">Girl</div>
+                                                        <input type="radio" name="childGender" value="Girl" required>
+                                                        <span class="radio-checkmark checkmark-girl"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-3">
+                                                    <label class="radio-container">
+                                                        <div th:text="#{twins.label}">Twins</div>
+                                                        <input type="radio" name="childGender" value="Twins" required>
+                                                        <span class="radio-checkmark checkmark-twins"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea class="form-control form-default-info contact-message-area"
+                                                  id="message" rows="5" name="message" value=""
+                                                  th:placeholder="#{message.placeholder}"></textarea>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-submit btn-outline-dark btn-lg button" th:text="#{send.button}">
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<meta th:replace="fragment/footer.html :: footer">
+<meta th:replace="fragment/script.html :: script">
+</body>
+
+</html>
+
