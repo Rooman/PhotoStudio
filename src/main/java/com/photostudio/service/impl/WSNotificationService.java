@@ -3,7 +3,7 @@ package com.photostudio.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.WebNotificationService;
-import com.photostudio.service.entity.OrderIdAndStatusDto;
+import com.photostudio.service.entity.OrderIdAndMessageText;
 import com.photostudio.service.entity.UserWSSession;
 import lombok.SneakyThrows;
 
@@ -22,13 +22,13 @@ public class WSNotificationService implements WebNotificationService {
 
     @Override
     @SneakyThrows
-    public void notification(int orderId, User user, String message) {
+    public void notification(User user, OrderIdAndMessageText orderIdAndMessageText) {
+        String sendMessageJSON = createMessage(orderIdAndMessageText);
         for (UserWSSession wsSession : sessionList) {
             User userSession = wsSession.getUser();
             if (userSession.getId() == user.getId()) {
-                String sendMessage = createMessage(orderId, message);
                 Session session = wsSession.getSession();
-                session.getBasicRemote().sendText(sendMessage);
+                session.getBasicRemote().sendText(sendMessageJSON);
             }
         }
     }
@@ -48,8 +48,7 @@ public class WSNotificationService implements WebNotificationService {
     }
 
     @SneakyThrows
-    String createMessage(int orderId, String message) {
-        OrderIdAndStatusDto orderIdAndStatusDto = new OrderIdAndStatusDto(orderId, message);
-        return objectMapper.writeValueAsString(orderIdAndStatusDto);
+    String createMessage(OrderIdAndMessageText orderIdAndMessageText) {
+        return objectMapper.writeValueAsString(orderIdAndMessageText);
     }
 }

@@ -10,6 +10,7 @@ import com.photostudio.service.NotificationService;
 import com.photostudio.service.WebNotificationService;
 import com.photostudio.service.UserService;
 import com.photostudio.service.entity.EmailTemplate;
+import com.photostudio.service.entity.OrderIdAndMessageText;
 import com.photostudio.web.util.MailSender;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +63,7 @@ public class DefaultNotificationService implements NotificationService {
         mailSender.sendToAdmin(emailTemplate.generateHeader(userMail, orderId), emailTemplate.generateBody(userMail, orderId));
         List<User> userAdmins = userService.getAmins();
         for (User userAdmin : userAdmins) {
-            webNotificationService.notification(orderId, userAdmin, emailTemplate.generateHeader(userMail, orderId));
+            webNotificationService.notification(userAdmin, new OrderIdAndMessageText(orderId, emailTemplate.generateHeader(userMail, orderId)));
         }
     }
 
@@ -71,6 +72,6 @@ public class DefaultNotificationService implements NotificationService {
         log.info("Send mail to {} after changing status to {} in order {}", userMail, orderStatus, orderId);
         EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userOrdered.getLangId(), orderStatus);
         mailSender.send(emailTemplate.generateHeader(orderId), emailTemplate.generateBody(orderId), userMail);
-        webNotificationService.notification(orderId, userOrdered, emailTemplate.generateHeader(orderId) + " " + emailTemplate.generateBody(orderId));
+        webNotificationService.notification(userOrdered, new OrderIdAndMessageText(orderId, emailTemplate.generateHeader(orderId) + " " + emailTemplate.generateBody(orderId)));
     }
 }
