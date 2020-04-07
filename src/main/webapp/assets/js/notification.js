@@ -32,9 +32,8 @@ notificationCloseDiv.addEventListener('click', function(){
     notificationDiv.classList.add("notification-form-message--hidden");
 });
 
-const path = /*@{/notification}*/ "localhost:8080/dev/notification";
-const ws = new WebSocket("ws://" + path);
-//const ws = new WebSocket("ws://localhost:8080/dev/notification");
+const path = /*[[@{/notification}]]*/ "localhost:8080/notification";
+const ws = new WebSocket("ws://" + location.host + path);
 ws.onopen = open;
 ws.onmessage=message;
 ws.onclose = close;
