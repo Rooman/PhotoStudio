@@ -21,12 +21,6 @@ public class DefaultNotificationService implements NotificationService {
     private EmailTemplateDao emailTemplateDao;
     private WebNotificationService notificationService;
 
-    public DefaultNotificationService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao) {
-        this.mailSender = mailSender;
-        this.userService = userService;
-        this.emailTemplateDao = emailTemplateDao;
-    }
-
     public DefaultNotificationService(MailSender mailSender, UserService userService, EmailTemplateDao emailTemplateDao, WebNotificationService notificationService) {
         this.mailSender = mailSender;
         this.userService = userService;

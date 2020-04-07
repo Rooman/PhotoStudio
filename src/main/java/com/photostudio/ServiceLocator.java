@@ -51,14 +51,14 @@ public class ServiceLocator {
         MailSender mailSender = new MailSender(propertyReader);
         register(MailSender.class, mailSender);
 
-        WebNotificationService notificationService = new WSNotificationService(mapper);
-        register(WebNotificationService.class, notificationService);
+        WebNotificationService webNotificationService = new WSNotificationService(mapper);
+        register(WebNotificationService.class, webNotificationService);
 
         EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(dataSource);
-        NotificationService mailService = new DefaultNotificationService(mailSender, userService, emailTemplateDao, notificationService);
-        register(NotificationService.class, mailService);
+        NotificationService notificationService = new DefaultNotificationService(mailSender, userService, emailTemplateDao, webNotificationService);
+        register(NotificationService.class, notificationService);
 
-        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, notificationService);
         register(OrderService.class, orderService);
         userService.setOrderService(orderService);
 
