@@ -48,7 +48,7 @@
 </div>
 <!--Bread Crumb End-->
 
-<h1 class="order__title" th:text="#{order.title}">Order</h1>
+<h1 class="order__title" th:with="title=#{order.title}" th:text="${roleAdmin ? 'Order' : title}">Order</h1>
 
 <h2 class="error" align="center" th:if="${errorMessage!=null}" th:text="${errorMessage}"></h2>
 
