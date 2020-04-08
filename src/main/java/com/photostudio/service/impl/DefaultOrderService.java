@@ -105,14 +105,20 @@ public class DefaultOrderService implements OrderService {
     public void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto) {
         int orderId = order.getId();
         log.info("Started service edit order {} by User", orderId);
+        boolean isSelected = false;
         if (isChanged) {
             orderDao.editOrderByUser(orderId, order.getCommentUser());
         }
         if (selectedPhoto != null && !selectedPhoto.isEmpty()) {
             orderDao.selectPhotos(orderId, selectedPhoto);
+            isSelected = true;
         }
         if (order.getStatus() == OrderStatus.VIEW_AND_SELECT) {
             moveStatusForward(orderId, userChanged);
+        } else if (order.getStatus() == OrderStatus.READY) {
+            if (isSelected) {
+                moveStatusBack(orderId, userChanged);
+            }
         }
     }
 
@@ -195,7 +201,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus){
+    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus) {
         List<Photo> photos = orderDao.getPhotosByStatus(orderId, photoStatus);
         return photoDao.addPhotoToArchive(orderId, photos);
     }
