@@ -8,6 +8,7 @@ import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.photo.PhotoStatus;
+import com.photostudio.entity.photo.Photos;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
@@ -94,11 +95,11 @@ public class DefaultOrderService implements OrderService {
         if (!photoToUpload.isEmpty()) {
             addPhotos(orderId, photoToUpload);
         }
-
-        if (order.getStatus() == OrderStatus.SELECTED) {
-            orderDao.setPhotosStatusPaid(orderId);
-            moveStatusForward(orderId, userChanged);
-        }
+//
+//        if (order.getStatus() == OrderStatus.SELECTED) {
+//            orderDao.setPhotosStatusPaid(orderId);
+//            moveStatusForward(orderId, userChanged);
+//        }
     }
 
     @Override
@@ -119,8 +120,11 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void addPhotos(int orderId, List<Part> photoToUpload) {
         log.info("Started service add photos to order {}", orderId);
-        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
-        orderDao.savePhotos(orderId, photosPath);
+        List<String> photosSources = orderDao.getPhotosSourcesByOrderId(orderId);
+        Photos photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId, photosSources);
+        orderDao.savePhotos(orderId, photosPath.getUnselectedPhotosPath());
+        orderDao.updateStatusRetouchedPhotos(photosPath.getRetouchedPhotosPath());
+
     }
 
     @Override
@@ -197,7 +201,7 @@ public class DefaultOrderService implements OrderService {
     @Override
     public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus){
         List<Photo> photos = orderDao.getPhotosByStatus(orderId, photoStatus);
-        return photoDao.addPhotoToArchive(orderId, photos);
+        return photoDao.addPhotoToArchive(orderId, photos, photoStatus);
     }
 
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {

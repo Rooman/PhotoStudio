@@ -25,9 +25,11 @@ public interface OrderDao {
 
     void savePhotos(int orderId, List<String> photosPath);
 
+    void updateStatusRetouchedPhotos(List<String> photosPath);
+
     void selectPhotos(int orderId, String selectedPhotos);
 
-    void setPhotosStatusPaid(int orderId);
+   // void setPhotosStatusPaid(int orderId);
 
     void changeOrderStatus(int id, int orderStatusId);
 
@@ -48,4 +50,6 @@ public interface OrderDao {
     void deletePhoto(long photoId);
 
     void deletePhotos(int orderId);
+
+    List<String> getPhotosSourcesByOrderId(int orderId);
 }

@@ -2,6 +2,8 @@ package com.photostudio.dao.file;
 
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.entity.photo.Photo;
+import com.photostudio.entity.photo.PhotoStatus;
+import com.photostudio.entity.photo.Photos;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.Part;
@@ -64,27 +66,13 @@ public class LocalDiskPhotoDao implements PhotoDao {
         Path orderPath = getOrderPath(orderId);
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
-        if (!Files.exists(orderPath)) {
-            try {
-                Files.createDirectory(orderPath);
-                log.info("Directory was created : {}", orderPath);
-            } catch (IOException e) {
-                log.error("Directory was not created : {}", orderPath, e);
-                throw new RuntimeException("Directory was not created " + orderPath, e);
-            }
-        }
+        createDirectoryForPhoto(orderPath);
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
-                    Path photoPath = Paths.get(orderPath.toString(), fileName);
-                    try (InputStream inputStream = photo.getInputStream()) {
-                        Files.copy(inputStream, photoPath, new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
-                        photosPaths.add(fileName);
-                    } catch (IOException e) {
-                        log.error("Can't save photos on local disk by path : {}", orderPath, e);
-                        throw new RuntimeException("Can't save photos on local disk", e);
-                    }
+                    uploadPhoto(orderPath.toString(), fileName, photo);
+                    photosPaths.add(fileName);
                 }
             }
         }
@@ -92,12 +80,69 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     @Override
-    public InputStream addPhotoToArchive(int orderId, List<Photo> photos) {
+    public Photos savePhotoByOrder(List<Part> photosParts, int orderId, List<String> photosSources) {
+        String orderPath = getPathToOrderDir(orderId);
+        log.info("save photos on local disk by path : {}", orderPath);
+        List<String> unselectedPhotosPaths = new ArrayList<>();
+        List<String> retouchedPhotosPaths = new ArrayList<>();
+        Path unselectedPhotosPath = getOrderPath(orderId);
+        Path retouchedPhotosPath = getPathToRetouchedPhoto(orderId);
+        createDirectoryForPhoto(unselectedPhotosPath);
+        createDirectoryForPhoto(retouchedPhotosPath);
+        Photos photos = new Photos();
+        for (Part photo : photosParts) {
+            if (photo != null && photo.getSize() > 0) {
+                if (photo.getName().equalsIgnoreCase("photo")) {
+                    String fileName = getFileName(photo);
+                    if (photosSources.contains(fileName)) {
+                        uploadPhoto(retouchedPhotosPath.toString(), fileName, photo);
+                        retouchedPhotosPaths.add(fileName);
+                    } else {
+                        uploadPhoto(unselectedPhotosPath.toString(), fileName, photo);
+                        unselectedPhotosPaths.add(fileName);
+                    }
+                }
+            }
+        }
+        photos.setUnselectedPhotosPath(unselectedPhotosPaths);
+        photos.setRetouchedPhotosPath(retouchedPhotosPaths);
+        return photos;
+    }
+
+    private void uploadPhoto(String pathToPhoto, String fileName, Part photo) {
+        Path photoPath = Paths.get(pathToPhoto, fileName);
+        try (InputStream inputStream = photo.getInputStream()) {
+            Files.copy(inputStream, photoPath, new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+        } catch (IOException e) {
+            log.error("Can't save photos on local disk by path : {}", photoPath, e);
+            throw new RuntimeException("Can't save photos on local disk", e);
+        }
+    }
+
+    private void createDirectoryForPhoto(Path directory) {
+        if (!Files.exists(directory)) {
+            try {
+                Files.createDirectories(directory);
+                log.info("Directory was created : {}", directory);
+            } catch (IOException e) {
+                log.error("Directory was not created : {}", directory, e);
+                throw new RuntimeException("Directory was not created " + directory, e);
+            }
+        }
+    }
+
+    @Override
+    public InputStream addPhotoToArchive(int orderId, List<Photo> photos, PhotoStatus photoStatus) {
         if (photos.isEmpty()) {
             log.error("No paid photos in order with id : {}", orderId);
             throw new RuntimeException("No paid photos in order with id " + orderId);
         }
-        String pathToOrderPhoto = getPathToOrderDir(orderId);
+        String pathToOrderPhoto;
+        if (photoStatus.equals(PhotoStatus.PAID)) {
+            pathToOrderPhoto = getPathToRetouchedPhoto(orderId).toString();
+        } else {
+            pathToOrderPhoto = getPathToOrderDir(orderId);
+        }
         log.info("Add to archive photos on local disk by path : {}", pathToOrderPhoto);
         String archiveName = orderId + ".zip";
         File archive = new File(pathToOrderPhoto, archiveName);
@@ -137,7 +182,11 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     private Path getOrderPath(int orderId) {
-        return Paths.get(path, "Order-" + orderId);
+        return Paths.get(path, "Order-" + orderId, "original");
+    }
+
+    private Path getPathToRetouchedPhoto(int orderId) {
+        return Paths.get(path, "Order-" + orderId, "final");
     }
 
     private boolean deleteDir(File dir) {

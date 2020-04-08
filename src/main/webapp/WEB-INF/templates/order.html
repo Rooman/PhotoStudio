@@ -188,7 +188,7 @@
                     </button>
                     <button th:if="${orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.all.button}">
+                            th:text="#{order.download.all.button}" form="download_photo">
                             Download All
                     </button>
                 </div>
@@ -197,6 +197,11 @@
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
                             Save
                         </button>
+                    <button th:if="${orderSelected}" type="submit"
+                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                            th:text="#{order.download.all.button}" form="download_photo">
+                        Download All
+                    </button>
                      <button th:if="${orderNew}"
                                 class="btn btn-submit btn-outline-dark button order__button main-button-big"
                                 form="change_status">
@@ -204,6 +209,11 @@
                             and
                             select
                         </button>
+                    <button th:if="${orderSelected}"
+                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                            form="change_status">
+                        Status to ready
+                    </button>
                      <button th:if="${editOrder}" type="button"
                                 class="btn btn-submit btn-outline-dark button order__button main-button-big"
                                 data-toggle="modal" data-target="#delete-order">
@@ -235,6 +245,7 @@
             </div>
         </div>
     </div>
+    <form id="download_photo"  th:action="@{'/order/download-zip/'+${order.id}}" method="get"></form>
     <form id="delete_order" th:if="${editOrder}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${editOrder}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
     <form id="delete_photos" th:if="${editOrder}" th:action="@{'/order/delete-photos/'+${order.id}}" method="post">

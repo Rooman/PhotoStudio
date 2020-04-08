@@ -2,8 +2,11 @@ package com.photostudio.web.servlet;
 
 import com.photostudio.ServiceLocator;
 import com.photostudio.entity.photo.PhotoStatus;
+import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
 import com.photostudio.service.OrderService;
 
+import com.photostudio.web.util.CommonVariableAppendService;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -13,27 +16,45 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.photostudio.entity.user.UserRole.ADMIN;
 
 
 @WebServlet(urlPatterns = "/order/download-zip/*")
 @Slf4j
-public class GetPaidPhotosServlet extends HttpServlet {
+public class DownloadPhotosServlet extends HttpServlet {
     private static final int BUFFER_SIZE = 8192;
     private OrderService orderService = ServiceLocator.getService(OrderService.class);
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        log.info("Request to paid photo source received");
+        log.info("Request to download photo source received");
         String uri = request.getRequestURI();
         String[] partsOfUri = uri.split("/");
         int orderId = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
+
+        Map<String, Object> paramsMap = new HashMap<>();
+
+        CommonVariableAppendService.appendUser(paramsMap, request);
+        User user = (User) paramsMap.get("user");
+
+        PhotoStatus photoStatus;
+        UserRole userRole = user.getUserRole();
+        if (userRole == ADMIN) {
+            photoStatus = PhotoStatus.SELECTED;
+        } else {
+            photoStatus = PhotoStatus.PAID;
+        }
+        log.info("User is: {}. Photo status is: {}", userRole, photoStatus );
 
         response.setContentType("application/zip");
         response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader("Content-Disposition", "attachment; filename=" + orderId + ".zip");
 
-        try (InputStream inputStream = orderService.downloadPhotosByStatus(orderId, PhotoStatus.PAID)) {
+        try (InputStream inputStream = orderService.downloadPhotosByStatus(orderId, photoStatus)) {
             ServletOutputStream outputStream = response.getOutputStream();
             int count;
             byte[] buffer = new byte[BUFFER_SIZE];
