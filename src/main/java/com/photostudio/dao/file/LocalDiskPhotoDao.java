@@ -5,8 +5,12 @@ import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.photo.PhotoStatus;
 import com.photostudio.entity.photo.Photos;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Part;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import java.util.zip.ZipOutputStream;
 public class LocalDiskPhotoDao implements PhotoDao {
     private static final int BUFFER_SIZE = 8192;
     private String path;
+    private String pathToWatermark;
 
     public LocalDiskPhotoDao(String path) {
         if (path == null) {
@@ -27,9 +32,22 @@ public class LocalDiskPhotoDao implements PhotoDao {
         this.path = path;
     }
 
+    public LocalDiskPhotoDao(String path, String pathToWatermark) {
+        if (path == null) {
+            log.error("can't create object LocalDiskPhotoDao: path is null");
+            throw new RuntimeException("path to Photo folder is null");
+        }
+        if (pathToWatermark == null) {
+            log.error("can't create object LocalDiskPhotoDao: path to watermark is null");
+            throw new RuntimeException("path to watermark is null");
+        }
+        this.path = path;
+        this.pathToWatermark = pathToWatermark;
+    }
+
     @Override
     public String getPathToOrderDir(int orderId) {
-        return getOrderPath(orderId).toAbsolutePath().toString();
+        return getPathToPreviewPhoto(orderId).toAbsolutePath().toString();
     }
 
     @Override
@@ -64,14 +82,19 @@ public class LocalDiskPhotoDao implements PhotoDao {
     @Override
     public List<String> savePhotoByOrder(List<Part> photos, int orderId) {
         Path orderPath = getOrderPath(orderId);
+        Path previewPhotoDir = getPathToPreviewPhoto(orderId);
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
         createDirectoryForPhoto(orderPath);
+        createDirectoryForPhoto(previewPhotoDir);
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
-                    uploadPhoto(orderPath.toString(), fileName, photo);
+                    Path photoPath = Paths.get(orderPath.toString(), fileName);
+                    Path previewPhotoPath = Paths.get(previewPhotoDir.toString(), fileName);
+                    uploadPhoto(photoPath, photo);
+                    resizePhotoAddWatermark(photoPath.toString(), previewPhotoPath.toString());
                     photosPaths.add(fileName);
                 }
             }
@@ -87,6 +110,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
         List<String> retouchedPhotosPaths = new ArrayList<>();
         Path unselectedPhotosPath = getOrderPath(orderId);
         Path retouchedPhotosPath = getPathToRetouchedPhoto(orderId);
+        Path previewPhotoDir = getPathToPreviewPhoto(orderId);
         createDirectoryForPhoto(unselectedPhotosPath);
         createDirectoryForPhoto(retouchedPhotosPath);
         Photos photos = new Photos();
@@ -95,10 +119,14 @@ public class LocalDiskPhotoDao implements PhotoDao {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
                     if (photosSources.contains(fileName)) {
-                        uploadPhoto(retouchedPhotosPath.toString(), fileName, photo);
+                        Path photoPath = Paths.get(retouchedPhotosPath.toString(), fileName);
+                        uploadPhoto(photoPath, photo);
                         retouchedPhotosPaths.add(fileName);
                     } else {
-                        uploadPhoto(unselectedPhotosPath.toString(), fileName, photo);
+                        Path photoPath = Paths.get(unselectedPhotosPath.toString(), fileName);
+                        Path previewPhotoPath = Paths.get(previewPhotoDir.toString(), fileName);
+                        uploadPhoto(photoPath, photo);
+                        resizePhotoAddWatermark(photoPath.toString(), previewPhotoPath.toString());
                         unselectedPhotosPaths.add(fileName);
                     }
                 }
@@ -109,8 +137,8 @@ public class LocalDiskPhotoDao implements PhotoDao {
         return photos;
     }
 
-    private void uploadPhoto(String pathToPhoto, String fileName, Part photo) {
-        Path photoPath = Paths.get(pathToPhoto, fileName);
+    private void uploadPhoto(Path photoPath, Part photo) {
+        log.error("Upload photos on local disk by path : {}", photoPath);
         try (InputStream inputStream = photo.getInputStream()) {
             Files.copy(inputStream, photoPath, new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
         } catch (IOException e) {
@@ -141,7 +169,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
         if (photoStatus.equals(PhotoStatus.PAID)) {
             pathToOrderPhoto = getPathToRetouchedPhoto(orderId).toString();
         } else {
-            pathToOrderPhoto = getPathToOrderDir(orderId);
+            pathToOrderPhoto = getOrderPath(orderId).toString();
         }
         log.info("Add to archive photos on local disk by path : {}", pathToOrderPhoto);
         String archiveName = orderId + ".zip";
@@ -181,12 +209,32 @@ public class LocalDiskPhotoDao implements PhotoDao {
         return "";
     }
 
+    private void resizePhotoAddWatermark(String fromPhoto, String toPhoto) {
+        log.info("Resize photo : {}", fromPhoto);
+        try {
+            BufferedImage originalImage = ImageIO.read(new File(fromPhoto));
+            BufferedImage watermarkImage = ImageIO.read(new File(pathToWatermark));
+            Thumbnails.of(originalImage)
+                    .size(800, 800)
+                    .watermark(Positions.BOTTOM_RIGHT, watermarkImage, 0.5f)
+                    .toFile(toPhoto);
+            log.info("Save resizing photo : {}", toPhoto);
+        } catch (IOException e) {
+            log.error("Cannot read photo to resize");
+            throw new RuntimeException("Cannot read photo to resize", e);
+        }
+    }
+
     private Path getOrderPath(int orderId) {
         return Paths.get(path, "Order-" + orderId, "original");
     }
 
     private Path getPathToRetouchedPhoto(int orderId) {
         return Paths.get(path, "Order-" + orderId, "final");
+    }
+
+    private Path getPathToPreviewPhoto(int orderId) {
+        return Paths.get(path, "Order-" + orderId, "preview");
     }
 
     private boolean deleteDir(File dir) {

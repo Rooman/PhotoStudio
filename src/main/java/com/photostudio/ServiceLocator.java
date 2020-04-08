@@ -38,7 +38,7 @@ public class ServiceLocator {
         OrderDao orderDao = new JdbcOrderDao(dataSource);
         register(OrderDao.class, orderDao);
 
-        PhotoDao photoDiskDao = new LocalDiskPhotoDao(propertyReader.getString("dir.photo"));
+        PhotoDao photoDiskDao = new LocalDiskPhotoDao(propertyReader.getString("dir.photo"),propertyReader.getString("path.watermark"));
         register(PhotoDao.class, photoDiskDao);
 
         UserService userService = new DefaultUserService(userDao);
