@@ -54,7 +54,6 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
     private static final String UPDATE_ALL_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ?";
     private static final String UPDATE_LIST_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ? AND id IN (%s)";
-  //  private static final String UPDATE_PAID_PHOTOS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE orderId = ? AND photoStatusId = 2";
     private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
     private static final String GET_PHOTOS_SOURCES_BY_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=?";
     private static final String UPDATE_RETOUCHED_PHOTOS_STATUS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE source = ?";
@@ -494,18 +493,6 @@ public class JdbcOrderDao implements OrderDao {
             throw new RuntimeException("Error during execution update photos to selected", e);
         }
     }
-
-//    @Override
-//    public void setPhotosStatusPaid(int orderId) {
-//        log.info("Set photo status Paid : {}", orderId);
-//        try (Connection connection = dataSource.getConnection()) {
-//            Executor.execute(connection, UPDATE_PAID_PHOTOS, orderId);
-//            log.info("Photo status PAID is set successfully");
-//        } catch (SQLException e) {
-//            log.error("Error during execution update photos to paid", e);
-//            throw new RuntimeException("Error during execution update photos to paid", e);
-//        }
-//    }
 
     public List<Photo> getPhotosByStatus(int orderId, PhotoStatus photoStatus) {
         log.info("Get photos with status : {} from DB", photoStatus.getName());

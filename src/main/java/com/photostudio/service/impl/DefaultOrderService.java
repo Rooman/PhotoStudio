@@ -95,11 +95,6 @@ public class DefaultOrderService implements OrderService {
         if (!photoToUpload.isEmpty()) {
             addPhotos(orderId, photoToUpload);
         }
-//
-//        if (order.getStatus() == OrderStatus.SELECTED) {
-//            orderDao.setPhotosStatusPaid(orderId);
-//            moveStatusForward(orderId, userChanged);
-//        }
     }
 
     @Override

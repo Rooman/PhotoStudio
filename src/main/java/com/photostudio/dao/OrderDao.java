@@ -29,8 +29,6 @@ public interface OrderDao {
 
     void selectPhotos(int orderId, String selectedPhotos);
 
-   // void setPhotosStatusPaid(int orderId);
-
     void changeOrderStatus(int id, int orderStatusId);
 
     OrderStatus getOrderStatus(int id);
