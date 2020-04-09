@@ -8,7 +8,7 @@ inputs.forEach(function (input) {
         let fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
 
         if (fileName)
-            label.querySelector('span').innerHTML = fileName;
+            label.innerHTML = fileName;
         else
             label.innerHTML = labelVal;
     });
