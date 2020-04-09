@@ -1,5 +1,5 @@
 .order {
-    max-width: 1240px;
+    /*max-width: 1240px;*/
     padding-bottom: 75px;
 }
 
@@ -117,28 +117,30 @@
 
 .order-photo-card {
     position: relative;
-    height: 240px;
-    width: 258px;
+    height: 278px;
+    width: 285px;
     border: 1px solid #FCC5D9;
     border-radius: 10px;
     margin: 0 15px 30px 15px;
 }
 
-.order__photo-block {
+.order-photo-block {
     height: auto;
     display: flex;
     justify-content: center;
     border-radius: 10px 10px 0px 0px;
 }
 
-.order__photo-block-paid {
+.order-photo-block-paid {
     background-color: rgba(252, 197, 217, 0.6);
 }
 
 .order__photo {
+    height: auto;
+    width: auto;
     padding: 15px 15px 40px;
-    max-height: 230px;
-    max-width: 250px;
+    max-height: 215px;
+    max-width: 258px;
 }
 
 .order__photo__expanded {
@@ -148,16 +150,44 @@
     max-width: 640px;
 }
 
+
+
+.photo-name-block {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+
+    color: #000000;
+
+    opacity: 0.4;
+}
+
 .photo__buttons {
-    background: #FCC5D9;
-    width: 256px;
-    height: 40px;
+    width: 100%;
+    height: 34px;
     position: absolute;
     bottom: 0;
-
-    padding: 2% 78px 0;
+    border-top: 1px solid #FCC5D9;
     border-radius: 0px 0px 10px 10px;
 }
+
+.button-icons {
+    height: 14px;
+}
+
+/*.button-icons:hover > .overlay-icon {
+    width:100%;
+    height:100%;
+    position:absolute;
+    background-color:#000;
+    opacity:0.5;
+    border-radius:30px;
+}*/
 
 .photo-option {
     text-decoration: none;
@@ -243,8 +273,7 @@
 
 .custom-checkmark {
   position: absolute;
-  top: 0;
-  left: 7px;
+  left: 1em;
   height: 20px;
   width: 20px;
   background-color: rgb(100%, 100%, 100%, 0.3);

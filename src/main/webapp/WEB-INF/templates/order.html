@@ -113,23 +113,34 @@
                                th:id="'checkbox'+${photo.getId()}">
                         <span class="custom-checkmark"></span>
                     </label>
-                    <div th:class="order__photo-block"
-                         th:classappend="${isPaid} ? order__photo-block-paid : ''">
-                        <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
-                             alt="photo">
+                    <div th:class="order-photo-block"
+                         th:classappend="${isPaid} ? order-photo-block-paid : ''">
+                         <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
+                                 alt="photo">
+                    </div>
+                    <div class="photo-name-block">
+                        <p class="photo-name" th:text="${photo.getName()}"></p>
                     </div>
                     <div class="photo__buttons">
                         <div class="row justify-content-center">
-                            <a class="photo-option col-auto text-center zoom__button" href="#">
-                                <i class="fas fa-search-plus"></i></a>
                             <a class="photo-option col-auto text-center" href="#"
                                th:if="${roleUser and isPaid}">
-                                <i class="fas fa-arrow-down"></i></a>
+                                <!--<div class="button-icons">
+                                    <div class="overlay-icon">
+                                        <img class="" th:src="@{/assets/images/icons/download-icon.png}">
+                                    </div>
+                                </div>-->
+                                <img class="button-icons" th:src="@{/assets/images/icons/download-icon.png}">
+                            </a>
+                            <a class="photo-option col-auto text-center zoom__button" href="#">
+                                <img class="button-icons" th:src="@{/assets/images/icons/zoom-in-icon.png}">
+                            </a>
                             <a class="photo-option col-auto text-center" href="#"
                                th:if="${roleAdmin and orderNew}"
                                th:onclick="|deletePhoto(${photo.getId()})|"
                                form="delete_photos">
-                                <i class="fas fa-trash-alt"></i></a>
+                                <img class="button-icons" th:src="@{/assets/images/icons/delete-icon.png}">
+                            </a>
                         </div>
                     </div>
                 </div>

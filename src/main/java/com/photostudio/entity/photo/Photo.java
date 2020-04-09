@@ -11,4 +11,11 @@ public class Photo {
     private String source;
     @NonNull
     private PhotoStatus photoStatus;
+
+    public String getName() {
+        String[] partsOfPath = source.split("/");
+        String name = partsOfPath[partsOfPath.length - 1];
+
+        return name.substring(0, name.indexOf("."));
+    }
 }
