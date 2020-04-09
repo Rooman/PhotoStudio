@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
 
 html, body {
-    height:100%;
+   height:100%;
 }
 
 body {
@@ -390,3 +390,41 @@ button.user-menu__item:hover {
  color: red;
 }
 /* User dropdown menu on Navigation end*/
+
+/*Notification form for message*/
+.notification-form-message {
+    z-index: 3;
+    position: fixed;
+    border: 1px solid #999999;
+    border-radius: 10px;
+    background-color: #fff;
+    opacity: .8;
+    margin: auto 10px 10px auto;
+    width: 250px;
+    height: 150px;
+    bottom:10px;
+    right:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 15px;
+    text-align: center;
+    color: #000000;
+    transition: opacity 1s ease-in;
+}
+
+.notification-form-message--hidden {
+     transition: opacity 1s ease-out;
+     opacity: 0;
+}
+
+#notification-close {
+    top: 5px;
+    right: 15px;
+    position:absolute;
+    cursor:pointer;
+}
+
+
+
+/*Notification form for message end*/

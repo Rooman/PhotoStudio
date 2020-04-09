@@ -1,6 +1,7 @@
 package com.photostudio.service.impl;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.dao.EmailTemplateDao;
 import com.photostudio.dao.UserDao;
 import com.photostudio.dao.jdbc.*;
@@ -8,9 +9,10 @@ import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
-import com.photostudio.service.MailService;
+import com.photostudio.service.NotificationService;
 import com.photostudio.service.OrderStatusService;
 import com.photostudio.service.UserService;
+import com.photostudio.service.WebNotificationService;
 import com.photostudio.service.testUtils.MockMailSender;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.*;
@@ -39,11 +41,13 @@ public class DefaultOrderServiceITest {
         MockMailSender mockMailSender = new MockMailSender(dataSource);
         UserDao userDao = new JdbcUserDao(jdbcDataSource);
         UserService userService = new DefaultUserService(userDao);
+        ObjectMapper objectMapper = new ObjectMapper();
+        WebNotificationService webNotificationService = new WSNotificationService(objectMapper);
 
         EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(jdbcDataSource);
-        MailService mailService = new DefaultMailService(mockMailSender, userService, emailTemplateDao);
+        NotificationService notificationService = new DefaultNotificationService(mockMailSender, userService, emailTemplateDao, webNotificationService);
 
-        orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, mailService);
+        orderService = new DefaultOrderService(jdbcOrderDao, orderStatusService, notificationService);
     }
 
     @BeforeEach

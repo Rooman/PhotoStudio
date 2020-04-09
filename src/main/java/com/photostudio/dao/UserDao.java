@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserDao {
     List<User> getAllUsers();
 
+    List<User> getAdmins();
+
     void add(User user);
 
     User getUserById(long id);

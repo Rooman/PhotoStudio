@@ -4,6 +4,7 @@ import com.photostudio.dao.UserDao;
 import com.photostudio.dao.UserLanguageDao;
 import com.photostudio.dao.jdbc.mapper.UserRowMapper;
 import com.photostudio.entity.user.User;
+import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.GetUserByEmailException;
 import com.photostudio.exception.LoginPasswordInvalidException;
 import lombok.extern.slf4j.Slf4j;
@@ -125,6 +126,30 @@ public class JdbcUserDao implements UserDao {
             throw new RuntimeException("Can't show all users", e);
         }
     }
+
+    @Override
+    public List<User> getAdmins() {
+        log.info("Get admin user from DB");
+        String sql = GET_USER_BY_PARAMS + " u.userRoleId = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, 1);
+            List<User> users = new ArrayList<>();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                User user = null;
+                while (resultSet.next()) {
+                    user = USER_ROW_MAPPER.mapRow(resultSet);
+                    users.add(user);
+                }
+                log.info("Get admin user: {} from DB", users);
+                return users;
+            }
+        } catch (SQLException e) {
+            log.error("An exception occurred while trying to get admin user", e);
+            throw new RuntimeException("Can't find admin user", e);
+        }
+    }
+
 
     @Override
     public void add(User user) {
