@@ -41,7 +41,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
                 <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/orders}">Order journal</a></li>
-                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">New order</li>
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page" th:text="${addNewOrder} ? 'New Order' : 'Order'"></li>
             </ol>
         </nav>
     </div>
