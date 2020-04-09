@@ -75,7 +75,9 @@
                        id="email"
                        th:attr="value=${((newEmail != null) ? newEmail : (order.id != 0) ? order.user.email : null)},
                             placeholder=${order.user == null and newEmail == null ? 'Email' : null}"
-                       name="email" required>
+                       name="email" required
+                       oninput="enableAddPhotos()"
+                >
                 <div th:if="${invalid == 'yes'}" class="form-text error">Email not found
                 </div>
             </div>
@@ -117,7 +119,8 @@
                             <div th:class="order__photo-block"
                                  th:classappend="${isPaid} ? order__photo-block-paid : ''">
                                 <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
-                                     alt="photo">
+                                     alt="photo" th:onclick="'checkbox'+${photo.getId()}+'.click()'"
+                                >
                             </div>
                             <div class="photo__buttons">
                                 <div class="row justify-content-center">
@@ -148,17 +151,19 @@
             <div class="photo-add-delete-buttons">
                 <div th:if="${roleAdmin and (addNewOrder or orderNew or orderSelected)}">
                     <input type="file" name="photo" id="file" class="inputfile"
-                           data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
-                    <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
+                           data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"
+                           th:disabled="${addNewOrder and (newEmail == null)}"
+                    />
+                    <label id="labelForFile" for="file" class="btn btn-submit btn-outline-dark button order__button"
+                           th:data-file-disabled="${addNewOrder and (newEmail == null) ? 'true' : 'false'}">
                         <span>Add</span>
                     </label>
 
-                    <a th:if="${roleAdmin and (addNewOrder or orderNew)}" class="photo-option" href="#">
-                        <button class="btn btn-submit btn-outline-dark button order__button"
-                                form="delete_photos" th:disabled="${addNewOrder}">
-                            Delete all
-                        </button>
-                    </a>
+                    <button th:if="${roleAdmin and (addNewOrder or orderNew)}"
+                            class="btn btn-submit btn-outline-dark button order__button"
+                            form="delete_photos" th:disabled="${addNewOrder}">
+                        Delete all
+                    </button>
                 </div>
                 <div class="order__complete-buttons">
                     <div th:if="${roleUser and !orderSelected}">
@@ -169,7 +174,7 @@
                         </button>
                         <button type="button" class="btn btn-submit btn-outline-dark btn-lg button order__button"
                                 th:text="#{order.deselect.button}" onclick="unSelectAll()">
-                                    Deselect All
+                            Deselect All
                         </button>
                     </div>
                 </div>
@@ -191,7 +196,7 @@
                             id="btnUserSubmit"
                             onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();"
                     >
-                            Submit
+                        Submit
                     </button>
                     <button class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                             th:text="#{order.resubmit.button}"
@@ -199,31 +204,31 @@
                             id="btnUserReselect"
                             onclick="btnUserSubmit.disabled=false; disabled=true;"
                     >
-                            Re-select
+                        Re-select
                     </button>
                     <button th:if="${orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                             th:text="#{order.download.all.button}">
-                            Download All
+                        Download All
                     </button>
                 </div>
                 <div th:if="${roleAdmin}">
-                     <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
+                    <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
-                            Save
-                        </button>
-                     <button th:if="${orderNew}"
-                                class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                                form="change_status">
-                            Status to view
-                            and
-                            select
-                        </button>
-                     <button th:if="${editOrder}" type="button"
-                                class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                                data-toggle="modal" data-target="#delete-order">
-                            Delete order
-                        </button>
+                        Save
+                    </button>
+                    <button th:if="${orderNew}"
+                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                            form="change_status">
+                        Status to view
+                        and
+                        select
+                    </button>
+                    <button th:if="${editOrder}" type="button"
+                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                            data-toggle="modal" data-target="#delete-order">
+                        Delete order
+                    </button>
                 </div>
             </div>
         </div>
@@ -263,5 +268,6 @@
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
 <script th:src="@{/assets/js/order/delete-photo.js}"></script>
 <script th:src="@{/assets/js/order/select-photo.js}"></script>
+<script th:src="@{/assets/js/order/enable-add-photos.js}"></script>
 
 </html>
