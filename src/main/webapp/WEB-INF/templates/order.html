@@ -123,7 +123,9 @@
                                     <a class="photo-option col-auto text-center" href="#">
                                         <i class="fas fa-search-plus"></i></a>
                                     <a class="photo-option col-auto text-center" href="#"
-                                       th:if="${roleUser and isPaid}">
+                                       th:if="${roleUser and isPaid}"
+                                       th:onclick="|downloadPhoto(${photo.getId()})|"
+                                       form="download_photo">
                                         <i class="fas fa-arrow-down"></i></a>
                                     <a class="photo-option col-auto text-center" href="#"
                                        th:if="${roleAdmin and orderNew}"
@@ -161,7 +163,7 @@
                         </button>
                         <button type="button" class="btn btn-submit btn-outline-dark btn-lg button order__button"
                                 th:text="#{order.deselect.button}" onclick="unSelectAll()">
-                                    Deselect All
+                            Deselect All
                         </button>
                     </div>
                 </div>
@@ -179,46 +181,46 @@
                     <button th:if="${!orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                             th:text="#{order.submit.button}">
-                            Submit
+                        Submit
                     </button>
                     <button th:if="${orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                             th:text="#{order.resubmit.button}">
-                            Re-submit
+                        Re-submit
                     </button>
                     <button th:if="${orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.all.button}" form="download_photo">
-                            Download All
+                            th:text="#{order.download.paid.button}" form="download_photos">
+                        Download Paid
                     </button>
                 </div>
                 <div th:if="${roleAdmin}">
-                     <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
+                    <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
-                            Save
-                        </button>
+                        Save
+                    </button>
                     <button th:if="${orderSelected}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.all.button}" form="download_photo">
-                        Download All
+                            th:text="#{order.download.selected.button}" form="download_photos">
+                        Download Selected
                     </button>
-                     <button th:if="${orderNew}"
-                                class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                                form="change_status">
-                            Status to view
-                            and
-                            select
-                        </button>
+                    <button th:if="${orderNew}"
+                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                            form="change_status">
+                        Status to view
+                        and
+                        select
+                    </button>
                     <button th:if="${orderSelected}"
                             class="btn btn-submit btn-outline-dark button order__button main-button-big"
                             form="change_status">
                         Status to ready
                     </button>
-                     <button th:if="${editOrder}" type="button"
-                                class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                                data-toggle="modal" data-target="#delete-order">
-                            Delete order
-                        </button>
+                    <button th:if="${editOrder}" type="button"
+                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                            data-toggle="modal" data-target="#delete-order">
+                        Delete order
+                    </button>
                 </div>
             </div>
         </div>
@@ -245,7 +247,10 @@
             </div>
         </div>
     </div>
-    <form id="download_photo"  th:action="@{'/order/download-zip/'+${order.id}}" method="get"></form>
+    <form id="download_photo" th:action="@{'/order/download-zip/'+${order.id}}" method="get">
+        <input type='hidden' name='downloadPhotoId' value='0' id='downloadPhotoId'/>
+    </form>
+    <form id="download_photos" th:action="@{'/order/download-zip/'+${order.id}}" method="get"></form>
     <form id="delete_order" th:if="${editOrder}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${editOrder}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
     <form id="delete_photos" th:if="${editOrder}" th:action="@{'/order/delete-photos/'+${order.id}}" method="post">
@@ -257,5 +262,6 @@
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
 <script th:src="@{/assets/js/order/delete-photo.js}"></script>
+<script th:src="@{/assets/js/order/download-photo.js}"></script>
 <script th:src="@{/assets/js/order/select-photo.js}"></script>
 </html>

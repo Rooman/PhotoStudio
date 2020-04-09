@@ -23,6 +23,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
     private static final int BUFFER_SIZE = 8192;
     private String path;
     private String pathToWatermark;
+    private int sizePreviewPhoto = 800;
 
     public LocalDiskPhotoDao(String path) {
         if (path == null) {
@@ -32,7 +33,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
         this.path = path;
     }
 
-    public LocalDiskPhotoDao(String path, String pathToWatermark) {
+    public LocalDiskPhotoDao(String path, String pathToWatermark, int sizePreviewPhoto) {
         if (path == null) {
             log.error("can't create object LocalDiskPhotoDao: path is null");
             throw new RuntimeException("path to Photo folder is null");
@@ -41,8 +42,12 @@ public class LocalDiskPhotoDao implements PhotoDao {
             log.error("can't create object LocalDiskPhotoDao: path to watermark is null");
             throw new RuntimeException("path to watermark is null");
         }
+        if (sizePreviewPhoto != 0){
+            this.sizePreviewPhoto = sizePreviewPhoto;
+        }
         this.path = path;
         this.pathToWatermark = pathToWatermark;
+
     }
 
     @Override
@@ -54,10 +59,14 @@ public class LocalDiskPhotoDao implements PhotoDao {
     public void deletePhoto(int orderId, String source) {
         log.info("delete file {} from order {}", source, orderId);
         Path photoPath = Paths.get(getPathToOrderDir(orderId), source);
+        Path originalPhotoPath = Paths.get(getOrderPath(orderId).toString(), source);
+        Path retouchedPhotoPath = Paths.get(getPathToRetouchedPhoto(orderId).toString(), source);
         try {
             if (!Files.deleteIfExists(photoPath)) {
                 throw new RuntimeException("File " + source + " does not exist");
             }
+            Files.deleteIfExists(originalPhotoPath);
+            Files.deleteIfExists(retouchedPhotoPath);
         } catch (IOException e) {
             log.error("File was not deleted : {}", photoPath, e);
             throw new RuntimeException("File was not deleted " + photoPath, e);
@@ -66,7 +75,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     @Override
     public void deleteByOrder(int orderId) {
-        String orderPath = getPathToOrderDir(orderId);
+        String orderPath = getPathToOrder(orderId).toString();
         log.info("delete photos from local disk by path:{}", orderPath);
         File dir = new File(orderPath);
         if (dir.exists()) {
@@ -160,11 +169,18 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     @Override
-    public InputStream addPhotoToArchive(int orderId, List<Photo> photos, PhotoStatus photoStatus) {
-        if (photos.isEmpty()) {
-            log.error("No paid photos in order with id : {}", orderId);
-            throw new RuntimeException("No paid photos in order with id " + orderId);
+    public InputStream downloadRetouchedPhoto(int orderId, String photoSource){
+        log.info("Download retouched photo with source : {} and orderId : {} ", photoSource, orderId);
+        try {
+            return new FileInputStream(new File (getPathToRetouchedPhoto(orderId).toString(), photoSource));
+        } catch (FileNotFoundException e) {
+            log.error("Retouched photo with source : {} and orderId : {} not found", photoSource, orderId);
+            throw  new RuntimeException("Retouched photo with source " + photoSource + " and orderId " + orderId + " not found", e);
         }
+    }
+
+    @Override
+    public InputStream addPhotoToArchive(int orderId, List<Photo> photos, PhotoStatus photoStatus) {
         String pathToOrderPhoto;
         if (photoStatus.equals(PhotoStatus.PAID)) {
             pathToOrderPhoto = getPathToRetouchedPhoto(orderId).toString();
@@ -215,7 +231,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
             BufferedImage originalImage = ImageIO.read(new File(fromPhoto));
             BufferedImage watermarkImage = ImageIO.read(new File(pathToWatermark));
             Thumbnails.of(originalImage)
-                    .size(800, 800)
+                    .size(sizePreviewPhoto, sizePreviewPhoto)
                     .watermark(Positions.BOTTOM_RIGHT, watermarkImage, 0.5f)
                     .toFile(toPhoto);
             log.info("Save resizing photo : {}", toPhoto);
@@ -235,6 +251,10 @@ public class LocalDiskPhotoDao implements PhotoDao {
 
     private Path getPathToPreviewPhoto(int orderId) {
         return Paths.get(path, "Order-" + orderId, "preview");
+    }
+
+    private Path getPathToOrder(int orderId) {
+        return Paths.get(path, "Order-" + orderId);
     }
 
     private boolean deleteDir(File dir) {

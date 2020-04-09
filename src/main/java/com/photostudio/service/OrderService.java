@@ -46,4 +46,6 @@ public interface OrderService {
     String getPathByPhotoId(long photoId);
 
     InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus);
+
+    InputStream downloadRetouchedPhoto(int orderId, long photoId);
 }

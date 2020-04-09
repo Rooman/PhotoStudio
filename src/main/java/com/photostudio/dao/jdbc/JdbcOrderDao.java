@@ -56,7 +56,7 @@ public class JdbcOrderDao implements OrderDao {
     private static final String UPDATE_LIST_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ? AND id IN (%s)";
     private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
     private static final String GET_PHOTOS_SOURCES_BY_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=?";
-    private static final String UPDATE_RETOUCHED_PHOTOS_STATUS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE source = ?";
+    private static final String UPDATE_RETOUCHED_PHOTOS_STATUS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE source = ? AND orderId = ? AND photoStatusId=2";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
     private static final PhotoSourceRowMapper PHOTO_SOURCE_ROW_MAPPER = new PhotoSourceRowMapper();
@@ -466,12 +466,13 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void updateStatusRetouchedPhotos(List<String> photosPaths) {
+    public void updateStatusRetouchedPhotos(List<String> photosPaths, int orderId) {
         log.info("Update retouched photos status");
         for (String pathToPhoto : photosPaths) {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RETOUCHED_PHOTOS_STATUS)) {
                 preparedStatement.setString(1, pathToPhoto);
+                preparedStatement.setInt(2, orderId);
                 preparedStatement.executeUpdate();
                 log.info("Photo :{} status is retouched", pathToPhoto);
             } catch (SQLException e) {

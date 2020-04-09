@@ -118,7 +118,7 @@ public class DefaultOrderService implements OrderService {
         List<String> photosSources = orderDao.getPhotosSourcesByOrderId(orderId);
         Photos photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId, photosSources);
         orderDao.savePhotos(orderId, photosPath.getUnselectedPhotosPath());
-        orderDao.updateStatusRetouchedPhotos(photosPath.getRetouchedPhotosPath());
+        orderDao.updateStatusRetouchedPhotos(photosPath.getRetouchedPhotosPath(), orderId);
 
     }
 
@@ -135,6 +135,13 @@ public class DefaultOrderService implements OrderService {
         String photoSource = orderDao.getPathByPhotoId(photoId);
         orderDao.deletePhoto(photoId);
         photoDao.deletePhoto(orderId, photoSource);
+    }
+
+    @Override
+    public InputStream downloadRetouchedPhoto(int orderId, long photoId) {
+        log.info("Started service download photo by id {}", photoId);
+        String photoSource = orderDao.getPathByPhotoId(photoId);
+        return photoDao.downloadRetouchedPhoto(orderId, photoSource);
     }
 
     @Override

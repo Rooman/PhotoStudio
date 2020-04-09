@@ -25,7 +25,7 @@ public interface OrderDao {
 
     void savePhotos(int orderId, List<String> photosPath);
 
-    void updateStatusRetouchedPhotos(List<String> photosPath);
+    void updateStatusRetouchedPhotos(List<String> photosPath, int orderId);
 
     void selectPhotos(int orderId, String selectedPhotos);
 

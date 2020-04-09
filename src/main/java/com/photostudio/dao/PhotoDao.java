@@ -22,4 +22,6 @@ public interface PhotoDao {
 
     InputStream addPhotoToArchive(int orderId, List<Photo> photos, PhotoStatus photoStatus);
 
+    InputStream downloadRetouchedPhoto(int orderId, String photoSource);
+
 }

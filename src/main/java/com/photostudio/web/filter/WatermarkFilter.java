@@ -19,7 +19,7 @@ import java.io.*;
 public class WatermarkFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig)  {
     }
 
     @Override
@@ -99,7 +99,7 @@ public class WatermarkFilter implements Filter {
             origResponse = response;
         }
 
-        public ServletOutputStream createOutputStream() throws IOException {
+        public ServletOutputStream createOutputStream()  {
             return servletOutputStream == null ? new ServletOutputStream() {
                 @Override
                 public boolean isReady() {
@@ -112,14 +112,14 @@ public class WatermarkFilter implements Filter {
                 }
 
                 @Override
-                public void write(int b) throws IOException {
+                public void write(int b)  {
                     byteArrayOutputStream.write(b);
                 }
             } : servletOutputStream;
         }
 
         @Override
-        public ServletOutputStream getOutputStream() throws IOException {
+        public ServletOutputStream getOutputStream() {
             if (servletOutputStream == null) {
                 servletOutputStream = createOutputStream();
             }
@@ -127,7 +127,7 @@ public class WatermarkFilter implements Filter {
         }
 
         @Override
-        public PrintWriter getWriter() throws IOException {
+        public PrintWriter getWriter()  {
             servletOutputStream = getOutputStream();
             if (printWriter == null) {
                 printWriter = new PrintWriter(servletOutputStream);
