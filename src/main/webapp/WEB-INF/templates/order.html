@@ -257,9 +257,11 @@
     </form>
 </div>
 </body>
+<meta th:replace="fragment/notification.html :: body">
 <meta th:replace="fragment/script.html :: script">
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
 <script th:src="@{/assets/js/order/delete-photo.js}"></script>
 <script th:src="@{/assets/js/order/select-photo.js}"></script>
+
 </html>
