@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+
 html, body {
    height:100%;
 }
@@ -6,11 +8,16 @@ body {
     font-family: "Cormorant Upright", sans-serif;
 }
 
+:lang(ru) {
+    font-family: 'Amatic SC', cursive;
+}
+
 main {
   min-height:90%;
 }
 
 .page_main-title {
+    font-family: "Cormorant Upright", sans-serif;
     font-weight: 300;
     font-size: 144px;
     line-height: 150px;

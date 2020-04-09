@@ -7,16 +7,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav top-navbar">
             <li class="nav-item active ">
-                <a class="nav-link" href="home" th:text="#{home.nav.title}">Home</a>
+                <a class="nav-link" th:href="@{/home}" th:text="#{home.nav.title}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="portfolio" th:text="#{portfolio.nav.title}">Portfolio</a>
+                <a class="nav-link" th:href="@{/portfolio}" th:text="#{portfolio.nav.title}">Portfolio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="price" th:text="#{price.nav.title}">Price</a>
+                <a class="nav-link" th:href="@{price}" th:text="#{price.nav.title}">Price</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="contact" th:text="#{contact.nav.title}">Contact</a>
+                <a class="nav-link" th:href="@{contact}" th:text="#{contact.nav.title}">Contact</a>
             </li>
             <li class="nav-item dropdown top-dropdown">
                 <a class="nav-link dropdown-toggle dropdown-choose" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -24,12 +24,12 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="?lang=en">En</a>
-                    <a class="dropdown-item" href="?lang=de">Ge</a>
+                    <a class="dropdown-item" href="?lang=de">De</a>
                     <a class="dropdown-item" href="?lang=ru">Ru</a>
                 </div>
             </li>
 
-            <li th:if="${ user==null}" class="nav-item">
+            <li th:if="${user==null}" class="nav-item">
                 <a class="nav-link" href="login" th:text="#{login.label}">Login</a>
             </li>
 
