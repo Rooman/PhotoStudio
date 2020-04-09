@@ -16,20 +16,23 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/notification", configurator = MyEndpointConfigurator.class)
 @Slf4j
 public class NotificationEndpoint {
-    private WebNotificationService notificationService = ServiceLocator.getService(WebNotificationService.class);
+    private WebNotificationService webNotificationService = ServiceLocator.getService(WebNotificationService.class);
     private SecurityService securityService = ServiceLocator.getService(SecurityService.class);
 
     @OnOpen
     public void onOpen(Session session) {
         String userToken = (String) session.getUserProperties().get("user-token");
         User user = securityService.getSession(userToken).getUser();
+        session.setMaxIdleTimeout(2*60*60*1000);
         UserWSSession userWSSession = new UserWSSession(session, user);
-        notificationService.addSession(userWSSession);
+        webNotificationService.addSession(userWSSession);
     }
+
+
 
     @OnClose
     public void onClose(Session session) {
-        notificationService.removeSession(session);
+        webNotificationService.removeSession(session);
     }
 
     @OnError
