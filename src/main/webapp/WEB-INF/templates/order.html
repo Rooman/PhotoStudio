@@ -151,8 +151,7 @@
                 <div th:if="${roleAdmin and (addNewOrder or orderNew or orderSelected)}">
                     <input type="file" name="photo" id="file" class="inputfile"
                            data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"
-                           th:disabled="${addNewOrder and (newEmail == null)}"
-                    />
+                           th:disabled="${addNewOrder and (newEmail == null)}" />
                     <label id="labelForFile" for="file" class="btn btn-submit btn-outline-dark button order__button"
                            th:data-file-disabled="${addNewOrder and (newEmail == null) ? 'true' : 'false'}">
                         <span>Add</span>
@@ -193,16 +192,14 @@
                             th:text="#{order.submit.button}"
                             th:disabled="${orderReady}"
                             id="btnUserSubmit"
-                            onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();"
-                    >
+                            onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();">
                         Submit
                     </button>
                     <button class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                             th:text="#{order.resubmit.button}"
                             th:if="${orderReady}"
                             id="btnUserReselect"
-                            onclick="btnUserSubmit.disabled=false; disabled=true;"
-                    >
+                            onclick="btnUserSubmit.disabled=false; disabled=true;" >
                         Re-select
                     </button>
                     <button th:if="${orderReady}" type="submit"
