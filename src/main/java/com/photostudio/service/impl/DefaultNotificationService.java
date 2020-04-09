@@ -63,7 +63,7 @@ public class DefaultNotificationService implements NotificationService {
         mailSender.sendToAdmin(emailTemplate.generateHeader(userMail, orderId), emailTemplate.generateBody(userMail, orderId));
         List<User> userAdmins = userService.getAmins();
         for (User userAdmin : userAdmins) {
-            webNotificationService.notification(userAdmin, new OrderIdAndMessageText(orderId, emailTemplate.generateHeader(userMail, orderId)));
+            webNotificationService.notificate(userAdmin, new OrderIdAndMessageText(orderId, emailTemplate.generateHeader(userMail, orderId)));
         }
     }
 
@@ -72,6 +72,6 @@ public class DefaultNotificationService implements NotificationService {
         log.info("Send mail to {} after changing status to {} in order {}", userMail, orderStatus, orderId);
         EmailTemplate emailTemplate = emailTemplateDao.getByLangAndStatus(userOrdered.getLangId(), orderStatus);
         mailSender.send(emailTemplate.generateHeader(orderId), emailTemplate.generateBody(orderId), userMail);
-        webNotificationService.notification(userOrdered, new OrderIdAndMessageText(orderId, emailTemplate.generateHeader(orderId) + " " + emailTemplate.generateBody(orderId)));
+        webNotificationService.notificate(userOrdered, new OrderIdAndMessageText(orderId, emailTemplate.generateHeader(orderId) + " " + emailTemplate.generateBody(orderId)));
     }
 }

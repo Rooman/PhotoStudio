@@ -3,7 +3,6 @@ package com.photostudio.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photostudio.entity.user.User;
 import com.photostudio.service.WebNotificationService;
-import com.photostudio.service.entity.OrderIdAndMessageText;
 import com.photostudio.service.entity.UserWSSession;
 import lombok.SneakyThrows;
 
@@ -22,13 +21,13 @@ public class WSNotificationService implements WebNotificationService {
 
     @Override
     @SneakyThrows
-    public void notification(User user, OrderIdAndMessageText orderIdAndMessageText) {
-        String sendMessageJSON = createMessage(orderIdAndMessageText);
+    public void notificate(User user, Object objectMesage) {
+        String sendMessageJSON = createMessage(objectMesage);
         for (UserWSSession wsSession : sessionList) {
             User userSession = wsSession.getUser();
             if (userSession.getId() == user.getId()) {
                 Session session = wsSession.getSession();
-                session.getBasicRemote().sendText(sendMessageJSON);
+                 session.getBasicRemote().sendText(sendMessageJSON);
             }
         }
     }
@@ -48,7 +47,7 @@ public class WSNotificationService implements WebNotificationService {
     }
 
     @SneakyThrows
-    String createMessage(OrderIdAndMessageText orderIdAndMessageText) {
-        return objectMapper.writeValueAsString(orderIdAndMessageText);
+    String createMessage(Object object) {
+        return objectMapper.writeValueAsString(object);
     }
 }

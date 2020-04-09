@@ -7,7 +7,7 @@ import com.photostudio.service.entity.UserWSSession;
 import javax.websocket.Session;
 
 public interface WebNotificationService {
-    void notification(User user, OrderIdAndMessageText orderIdAndMessageText);
+    void notificate(User user, Object objectMessage);
 
     void addSession(UserWSSession session);
 
