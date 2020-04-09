@@ -92,10 +92,12 @@ public class LocalDiskPhotoDao implements PhotoDao {
     public List<String> savePhotoByOrder(List<Part> photos, int orderId) {
         Path orderPath = getOrderPath(orderId);
         Path previewPhotoDir = getPathToPreviewPhoto(orderId);
+        Path retouchedPhotoDir = getPathToRetouchedPhoto(orderId);
         log.info("save photos on local disk by path : {}", orderPath);
         List<String> photosPaths = new ArrayList<>();
         createDirectoryForPhoto(orderPath);
         createDirectoryForPhoto(previewPhotoDir);
+        createDirectoryForPhoto(retouchedPhotoDir);
         for (Part photo : photos) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {

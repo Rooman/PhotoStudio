@@ -125,7 +125,7 @@
                                     <a class="photo-option col-auto text-center" href="#"
                                        th:if="${roleUser and isPaid}"
                                        th:onclick="|downloadPhoto(${photo.getId()})|"
-                                       form="download_photo">
+                                       form="download_paid_photo">
                                         <i class="fas fa-arrow-down"></i></a>
                                     <a class="photo-option col-auto text-center" href="#"
                                        th:if="${roleAdmin and orderNew}"
@@ -190,7 +190,7 @@
                     </button>
                     <button th:if="${orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.paid.button}" form="download_photos">
+                            th:text="#{order.download.paid.button}" form="download_paid_photos">
                         Download Paid
                     </button>
                 </div>
@@ -199,10 +199,15 @@
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
                         Save
                     </button>
-                    <button th:if="${orderSelected}" type="submit"
+                    <button th:if="${orderSelected or orderReady}" type="submit"
                             class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.selected.button}" form="download_photos">
+                            th:text="#{order.download.selected.button}" form="download_selected_photos">
                         Download Selected
+                    </button>
+                    <button  th:if="${orderSelected or orderReady}" type="submit"
+                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                            th:text="#{order.download.paid.button}" form="download_paid_photos">
+                        Download Paid
                     </button>
                     <button th:if="${orderNew}"
                             class="btn btn-submit btn-outline-dark button order__button main-button-big"
@@ -247,10 +252,11 @@
             </div>
         </div>
     </div>
-    <form id="download_photo" th:action="@{'/order/download-zip/'+${order.id}}" method="get">
+    <form id="download_paid_photos" th:action="@{'/order/download-paid/'+${order.id}}" method="get"></form>
+    <form id="download_paid_photo" th:action="@{'/order/download-paid/'+${order.id}}" method="get">
         <input type='hidden' name='downloadPhotoId' value='0' id='downloadPhotoId'/>
     </form>
-    <form id="download_photos" th:action="@{'/order/download-zip/'+${order.id}}" method="get"></form>
+    <form id="download_selected_photos" th:action="@{'/order/download-selected/'+${order.id}}" method="get"></form>
     <form id="delete_order" th:if="${editOrder}" th:action="@{'/order/delete/'+${order.id}}" method="post"></form>
     <form id="change_status" th:if="${editOrder}" th:action="@{'/order/forward/'+${order.id}}" method="post"></form>
     <form id="delete_photos" th:if="${editOrder}" th:action="@{'/order/delete-photos/'+${order.id}}" method="post">
