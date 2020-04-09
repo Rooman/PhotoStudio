@@ -35,11 +35,6 @@ public class LoginServlet extends HttpServlet {
 
         Map<String, Object> paramsMap = new HashMap<>();
 
-        String isInvalid = request.getParameter("invalid");
-        if ("yes".equals(isInvalid)) {
-            paramsMap.put("invalid", "yes");
-        }
-
         response.setContentType("text/html;charset=utf-8");
 
         TemplateEngineFactory.process(request, response, "login", paramsMap);
@@ -69,9 +64,11 @@ public class LoginServlet extends HttpServlet {
                 }
 
             } catch (LoginPasswordInvalidException e) {
-                String lang = request.getParameter("lang");
+                Map<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("invalid", "yes");
 
-                response.sendRedirect("login?lang=" + lang + "&invalid=yes");
+                response.setContentType("text/html;charset=utf-8");
+                TemplateEngineFactory.process(request, response, "login", paramsMap);
             }
         } catch (IOException e) {
             LOG.error("LoginServlet doPost error", e);
