@@ -66,6 +66,8 @@ public class LoginServlet extends HttpServlet {
             } catch (LoginPasswordInvalidException e) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("invalid", "yes");
+
+                response.setContentType("text/html;charset=utf-8");
                 TemplateEngineFactory.process(request, response, "login", paramsMap);
             }
         } catch (IOException e) {
