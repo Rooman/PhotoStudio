@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 
 @Slf4j
@@ -23,7 +24,7 @@ public class TemplateEngineFactory {
     private static TemplateEngine TEMPLATE_ENGINE = new TemplateEngine();
     private static boolean isConfigured;
 
-    public static void configTemplate(ServletContext servletContext) {
+    public static void configTemplate(ServletContext servletContext, Properties properties) {
         if (isConfigured) {
             return;
         }
@@ -32,6 +33,8 @@ public class TemplateEngineFactory {
         templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
+        String isCacheable = properties.getProperty("thymeleaf.cacheable", "true");
+        templateResolver.setCacheable(Boolean.parseBoolean(isCacheable));
         TEMPLATE_ENGINE.addDialect(new Java8TimeDialect());
         TEMPLATE_ENGINE.setTemplateResolver(templateResolver);
     }

@@ -2,10 +2,13 @@
 package com.photostudio.service;
 
 import com.photostudio.entity.user.User;
+
 import java.util.List;
 
 public interface UserService {
     List<User> getAllUsers();
+
+    List<User> getAmins();
 
     void add(User user);
 

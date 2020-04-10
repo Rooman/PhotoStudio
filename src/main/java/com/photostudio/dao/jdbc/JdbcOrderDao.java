@@ -52,8 +52,10 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_COUNT_PHOTO = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ?";
     private static final String GET_COUNT_PHOTO_BY_STATUS = "SELECT COUNT(*) FROM OrderPhotos WHERE orderId = ? AND photoStatusId = ?";
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
-    private static final String UPDATE_ALL_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ?";
-    private static final String UPDATE_LIST_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE orderId = ? AND id IN (%s)";
+    private static final String UPDATE_ALL_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE photoStatusId = 1 AND orderId = ? ";
+    private static final String UPDATE_LIST_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE photoStatusId = 1 AND orderId = ? AND id IN (%s)";
+    //private static final String UPDATE_PAID_PHOTOS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE orderId = ? AND photoStatusId = 2";
+
     private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
     private static final String GET_PHOTOS_SOURCES_BY_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=?";
     private static final String UPDATE_RETOUCHED_PHOTOS_STATUS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE source = ? AND orderId = ? AND photoStatusId=2";
@@ -557,7 +559,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     private String addSort(String query) {
-        return query + " ORDER BY o.id DESC";
+        return query + " ORDER BY o.statusId, o.orderDate DESC";
     }
 
     String getDeletePhotoStatement(List<Order> orderList) {

@@ -48,15 +48,15 @@
         <div th:each="user : ${users}">
             <tr class="table_info double-click"
                 th:id="${orderId == null} ? '../order?newEmail=' + ${user.email} : '../order/' + ${orderId} +'?newEmail=' + ${user.email}">
-                <td class="table_info" th:text="${user.email}"></td>
-                <td class="table_info" th:text="${user.phoneNumber}"></td>
-                <td class="table_info" th:text="${user.firstName} +' '+ ${user.lastName} "></td>
-                <td class="table_info"
+                <td class="table_info col__mail col__text" th:text="${user.email}"></td>
+                <td class="table_info col__phone col__text" th:text="${user.phoneNumber}"></td>
+                <td class="table_info col__name col__text" th:text="${user.firstName} +' '+ ${user.lastName} "></td>
+                <td class="table_info col__address col__text"
                     th:text="*{user.zip != 0}? *{user.zip} : ''+' '+ ${user.country}+' '+ ${user.city} +' '+${user.address}"></td>
-                <td class="table_info" th:text="${user.additionalInfo}"></td>
+                <td class="table_info col__add-info col__text" th:text="${user.additionalInfo}"></td>
                 <td class="table_info">
-                    <a th:href="@{'../user'(id=${user.id})}">
-                        <img class="img-edit" src="../assets/images/user/Edit.svg">
+                    <a th:href="@{'/user'(id=${user.id})}">
+                        <img class="img-edit" th:src="@{/assets/images/user/Edit.svg}">
                     </a>
                 </td>
             </tr>
@@ -77,6 +77,9 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 <script src="../assets/js/user/user.js"></script>
+
+<meta th:replace="fragment/notification.html :: body">
+
 </body>
 
 </html>

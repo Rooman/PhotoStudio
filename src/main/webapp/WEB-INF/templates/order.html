@@ -19,7 +19,8 @@
                editOrder=${order.id!=0},
                orderSelected=${addNewOrder ? false : order.status.getOrderStatusName()=='SELECTED'},
                orderReady=${addNewOrder ? false : order.status.getOrderStatusName()=='READY'},
-               orderNew=${addNewOrder ? false : order.status.getOrderStatusName()=='NEW'}
+               orderNew=${addNewOrder ? false : order.status.getOrderStatusName()=='NEW'},
+               orderViewAndSelect=${addNewOrder ? false : order.status.getOrderStatusName()=='VIEW AND SELECTED'}
 ">
 <div th:if="${roleAdmin==false}">
     <header class="header">
@@ -40,14 +41,14 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/admin}">Admin page</a></li>
                 <li class="breadcrumb-item"><a class="breadcrumb__link" th:href="@{/orders}">Order journal</a></li>
-                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page">New order</li>
+                <li class="breadcrumb-item breadcrumb-item__active" aria-current="page" th:text="${addNewOrder} ? 'New Order' : 'Order'"></li>
             </ol>
         </nav>
     </div>
 </div>
 <!--Bread Crumb End-->
 
-<h1 class="order__title" th:text="#{order.title}">Order</h1>
+<h1 class="order__title" th:with="title=#{order.title}" th:text="${roleAdmin ? 'Order' : title}">Order</h1>
 
 <h2 class="error" align="center" th:if="${errorMessage!=null}" th:text="${errorMessage}"></h2>
 
@@ -59,7 +60,7 @@
              th:text="${#temporals.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></div>
         <div class="order__detail-info order__status" th:text="${order.status}" th:if="${roleAdmin}"></div>
     </div>
-    <form id="new" th:action="${addNewOrder} ? @{/order} : ${servletEdit}" th:method="post"
+    <form id="frmNew" th:action="${addNewOrder} ? @{/order} : ${servletEdit}" th:method="post"
           th:enctype="${order.id} == 0 or ${roleAdmin} ? 'multipart/form-data' : null">
         <input th:if="${editOrder}" type="hidden" name="emailOld" th:value="${order.user.email}" id="emailOld">
         <input th:if="${editOrder}" type="hidden" name="commentAdminOld" th:value="${order.commentAdmin}"
@@ -100,42 +101,46 @@
 
 
         </div>
+
         <div class="order__photos">
-            <div class="photo-aria overflow-auto">
-                <div class="row order__block">
-                    <div class="col-md-3" th:each="photo : ${order.photoSources}"
-                         th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}, isSelected=${photo.getPhotoStatus().getName()=='SELECTED'}">
-                        <div class="order-photo-card">
-                            <label class="checkbox-container">
-                                <input type="checkbox" th:checked="${isSelected or isPaid}"
-                                       th:disabled="${orderNew or orderSelected or roleAdmin}"
-                                       th:onclick="|onClickCheckBox(${photo.getId()})|"
-                                       th:id="'checkbox'+${photo.getId()}">
-                                <span class="custom-checkmark"></span>
-                            </label>
-                            <div th:class="order__photo-block"
-                                 th:classappend="${isPaid} ? order__photo-block-paid : ''">
-                                <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
-                                     alt="photo">
-                            </div>
-                            <div class="photo__buttons">
-                                <div class="row justify-content-center">
-                                    <a class="photo-option col-auto text-center" href="#">
-                                        <i class="fas fa-search-plus"></i></a>
-                                    <a class="photo-option col-auto text-center" href="#"
-                                       th:if="${roleUser and isPaid}"
-                                       th:onclick="|downloadPhoto(${photo.getId()})|"
-                                       form="download_paid_photo">
-                                        <i class="fas fa-arrow-down"></i></a>
-                                    <a class="photo-option col-auto text-center" href="#"
-                                       th:if="${roleAdmin and orderNew}"
-                                       th:onclick="|deletePhoto(${photo.getId()})|"
-                                       form="delete_photos">
-                                        <i class="fas fa-trash-alt"></i></a>
-                                </div>
-                            </div>
+            <div class="photo-aria">
+                <div class="order-photo-card" th:each="photo : ${order.photoSources}"
+                     th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}, isSelected=${photo.getPhotoStatus().getName()=='SELECTED'}">
+                    <label class="checkbox-container">
+                        <input type="checkbox" th:checked="${isSelected or isPaid}"
+                               th:disabled="${orderNew or orderSelected or roleAdmin or isPaid}"
+                               th:onclick="|onClickCheckBox(${photo.getId()})|"
+                               th:id="'checkbox'+${photo.getId()}">
+                        <span class="custom-checkmark"></span>
+                    </label>
+                    <div th:class="order__photo-block"
+                         th:classappend="${isPaid} ? order__photo-block-paid : ''">
+                        <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
+                             alt="photo">
+                    </div>
+                    <div class="photo__buttons">
+                        <div class="row justify-content-center">
+                            <a class="photo-option col-auto text-center zoom__button" href="#">
+                                <i class="fas fa-search-plus"></i></a>
+                            <a class="photo-option col-auto text-center" href="#"
+                               th:if="${roleUser and isPaid}"
+                               th:onclick="|downloadPhoto(${photo.getId()})|"
+                               form="download_paid_photo">
+                                <i class="fas fa-arrow-down"></i></a>
+                            <a class="photo-option col-auto text-center" href="#"
+                               th:if="${roleAdmin and orderNew}"
+                               th:onclick="|deletePhoto(${photo.getId()})|"
+                               form="delete_photos">
+                                <i class="fas fa-trash-alt"></i></a>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div id="photoModal" class="modal">
+                <div class="zoom-photo__position">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="photoModalId">
                 </div>
             </div>
 
@@ -144,11 +149,11 @@
                     <input type="file" name="photo" id="file" class="inputfile"
                            data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
                     <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
-                        <span>Add</span>
+                        Add
                     </label>
 
                     <a th:if="${roleAdmin and (addNewOrder or orderNew)}" class="photo-option" href="#">
-                        <button class="btn btn-submit btn-outline-dark button order__button"
+                        <button class="btn btn-submit btn-outline-dark button order__button order__photo-button"
                                 form="delete_photos" th:disabled="${addNewOrder}">
                             Delete all
                         </button>
@@ -176,82 +181,69 @@
                     </div>
                 </div>
             </div>
-            <div class="order__complete-buttons">
-                <div th:if="${roleUser and !orderSelected}">
-                    <button th:if="${!orderReady}" type="submit"
-                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.submit.button}">
-                        Submit
-                    </button>
-                    <button th:if="${orderReady}" type="submit"
-                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.resubmit.button}">
-                        Re-submit
-                    </button>
-                    <button th:if="${orderReady}" type="submit"
-                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.paid.button}" form="download_paid_photos">
-                        Download Paid
-                    </button>
-                </div>
-                <div th:if="${roleAdmin}">
-                    <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
-                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
-                        Save
-                    </button>
-                    <button th:if="${orderSelected or orderReady}" type="submit"
-                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.selected.button}" form="download_selected_photos">
-                        Download Selected
-                    </button>
-                    <button  th:if="${orderSelected or orderReady}" type="submit"
-                            class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                            th:text="#{order.download.paid.button}" form="download_paid_photos">
-                        Download Paid
-                    </button>
-                    <button th:if="${orderNew}"
-                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                            form="change_status">
-                        Status to view
-                        and
-                        select
-                    </button>
-                    <button th:if="${orderSelected}"
-                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                            form="change_status">
-                        Status to ready
-                    </button>
-                    <button th:if="${editOrder}" type="button"
-                            class="btn btn-submit btn-outline-dark button order__button main-button-big"
-                            data-toggle="modal" data-target="#delete-order">
-                        Delete order
-                    </button>
-                </div>
+        </div>
+
+        <div class="order__complete-buttons">
+            <div th:if="${roleUser and !orderSelected}">
+                <button type="submit"
+                        class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                        th:text="#{order.submit.button}"
+                        th:disabled="${orderReady}"
+                        id="btnUserSubmit"
+                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();"
+                >
+                    Submit
+                </button>
+                <button class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                        th:text="#{order.resubmit.button}"
+                        th:if="${orderReady}"
+                        id="btnUserReselect"
+                        onclick="btnUserSubmit.disabled=false; disabled=true;"
+                >
+                    Re-select
+                </button>
+                <button th:if="${orderReady}" type="submit"
+                        class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                        th:text="#{order.download.paid.button}" form="download_paid_photos">
+                    Download Paid
+                </button>
+                <button th:if="${orderReady}" type="submit"
+                        class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                        th:text="#{order.download.all.button}">
+                    Download All
+                </button>
+            </div>
+            <div th:if="${roleAdmin}">
+                <button th:if="${addNewOrder or orderNew or orderSelected}" type="submit"
+                        class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big">
+                    Save
+                </button>
+                <button th:if="${orderSelected or orderReady}" type="submit"
+                        class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                        th:text="#{order.download.selected.button}" form="download_selected_photos">
+                    Download Selected
+                </button>
+                <button  th:if="${orderSelected or orderReady}" type="submit"
+                         class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
+                         th:text="#{order.download.paid.button}" form="download_paid_photos">
+                    Download Paid
+                </button>
+                <button th:if="${orderNew}"
+                        class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                        form="change_status">
+                    Status to view
+                    and
+                    select
+                </button>
+                <button th:if="${editOrder}" type="button"
+                        class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                        data-toggle="modal" data-target="#delete-order">
+                    Delete order
+                </button>
             </div>
         </div>
     </form>
-    <div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title dialog-title" id="delete-order-title">Confirm delete</h5>
-                </div>
-                <div class="modal-body">
-                    <p class="dialog-body"
-                       th:text="'Are you sure you want to delete order with id '+${order.id}+' ?'"></p>
-                </div>
-                <div class="modal-footer dialog-buttons">
-                    <button class="btn btn-submit btn-outline-dark button dialog__button
-                            delete-button" data-dismiss="modal">No
-                    </button>
-                    <button class="btn btn-submit btn-outline-dark button dialog__button delete-button"
-                            form="delete_order">Yes
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <form id="download_paid_photos" th:action="@{'/order/download-paid/'+${order.id}}" method="get"></form>
     <form id="download_paid_photo" th:action="@{'/order/download-paid/'+${order.id}}" method="get">
         <input type='hidden' name='downloadPhotoId' value='0' id='downloadPhotoId'/>
@@ -263,11 +255,37 @@
         <input type='hidden' name='photoId' value='0' id='photoId'/>
     </form>
 </div>
+
+<div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title dialog-title" id="delete-order-title">Confirm delete</h5>
+            </div>
+            <div class="modal-body">
+                <p class="dialog-body"
+                   th:text="'Are you sure you want to delete order with id '+${order.id}+' ?'"></p>
+            </div>
+            <div class="modal-footer dialog-buttons">
+                <button class="btn btn-submit btn-outline-dark button dialog__button
+                            delete-button" data-dismiss="modal">No
+                </button>
+                <button class="btn btn-submit btn-outline-dark button dialog__button delete-button"
+                        form="delete_order">Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
+<meta th:replace="fragment/notification.html :: body">
 <meta th:replace="fragment/script.html :: script">
 
 <script th:src="@{/assets/js/order/custom-file-input.js}"></script>
 <script th:src="@{/assets/js/order/delete-photo.js}"></script>
 <script th:src="@{/assets/js/order/download-photo.js}"></script>
 <script th:src="@{/assets/js/order/select-photo.js}"></script>
+
 </html>

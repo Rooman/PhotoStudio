@@ -29,7 +29,7 @@
     <!--Bread Crumb End-->
 
      <h1 th:if="${roleAdmin}" class="orders__title">Orders</h1>
-     <h1 th:if="${roleUser}" class="orders__title">Your orders</h1>
+     <h1 th:if="${roleUser}" class="orders__title" th:text="#{your.orders.title}">Your orders</h1>
 
     <div th:if="${roleAdmin}" class="order__header">
         <div class="order-btn">
@@ -93,9 +93,9 @@
     <table class="table table-hover table__rounded">
         <tbody>
         <tr id="new-page" class="table_header">
-            <td class="table_header">Number</td>
-            <td class="table_header">Date</td>
-            <td class="table_header">Status</td>
+            <td class="table_header" th:with="title=#{order.number.title}" th:text="${roleAdmin ? 'Number' : title}">Number</td>
+            <td class="table_header" th:with="title=#{order.date.title}" th:text="${roleAdmin ? 'Date' : title}">Date</td>
+            <td class="table_header" th:with="title=#{order.status.title}" th:text="${roleAdmin ? 'Status' : title}">Status</td>
             <td th:if="${roleAdmin}" class="table_header">User(Email/Phone)</td>
         </tr>
         <div th:each="order : ${orders}">
@@ -124,6 +124,7 @@
 <script src="assets/js/page/all-orders.js"></script>
 <script src="assets/js/order/get-order-by-id.js"></script>
 <script src="assets/js/app.js"></script>
+<meta th:replace="fragment/notification.html :: body">
 </body>
 </html>
 

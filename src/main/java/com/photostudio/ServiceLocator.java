@@ -19,6 +19,10 @@ public class ServiceLocator {
     private static final Map<Class<?>, Object> SERVICES = new HashMap<>();
 
     static {
+        //mapper for JSON
+        ObjectMapper mapper = new ObjectMapper();
+        register(ObjectMapper.class, mapper);
+
         //config property reader util class
         PropertyReader propertyReader = new PropertyReader("application.properties");
         register(PropertyReader.class, propertyReader);
@@ -49,11 +53,14 @@ public class ServiceLocator {
         MailSender mailSender = new MailSender(propertyReader);
         register(MailSender.class, mailSender);
 
-        EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(dataSource);
-        MailService mailService = new DefaultMailService(mailSender, userService, emailTemplateDao);
-        register(MailService.class, mailService);
+        WebNotificationService webNotificationService = new WSNotificationService(mapper);
+        register(WebNotificationService.class, webNotificationService);
 
-        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, mailService);
+        EmailTemplateDao emailTemplateDao = new JdbcEmailTemplateCachedDao(dataSource);
+        NotificationService notificationService = new DefaultNotificationService(mailSender, userService, emailTemplateDao, webNotificationService);
+        register(NotificationService.class, notificationService);
+
+        OrderService orderService = new DefaultOrderService(orderDao, photoDiskDao, orderStatusService, notificationService);
         register(OrderService.class, orderService);
         userService.setOrderService(orderService);
 
@@ -65,10 +72,6 @@ public class ServiceLocator {
 
         UserLanguageService userLanguageService = new DefaultUserLanguageService(userLanguageDao);
         register(UserLanguageService.class, userLanguageService);
-
-        //mapper for JSON
-        ObjectMapper mapper = new ObjectMapper();
-        register(ObjectMapper.class, mapper);
 
     }
 

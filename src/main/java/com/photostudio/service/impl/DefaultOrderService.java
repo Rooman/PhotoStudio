@@ -13,7 +13,7 @@ import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
 import com.photostudio.exception.entity.ErrorChangeOrderStatus;
-import com.photostudio.service.MailService;
+import com.photostudio.service.NotificationService;
 
 
 import com.photostudio.service.OrderService;
@@ -32,19 +32,19 @@ public class DefaultOrderService implements OrderService {
     private OrderDao orderDao;
     private PhotoDao photoDao;
     private OrderStatusService orderStatusService;
-    private MailService mailService;
+    private NotificationService notificationService;
 
-    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderStatusService, MailService mailService) {
+    public DefaultOrderService(OrderDao orderDao, PhotoDao photoDao, OrderStatusService orderStatusService, NotificationService notificationService) {
         this.orderDao = orderDao;
         this.photoDao = photoDao;
         this.orderStatusService = orderStatusService;
-        this.mailService = mailService;
+        this.notificationService = notificationService;
     }
 
-    DefaultOrderService(OrderDao orderDao, OrderStatusService orderStatusService, MailService mailService) {
+    DefaultOrderService(OrderDao orderDao, OrderStatusService orderStatusService, NotificationService notificationService) {
         this.orderDao = orderDao;
         this.orderStatusService = orderStatusService;
-        this.mailService = mailService;
+        this.notificationService = notificationService;
     }
 
     DefaultOrderService(OrderDao orderDao) {
@@ -101,14 +101,20 @@ public class DefaultOrderService implements OrderService {
     public void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto) {
         int orderId = order.getId();
         log.info("Started service edit order {} by User", orderId);
+        boolean isSelected = false;
         if (isChanged) {
             orderDao.editOrderByUser(orderId, order.getCommentUser());
         }
         if (selectedPhoto != null && !selectedPhoto.isEmpty()) {
             orderDao.selectPhotos(orderId, selectedPhoto);
+            isSelected = true;
         }
         if (order.getStatus() == OrderStatus.VIEW_AND_SELECT) {
             moveStatusForward(orderId, userChanged);
+        } else if (order.getStatus() == OrderStatus.READY) {
+            if (isSelected) {
+                moveStatusBack(orderId, userChanged);
+            }
         }
     }
 
@@ -201,7 +207,7 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
-    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus){
+    public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus) {
         List<Photo> photos = orderDao.getPhotosByStatus(orderId, photoStatus);
         return photoDao.addPhotoToArchive(orderId, photos, photoStatus);
     }
@@ -209,8 +215,10 @@ public class DefaultOrderService implements OrderService {
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {
         if (checkUserRole(userChanged.getUserRole(), newStatus) && checkPhoto(orderId, newStatus)) {
             orderDao.changeOrderStatus(orderId, orderStatusService.getOrderStatusIdByStatusName(newStatus));
-            mailService.sendOnChangeStatus(userChanged, orderId, newStatus);
+            notificationService.sendOnChangeStatus(userChanged, orderId, newStatus);
         }
+
+
     }
 
     boolean checkUserRole(UserRole userRole, OrderStatus newStatus) {
@@ -232,13 +240,11 @@ public class DefaultOrderService implements OrderService {
             if (orderDao.getPhotoCount(orderId) == 0) {
                 throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_LOADED);
             }
-        }
-        if (newOrderStatus == OrderStatus.SELECTED) {
+        } else if (newOrderStatus == OrderStatus.SELECTED) {
             if (orderDao.getPhotoCountByStatus(orderId, PhotoStatus.SELECTED.getId()) == 0) {
                 throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_SELECTED);
             }
-        }
-        if (newOrderStatus == OrderStatus.READY) {
+        } else if (newOrderStatus == OrderStatus.READY) {
             if (orderDao.getPhotoCountByStatus(orderId, PhotoStatus.PAID.getId()) == 0) {
                 throw new ChangeOrderStatusInvalidException(ErrorChangeOrderStatus.PHOTOS_SHOULD_BE_PAID);
             }

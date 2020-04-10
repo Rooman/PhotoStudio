@@ -26,7 +26,7 @@ import static com.photostudio.entity.user.UserRole.*;
 @WebFilter(urlPatterns = {"/*"})
 @Slf4j
 public class SecurityFilter implements Filter {
-    private static final List<String> DEFAULT_EXCLUDED_URLS = Arrays.asList("/login", "/", "/home", "/access-denied", "/assets/*", "/security/reset-password");
+    private static final List<String> DEFAULT_EXCLUDED_URLS = Arrays.asList("/login", "/", "/home", "/access-denied", "/assets/*", "/security/reset-password", "/legal-information", "/data-protection", "/price", "/portfolio", "/portfolio-newborns", "/portfolio-babies", "/contact");
 
     private SecurityService securityService;
 
@@ -52,7 +52,7 @@ public class SecurityFilter implements Filter {
         urlToRoleMap.put("/user", USER);
         urlToRoleMap.put("/security/change-password", USER);
         urlToRoleMap.put("/order/download-paid", USER);
-
+        urlToRoleMap.put("/notification", USER);
 
         urlToRoleMap.put("/admin/users", ADMIN);
         urlToRoleMap.put("/admin", ADMIN);
