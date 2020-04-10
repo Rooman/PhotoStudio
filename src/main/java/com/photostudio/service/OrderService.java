@@ -39,6 +39,8 @@ public interface OrderService {
 
     void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto);
 
+    void addRetouchedPhotos(int orderId, List<Part> photoToUpload);
+
     void addPhotos(int orderId, List<Part> photoToUpload);
 
     String getPathToOrderDir(int orderId);
@@ -46,4 +48,6 @@ public interface OrderService {
     String getPathByPhotoId(long photoId);
 
     InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus);
+
+    InputStream downloadRetouchedPhoto(int orderId, long photoId);
 }

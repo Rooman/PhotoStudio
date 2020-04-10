@@ -94,11 +94,6 @@ public class DefaultOrderService implements OrderService {
         if (!photoToUpload.isEmpty()) {
             addPhotos(orderId, photoToUpload);
         }
-
-        if (order.getStatus() == OrderStatus.SELECTED) {
-            orderDao.setPhotosStatusPaid(orderId);
-            moveStatusForward(orderId, userChanged);
-        }
     }
 
     @Override
@@ -130,6 +125,15 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
+    public void addRetouchedPhotos(int orderId, List<Part> photoToUpload) {
+        log.info("Started service add retouched photos to order {}", orderId);
+        List<String> selectedPhotosSources = orderDao.getSelectedPhotosSourcesByOrderId(orderId);
+        List<String> retouchedPhotosPath = photoDao.saveRetouchedPhotoByOrder(photoToUpload, orderId, selectedPhotosSources);
+        orderDao.updateStatusRetouchedPhotos(retouchedPhotosPath, orderId);
+    }
+
+
+    @Override
     public void delete(int id) {
         log.info("Started service delete order by id {}", id);
         photoDao.deleteByOrder(id);
@@ -142,6 +146,13 @@ public class DefaultOrderService implements OrderService {
         String photoSource = orderDao.getPathByPhotoId(photoId);
         orderDao.deletePhoto(photoId);
         photoDao.deletePhoto(orderId, photoSource);
+    }
+
+    @Override
+    public InputStream downloadRetouchedPhoto(int orderId, long photoId) {
+        log.info("Started service download photo by id {}", photoId);
+        String photoSource = orderDao.getPathByPhotoId(photoId);
+        return photoDao.downloadRetouchedPhoto(orderId, photoSource);
     }
 
     @Override
@@ -203,7 +214,7 @@ public class DefaultOrderService implements OrderService {
     @Override
     public InputStream downloadPhotosByStatus(int orderId, PhotoStatus photoStatus) {
         List<Photo> photos = orderDao.getPhotosByStatus(orderId, photoStatus);
-        return photoDao.addPhotoToArchive(orderId, photos);
+        return photoDao.addPhotoToArchive(orderId, photos, photoStatus);
     }
 
     private void changeStatus(int orderId, User userChanged, OrderStatus newStatus) {

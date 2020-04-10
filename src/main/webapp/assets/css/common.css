@@ -21,7 +21,6 @@ button:focus {
 }
 
 .page_main-title {
-    font-family: "Cormorant Upright", sans-serif;
     font-weight: 300;
     font-size: 144px;
     line-height: 150px;
@@ -91,6 +90,10 @@ button:focus {
   border: 2px solid rgba(0, 0, 0, 1);
   color: #000;
   background-color: rgba(255, 255, 255, 0);
+}
+
+.navbar-text-ru:lang(ru) {
+    font-weight: bold;
 }
 
 .top-navbar {
