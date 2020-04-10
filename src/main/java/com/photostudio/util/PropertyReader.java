@@ -55,6 +55,10 @@ public class PropertyReader {
             properties.setProperty("dir.photo", dirPhoto);
             log.debug("Set dir.photo: {}", dirPhoto);
 
+            String pathWatermark = System.getenv("PATH_WATERMARK");
+            properties.setProperty("path.watermark", pathWatermark);
+            log.debug("Set path.watermark: {}", pathWatermark);
+
             String adminMailPassword = System.getenv("ADMIN_MAIL_PASSWORD");
             properties.setProperty("mail.admin.password", adminMailPassword);
             log.debug("Set admin.mail.password: {}", adminMailPassword);
