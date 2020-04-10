@@ -68,7 +68,7 @@
 
 .btn{
 	background: #FAE1DE;
-	border: 3px solid rgba(228, 159, 182, 0.6);
+    border: 2px solid #FAE1DE;
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 	font-weight: 500;
 	font-size: 36px;

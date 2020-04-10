@@ -82,8 +82,8 @@
                 </div>
             </div>
             <a th:href="${order.id} == 0 ? @{/admin/users?search=userForOrder} : @{'/admin/users?search=userForOrder&id=' + ${order.id}}"
-               class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user</a>
-            <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
+               class="btn button order__button order__search-button">Search user</a>
+            <a th:href="@{/user}" class="btn button order__button order__status-button">Create
                 new
                 user</a>
         </div>
@@ -156,13 +156,13 @@
                 <div th:if="${roleAdmin and (addNewOrder or orderNew or orderSelected)}">
                     <input type="file" name="photo" id="file" class="inputfile"
                            data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}" th:disabled="${addNewOrder and (newEmail == null)}"/>
-                    <label id="labelForFile" for="file" class="btn  btn-submit btn-outline-dark button order__button"
+                    <label id="labelForFile" for="file"  class="btn button order__button"
                            th:data-file-disabled="${addNewOrder and (newEmail == null) ? 'true' : 'false'}">
                         Add
                     </label>
 
                     <button th:if="${roleAdmin and (addNewOrder or orderNew)}"
-                            class="btn btn-submit btn-outline-dark button order__button"
+                            class="btn button order__button"
                             form="delete_photos" th:disabled="${addNewOrder}">
                         Delete all
                     </button>

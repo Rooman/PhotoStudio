@@ -30,7 +30,7 @@
     </div>
     <!--Bread Crumb End-->
 
-    <a th:if="${search} == null" th:href="@{/user}" class="btn new-user_button">New user</a>
+    <a th:if="${search} == null" th:href="@{/user}" class="btn button new-user_button">New user</a>
 
     <h1 class="all-users_title">Users</h1>
 
@@ -64,7 +64,7 @@
         </tbody>
     </table>
     <a th:if="${search} != null" th:href="${orderId} == null ? @{'/order'} : @{'/order/' + ${orderId}}"
-       class="btn new-user_button close__button-position">Close</a>
+       class="btn button new-user_button close__button-position">Close</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
