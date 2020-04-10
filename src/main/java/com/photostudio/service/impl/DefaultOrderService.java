@@ -8,7 +8,6 @@ import com.photostudio.entity.order.Order;
 import com.photostudio.entity.order.OrderStatus;
 import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.photo.PhotoStatus;
-import com.photostudio.entity.photo.Photos;
 import com.photostudio.entity.user.User;
 import com.photostudio.entity.user.UserRole;
 import com.photostudio.exception.ChangeOrderStatusInvalidException;
@@ -121,12 +120,19 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void addPhotos(int orderId, List<Part> photoToUpload) {
         log.info("Started service add photos to order {}", orderId);
-        List<String> photosSources = orderDao.getPhotosSourcesByOrderId(orderId);
-        Photos photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId, photosSources);
-        orderDao.savePhotos(orderId, photosPath.getUnselectedPhotosPath());
-        orderDao.updateStatusRetouchedPhotos(photosPath.getRetouchedPhotosPath(), orderId);
+        List<String> photosPath = photoDao.savePhotoByOrder(photoToUpload, orderId);
+        orderDao.savePhotos(orderId, photosPath);
+    }
+
+    @Override
+    public void addRetouchedPhotos(int orderId, List<Part> photoToUpload) {
+        log.info("Started service add retouched photos to order {}", orderId);
+        List<String> photosSources = orderDao.getSelectedPhotosSourcesByOrderId(orderId);
+        List<String> retouchedPhotosPath = photoDao.saveRetouchedPhotoByOrder(photoToUpload, orderId, photosSources);
+        orderDao.updateStatusRetouchedPhotos(retouchedPhotosPath, orderId);
 
     }
+
 
     @Override
     public void delete(int id) {

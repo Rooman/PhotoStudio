@@ -3,7 +3,6 @@ package com.photostudio.dao.file;
 import com.photostudio.dao.PhotoDao;
 import com.photostudio.entity.photo.Photo;
 import com.photostudio.entity.photo.PhotoStatus;
-import com.photostudio.entity.photo.Photos;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
@@ -114,17 +113,12 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     @Override
-    public Photos savePhotoByOrder(List<Part> photosParts, int orderId, List<String> photosSources) {
+    public List<String> saveRetouchedPhotoByOrder(List<Part> photosParts, int orderId, List<String> photosSources) {
         String orderPath = getPathToOrderDir(orderId);
-        log.info("save photos on local disk by path : {}", orderPath);
-        List<String> unselectedPhotosPaths = new ArrayList<>();
+        log.info("save retouched photos on local disk by path : {}", orderPath);
         List<String> retouchedPhotosPaths = new ArrayList<>();
-        Path unselectedPhotosPath = getOrderPath(orderId);
         Path retouchedPhotosPath = getPathToRetouchedPhoto(orderId);
-        Path previewPhotoDir = getPathToPreviewPhoto(orderId);
-        createDirectoryForPhoto(unselectedPhotosPath);
         createDirectoryForPhoto(retouchedPhotosPath);
-        Photos photos = new Photos();
         for (Part photo : photosParts) {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
@@ -133,19 +127,11 @@ public class LocalDiskPhotoDao implements PhotoDao {
                         Path photoPath = Paths.get(retouchedPhotosPath.toString(), fileName);
                         uploadPhoto(photoPath, photo);
                         retouchedPhotosPaths.add(fileName);
-                    } else {
-                        Path photoPath = Paths.get(unselectedPhotosPath.toString(), fileName);
-                        Path previewPhotoPath = Paths.get(previewPhotoDir.toString(), fileName);
-                        uploadPhoto(photoPath, photo);
-                        resizePhotoAddWatermark(photoPath.toString(), previewPhotoPath.toString());
-                        unselectedPhotosPaths.add(fileName);
                     }
                 }
             }
         }
-        photos.setUnselectedPhotosPath(unselectedPhotosPaths);
-        photos.setRetouchedPhotosPath(retouchedPhotosPaths);
-        return photos;
+        return retouchedPhotosPaths;
     }
 
     private void uploadPhoto(Path photoPath, Part photo) {

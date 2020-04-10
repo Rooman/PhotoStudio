@@ -69,7 +69,7 @@
     background: #FAE1DE;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
-    margin-left: 45px;
+    margin-left: 35px;
 }
 
 .order__button:hover {
@@ -208,6 +208,12 @@
    background: #FCC5D9;
    margin-left: 25px;
    border-color: #FCC5D9;
+}
+
+.retouched__upload-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
 }
 
 .thank-you-label {

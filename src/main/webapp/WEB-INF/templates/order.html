@@ -128,7 +128,7 @@
                                form="download_paid_photo">
                                 <i class="fas fa-arrow-down"></i></a>
                             <a class="photo-option col-auto text-center" href="#"
-                               th:if="${roleAdmin and orderNew}"
+                               th:if="${roleAdmin and (addNewOrder or orderNew or orderSelected)}"
                                th:onclick="|deletePhoto(${photo.getId()})|"
                                form="delete_photos">
                                 <i class="fas fa-trash-alt"></i></a>
@@ -190,7 +190,7 @@
                         th:text="#{order.submit.button}"
                         th:disabled="${orderReady}"
                         id="btnUserSubmit"
-                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();"
+                        onclick="btnUserSubmit.disabled=false; disabled=true; frmNew.submit();"
                 >
                     Submit
                 </button>
@@ -198,7 +198,7 @@
                         th:text="#{order.resubmit.button}"
                         th:if="${orderReady}"
                         id="btnUserReselect"
-                        onclick="btnUserSubmit.disabled=false; disabled=true;"
+                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit()"
                 >
                     Re-select
                 </button>
@@ -206,11 +206,6 @@
                         class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                         th:text="#{order.download.paid.button}" form="download_paid_photos">
                     Download Paid
-                </button>
-                <button th:if="${orderReady}" type="submit"
-                        class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
-                        th:text="#{order.download.all.button}">
-                    Download All
                 </button>
             </div>
             <div th:if="${roleAdmin}">
@@ -227,6 +222,11 @@
                          class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                          th:text="#{order.download.paid.button}" form="download_paid_photos">
                     Download Paid
+                </button>
+                <button th:if="${orderSelected}"
+                        class="btn btn-submit btn-outline-dark button order__button main-button-big"
+                        form="change_status">
+                    Status to ready
                 </button>
                 <button th:if="${orderNew}"
                         class="btn btn-submit btn-outline-dark button order__button main-button-big"
@@ -254,6 +254,23 @@
     <form id="delete_photos" th:if="${editOrder}" th:action="@{'/order/delete-photos/'+${order.id}}" method="post">
         <input type='hidden' name='photoId' value='0' id='photoId'/>
     </form>
+    <div th:if="${roleAdmin and orderSelected }" class="retouched__upload-buttons">
+        <form id="upload_retouched_photos" th:action="@{'/order/upload-retouched/'+${order.id}}" th:method="post"
+              th:enctype="'multipart/form-data'">
+            <input type="file" name="photo" id="retouchedFile" class="inputfile"
+                   data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
+            <label for="retouchedFile" class="btn  btn-submit btn-outline-dark button order__button">
+                <span>Select Retouched</span>
+            </label>
+
+            <a th:if="${roleAdmin and (orderSelected or orderReady)}" class="photo-option" href="#">
+                <button class="btn btn-submit btn-outline-dark button order__button" type="submit"
+                        form="upload_retouched_photos" th:disabled="${addNewOrder}">
+                    Upload
+                </button>
+            </a>
+        </form>
+    </div>
 </div>
 
 <div class="modal fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="delete-order-title"

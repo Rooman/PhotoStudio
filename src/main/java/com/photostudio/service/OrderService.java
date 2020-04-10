@@ -39,6 +39,8 @@ public interface OrderService {
 
     void editOrderByUser(Order order, User userChanged, boolean isChanged, String selectedPhoto);
 
+    void addRetouchedPhotos(int orderId, List<Part> photoToUpload);
+
     void addPhotos(int orderId, List<Part> photoToUpload);
 
     String getPathToOrderDir(int orderId);

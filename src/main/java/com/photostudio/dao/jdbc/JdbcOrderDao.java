@@ -57,7 +57,7 @@ public class JdbcOrderDao implements OrderDao {
     //private static final String UPDATE_PAID_PHOTOS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE orderId = ? AND photoStatusId = 2";
 
     private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
-    private static final String GET_PHOTOS_SOURCES_BY_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=?";
+    private static final String GET_SELECTED_PHOTOS_SOURCES_BY_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId=2";
     private static final String UPDATE_RETOUCHED_PHOTOS_STATUS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE source = ? AND orderId = ? AND photoStatusId=2";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
@@ -428,10 +428,10 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public List<String> getPhotosSourcesByOrderId(int orderId){
+    public List<String> getSelectedPhotosSourcesByOrderId(int orderId){
         log.info("Get photos sources by orderId : {}", orderId);
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_PHOTOS_SOURCES_BY_ORDER_ID)){
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_SELECTED_PHOTOS_SOURCES_BY_ORDER_ID)){
             preparedStatement.setInt(1, orderId);
             ResultSet resultSet = preparedStatement.executeQuery();
             List<String> photosSources = new ArrayList<>();

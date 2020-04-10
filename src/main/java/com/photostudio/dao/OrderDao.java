@@ -49,5 +49,5 @@ public interface OrderDao {
 
     void deletePhotos(int orderId);
 
-    List<String> getPhotosSourcesByOrderId(int orderId);
+    List<String> getSelectedPhotosSourcesByOrderId(int orderId);
 }
