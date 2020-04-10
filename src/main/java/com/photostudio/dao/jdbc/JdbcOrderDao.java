@@ -529,7 +529,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     private String addSort(String query) {
-        return query + " ORDER BY o.id DESC";
+        return query + " ORDER BY o.statusId, o.orderDate DESC";
     }
 
     String getDeletePhotoStatement(List<Order> orderList) {
