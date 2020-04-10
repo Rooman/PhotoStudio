@@ -13,9 +13,6 @@ public class Photo {
     private PhotoStatus photoStatus;
 
     public String getName() {
-        String[] partsOfPath = source.split("/");
-        String name = partsOfPath[partsOfPath.length - 1];
-
-        return name.substring(0, name.indexOf("."));
+        return source.substring(0, source.indexOf("."));
     }
 }
