@@ -80,8 +80,8 @@
                 </div>
             </div>
             <a th:href="${order.id} == 0 ? @{/admin/users?search=userForOrder} : @{'/admin/users?search=userForOrder&id=' + ${order.id}}"
-               class="btn btn-submit btn-outline-dark button order__button order__search-button">Search user</a>
-            <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button order__button order__status-button">Create
+               class="btn button order__button order__search-button">Search user</a>
+            <a th:href="@{/user}" class="btn button order__button order__status-button">Create
                 new
                 user</a>
         </div>
@@ -152,12 +152,12 @@
                 <div th:if="${roleAdmin and (addNewOrder or orderNew or orderSelected)}">
                     <input type="file" name="photo" id="file" class="inputfile"
                            data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
-                    <label for="file" class="btn  btn-submit btn-outline-dark button order__button">
+                    <label for="file" class="btn button order__button">
                         Add
                     </label>
 
                     <a th:if="${roleAdmin and (addNewOrder or orderNew)}" class="photo-option" href="#">
-                        <button class="btn btn-submit btn-outline-dark button order__button order__photo-button"
+                        <button class="btn button order__button order__photo-button"
                                 form="delete_photos" th:disabled="${addNewOrder}">
                             Delete all
                         </button>

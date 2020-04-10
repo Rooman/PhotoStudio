@@ -4,7 +4,7 @@
     <title>Admin Page</title>
     <meta th:replace="fragment/head.html :: meta">
     <link th:replace="fragment/head.html :: link">
-    <link rel="stylesheet" type="text/css" href="assets/css/admin-page.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/admin-page.css}">
 </head>
 <body>
 
@@ -18,18 +18,18 @@
         <div class="admin__buttons">
             <ul class="admin__nav-links">
                 <li class="admin__nav-link">
-                    <a th:href="@{/order}" class="btn btn-submit btn-outline-dark button">New order</a>
+                    <a th:href="@{/order}" class="btn button">New order</a>
                 </li>
                 <li class="admin__nav-link">
                     <a th:href="@{/orders}"
-                       class="btn btn-submit btn-outline-dark button order__button order__search-button">Order
+                       class="btn button order__button order__search-button">Order
                         journal</a>
                 </li>
                 <li class="admin__nav-link">
-                    <a th:href="@{/admin/users}" class="btn btn-submit btn-outline-dark button">All users</a>
+                    <a th:href="@{/admin/users}" class="btn button">All users</a>
                 </li>
                 <li class="admin__nav-link">
-                    <a th:href="@{/user}" class="btn btn-submit btn-outline-dark button">New user</a>
+                    <a th:href="@{/user}" class="btn button">New user</a>
                 </li>
             </ul>
         </div>

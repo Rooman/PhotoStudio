@@ -159,24 +159,35 @@ button:focus {
 }
 
 .button {
-    width: 18rem;
-    height: 5rem;
-    border: 3px solid rgba(250, 225, 222, 0.8);
-    border-radius: 0.6rem;
+    width: 264px;
+    height: 64px;
+    background: #FAE1DE;
+    border: 2px solid #FAE1DE;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     font-weight: 300;
-    font-size: 48px;
+    font-size: 32px;
     line-height: 48px;
 }
 
 .button:hover {
+    font-weight: 600;
     color: #000000;
-    background-color: rgba(250, 225, 222, 0.8);
-    border-color: rgba(250, 225, 222, 0.8);
+    background-color: #FAE1DE;
+    border: 2px solid #FAE1DE;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .button:active {
+    font-weight: 600;
+    color: #000000;
     background-color: #FAE1DE;
-    border-color: #FAE1DE;
+    border: 2px solid #FAE1DE;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.button:focus {
+    outline: none;
 }
 /*Bread Crumb */
 .bread__crumb-navigation {

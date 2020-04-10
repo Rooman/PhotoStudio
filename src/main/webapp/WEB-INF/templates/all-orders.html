@@ -34,9 +34,9 @@
     <div th:if="${roleAdmin}" class="order__header">
         <div class="order-btn">
             <a value="Show/Hide" onClick="showHideFilterTable('filterTable')"
-               class="btn btn-submit btn-outline-dark button order-btn_right">Filter</a>
+               class="btn button order-btn_right">Filter</a>
             <a th:href="@{/order}"
-               class="btn btn-submit btn-outline-dark button order-btn_left">New order</a>
+               class="btn button order-btn_left">New order</a>
         </div>
     </div>
 
@@ -84,7 +84,7 @@
 
                 <div class="form-group orders-board-btn_apply ">
                     <a href="#" onclick="parameterize()" id="add_parameters"
-                       class="btn btn-submit btn-outline-dark button">Apply</a>
+                       class="btn button">Apply</a>
                 </div>
             </div>
         </div>
