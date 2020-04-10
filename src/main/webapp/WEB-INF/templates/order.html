@@ -104,7 +104,8 @@
 
         <div class="order__photos">
             <div class="photo-aria">
-                <div class="order-photo-card" th:each="photo : ${order.photoSources}"
+                <div th:class="order-photo-card" th:classappend="${isPaid} ? order-photo-card-paid : ''"
+                     th:each="photo : ${order.photoSources}"
                      th:with="isPaid=${photo.getPhotoStatus().getName()=='PAID'}, isSelected=${photo.getPhotoStatus().getName()=='SELECTED'}">
                     <label class="checkbox-container">
                         <input type="checkbox" th:checked="${isSelected or isPaid}"
@@ -113,23 +114,28 @@
                                th:id="'checkbox'+${photo.getId()}">
                         <span class="custom-checkmark"></span>
                     </label>
-                    <div th:class="order__photo-block"
-                         th:classappend="${isPaid} ? order__photo-block-paid : ''">
-                        <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
-                             alt="photo">
+                    <div class="order-photo-block">
+                         <img class="order__photo" th:src="@{/photo(id= ${photo.getId()}, orderId=${order.id})}"
+                                 alt="photo">
+                    </div>
+                    <div class="photo-name-block">
+                        <p class="photo-name" th:text="${photo.getName()}"></p>
                     </div>
                     <div class="photo__buttons">
                         <div class="row justify-content-center">
-                            <a class="photo-option col-auto text-center zoom__button" href="#">
-                                <i class="fas fa-search-plus"></i></a>
                             <a class="photo-option col-auto text-center" href="#"
                                th:if="${roleUser and isPaid}">
-                                <i class="fas fa-arrow-down"></i></a>
+                                <img class="button-icons" th:src="@{/assets/images/icons/download.svg}">
+                            </a>
+                            <a class="photo-option col-auto text-center zoom__button" href="#">
+                                <img class="button-icons" th:src="@{/assets/images/icons/zoom-in.svg}">
+                            </a>
                             <a class="photo-option col-auto text-center" href="#"
                                th:if="${roleAdmin and orderNew}"
                                th:onclick="|deletePhoto(${photo.getId()})|"
                                form="delete_photos">
-                                <i class="fas fa-trash-alt"></i></a>
+                                <img class="button-icons" th:src="@{/assets/images/icons/delete.svg}">
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -189,16 +195,14 @@
                         th:text="#{order.submit.button}"
                         th:disabled="${orderReady}"
                         id="btnUserSubmit"
-                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();"
-                >
+                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();">
                     Submit
                 </button>
                 <button class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                         th:text="#{order.resubmit.button}"
                         th:if="${orderReady}"
                         id="btnUserReselect"
-                        onclick="btnUserSubmit.disabled=false; disabled=true;"
-                >
+                        onclick="btnUserSubmit.disabled=false; disabled=true;">
                     Re-select
                 </button>
                 <button th:if="${orderReady}" type="submit"
@@ -215,9 +219,7 @@
                 <button th:if="${orderNew}"
                         class="btn btn-submit btn-outline-dark button order__button main-button-big"
                         form="change_status">
-                    Status to view
-                    and
-                    select
+                    Status to view and select
                 </button>
                 <button th:if="${editOrder}" type="button"
                         class="btn btn-submit btn-outline-dark button order__button main-button-big"
@@ -249,11 +251,11 @@
                    th:text="'Are you sure you want to delete order with id '+${order.id}+' ?'"></p>
             </div>
             <div class="modal-footer dialog-buttons">
-                <button class="btn btn-submit btn-outline-dark button dialog__button
-                            delete-button" data-dismiss="modal">No
-                </button>
                 <button class="btn btn-submit btn-outline-dark button dialog__button delete-button"
                         form="delete_order">Yes
+                </button>
+                <button class="btn btn-submit btn-outline-dark button dialog__button
+                            delete-button" data-dismiss="modal">No
                 </button>
             </div>
         </div>

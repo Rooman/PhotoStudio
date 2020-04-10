@@ -1,5 +1,5 @@
 .order {
-    max-width: 1240px;
+    /*max-width: 1240px;*/
     padding-bottom: 75px;
 }
 
@@ -108,7 +108,7 @@
     margin-bottom: 30px;
     flex: 1 0 auto;
     display: flex;
-
+    justify-content: center;
     flex-wrap: wrap;
 
     overflow-y: scroll;
@@ -117,28 +117,31 @@
 
 .order-photo-card {
     position: relative;
-    height: 240px;
-    width: 258px;
+    height: 278px;
+    width: 285px;
     border: 1px solid #FCC5D9;
     border-radius: 10px;
     margin: 0 15px 30px 15px;
-}
-
-.order__photo-block {
-    height: auto;
     display: flex;
     justify-content: center;
+}
+
+.order-photo-block {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 240px;
+    padding: 10px;
     border-radius: 10px 10px 0px 0px;
 }
 
-.order__photo-block-paid {
+.order-photo-card-paid {
     background-color: rgba(252, 197, 217, 0.6);
 }
 
 .order__photo {
-    padding: 15px 15px 40px;
-    max-height: 230px;
-    max-width: 250px;
+    max-height: 215px;
+    max-width: 258px;
 }
 
 .order__photo__expanded {
@@ -148,16 +151,62 @@
     max-width: 640px;
 }
 
+
+
+.photo-name-block {
+    font-family: Cormorant Upright;
+    position: absolute;
+    left: 30.58%;
+    right: 30.94%;
+    top: 81.75%;
+    bottom: 14.04%;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+
+    color: #000000;
+
+    opacity: 0.4;
+}
+
 .photo__buttons {
-    background: #FCC5D9;
-    width: 256px;
-    height: 40px;
+    width: 100%;
+    height: 34px;
     position: absolute;
     bottom: 0;
-
-    padding: 2% 78px 0;
+    border-top: 1px solid #FCC5D9;
     border-radius: 0px 0px 10px 10px;
 }
+
+.button-icons {
+    height: 14px;
+    margin-left: 10px;
+    margin-right: 10px;
+    opacity: 0.4;
+}
+
+.button-icons:hover {
+    opacity: 0.7;
+}
+
+.button-icons:active {
+    opacity: 1;
+}
+
+/*.button-icons:hover > .overlay-icon {
+    width:100%;
+    height:100%;
+    position:absolute;
+    background-color:#000;
+    opacity:0.5;
+    border-radius:30px;
+}*/
 
 .photo-option {
     text-decoration: none;
@@ -169,7 +218,6 @@
 
 .photo-option:hover {
     color: #000000;
-    opacity: 0.4;
 }
 
 .photo-add-delete-buttons {
@@ -203,7 +251,7 @@
 }
 
 .delete-button {
-   width: 200px;
+   width: 120px;
    height: 64px;
    background: #FCC5D9;
    margin-left: 25px;
@@ -242,9 +290,13 @@
 }
 
 .custom-checkmark {
+  /*position: absolute;
+  left: 1em;*/
   position: absolute;
-  top: 0;
-  left: 7px;
+  left: 68.49%;
+  right: 4.32%;
+  top: 4.56%;
+  bottom: 88.42%;
   height: 20px;
   width: 20px;
   background-color: rgb(100%, 100%, 100%, 0.3);
@@ -291,7 +343,7 @@
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 1050; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -306,7 +358,7 @@
 .modal-content {
     margin: auto;
     display: block;
-    width: 80%;
+    width: 100%;
     max-width: 800px;
     padding: 30px;
     border-radius: 30px;
