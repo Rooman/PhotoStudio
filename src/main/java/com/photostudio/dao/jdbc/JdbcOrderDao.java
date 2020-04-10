@@ -54,10 +54,8 @@ public class JdbcOrderDao implements OrderDao {
     private static final String GET_PATH_PHOTO_BY_ID = "SELECT source FROM OrderPhotos WHERE id = ?";
     private static final String UPDATE_ALL_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE photoStatusId = 1 AND orderId = ? ";
     private static final String UPDATE_LIST_PHOTOS_SELECTED = "UPDATE OrderPhotos SET photoStatusId = 2 WHERE photoStatusId = 1 AND orderId = ? AND id IN (%s)";
-    //private static final String UPDATE_PAID_PHOTOS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE orderId = ? AND photoStatusId = 2";
 
     private static final String GET_PHOTOS_BY_STATUS_AND_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId = ?";
-    private static final String GET_SELECTED_PHOTOS_SOURCES_BY_ORDER_ID = "SELECT * FROM OrderPhotos WHERE orderId=? AND photoStatusId=2";
     private static final String UPDATE_RETOUCHED_PHOTOS_STATUS = "UPDATE OrderPhotos SET photoStatusId = 3 WHERE source = ? AND orderId = ? AND photoStatusId=2";
 
     private static final OrderRowMapper ORDER_ROW_MAPPER = new OrderRowMapper();
@@ -428,24 +426,27 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public List<String> getSelectedPhotosSourcesByOrderId(int orderId){
+    public List<String> getSelectedPhotosSourcesByOrderId(int orderId) {
         log.info("Get photos sources by orderId : {}", orderId);
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_SELECTED_PHOTOS_SOURCES_BY_ORDER_ID)){
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_PHOTOS_BY_STATUS_AND_ORDER_ID)) {
             preparedStatement.setInt(1, orderId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.setInt(2, 2);
             List<String> photosSources = new ArrayList<>();
-            while (resultSet.next()) {
-                Photo photo  = PHOTO_SOURCE_ROW_MAPPER.mapRow(resultSet);
-                photosSources.add(photo.getSource());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    Photo photo = PHOTO_SOURCE_ROW_MAPPER.mapRow(resultSet);
+                    photosSources.add(photo.getSource());
+                }
             }
             log.info("Get: {} photosSources from DB", photosSources.size());
             log.debug("Get all photosSources: {}", photosSources);
             return photosSources;
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             log.error("Error during get photo with orderId : {}", orderId);
-            throw new RuntimeException("Error during get photo with orderId "+ orderId, e);
+            throw new RuntimeException("Error during get photo with orderId " + orderId, e);
         }
     }
 
@@ -470,19 +471,20 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public void updateStatusRetouchedPhotos(List<String> photosPaths, int orderId) {
         log.info("Update retouched photos status");
-        for (String pathToPhoto : photosPaths) {
-            try (Connection connection = dataSource.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RETOUCHED_PHOTOS_STATUS)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_RETOUCHED_PHOTOS_STATUS)) {
+            for (String pathToPhoto : photosPaths) {
                 preparedStatement.setString(1, pathToPhoto);
                 preparedStatement.setInt(2, orderId);
                 preparedStatement.executeUpdate();
                 log.info("Photo :{} status is retouched", pathToPhoto);
-            } catch (SQLException e) {
-                log.error("Error during change status photo : {}", pathToPhoto);
-                throw new RuntimeException("Error during change status photo "+pathToPhoto, e);
             }
+        } catch (SQLException e) {
+            log.error("Error during change status photo", e);
+            throw new RuntimeException("Error during change status photo", e);
         }
     }
+
 
     @Override
     public void selectPhotos(int orderId, String selectedPhotos) {

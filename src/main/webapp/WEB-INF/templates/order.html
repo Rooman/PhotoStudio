@@ -190,16 +190,14 @@
                         th:text="#{order.submit.button}"
                         th:disabled="${orderReady}"
                         id="btnUserSubmit"
-                        onclick="btnUserSubmit.disabled=false; disabled=true; frmNew.submit();"
-                >
+                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit();">
                     Submit
                 </button>
                 <button class="btn btn-submit btn-outline-dark btn-lg button order__button main-button-big"
                         th:text="#{order.resubmit.button}"
                         th:if="${orderReady}"
                         id="btnUserReselect"
-                        onclick="btnUserReselect.disabled=false; disabled=true; frmNew.submit()"
-                >
+                        onclick="btnUserSubmit.disabled=false; disabled=true;">
                     Re-select
                 </button>
                 <button th:if="${orderReady}" type="submit"
@@ -224,6 +222,7 @@
                     Download Paid
                 </button>
                 <button th:if="${orderSelected}"
+                        th:text="#{order.status.to.ready.button}"
                         class="btn btn-submit btn-outline-dark button order__button main-button-big"
                         form="change_status">
                     Status to ready
@@ -260,11 +259,12 @@
             <input type="file" name="photo" id="retouchedFile" class="inputfile"
                    data-multiple-caption="{count} file(s) selected" multiple th:accept="${acceptedFileTypes}"/>
             <label for="retouchedFile" class="btn  btn-submit btn-outline-dark button order__button">
-                <span>Select Retouched</span>
+                <span th:text="#{order.select.retouched.photos.button}">Select Retouched</span>
             </label>
 
             <a th:if="${roleAdmin and (orderSelected or orderReady)}" class="photo-option" href="#">
                 <button class="btn btn-submit btn-outline-dark button order__button" type="submit"
+                        th:text="#{order.upload.retouched.photos.button}"
                         form="upload_retouched_photos" th:disabled="${addNewOrder}">
                     Upload
                 </button>

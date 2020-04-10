@@ -113,7 +113,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
     }
 
     @Override
-    public List<String> saveRetouchedPhotoByOrder(List<Part> photosParts, int orderId, List<String> photosSources) {
+    public List<String> saveRetouchedPhotoByOrder(List<Part> photosParts, int orderId, List<String> selectedSources) {
         String orderPath = getPathToOrderDir(orderId);
         log.info("save retouched photos on local disk by path : {}", orderPath);
         List<String> retouchedPhotosPaths = new ArrayList<>();
@@ -123,7 +123,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
             if (photo != null && photo.getSize() > 0) {
                 if (photo.getName().equalsIgnoreCase("photo")) {
                     String fileName = getFileName(photo);
-                    if (photosSources.contains(fileName)) {
+                    if (selectedSources.contains(fileName)) {
                         Path photoPath = Paths.get(retouchedPhotosPath.toString(), fileName);
                         uploadPhoto(photoPath, photo);
                         retouchedPhotosPaths.add(fileName);
@@ -224,7 +224,7 @@ public class LocalDiskPhotoDao implements PhotoDao {
                     .toFile(toPhoto);
             log.info("Save resizing photo : {}", toPhoto);
         } catch (IOException e) {
-            log.error("Cannot read photo to resize");
+            log.error("Cannot read photo to resize", e);
             throw new RuntimeException("Cannot read photo to resize", e);
         }
     }

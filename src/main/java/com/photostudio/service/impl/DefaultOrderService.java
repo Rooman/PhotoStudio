@@ -127,10 +127,9 @@ public class DefaultOrderService implements OrderService {
     @Override
     public void addRetouchedPhotos(int orderId, List<Part> photoToUpload) {
         log.info("Started service add retouched photos to order {}", orderId);
-        List<String> photosSources = orderDao.getSelectedPhotosSourcesByOrderId(orderId);
-        List<String> retouchedPhotosPath = photoDao.saveRetouchedPhotoByOrder(photoToUpload, orderId, photosSources);
+        List<String> selectedPhotosSources = orderDao.getSelectedPhotosSourcesByOrderId(orderId);
+        List<String> retouchedPhotosPath = photoDao.saveRetouchedPhotoByOrder(photoToUpload, orderId, selectedPhotosSources);
         orderDao.updateStatusRetouchedPhotos(retouchedPhotosPath, orderId);
-
     }
 
 

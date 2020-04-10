@@ -4,6 +4,7 @@ import com.photostudio.ServiceLocator;
 import com.photostudio.entity.photo.PhotoStatus;
 import com.photostudio.service.OrderService;
 
+import com.photostudio.web.util.UtilClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletOutputStream;
@@ -25,8 +26,7 @@ public class DownloadSelectedPhotosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         log.info("Request to download photo source received");
         String uri = request.getRequestURI();
-        String[] partsOfUri = uri.split("/");
-        int orderId = Integer.parseInt(partsOfUri[partsOfUri.length - 1]);
+        int orderId = UtilClass.getIdFromPath(uri);
 
         response.setContentType("application/zip");
         response.setStatus(HttpServletResponse.SC_OK);
