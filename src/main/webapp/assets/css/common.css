@@ -355,11 +355,22 @@ td.table_header:last-child {
     background: rgba(228, 159, 182, 0.6);
     height: 187px;
     margin-top:-187px;
-    text-transform:uppercase;
+    text-transform: uppercase;
 }
 
 .footer a {
    color:#000;
+   font-size: 18px;
+   text-decoration: none;
+}
+
+.footer a:hover {
+   font-weight: 600;
+}
+
+.footer a:active {
+   font-weight: 600;
+   backdrop-filter: blur(4px);
 }
 
 /* User dropdown menu on Navigation */
