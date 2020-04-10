@@ -1,5 +1,9 @@
+.container__background {
+    background: url("../images/portfolio/portfolio-general.png") no-repeat;
+}
+
 .container-main-custom {
-    background: url("../images/portfolio/portfolio-general.png") repeat-y;
+    background: none;
 }
 
 .portfolio-title {
@@ -9,12 +13,36 @@
     line-height: 64px;
 }
 
+.links__decoration {
+    text-decoration: none;
+    text-align: center;
+}
+
+.links__decoration:hover {
+    text-decoration: none;
+    text-shadow: 5px 5px 8px rgba(0, 0, 0, 0.2);
+}
+
+.links__decoration:active .title-newborns {
+    text-decoration: none;
+    color: #347674;
+}
+
+.links__decoration:active .title-babies {
+    text-decoration: none;
+    color: #A77084;
+}
+
 .title-newborns {
     color: #89CBC9;
 }
 
 .title-babies {
     color: #FCC5D9;
+}
+
+.portfolio__links {
+    margin-bottom: 200px;
 }
 
 .back-button {

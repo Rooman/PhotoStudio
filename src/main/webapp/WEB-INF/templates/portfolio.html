@@ -17,34 +17,29 @@
 </header>
 
 <main>
-    <div class="container">
+    <div class="container container__background">
         <p class="page_main-title">Miari Fotografie</p>
-    </div>
-    <div class="container-main-custom">
-        <div class="container">
-            <div class="row justify-content-center">
+        <div class="container-main-custom">
+            <div class="row justify-content-center portfolio__links">
                 <div class="col-6 d-flex justify-content-center align-items-center">
-                    <div class="portfolio-title title-newborns">
-                        <p th:text="#{newborns.title}">Newborns</p>
-                    </div>
-                </div>
-                <div class="col-6 d-flex justify-content-center align-items-center">
-                    <div class="portfolio-title title-babies">
-                        <p th:text="#{babies.title}">Babies</p>
-                    </div>
-                </div>
-                <div class="col-6 d-flex justify-content-center align-items-center">
-                    <a href="portfolio-newborns">
+                    <a href="portfolio-newborns" class="links__decoration">
+                        <div class="portfolio-title title-newborns">
+                            <p th:text="#{newborns.title}">Newborns</p>
+                        </div>
                         <img class="rounded-circle" src="assets/images/portfolio/circle-newborns.png" alt="Newborns">
                     </a>
                 </div>
                 <div class="col-6 d-flex justify-content-center align-items-center">
-                    <a href="portfolio-babies">
+                    <a href="portfolio-babies" class="links__decoration">
+                        <div class="portfolio-title title-babies">
+                            <p th:text="#{babies.title}">Babies</p>
+                        </div>
                         <img class="rounded-circle" src="assets/images/portfolio/circle-babies.png" alt="Babies">
                     </a>
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 
