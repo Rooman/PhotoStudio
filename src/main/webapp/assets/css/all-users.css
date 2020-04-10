@@ -39,4 +39,28 @@
     opacity: 1;
 }
 
+td.col__text {
+    word-wrap: break-word;
+    font-size: 26px;
+    line-height: 26px;
+}
 
+td.col__mail {
+    max-width: 188px;
+}
+
+td.col__phone {
+    max-width: 183px;
+}
+
+td.col__name {
+    max-width: 194px;
+}
+
+td.col__address {
+    max-width: 285px;
+}
+
+td.col__add-info {
+    max-width: 305px;
+}
