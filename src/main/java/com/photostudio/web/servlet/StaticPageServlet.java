@@ -14,10 +14,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-// This servlet is only required to have access to static pages.
-// Probably for "/contact" page there's separate servlet needed, so we'll need to remove "/contact" mapping from here.
-
 @Slf4j
 @WebServlet(urlPatterns = {"/legal-information", "/data-protection","/portfolio", "/portfolio-newborns", "/portfolio-babies", "/price"})
 public class StaticPageServlet extends HttpServlet {

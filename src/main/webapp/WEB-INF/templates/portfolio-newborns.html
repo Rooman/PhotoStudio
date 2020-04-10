@@ -17,11 +17,11 @@
 </header>
 
 <main>
-    <div class="container text-center">
-        <p class="page_main-title" th:text="#{portfolio.newborns.title}">Newborns</p>
-    </div>
-    <div class="container-main-custom custom-alt-bg">
-        <div class="container">
+    <div class="container container__background">
+        <div class="text-center">
+            <p class="page_main-title" th:text="#{portfolio.newborns.title}">Newborns</p>
+        </div>
+        <div class="container-main-custom custom-alt-bg">
             <div class="row justify-content-center">
                 <div class="col-4 justify-content-center reduce-margin">
                     <div class="portfolio-image-block text-center">
@@ -50,7 +50,8 @@
             </div>
 
             <div class="row justify-content-center">
-                <a href="portfolio" type="submit" class="btn btn-submit btn-outline-dark btn-lg button back-button" th:text="#{back.to.portfolio.button}">
+                <a href="portfolio" type="submit" class="btn btn-submit btn-outline-dark btn-lg button back-button"
+                   th:text="#{back.to.portfolio.button}">
                     Back to Portfolio
                 </a>
             </div>

@@ -11,4 +11,8 @@ public class Photo {
     private String source;
     @NonNull
     private PhotoStatus photoStatus;
+
+    public String getName() {
+        return source.substring(0, source.indexOf("."));
+    }
 }
