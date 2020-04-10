@@ -72,6 +72,30 @@
     margin-left: 45px;
 }
 
+.button:disabled {
+    color:#fff;
+    background:rgba(51, 51, 51, 0.2);
+    box-shadow:none;
+    font-weight:600;
+    font-size:32px;
+}
+
+label[data-file-disabled='true'] {
+    color:#fff;
+    background:rgba(51, 51, 51, 0.2);
+    box-shadow:none;
+    font-weight:600;
+    font-size:32px;
+}
+
+label[data-file-disabled='true']:hover {
+    color:#fff;
+    background:rgba(51, 51, 51, 0.2);
+    box-shadow:none;
+    font-weight:600;
+    font-size:32px;
+}
+
 .order__button:hover {
     font-weight: 600;
 }
@@ -373,8 +397,8 @@
     border-radius: 50%;
     line-height: 30px;
     text-align: center;
-    top: 35px;
-    right: 135px;
+    top: 85px;
+    right: 45px;
     color: #000000;
     font-size: 40px;
     font-weight: bold;
