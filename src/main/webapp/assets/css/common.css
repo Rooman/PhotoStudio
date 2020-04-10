@@ -16,6 +16,10 @@ main {
   min-height:90%;
 }
 
+button:focus {
+  outline: none;
+}
+
 .page_main-title {
     font-family: "Cormorant Upright", sans-serif;
     font-weight: 300;
@@ -54,6 +58,39 @@ main {
 
 .top-nav {
     height: 137px;
+}
+
+.design-nav-item {
+  border: 2px solid rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.design-nav-item:hover {
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  font-weight: 600;
+}
+
+.design-nav-item:active {
+  border: 2px solid rgba(0, 0, 0, 1);
+  font-weight: 600;
+}
+
+.lang-dropdown {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+.lang-dropdown:hover {
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.lang-dropdown:active {
+  font-weight: 600;
+  border: 2px solid rgba(0, 0, 0, 1);
+  color: #000;
+  background-color: rgba(255, 255, 255, 0);
 }
 
 .top-navbar {
@@ -113,8 +150,6 @@ main {
     font-family: Cormorant Upright;
     font-size: 13px;
     line-height: 13px;
-    opacity: 0.4;
-    border: 1px solid #000000;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -238,13 +273,14 @@ main {
 
 .dialog-buttons {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .dialog__button {
     font-size: 32px;
     line-height: 46px;
     height: 64px;
+    width: auto;
     background: #FAE1DE;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
@@ -260,7 +296,7 @@ main {
 }
 
 .delete-button {
-    width: 200px;
+    width: 120px;
     height: 64px;
     background: #FCC5D9;
     margin-left: 25px;
@@ -320,11 +356,22 @@ td.table_header:last-child {
     background: rgba(228, 159, 182, 0.6);
     height: 187px;
     margin-top:-187px;
-    text-transform:uppercase;
+    text-transform: uppercase;
 }
 
 .footer a {
    color:#000;
+   font-size: 18px;
+   text-decoration: none;
+}
+
+.footer a:hover {
+   font-weight: 600;
+}
+
+.footer a:active {
+   font-weight: 600;
+   backdrop-filter: blur(4px);
 }
 
 /* User dropdown menu on Navigation */
@@ -369,6 +416,18 @@ td.table_header:last-child {
     margin-top: 10px;
 }
 
+.user-menu__item:hover {
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #000;
+}
+
+.user-menu__item:active {
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid #FCC5D9;
+}
+
 a.user-menu__item{
     text-transform: none;
 }
@@ -380,10 +439,6 @@ user-dropdown__user-menu .user-menu__item:first-child{
 button.user-menu__item {
     height: 36px;
     background-color:#fff;
-}
-
-button.user-menu__item:hover {
-    text-decoration:underline;
 }
 
 .error {
