@@ -1,5 +1,6 @@
 package com.photostudio.web.templater;
 
+import com.photostudio.web.util.CommonVariableAppendService;
 import com.photostudio.web.util.SupportedLocale;
 import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.TemplateEngine;
@@ -42,6 +43,8 @@ public class TemplateEngineFactory {
 
     public static void process(HttpServletRequest request, HttpServletResponse response, String template, Map<String, Object> parameters) {
         try {
+            CommonVariableAppendService.appendUser(parameters, request);
+
             SupportedLocale currentLocale = (SupportedLocale) request.getAttribute("currentLocale");
             parameters.put("language", currentLocale.getName());
 

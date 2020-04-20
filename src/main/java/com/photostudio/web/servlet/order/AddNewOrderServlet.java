@@ -38,7 +38,13 @@ public class AddNewOrderServlet extends HttpServlet {
         String newEmail = request.getParameter("newEmail");
         log.info("Request get order page to create a new order");
 
+
+
         Map<String, Object> paramsMap = getParametersMap(request, newEmail);
+
+        // add current user to thymeleaf parameter map
+        CommonVariableAppendService.appendUser(paramsMap, request);
+
         response.setContentType("text/html;charset=utf-8");
         TemplateEngineFactory.process(request, response, "order", paramsMap);
     }
@@ -47,6 +53,7 @@ public class AddNewOrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.info("Create new order");
 
+        // findbugs!!!
         List<Part> photoToUpload = (List<Part>) request.getParts();
 
         String email = request.getParameter("email");

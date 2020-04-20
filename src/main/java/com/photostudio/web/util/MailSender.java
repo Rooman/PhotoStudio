@@ -47,3 +47,7 @@ public class MailSender {
         send(subject, text, adminEmail);
     }
 }
+
+// данные локига интерфейс
+// dao   service <- web
+// dao service <- desktop
