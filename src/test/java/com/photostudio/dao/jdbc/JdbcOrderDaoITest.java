@@ -1,5 +1,6 @@
 package com.photostudio.dao.jdbc;
 
+import com.photostudio.dao.jdbc.stat.StatisticDataSource;
 import com.photostudio.dao.jdbc.testUtils.TestDataSource;
 import com.photostudio.entity.order.FilterParameters;
 import com.photostudio.entity.order.OrderStatus;
@@ -337,7 +338,7 @@ public class JdbcOrderDaoITest {
 
 
         //when
-        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(jdbcDataSource);
+        JdbcOrderDao jdbcOrderDao = new JdbcOrderDao(new StatisticDataSource(jdbcDataSource));
         List<Order> ordersByUserIdBeforeDelete = jdbcOrderDao.getOrdersByUserId(user3.getId());
         assertFalse(ordersByUserIdBeforeDelete.isEmpty());
         jdbcOrderDao.deleteOrdersByUserId(orderList, user3.getId());

@@ -1,4 +1,6 @@
 package com.photostudio.dao.jdbc.stat;
 
-public class ThrowingSupplier {
+@FunctionalInterface
+public interface ThrowingSupplier<T, E extends Exception> {
+    T get() throws E;
 }
