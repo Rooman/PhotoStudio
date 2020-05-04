@@ -28,7 +28,7 @@ public class StatisticsConnection implements Connection {
         PreparedStatement preparedStatement = connection.prepareStatement(s);
         long end = System.nanoTime();
         statisticsVo.setPreparedStatementsSpentTime(statisticsVo.getPreparedStatementsSpentTime() + (end - start));
-        return preparedStatement;
+        return new StatisticPreparedStatement(preparedStatement);
     }
 
     @Override

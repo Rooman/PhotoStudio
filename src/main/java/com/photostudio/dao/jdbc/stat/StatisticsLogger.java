@@ -13,6 +13,9 @@ public class StatisticsLogger {
         stringJoiner.add(String.format("%d nanoseconds spent preparing %d JDBC statements",
                 statisticsVo.getPreparedStatementsSpentTime(),
                 statisticsVo.getPreparedStatementsCount()));
+        stringJoiner.add(String.format("%d nanoseconds spent executing %d JDBC statements",
+                statisticsVo.getSqlExecutedTime(),
+                statisticsVo.getSqlExecutedCount()));
         log.info(stringJoiner.toString());
     }
 }

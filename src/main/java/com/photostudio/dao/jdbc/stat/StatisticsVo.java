@@ -8,4 +8,11 @@ public class StatisticsVo {
     private long closeConnectionTime;
     private int preparedStatementsCount;
     private long preparedStatementsSpentTime;
+    private int sqlExecutedCount;
+    private long sqlExecutedTime;
+
+    public void addExecutedTime(long time) {
+        sqlExecutedCount++;
+        sqlExecutedTime += time;
+    }
 }
